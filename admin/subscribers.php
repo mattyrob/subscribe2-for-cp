@@ -36,27 +36,33 @@ if ( isset( $_POST['s2_admin'] ) ) {
 		$reg_sub_error = '';
 		$pub_sub_error = '';
 		$unsub_error = '';
+		$email_error = '';
 		$message = '';
 		foreach ( preg_split( '/[\s,]+/', $_POST['addresses'] ) as $email ) {
-			$email = $this->sanitize_email( $email );
-			if ( is_email( $email ) && isset( $_POST['subscribe'] ) ) {
-				if ( false !== $this->is_public( $email ) ) {
-					('' === $pub_sub_error) ? $pub_sub_error = "$email" : $pub_sub_error .= ", $email";
+			if ( false === $this->validate_email( $email ) ) {
+				('' === $email_error) ? $email_error = "$email" : $email_error .= ", $email";
 					continue;
+			} else {
+				$email = $this->sanitize_email( $email );
+				if ( isset( $_POST['subscribe'] ) ) {
+					if ( false !== $this->is_public( $email ) ) {
+						('' === $pub_sub_error) ? $pub_sub_error = "$email" : $pub_sub_error .= ", $email";
+						continue;
+					}
+					if ( $this->is_registered( $email ) ) {
+						('' === $reg_sub_error) ? $reg_sub_error = "$email" : $reg_sub_error .= ", $email";
+						continue;
+					}
+					$this->add( $email, true );
+					$message = '<div id="message" class="updated fade"><p><strong>' . __( 'Address(es) subscribed!', 'subscribe2' ) . '</strong></p></div>';
+				} elseif ( isset( $_POST['unsubscribe'] ) ) {
+					if ( false === $this->is_public( $email ) || $this->is_registered( $email ) ) {
+						('' === $unsub_error) ? $unsub_error = "$email" : $unsub_error .= ", $email";
+						continue;
+					}
+					$this->delete( $email );
+					$message = '<div id="message" class="updated fade"><p><strong>' . __( 'Address(es) unsubscribed!', 'subscribe2' ) . '</strong></p></div>';
 				}
-				if ( $this->is_registered( $email ) ) {
-					('' === $reg_sub_error) ? $reg_sub_error = "$email" : $reg_sub_error .= ", $email";
-					continue;
-				}
-				$this->add( $email, true );
-				$message = '<div id="message" class="updated fade"><p><strong>' . __( 'Address(es) subscribed!', 'subscribe2' ) . '</strong></p></div>';
-			} elseif ( is_email( $email ) && isset( $_POST['unsubscribe'] ) ) {
-				if ( false === $this->is_public( $email ) || $this->is_registered( $email ) ) {
-					('' === $unsub_error) ? $unsub_error = "$email" : $unsub_error .= ", $email";
-					continue;
-				}
-				$this->delete( $email );
-				$message = '<div id="message" class="updated fade"><p><strong>' . __( 'Address(es) unsubscribed!', 'subscribe2' ) . '</strong></p></div>';
 			}
 		}
 		if ( '' !== $reg_sub_error ) {
@@ -68,6 +74,9 @@ if ( isset( $_POST['s2_admin'] ) ) {
 		if ( '' !== $unsub_error ) {
 			echo '<div id="message" class="error"><p><strong>' . __( 'Some emails were not processed, the following were not in the database' , 'subscribe2' ) . ':<br /> ' . $unsub_error . '</strong></p></div>';
 		}
+		if ( '' !== $email_error ) {
+			echo '<div id="message" class="error"><p><strong>' . __( 'Some emails were not processed, the following were invalid email addresses' , 'subscribe2' ) . ':<br /> ' . $email_error . '</strong></p></div>';
+		}
 		if ( '' !== $message ) {
 			echo $message;
 		}
@@ -75,6 +84,34 @@ if ( isset( $_POST['s2_admin'] ) ) {
 	} elseif ( isset( $_POST['remind'] ) ) {
 		$this->remind( $_POST['reminderemails'] );
 		echo '<div id="message" class="updated fade"><p><strong>' . __( 'Reminder Email(s) Sent!', 'subscribe2' ) . '</strong></p></div>';
+	} elseif ( isset( $_POST['sub_categories'] ) && 'subscribe' === $_POST['manage'] ) {
+		if ( isset( $_REQUEST['subscriber'] ) ) {
+			$this->subscribe_registered_users( implode( ",\r\n", $_REQUEST['subscriber'] ), $_POST['category'] );
+		} else {
+			$this->subscribe_registered_users( $_POST['exportcsv'], $_POST['category'] );
+		}
+		echo '<div id="message" class="updated fade"><p><strong>' . __( 'Registered Users Subscribed!', 'subscribe2' ) . '</strong></p></div>';
+	} elseif ( isset( $_POST['sub_categories'] ) && 'unsubscribe' === $_POST['manage'] ) {
+		if ( isset( $_REQUEST['subscriber'] ) ) {
+			$this->unsubscribe_registered_users( implode( ",\r\n", $_REQUEST['subscriber'] ), $_POST['category'] );
+		} else {
+			$this->unsubscribe_registered_users( $_POST['exportcsv'], $_POST['category'] );
+		}
+		echo '<div id="message" class="updated fade"><p><strong>' . __( 'Registered Users Unsubscribed!', 'subscribe2' ) . '</strong></p></div>';
+	} elseif ( isset( $_POST['sub_format'] ) ) {
+		if ( isset( $_REQUEST['subscriber'] ) ) {
+			$this->format_change( implode( ",\r\n", $_REQUEST['subscriber'] ), $_POST['format'] );
+		} else {
+			$this->format_change( $_POST['exportcsv'], $_POST['format'] );
+		}
+		echo '<div id="message" class="updated fade"><p><strong>' . __( 'Format updated for Selected Registered Users!', 'subscribe2' ) . '</strong></p></div>';
+	} elseif ( isset( $_POST['sub_digest'] ) ) {
+		if ( isset( $_REQUEST['subscriber'] ) ) {
+			$this->digest_change( implode( ",\r\n", $_REQUEST['subscriber'] ), $_POST['sub_category'] );
+		} else {
+			$this->digest_change( $_POST['exportcsv'], $_POST['sub_category'] );
+		}
+		echo '<div id="message" class="updated fade"><p><strong>' . __( 'Digest Subscription updated for Selected Registered Users!', 'subscribe2' ) . '</strong></p></div>';
 	}
 }
 
@@ -245,6 +282,10 @@ if ( 'registered' === $current_tab ) {
 		if ( isset( $_POST['category'] ) ) {
 			$categories = $_POST['category'];
 		}
+		$manage = '';
+		if ( isset( $_POST['manage'] ) ) {
+			$manage = $_POST['manage'];
+		}
 		$format = '';
 		if ( isset( $_POST['format'] ) ) {
 			$format = $_POST['format'];
@@ -252,20 +293,20 @@ if ( 'registered' === $current_tab ) {
 		echo __( 'Preferences for Registered Users selected above can be changed using this section.', 'subscribe2' ) . '<br />' . "\r\n";
 		echo '<strong><em style="color: red">' . __( 'Consider User Privacy as changes cannot be undone', 'subscribe2' ) . '</em></strong><br />' . "\r\n";
 		echo '<br />' . __( 'Action to perform', 'subscribe2' ) . ':' . "\r\n";
-		echo '<label><input type="radio" name="manage" value="subscribe" checked="checked" /> ' . __( 'Subscribe', 'subscribe2' ) . '</label>&nbsp;&nbsp;' . "\r\n";
-		echo '<label><input type="radio" name="manage" value="unsubscribe" /> ' . __( 'Unsubscribe', 'subscribe2' ) . '</label><br /><br />' . "\r\n";
+		echo '<label><input type="radio" name="manage" value="subscribe"' . checked( $manage, 'subscribe', false ) . ' /> ' . __( 'Subscribe', 'subscribe2' ) . '</label>&nbsp;&nbsp;' . "\r\n";
+		echo '<label><input type="radio" name="manage" value="unsubscribe"' . checked( $manage, 'unsubscribe', false ) . ' /> ' . __( 'Unsubscribe', 'subscribe2' ) . '</label><br /><br />' . "\r\n";
 		if ( '1' === $this->subscribe2_options['reg_override'] ) {
 			$s2_forms->display_category_form( $categories, 1 );
 		} else {
 			$s2_forms->display_category_form( $categories, 0 );
 		}
-		echo '<p class="submit"><button class="button-primary" name="sub_categories" onclick="bu_cats();">' . __( 'Bulk Update Categories', 'subscribe2' ) . '</button></p>';
+		echo '<p class="submit"><button class="button-primary" name="sub_categories" onclick="return bm_check();">' . __( 'Bulk Update Categories', 'subscribe2' ) . '</button></p>';
 		echo '<br />' . __( 'Send email as', 'subscribe2' ) . ':' . "\r\n";
 		echo '<label><input type="radio" name="format" value="html"' . checked( $format, 'html', false ) . ' /> ' . __( 'HTML - Full', 'subscribe2' ) . '</label>&nbsp;&nbsp;' . "\r\n";
 		echo '<label><input type="radio" name="format" value="html_excerpt"' . checked( $format, 'html_excerpt', false ) . ' /> ' . __( 'HTML - Excerpt', 'subscribe2' ) . '</label>&nbsp;&nbsp;' . "\r\n";
 		echo '<label><input type="radio" name="format" value="post"' . checked( $format, 'post', false ) . ' /> ' . __( 'Plain Text - Full', 'subscribe2' ) . '</label>&nbsp;&nbsp;' . "\r\n";
 		echo '<label><input type="radio" name="format" value="excerpt"' . checked( $format, 'excerpt', false ) . '/> ' . __( 'Plain Text - Excerpt', 'subscribe2' ) . '</label>' . "\r\n";
-		echo '<p class="submit"><button class="button-primary" name="sub_format" onclick="bu_format();">' . __( 'Bulk Update Format', 'subscribe2' ) . '</button></p>';
+		echo '<p class="submit"><button class="button-primary" name="sub_format" onclick="return bm_check();">' . __( 'Bulk Update Format', 'subscribe2' ) . '</button></p>';
 	} else {
 		$sub_cats = '';
 		if ( isset( $_POST['sub_category'] ) ) {
@@ -278,7 +319,7 @@ if ( 'registered' === $current_tab ) {
 		echo __( 'Yes', 'subscribe2' ) . '</label>&nbsp;&nbsp;' . "\r\n";
 		echo '<label><input type="radio" name="sub_category" value="-1"' . checked( $sub_cats, '-1', false ) . ' /> ';
 		echo __( 'No', 'subscribe2' ) . '</label>';
-		echo '<p class="submit"><button class="button-primary" name="sub_digest" onclick="bu_digest();">' . __( 'Bulk Update Digest Subscription', 'subscribe2' ) . '</button></p>';
+		echo '<p class="submit"><button class="button-primary" name="sub_digest" onclick="return bm_check();">' . __( 'Bulk Update Digest Subscription', 'subscribe2' ) . '</button></p>';
 	}
 	echo '</div>' . "\r\n";
 }

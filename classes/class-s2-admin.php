@@ -15,7 +15,9 @@ class S2_Admin extends S2_Core {
 		$s2subscribers = add_submenu_page( 's2', __( 'Subscribers', 'subscribe2' ), __( 'Subscribers', 'subscribe2' ), apply_filters( 's2_capability', 'manage_options', 'manage' ), 's2_tools', array( &$this, 'subscribers_menu' ) );
 		add_action( "admin_print_scripts-$s2subscribers", array( &$this, 'checkbox_form_js' ) );
 		add_action( "admin_print_scripts-$s2subscribers", array( &$this, 'subscribers_form_js' ) );
+		add_action( "admin_print_scripts-$s2subscribers", array( &$this, 'subscribers_css' ) );
 		add_action( 'load-' . $s2subscribers, array( &$this, 'subscribers_help' ) );
+		add_action( 'load-' . $s2subscribers, array( &$this, 'subscribers_options' ) );
 
 		$s2settings = add_submenu_page( 's2', __( 'Settings', 'subscribe2' ), __( 'Settings', 'subscribe2' ), apply_filters( 's2_capability', 'manage_options', 'settings' ), 's2_settings', array( &$this, 'settings_menu' ) );
 		add_action( "admin_print_scripts-$s2settings", array( &$this, 'checkbox_form_js' ) );
@@ -68,6 +70,25 @@ class S2_Admin extends S2_Core {
 			'</p><p>' . __( 'On this page registered subscribers can be viewed and searched. User accounts can be deleted from here with any posts created by those users being assigned to the currently logged in user. Bulk changes can be applied to all user settings changing their subscription email format and categories.', 'subscribe2' ) . '</p>',
 		) );
 	} // end subscribers_help()
+
+	function subscribers_options() {
+		$option = 'per_page';
+		$args = array(
+			'label' => __( 'Number of subscribers per page: ', 'subscribe2' ),
+			'default' => 25,
+			'option' => 'subscribers_per_page',
+		);
+		add_screen_option( $option, $args );
+	} // end subscribers_options
+
+	function subscribers_set_screen_option( $status, $option, $value ) {
+		if ( 'subscribers_per_page' === $option && false === $status ) {
+			if ( $value < 1 || $value > 999 ) {
+				return;
+			}
+			return $value;
+		}
+	} // end subscribers_set_screen_option()
 
 	function settings_help() {
 		$screen = get_current_screen();
@@ -141,7 +162,7 @@ class S2_Admin extends S2_Core {
 	} //end checkbox_form_js()
 
 	function user_admin_css() {
-		wp_register_style( 's2_user_admin', S2URL . 'include/s2-user-admin.css', array(), '1.0' );
+		wp_register_style( 's2_user_admin', S2URL . 'include/s2-user-admin' . $this->script_debug . '.css', array(), '1.0' );
 		wp_enqueue_style( 's2_user_admin' );
 	} // end user_admin_css()
 
@@ -176,16 +197,25 @@ class S2_Admin extends S2_Core {
 	} // end s2_dismiss_notice_handler()
 
 	function subscribers_form_js() {
-		wp_register_script( 's2_subscribers', S2URL . 'include/s2-subscribers' . $this->script_debug . '.js', array(), '1.3' );
+		wp_register_script( 's2_subscribers', S2URL . 'include/s2-subscribers' . $this->script_debug . '.js', array(), '1.4' );
 		$translation_array = array(
 			'registered_confirm_single' => __( 'You are about to delete a registered user account, any posts made by this user will be assigned to you. Are you sure?', 'subscribe2' ),
 			'registered_confirm_plural' => __( 'You are about to delete registered user accounts, any posts made by these users will be assigned to you. Are you sure?', 'subscribe2' ),
 			'public_confirm_single' => __( 'You are about to delete a public subscriber. Are you sure?', 'subscribe2' ),
 			'public_confirm_plural' => __( 'You are about to delete public subscribers. Are you sure?', 'subscribe2' ),
+			'bulk_manage_all' => __( 'You are about to make Bulk Management changes to all Registered Users. Are you sure?', 'subscribe2' ),
+			'bulk_manage_single' => __( 'You are about to make Bulk Management changes to the selected Registered User. Are you sure?', 'subscribe2' ),
+			'bulk_manage_plural' => __( 'You are about to make Bulk Management changes to the selected Registered Users. Are you sure?', 'subscribe2' ),
 		);
 		wp_localize_script( 's2_subscribers', 's2_script_strings', $translation_array );
 		wp_enqueue_script( 's2_subscribers' );
 	} // end subscribers_form_js()
+
+	function subscribers_css() {
+		echo '<style type="text/css">';
+		echo '.wp-list-table .column-date { width: 15%; }';
+		echo '</style>';
+	} // end subscribers_css()
 
 	/**
 	Adds a links directly to the settings page from the plugin page
@@ -261,6 +291,18 @@ class S2_Admin extends S2_Core {
 		$arr[] = 'subscribe2';
 		return $arr;
 	} // end mce_button()
+
+	function gutenberg_block_editor_assets() {
+		wp_register_script(
+			'subscribe2-gutenberg',
+			S2URL . 'blocks/block' . $this->script_debug . '.js',
+			array( 'wp-blocks', 'wp-i18n', 'wp-element' ),
+			'1.0'
+		);
+		register_block_type( 'subscribe2-html/shortcode', array(
+			'editor_script' => 'subscribe2-gutenberg',
+		) );
+	} // end gutenberg_block_editor_assets()
 
 	/* ===== widget functions ===== */
 	/**
@@ -344,6 +386,24 @@ class S2_Admin extends S2_Core {
 			return $this->signup_dates[ $email ];
 		}
 	} // end signup_date()
+
+	/**
+	Collects the signup time for all public subscribers
+	*/
+	function signup_time( $email = '' ) {
+		if ( '' === $email ) { return false; }
+
+		global $wpdb;
+		if ( ! empty( $this->signup_times ) ) {
+			return $this->signup_times[ $email ];
+		} else {
+			$results = $wpdb->get_results( "SELECT email, time FROM $this->public", ARRAY_N );
+			foreach ( $results as $result ) {
+				$this->signup_times[ $result[0] ] = $result[1];
+			}
+			return $this->signup_times[ $email ];
+		}
+	} // end signup_time()
 
 	/**
 	Collects the ip address for all public subscribers
@@ -905,7 +965,7 @@ class S2_Admin extends S2_Core {
 	Core function to hook the digest email preview to the action on the Settings page
 	*/
 	function digest_preview( $user_email = '' ) {
-		if ( ! is_email( $user_email ) ) { return; }
+		if ( false === $this->validate_email( $user_email ) ) { return; }
 		$this->subscribe2_cron( $user_email );
 	} // end digest_preview()
 

@@ -106,7 +106,7 @@ class S2_Frontend extends S2_Core {
 		}
 
 		// allow remote setting of email in form
-		if ( isset( $_REQUEST['email'] ) && is_email( $_REQUEST['email'] ) ) {
+		if ( isset( $_REQUEST['email'] ) && false !== $this->validate_email( $_REQUEST['email'] ) ) {
 			$value = $this->sanitize_email( $_REQUEST['email'] );
 		} elseif ( 'true' === strtolower( $args['nojs'] ) ) {
 			$value = '';
@@ -154,7 +154,7 @@ class S2_Frontend extends S2_Core {
 			}
 			global $wpdb;
 			$this->email = $this->sanitize_email( $_POST['email'] );
-			if ( ! is_email( $this->email ) ) {
+			if ( false === $this->validate_email( $this->email ) ) {
 				$this->s2form = $this->s2form . $this->not_an_email;
 			} elseif ( $this->is_barred( $this->email ) ) {
 				$this->s2form = $this->s2form . $this->barred_domain;
@@ -459,7 +459,7 @@ class S2_Frontend extends S2_Core {
 	Add ip updater library to footer
 	*/
 	function js_ip_library_script() {
-		echo '<script type="application/javascript" src="https://api.ipify.org?format=jsonp&callback=getip"></script>' . "\r\n";
+		echo '<script async="async" src="https://api.ipify.org?format=jsonp&callback=getip"></script>' . "\r\n";
 	} // end js_ip_library_script()
 }
 ?>

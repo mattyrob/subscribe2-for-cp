@@ -128,10 +128,6 @@ if ( ! isset( $mysubscribe2->subscribe2_options['s2meta_default'] ) ) {
 	$mysubscribe2->subscribe2_options['s2meta_default'] = '0';
 } // option for Subscribe2 over ride postmeta to be checked by default
 
-if ( ! isset( $mysubscribe2->subscribe2_options['entries'] ) ) {
-	$mysubscribe2->subscribe2_options['entries'] = 25;
-} // option for the number of subscribers displayed on each page
-
 if ( ! isset( $mysubscribe2->subscribe2_options['barred'] ) ) {
 	$mysubscribe2->subscribe2_options['barred'] = '';
 } // option containing domains barred from public registration

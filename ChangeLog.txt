@@ -1,11 +1,20 @@
-= 10.22.3 =
+= 10.23 =
 
 * Improve REGEX for the old Subscribe2 token - props @pik256
+* Introduce Gutenber Block for testing
+* Applied Grunt to packing for distribution so files are minified differently
+* Load external javascripts asynchronously
+* Improve Bulk Management user experience
+* Move Display options for Subscriber page to screen option
+* Fixed error messages when using 's2_custom_keyword' hook in digest mode - thanks to Bryan Fogarty
+* Ported several features from Subscribe2 HTML including Remote IP checking and email address validation
+* Other minor big fixes
 
 = 10.22.2 =
 
 * Fix JavaScript issue when toggling subscribers
 * Fix to correct display of Registered Subscribers on multisite installs
+* Fix for Content Type in plaintext emails
 
 = 10.22.1 =
 

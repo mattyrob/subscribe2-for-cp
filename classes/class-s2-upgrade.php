@@ -77,6 +77,11 @@ class S2_Upgrade {
 			$mysubscribe2->subscribe2_options['version'] = '10.15';
 			update_option( 'subscribe2_options', $mysubscribe2->subscribe2_options );
 		}
+		if ( version_compare( $mysubscribe2->subscribe2_options['version'], '10.23', '<' ) ) {
+			$this->upgrade1023();
+			$mysubscribe2->subscribe2_options['version'] = '10.23';
+			update_option( 'subscribe2_options', $mysubscribe2->subscribe2_options );
+		}
 
 		$mysubscribe2->subscribe2_options['version'] = S2VERSION;
 		update_option( 'subscribe2_options', $mysubscribe2->subscribe2_options );
@@ -468,5 +473,12 @@ class S2_Upgrade {
 			$mysubscribe2->subscribe2_options['js_ip_updater'] = '0';
 		}
 	} // end upgrade1015()
+
+	function upgrade1023() {
+		global $mysubscribe2;
+		if ( isset( $mysubscribe2->subscribe2_options['entries'] ) ) {
+			unset( $mysubscribe2->subscribe2_options['entries'] );
+		}
+	} // end upgrade1023()
 }
 ?>

@@ -3,7 +3,7 @@
 Plugin Name: Subscribe2
 Plugin URI: https://subscribe2.wordpress.com/
 Description: Notifies an email list when new entries are posted.
-Version: 10.22.2
+Version: 10.23
 Author: Matthew Robinson, Tanay Lakhani, Bryan Hadaway
 Author URI: https://subscribe2.wordpress.com/
 Licence: GPLv3
@@ -11,7 +11,7 @@ Text Domain: subscribe2
 */
 
 /*
-Copyright (C) 2006-14 Matthew Robinson
+Copyright (C) 2006-18 Matthew Robinson
 Based on the Original Subscribe2 plugin by
 Copyright (C) 2005 Scott Merrill (skippy@skippy.net)
 
@@ -36,7 +36,7 @@ if ( version_compare( $GLOBALS['wp_version'], '3.3', '<' ) || ! function_exists(
 		$exit_msg = __( "I'm just a plugin, please don't call me directly", 'subscribe2' );
 	} else {
 		// Subscribe2 needs WordPress 3.3 or above, exit if not on a compatible version
-		$exit_msg = sprintf( __( 'This version of Subscribe2 requires WordPress 3.3 or greater. Please update %1$s or use an older version of %2$s.', 'subscribe2' ), '<a href="http://codex.wordpress.org/Updating_WordPress">Wordpress</a>', '<a href="http://wordpress.org/extend/plugins/subscribe2/download/">Subscribe2</a>' );
+		$exit_msg = sprintf( __( 'This version of Subscribe2 requires WordPress 3.3 or greater. Please update %1$s or use an older version of %2$s.', 'subscribe2' ), '<a href="http://codex.wordpress.org/Updating_WordPress">WordPress</a>', '<a href="http://wordpress.org/extend/plugins/subscribe2/download/">Subscribe2</a>' );
 	}
 	exit( $exit_msg );
 }
@@ -54,7 +54,7 @@ if ( is_plugin_active_for_network( plugin_basename( __FILE__ ) ) ) {
 
 // our version number. Don't touch this or any line below
 // unless you know exactly what you are doing
-define( 'S2VERSION', '10.22' );
+define( 'S2VERSION', '10.23' );
 define( 'S2PATH', trailingslashit( dirname( __FILE__ ) ) );
 define( 'S2DIR', trailingslashit( dirname( plugin_basename( __FILE__ ) ) ) );
 define( 'S2URL', plugin_dir_url( dirname( __FILE__ ) ) . S2DIR );

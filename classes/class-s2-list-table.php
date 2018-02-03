@@ -3,6 +3,9 @@
 List Table class used in WordPress 4.3.x and above
 */
 class S2_List_Table extends WP_List_Table {
+	private $date_format = '';
+	private $time_format = '';
+
 	function __construct() {
 		global $status, $page;
 
@@ -11,6 +14,8 @@ class S2_List_Table extends WP_List_Table {
 			'plural'	=> 'subscribers',
 			'ajax'		=> false,
 		) );
+		$this->date_format = get_option( 'date_format' );
+		$this->time_format = get_option( 'time_format' );
 	}
 
 	function column_default( $item, $column_name ) {
@@ -39,10 +44,20 @@ class S2_List_Table extends WP_List_Table {
 		} else {
 			global $mysubscribe2;
 			if ( '0' === $mysubscribe2->is_public( $item['email'] ) ) {
-				return sprintf( '<span style="color:#FF0000"><abbr title="' . $mysubscribe2->signup_ip( $item['email'] ) . '">%1$s</abbr></span>', $item['email'] );
+				return sprintf( '<span style="color:#FF0000"><abbr title="%2$s">%1$s</abbr></span>', $item['email'], $item['ip'] );
 			} else {
-				return sprintf( '<abbr title="' . $mysubscribe2->signup_ip( $item['email'] ) . '">%1$s</abbr>', $item['email'] );
+				return sprintf( '<abbr title="%2$s">%1$s</abbr>', $item['email'], $item['ip'] );
 			}
+		}
+	}
+
+	function column_date( $item ) {
+		global $current_tab;
+		if ( 'registered' === $current_tab ) {
+			return $item['date'];
+		} else {
+			$timestamp = strtotime( $item['date'] . ' ' . $item['time'] );
+			return sprintf( '<abbr title="%2$s">%1$s</abbr>', date_i18n( $this->date_format, $timestamp ), date_i18n( $this->time_format, $timestamp ) );
 		}
 	}
 
@@ -94,20 +109,9 @@ class S2_List_Table extends WP_List_Table {
 			if ( is_multisite() ) {
 				return array();
 			} else {
-				global $mysubscribe2;
-				if ( 'never' === $mysubscribe2->subscribe2_options['email_freq'] ) {
-					return array(
-						'delete' => __( 'Delete', 'subscribe2' ),
-						'subscribe' => __( 'Subscribe', 'subscribe2' ),
-						'unsubscribe' => __( 'Unsubscribe', 'subscribe2' ),
-						'format' => __( 'Change Email Format', 'subscribe2' ),
-					);
-				} else {
-					return array(
-						'delete' => __( 'Delete', 'subscribe2' ),
-						'digest' => __( 'Change Digest Subscription', 'subscribe2' ),
-					);
-				}
+				return array(
+					'delete' => __( 'Delete', 'subscribe2' ),
+				);
 			}
 		} else {
 			$actions = array(
@@ -119,7 +123,7 @@ class S2_List_Table extends WP_List_Table {
 	}
 
 	function process_bulk_action() {
-		if ( in_array( $this->current_action(), array( 'delete', 'toggle', 'subscribe', 'unsubscribe', 'format', 'digest' ) ) ) {
+		if ( in_array( $this->current_action(), array( 'delete', 'toggle' ) ) ) {
 			if ( ! isset( $_REQUEST['subscriber'] ) ) {
 				echo '<div id="message" class="error"><p><strong>' . __( 'No users were selected.' , 'subscribe2' ) . '</strong></p></div>';
 				return;
@@ -164,26 +168,6 @@ class S2_List_Table extends WP_List_Table {
 				}
 			}
 			echo '<div id="message" class="updated fade"><p><strong>' . __( 'Status changed!', 'subscribe2' ) . '</strong></p></div>';
-		}
-		if ( 'subscribe' === $this->current_action() ) {
-			global $mysubscribe2;
-			$mysubscribe2->subscribe_registered_users( implode( ",\r\n", $_REQUEST['subscriber'] ), $_POST['category'] );
-			echo '<div id="message" class="updated fade"><p><strong>' . __( 'Registered Users Subscribed!', 'subscribe2' ) . '</strong></p></div>';
-		}
-		if ( 'unsubscribe' === $this->current_action() ) {
-			global $mysubscribe2;
-			$mysubscribe2->unsubscribe_registered_users( implode( ",\r\n", $_REQUEST['subscriber'] ), $_POST['category'] );
-			echo '<div id="message" class="updated fade"><p><strong>' . __( 'Registered Users Unsubscribed!', 'subscribe2' ) . '</strong></p></div>';
-		}
-		if ( 'format' === $this->current_action() ) {
-			global $mysubscribe2;
-			$mysubscribe2->format_change( implode( ",\r\n", $_REQUEST['subscriber'] ), $_POST['format'] );
-			echo '<div id="message" class="updated fade"><p><strong>' . __( 'Format updated for Selected Registered Users!', 'subscribe2' ) . '</strong></p></div>';
-		}
-		if ( 'digest' === $this->current_action() ) {
-			global $mysubscribe2;
-			$mysubscribe2->digest_change( implode( ",\r\n", $_REQUEST['subscriber'] ), $_POST['sub_category'] );
-			echo '<div id="message" class="error"><p><strong>' . __( 'Digest Subscription updated for Selected Registered Users!', 'subscribe2' ) . '</strong></p></div>';
 		}
 	}
 
@@ -274,7 +258,7 @@ class S2_List_Table extends WP_List_Table {
 		}
 
 		if ( 'bottom' === $which ) {
-			$html_current_page  = $current;
+			$html_current_page = $current;
 			$total_pages_before = '<span class="screen-reader-text">' . __( 'Current Page', 'subscribe2' ) . '</span><span id="table-paging" class="paging-input">';
 		} else {
 			$html_current_page = sprintf( "%s<input class='current-page' id='current-page-selector' type='text' name='paged' value='%s' size='%d' aria-describedby='table-paging' />",
@@ -324,10 +308,13 @@ class S2_List_Table extends WP_List_Table {
 
 	function prepare_items() {
 		global $mysubscribe2, $subscribers, $current_tab;
-		if ( is_int( $mysubscribe2->subscribe2_options['entries'] ) ) {
-			$per_page = $mysubscribe2->subscribe2_options['entries'];
-		} else {
-			$per_page = 25;
+
+		$user = get_current_user_id();
+		$screen = get_current_screen();
+		$screen_option = $screen->get_option( 'per_page', 'option' );
+		$per_page = get_user_meta( $user, $screen_option, true );
+		if ( empty( $per_page ) || $per_page < 1 ) {
+			$per_page = $screen->get_option( 'per_page', 'default' );
 		}
 
 		$columns = $this->get_columns();
@@ -343,6 +330,8 @@ class S2_List_Table extends WP_List_Table {
 				$data[] = array(
 					'email' => $email,
 					'date' => $mysubscribe2->signup_date( $email ),
+					'time' => $mysubscribe2->signup_time( $email ),
+					'ip' => $mysubscribe2->signup_ip( $email ),
 				);
 			}
 		} else {

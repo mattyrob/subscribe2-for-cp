@@ -81,7 +81,7 @@ class S2_Ajax {
 		global $s2_frontend, $wpdb;
 		$s2_frontend->email = $s2_frontend->sanitize_email( $data['email'] );
 		$s2_frontend->ip = $data['ip'];
-		if ( ! is_email( $s2_frontend->email ) ) {
+		if ( false === $s2_frontend->validate_email( $s2_frontend->email ) ) {
 			echo '<p>' . __( 'Sorry, but that does not look like an email address to me.', 'subscribe2' ) . '</p>';
 		} elseif ( $s2_frontend->is_barred( $s2_frontend->email ) ) {
 			echo '<p>' . __( 'Sorry, email addresses at that domain are currently barred due to spam, please use an alternative email address.', 'subscribe2' ) . '</p>';

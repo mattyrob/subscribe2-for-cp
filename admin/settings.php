@@ -35,11 +35,9 @@ if ( isset( $_POST['s2_admin'] ) ) {
 		}
 	} elseif ( isset( $_POST['submit'] ) ) {
 		foreach ( $_POST as $key => $value ) {
-			if ( in_array( $key, array( 'bcclimit', 's2page', 'entries' ) ) ) {
+			if ( in_array( $key, array( 'bcclimit', 's2page' ) ) ) {
 				// numerical inputs fixed for old option names
-				if ( 'entries' === $key && is_numeric( $_POST[ $key ] ) && $_POST[ $key ] > 0 ) {
-					$this->subscribe2_options[ $key ] = (int) $_POST[ $key ];
-				} elseif ( 'entries' !== $key && is_numeric( $_POST[ $key ] ) && $_POST[ $key ] >= 0 ) {
+				if ( is_numeric( $_POST[ $key ] ) && $_POST[ $key ] >= 0 ) {
 					$this->subscribe2_options[ $key ] = (int) $_POST[ $key ];
 				}
 			} elseif ( in_array( $key, array( 'show_meta', 'show_button', 'ajax', 'widget', 'counterwidget', 's2meta_default', 'reg_override' ) ) ) {
@@ -171,7 +169,7 @@ $tabs = array(
 	'registered' => __( 'Registered Users', 'subscribe2' ),
 	'appearance' => __( 'Appearance', 'subscribe2' ),
 	'misc' => __( 'Miscellaneous', 'subscribe2' ),
-	);
+);
 echo '<h2 class="nav-tab-wrapper">';
 foreach ( $tabs as $tab_key => $tab_caption ) {
 	$active = ($current_tab === $tab_key) ? 'nav-tab-active' : '';
@@ -185,7 +183,6 @@ wp_nonce_field( 'subscribe2-options_subscribers' . S2VERSION );
 
 echo '<input type="hidden" name="s2_admin" value="options" />' . "\r\n";
 echo '<input type="hidden" id="jsbcclimit" value="' . $this->subscribe2_options['bcclimit'] . '" />';
-echo '<input type="hidden" id="jsentries" value="' . $this->subscribe2_options['entries'] . '" />';
 
 switch ( $current_tab ) {
 	case 'email':
@@ -434,15 +431,6 @@ switch ( $current_tab ) {
 		$this->pages_dropdown( $this->subscribe2_options['s2page'] );
 		echo '</select>' . "\r\n";
 
-		// Number of subscribers per page
-		echo '<br /><br />' . __( 'Set the number of Subscribers displayed per page', 'subscribe2' ) . ': ';
-		echo '<span id="s2entries_1"><span id="s2entries" style="background-color: #FFFBCC">' . $this->subscribe2_options['entries'] . '</span> ';
-		echo '<a href="#" onclick="s2_show(\'entries\'); return false;">' . __( 'Edit', 'subscribe2' ) . '</a></span>' . "\r\n";
-		echo '<span id="s2entries_2">' . "\r\n";
-		echo '<input type="text" name="entries" value="' . $this->subscribe2_options['entries'] . '" size="3" />' . "\r\n";
-		echo '<a href="#" onclick="s2_update(\'entries\'); return false;">' . __( 'Update', 'subscribe2' ) . '</a>' . "\r\n";
-		echo '<a href="#" onclick="s2_revert(\'entries\'); return false;">' . __( 'Revert', 'subscribe2' ) . '</a></span>' . "\r\n";
-
 		// show link to WordPress page in meta
 		echo '<br /><br /><label><input type="checkbox" name="show_meta" value="1"' . checked( $this->subscribe2_options['show_meta'], '1', false ) . ' /> ';
 		echo __( 'Show a link to your subscription page in "meta"?', 'subscribe2' ) . '</label><br /><br />' . "\r\n";
@@ -466,6 +454,10 @@ switch ( $current_tab ) {
 		// s2_meta checked by default
 		echo '<label><input type="checkbox" name="s2meta_default" value="1"' . checked( $this->subscribe2_options['s2meta_default'], '1', false ) . ' /> ';
 		echo __( 'Disable email notifications is checked by default on authoring pages?', 'subscribe2' ) . '</label><br /><br />' . "\r\n";
+
+		// Subscription form for Registered Users on Frontend
+		echo '<label><input type="checkbox" name="js_ip_updater" value="1"' . checked( $this->subscribe2_options['js_ip_updater'], '1', false ) . ' /> ';
+		echo __( 'Use javascript to update IP address in Subscribe2 HTML form data? (useful if caching is enabled)', 'subscribe2' ) . '</label>' . "\r\n";
 		echo '</p>';
 		echo '</div>' . "\r\n";
 	break;

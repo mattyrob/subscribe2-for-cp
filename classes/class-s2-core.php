@@ -86,7 +86,7 @@ class S2_Core {
 	/**
 	Performs string substitutions for subscribe2 mail tags
 	*/
-	function substitute( $string = '' ) {
+	function substitute( $string = '', $digest_post_ids = array() ) {
 		if ( '' === $string ) {
 			return;
 		}
@@ -115,7 +115,11 @@ class S2_Core {
 		$string = str_replace( '{TAGS}', $this->post_tag_names, $string );
 		$string = str_replace( '{COUNT}', $this->post_count, $string );
 
-		return apply_filters( 's2_custom_keywords', $string );
+		if ( ! empty( $digest_post_ids ) ) {
+			return apply_filters( 's2_custom_keywords', $string, $digest_post_ids );
+		} else {
+			return apply_filters( 's2_custom_keywords', $string );
+		}
 	} // end substitute()
 
 	/**
@@ -141,7 +145,7 @@ class S2_Core {
 			$headers = $this->headers( 'text' );
 			remove_all_filters( 'wp_mail_content_type' );
 			add_filter( 'wp_mail_content_type', array( $this, 'plain_email' ) );
-			$message = html_entity_decode( strip_tags( $message ), ENT_NOQUOTES, 'UTF-8' );
+			$message = strip_tags( html_entity_decode( $message, ENT_NOQUOTES ) );
 			$mailtext = apply_filters( 's2_plain_email', $message );
 		}
 
@@ -693,7 +697,7 @@ class S2_Core {
 		if ( 1 === $this->filtered ) { return; }
 		global $wpdb;
 
-		if ( ! is_email( $email ) ) { return false; }
+		if ( false === $this->validate_email( $email ) ) { return false; }
 
 		if ( false !== $this->is_public( $email ) ) {
 			// is this an email for a registered user
@@ -720,7 +724,7 @@ class S2_Core {
 	function delete( $email = '' ) {
 		global $wpdb;
 
-		if ( ! is_email( $email ) ) { return false; }
+		if ( false === $this->validate_email( $email ) ) { return false; }
 		$wpdb->query( $wpdb->prepare( "DELETE FROM $this->public WHERE CAST(email as binary)=%s LIMIT 1", $email ) );
 	} // end delete()
 
@@ -730,7 +734,7 @@ class S2_Core {
 	function toggle( $email = '' ) {
 		global $wpdb;
 
-		if ( '' === $email || ! is_email( $email ) ) { return false; }
+		if ( '' === $email || false === $this->validate_email( $email ) ) { return false; }
 
 		// let's see if this is a public user
 		$status = $this->is_public( $email );
@@ -939,12 +943,32 @@ class S2_Core {
 	*/
 	function sanitize_email( $email ) {
 		$email = trim( $email );
-		if ( ! is_email( $email ) ) { return; }
+		if ( false === $this->validate_email( $email ) ) { return; }
 
 		// ensure that domain is in lowercase as per internet email standards http://www.ietf.org/rfc/rfc5321.txt
 		list( $name, $domain ) = explode( '@', $email, 2 );
 		return apply_filters( 's2_sanitize_email', $name . '@' . strtolower( $domain ) );
 	} // end sanitize_email()
+
+	/**
+	Check email is valid
+	*/
+	function validate_email( $email ) {
+		// Check the formatting is correct
+		if ( function_exists( 'filter_var' ) ) {
+			if ( false === filter_var( $email, FILTER_VALIDATE_EMAIL ) ) {
+				return false;
+			}
+			$domain = explode( '@', $email, 2 );
+			if ( true === checkdnsrr( $domain[1] ) ) {
+				return $email;
+			} else {
+				return false;
+			}
+		} else {
+			return is_email( $email );
+		}
+	} // end validate_email()
 
 	/**
 	Create the appropriate usermeta values when a user registers
@@ -1761,13 +1785,14 @@ class S2_Core {
 			add_action( 'admin_menu', array( &$this, 'admin_menu' ) );
 			add_action( 'admin_menu', array( &$this, 's2_meta_init' ) );
 			add_action( 'save_post', array( &$this, 's2_meta_handler' ) );
+			add_action( 'save_post', array( &$this, 's2_preview_handler' ) );
 			add_action( 'create_category', array( &$this, 'new_category' ) );
 			add_action( 'delete_category', array( &$this, 'delete_category' ) );
 
 			// Add filters for Ozh Admin Menu
 			if ( function_exists( 'wp_ozh_adminmenu' ) ) {
+				add_filter( 'ozh_adminmenu_icon_s2', array( &$this, 'ozh_s2_icon' ) );
 				add_filter( 'ozh_adminmenu_icon_s2_posts', array( &$this, 'ozh_s2_icon' ) );
-				add_filter( 'ozh_adminmenu_icon_s2_users', array( &$this, 'ozh_s2_icon' ) );
 				add_filter( 'ozh_adminmenu_icon_s2_tools', array( &$this, 'ozh_s2_icon' ) );
 				add_filter( 'ozh_adminmenu_icon_s2_settings', array( &$this, 'ozh_s2_icon' ) );
 			}
@@ -1775,6 +1800,9 @@ class S2_Core {
 			// add write button
 			if ( '1' === $this->subscribe2_options['show_button'] ) {
 				add_action( 'admin_init', array( &$this, 'button_init' ) );
+			}
+			if ( defined( 'GUTENBERG_VERSION' ) ) {
+				add_action( 'admin_init', array( &$this, 'gutenberg_block_editor_assets' ) );
 			}
 
 			// add counterwidget css and js
@@ -1796,6 +1824,9 @@ class S2_Core {
 
 			// add handler to dismiss sender error notice
 			add_action( 'wp_ajax_s2_dismiss_notice', array( &$this, 's2_dismiss_notice_handler' ) );
+
+			// subscriber page options handler
+			add_filter( 'set-screen-option', array( &$this, 'subscribers_set_screen_option' ), 10, 3 );
 
 			// capture CSV export
 			if ( isset( $_POST['s2_admin'] ) && isset( $_POST['csv'] ) ) {
