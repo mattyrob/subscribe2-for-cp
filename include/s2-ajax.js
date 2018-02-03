@@ -52,7 +52,7 @@ s2jQuery( document ).ready( function() {
 					'firstname': firstname,
 					'lastname': lastname,
 					'uri': uri,
-					'button': btn.attr( 'name' ),
+					'button': btn.attr( 'name' )
 				}
 			};
 			jQuery.post( ajaxurl, data, function( response ) {

@@ -2,6 +2,7 @@
 // Version 1.0 - original version
 // Version 1.1 - updated for Subscribe2 8.6
 // Version 1.2 - updated for Subscribe2 9.0
+
 jQuery( document ).ready(function () {
 	// hide our span before page loads
 	jQuery( '#s2bcclimit_2' ).hide();

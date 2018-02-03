@@ -1,13 +1,16 @@
 /* global s2_script_strings */
-/* exported s2_delete_check, bu_cats, bu_format, bu_digest, s2_script_strings */
+/* exported s2_bulk_action_check, submitHandler, bm_check, s2_script_strings */
 // Version 1.0 - original version
 // Version 1.1 - context specific delete warnings for registered or public subscribers
 // Version 1.2 - single and plural string confirmation messages
-// Version 1.3 - fix for Toggle action
+// Version 1.3 - fix suppressed form processing for Toggle action, JavaScript binding only if elements exist & more effecient handling when no users selected
+// Version 1.4 - improve Bulk Management user experience and functions
 
-function s2_delete_check() {
-	document.getElementById( 'doaction' ).onclick = submitHandler;
-	document.getElementById( 'doaction2' ).onclick = submitHandler;
+function s2_bulk_action_check() {
+	if ( null !== document.getElementById( 'doaction' ) ) {
+		document.getElementById( 'doaction' ).onclick = submitHandler;
+		document.getElementById( 'doaction2' ).onclick = submitHandler;
+	}
 }
 function submitHandler() {
 	var location, action1, action2, agree, selected;
@@ -16,6 +19,9 @@ function submitHandler() {
 	action2 = document.getElementById( 'bulk-action-selector-bottom' );
 	agree = false;
 	selected = document.querySelectorAll( 'input[name="subscriber[]"]:checked' ).length;
+	if ( 0 === selected ) {
+		return true;
+	}
 	if ( 'delete' === action1.value || 'delete' === action2.value ) {
 		if ( 'registered' === location.value ) {
 			if ( selected > 1 ) {
@@ -35,22 +41,17 @@ function submitHandler() {
 	}
 	return agree;
 }
-function bu_cats() {
-	var action, actions = document.getElementsByName( 'manage' );
-	for ( var i = 0; i < actions.length; i++ ) {
-		if ( actions[i].checked ) {
-			action = actions[i].value;
-		}
+function bm_check() {
+	var agree, selected;
+	agree = false;
+	selected = document.querySelectorAll( 'input[name="subscriber[]"]:checked' ).length;
+	if ( 0 === selected ) {
+		agree = window.confirm( s2_script_strings.bulk_manage_all );
+	} else if ( selected > 1 ) {
+		agree = window.confirm( s2_script_strings.bulk_manage_single );
+	} else {
+		agree = window.confirm( s2_script_strings.bulk_manage_plural );
 	}
-	document.getElementById( 'bulk-action-selector-top' ).value = action;
-	document.getElementById( 'doaction' ).click();
+	return agree;
 }
-function bu_format() {
-	document.getElementById( 'bulk-action-selector-top' ).value = 'format';
-	document.getElementById( 'doaction' ).click();
-}
-function bu_digest() {
-	document.getElementById( 'bulk-action-selector-top' ).value = 'digest';
-	document.getElementById( 'doaction' ).click();
-}
-window.onload = s2_delete_check;
+window.onload = s2_bulk_action_check;

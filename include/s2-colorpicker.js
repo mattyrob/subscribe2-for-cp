@@ -1,6 +1,7 @@
 // version 1.0 - original version
 // version 1.1 - Update for Subscribe2 9.0 to remove unecessary code now WordPress 3.3 is minimum requirement
 // version 1.2 - Initialise the colour fields on page load so they are the correct colour
+
 jQuery( document ).ready(function () {
 	jQuery( document ).on( 'focus', '.colorpickerField', function () {
 		if ( jQuery( this ).is( '.s2_initialised' ) || -1 !== this.id.search( '__i__' ) ) {
