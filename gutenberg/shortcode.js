@@ -1,9 +1,9 @@
 // Version 1.0 - Initial version
-( function( blocks, i18n, element ) {
+( function( blocks, i18n, element, components ) {
 	var el = element.createElement,
-		TextControl = blocks.InspectorControls.TextControl,
-		CheckboxControl = blocks.InspectorControls.CheckboxControl,
-		RadioControl = blocks.InspectorControls.RadioControl;
+		TextControl = components.TextControl,
+		CheckboxControl = components.CheckboxControl,
+		RadioControl = components.RadioControl;
 
 	blocks.registerBlockType( 'subscribe2-html/shortcode', {
 		title: i18n.__( 'Subscribe2 HTML' ),
@@ -84,9 +84,9 @@
 							selected: hide || 'none',
 							onChange: onChangeHide,
 							options: [
-								{ value: 'none', label: i18n.__( 'None' ) },
-								{ value: 'subscribe', label: i18n.__( 'Subscribe' ) },
-								{ value: 'unsubscribe', label: i18n.__( 'Unsubscribe' ) }
+								{ value: 'none', label: i18n.__( 'Show Both Buttons' ) },
+								{ value: 'subscribe', label: i18n.__( 'Hide Subscribe Button' ) },
+								{ value: 'unsubscribe', label: i18n.__( 'Hide Unsubscribe Button' ) }
 							]
 						}
 					),
@@ -142,7 +142,7 @@
 					'div', {
 						key: 'subscribe2-html/block',
 						style: { backgroundColor: '#ff0', color: '#000', padding: '2px', 'textAlign': 'center' }
-					}, 'Subscribe2 HTML Shortcode'
+					},  i18n.__( 'Subscribe2 HTML Shortcode' )
 				)
 			];
 		},
@@ -154,7 +154,7 @@
 			} else if ( 'unsubscribe' === attributes.hide ) {
 				hide = ' hide=\'unsubscribe\'';
 			}
-			if ( '' !== attributes.id ) {
+			if ( '' !== attributes.id && undefined !== attributes.id ) {
 				id = ' id=\'' + attributes.id + '\'';
 			}
 			if ( true === attributes.nojs ) {
@@ -163,18 +163,19 @@
 			if ( true === attributes.antispam ) {
 				antispam = '  antispam=\'true\'';
 			}
-			if ( '' !== attributes.size && '20' !== attributes.size ) {
+			if ( '' !== attributes.size && undefined !== attributes.size && '20' !== attributes.size ) {
 				size = ' size=\'' + attributes.size + '\'';
 			}
 			if ( true === attributes.wrap ) {
 				wrap = ' wrap=\'false\'';
 			}
 
-			return '<p>[subscribe2' + hide + id + nojs + antispam + size + wrap + ']</p>';
+			return el( element.RawHTML, null, '<p>[subscribe2' + hide + id + nojs + antispam + size + wrap + ']</p>' );
 		}
 	} );
 } ) (
 	window.wp.blocks,
 	window.wp.i18n,
-	window.wp.element
+	window.wp.element,
+	window.wp.components
 );

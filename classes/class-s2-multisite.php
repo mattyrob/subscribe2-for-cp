@@ -2,8 +2,8 @@
 class S2_Multisite {
 	/* === WP Multisite specific functions === */
 	/**
-	Handles subscriptions and unsubscriptions for different blogs on WPMU installs
-	*/
+	 * Handles subscriptions and unsubscriptions for different blogs on WPMU installs
+	 */
 	function wpmu_subscribe() {
 		global $mysubscribe2;
 		// subscribe to new blog
@@ -31,7 +31,7 @@ class S2_Multisite {
 
 				$cats_string = '';
 				foreach ( $all_cats as $cat ) {
-					('' === $cats_string) ? $cats_string = "$cat->term_id" : $cats_string .= ",$cat->term_id";
+					( '' === $cats_string ) ? $cats_string = "$cat->term_id" : $cats_string .= ",$cat->term_id";
 					update_user_meta( $user_ID, $mysubscribe2->get_usermeta_keyname( 's2_cat' ) . $cat->term_id, $cat->term_id );
 				}
 				if ( empty( $cats_string ) ) {
@@ -85,9 +85,9 @@ class S2_Multisite {
 	} // end wpmu_subscribe()
 
 	/**
-	Obtain a list of current WordPress multiuser blogs
-	Note this may affect performance but there is no alternative
-	*/
+	 * Obtain a list of current WordPress multiuser blogs
+	 * Note this may affect performance but there is no alternative
+	 */
 	function get_mu_blog_list() {
 		global $wpdb;
 		$blogs = $wpdb->get_results( $wpdb->prepare( "SELECT blog_id, domain, path FROM $wpdb->blogs WHERE site_id = %d AND archived = '0' AND mature = '0' AND spam = '0' AND deleted = '0' ORDER BY registered DESC", $wpdb->siteid ), ARRAY_A );
@@ -105,11 +105,13 @@ class S2_Multisite {
 	} // end get_mu_blog_list()
 
 	/**
-	Register user details when new user is added to a multisite blog
-	*/
+	 * Register user details when new user is added to a multisite blog
+	 */
 	function wpmu_add_user( $user_ID = 0 ) {
 		global $mysubscribe2;
-		if ( 0 === $user_ID ) { return; }
+		if ( 0 === $user_ID ) {
+			return;
+		}
 		if ( 'yes' === $mysubscribe2->subscribe2_options['autosub'] ) {
 			$mysubscribe2->register( $user_ID, true );
 		} else {
@@ -118,11 +120,13 @@ class S2_Multisite {
 	} // end wpmu_add_user()
 
 	/**
-	Delete user details when a user is removed from a multisite blog
-	*/
+	 * Delete user details when a user is removed from a multisite blog
+	 */
 	function wpmu_remove_user( $user_ID ) {
 		global $mysubscribe2;
-		if ( 0 === $user_ID ) { return; }
+		if ( 0 === $user_ID ) {
+			return;
+		}
 		delete_user_meta( $user_ID, $mysubscribe2->get_usermeta_keyname( 's2_format' ) );
 		delete_user_meta( $user_ID, $mysubscribe2->get_usermeta_keyname( 's2_autosub' ) );
 		$cats = get_user_meta( $user_ID, $mysubscribe2->get_usermeta_keyname( 's2_subscribed' ), true );
@@ -136,8 +140,8 @@ class S2_Multisite {
 	} // end wpmu_remove_user()
 
 	/**
-	Rename WPMU widgets on upgrade without requiring user to re-enable
-	*/
+	 * Rename WPMU widgets on upgrade without requiring user to re-enable
+	 */
 	function namechange_subscribe2_widget() {
 		global $wpdb;
 		$blogs = $wpdb->get_col( "SELECT blog_id FROM {$wpdb->blogs}" );
@@ -146,14 +150,18 @@ class S2_Multisite {
 			switch_to_blog( $blog );
 
 			$sidebars = get_option( 'sidebars_widgets' );
-			if ( empty( $sidebars ) || ! is_array( $sidebars ) ) { return; }
+			if ( empty( $sidebars ) || ! is_array( $sidebars ) ) {
+				return;
+			}
 			$changed = false;
 			foreach ( $sidebars as $s => $sidebar ) {
-				if ( empty( $sidebar ) || ! is_array( $sidebar ) ) { break; }
+				if ( empty( $sidebar ) || ! is_array( $sidebar ) ) {
+					break;
+				}
 				foreach ( $sidebar as $w => $widget ) {
 					if ( 'subscribe2widget' === $widget ) {
 						$sidebars[ $s ][ $w ] = 'subscribe2';
-						$changed = true;
+						$changed              = true;
 					}
 				}
 			}
@@ -164,4 +172,3 @@ class S2_Multisite {
 		}
 	} // end namechange_subscribe2_widget()
 }
-?>

@@ -1,31 +1,44 @@
 <?php
 class S2_Forms {
 	/**
-	Functions to Display content of Your Subscriptions page and process any input
-	*/
+	 * Functions to Display content of Your Subscriptions page and process any input
+	 */
 	function init() {
 		add_action( 's2_subscription_submit', array( &$this, 's2_your_subscription_submit' ) );
 		add_action( 's2_subscription_form', array( &$this, 's2_your_subscription_form' ), 10, 2 );
 	} // end init()
 
 	/**
-	Return appropriate user ID if user can edit other users subscriptions
-	*/
+	 * Return appropriate user ID if user can edit other users subscriptions
+	 */
 	function get_userid() {
-		global $user_ID;
-		if ( current_user_can( apply_filters( 's2_capability', 'manage_options', 'manage' ) ) && isset( $_GET['id'] ) ) {
-			$userid = (int) $_GET['id'];
+		if ( isset( $_GET['id'] ) ) {
+			if ( ! current_user_can( apply_filters( 's2_capability', 'manage_options', 'manage' ) ) ) {
+				die( '<p>' . __( 'Permission error! Your request cannot be completed.', 'subscribe2' ) . '</p>' );
+			}
+			if ( is_multisite() ) {
+				if ( ! is_user_member_of_blog( $_GET['id'], get_current_blog_id() ) ) {
+					die( '<p>' . __( 'Permission error! Your request cannot be completed.', 'subscribe2' ) . '</p>' );
+				} else {
+					$userid = (int) $_GET['id'];
+				}
+			} else {
+				$userid = (int) $_GET['id'];
+			}
 		} else {
-			$userid = $user_ID;
+			global $user_ID;
+			return $user_ID;
 		}
 		return $userid;
 	} // end get_userid()
 
 	/**
-	Display the form to allow Regsitered users to amend their subscription
-	*/
+	 * Display the form to allow Regsitered users to amend their subscription
+	 */
 	function s2_your_subscription_form( $userid ) {
-		if ( ! is_int( $userid ) ) { return false; }
+		if ( ! is_int( $userid ) ) {
+			return false;
+		}
 		global $mysubscribe2;
 
 		echo '<input type="hidden" name="s2_admin" value="user" />';
@@ -99,14 +112,14 @@ class S2_Forms {
 			echo '</div>' . "\r\n";
 		}
 
-		// list of subscribed blogs on wordpress mu
+		// list of subscribed blogs on WordPress mu
 		if ( $mysubscribe2->s2_mu && ! isset( $_GET['email'] ) ) {
 			global $blog_id, $current_user, $s2class_multisite;
-			$s2blog_id = $blog_id;
+			$s2blog_id    = $blog_id;
 			$current_user = wp_get_current_user();
-			$blogs = $s2class_multisite->get_mu_blog_list();
+			$blogs        = $s2class_multisite->get_mu_blog_list();
 
-			$blogs_subscribed = array();
+			$blogs_subscribed    = array();
 			$blogs_notsubscribed = array();
 
 			foreach ( $blogs as $blog ) {
@@ -131,8 +144,8 @@ class S2_Forms {
 				} else {
 					$blog['blogname'] = $blogname;
 				}
-				$blog['description'] = get_option( 'blogdescription' );
-				$blog['blogurl'] = get_option( 'home' );
+				$blog['description']    = get_option( 'blogdescription' );
+				$blog['blogurl']        = get_option( 'home' );
 				$blog['subscribe_page'] = get_option( 'home' ) . '/wp-admin/admin.php?page=s2';
 
 				$key = strtolower( $blog['blogname'] . '-' . $blog['blog_id'] );
@@ -191,8 +204,8 @@ class S2_Forms {
 	} // end s2_your_subscription_form()
 
 	/**
-	Process input from the form that allows Regsitered users to amend their subscription
-	*/
+	 * Process input from the form that allows Regsitered users to amend their subscription
+	 */
 	function s2_your_subscription_submit() {
 		global $mysubscribe2, $user_ID;
 
@@ -229,7 +242,7 @@ class S2_Forms {
 			} elseif ( 'digest' === $cats ) {
 				$all_cats = $mysubscribe2->all_cats( false, 'ID' );
 				foreach ( $all_cats as $cat ) {
-					('' === $catids) ? $catids = "$cat->term_id" : $catids .= ",$cat->term_id";
+					( '' === $catids ) ? $catids = "$cat->term_id" : $catids .= ",$cat->term_id";
 					update_user_meta( $userid, $mysubscribe2->get_usermeta_keyname( 's2_cat' ) . $cat->term_id, $cat->term_id );
 				}
 				update_user_meta( $userid, $mysubscribe2->get_usermeta_keyname( 's2_subscribed' ), $catids );
@@ -239,8 +252,8 @@ class S2_Forms {
 				}
 				sort( $cats );
 				$old_cats = explode( ',', get_user_meta( $userid, $mysubscribe2->get_usermeta_keyname( 's2_subscribed' ), true ) );
-				$remove = array_diff( $old_cats, $cats );
-				$new = array_diff( $cats, $old_cats );
+				$remove   = array_diff( $old_cats, $cats );
+				$new      = array_diff( $cats, $old_cats );
 				if ( ! empty( $remove ) ) {
 					// remove subscription to these cat IDs
 					foreach ( $remove as $id ) {
@@ -273,9 +286,9 @@ class S2_Forms {
 	} // end s2_your_subscription_submit()
 
 	/**
-	Display a table of categories with checkboxes
-	Optionally pre-select those categories specified
-	*/
+	 * Display a table of categories with checkboxes
+	 * Optionally pre-select those categories specified
+	 */
 	function display_category_form( $selected = array(), $override = 1, $compulsory = array(), $name = 'category' ) {
 		global $wpdb, $mysubscribe2;
 
@@ -285,9 +298,9 @@ class S2_Forms {
 			$all_cats = $mysubscribe2->all_cats( false );
 		}
 
-		$half = (count( $all_cats ) / 2);
-		$i = 0;
-		$j = 0;
+		$half = ( count( $all_cats ) / 2 );
+		$i    = 0;
+		$j    = 0;
 		echo '<table style="width: 100%; border-collapse: separate; border-spacing: 2px; *border-collapse: expression(\'separate\', cellSpacing = \'2px\');" class="editform">' . "\r\n";
 		echo '<tr><td style="text-align: left;" colspan="2">' . "\r\n";
 		echo '<label><input type="checkbox" name="checkall" value="checkall_' . $name . '" /> ' . __( 'Select / Unselect All', 'subscribe2' ) . '</label>' . "\r\n";
@@ -298,15 +311,15 @@ class S2_Forms {
 				echo '</td><td style="width: 50%; text-align: left;">' . "\r\n";
 				$j++;
 			}
-			$catName = '';
-			$parents = array_reverse( get_ancestors( $cat->term_id, $cat->taxonomy ) );
+			$cat_name = '';
+			$parents  = array_reverse( get_ancestors( $cat->term_id, $cat->taxonomy ) );
 			if ( $parents ) {
 				foreach ( $parents as $parent ) {
-					$parent = get_term( $parent, $cat->taxonomy );
-					$catName .= $parent->name . ' &raquo; ';
+					$parent    = get_term( $parent, $cat->taxonomy );
+					$cat_name .= $parent->name . ' &raquo; ';
 				}
 			}
-			$catName .= $cat->name;
+			$cat_name .= $cat->name;
 
 			if ( 0 === $j ) {
 				echo '<label><input class="checkall_' . $name . '" type="checkbox" name="' . $name . '[]" value="' . $cat->term_id . '"';
@@ -316,7 +329,7 @@ class S2_Forms {
 				if ( in_array( $cat->term_id, $compulsory ) && 'category' === $name ) {
 					echo ' DISABLED';
 				}
-				echo ' /> <abbr title="' . $cat->slug . '">' . $catName . '</abbr></label><br />' . "\r\n";
+				echo ' /> <abbr title="' . $cat->slug . '">' . $cat_name . '</abbr></label><br />' . "\r\n";
 			} else {
 				echo '<label><input class="checkall_' . $name . '" type="checkbox" name="' . $name . '[]" value="' . $cat->term_id . '"';
 				if ( in_array( $cat->term_id, $selected ) || in_array( $cat->term_id, $compulsory ) ) {
@@ -325,7 +338,7 @@ class S2_Forms {
 				if ( in_array( $cat->term_id, $compulsory ) && 'category' === $name ) {
 					echo ' DISABLED';
 				}
-				echo ' /> <abbr title="' . $cat->slug . '">' . $catName . '</abbr></label><br />' . "\r\n";
+				echo ' /> <abbr title="' . $cat->slug . '">' . $cat_name . '</abbr></label><br />' . "\r\n";
 			}
 			$i++;
 		}
@@ -339,15 +352,15 @@ class S2_Forms {
 	} // end display_category_form()
 
 	/**
-	Display a table of authors with checkboxes
-	Optionally pre-select those authors specified
-	*/
+	 * Display a table of authors with checkboxes
+	 * Optionally pre-select those authors specified
+	 */
 	function display_author_form( $selected = array() ) {
 		$all_authors = $this->get_authors();
 
-		$half = (count( $all_authors ) / 2);
-		$i = 0;
-		$j = 0;
+		$half = ( count( $all_authors ) / 2 );
+		$i    = 0;
+		$j    = 0;
 		echo '<table style="width: 100%; border-collapse: separate; border-spacing: 2px; *border-collapse: expression(\'separate\', cellSpacing = \'2px\');" class="editform">' . "\r\n";
 		echo '<tr><td style="text-align: left;" colspan="2">' . "\r\n";
 		echo '<label><input type="checkbox" name="checkall" value="checkall_author" /> ' . __( 'Select / Unselect All', 'subscribe2' ) . '</label>' . "\r\n";
@@ -378,24 +391,29 @@ class S2_Forms {
 	} // end display_author_form()
 
 	/**
-	Collect an array of all author level users and above
-	*/
+	 * Collect an array of all author level users and above
+	 */
 	function get_authors() {
 		if ( '' === $this->all_authors ) {
 			$role = array(
 				'fields' => array( 'ID', 'display_name' ),
-				'role' => 'administrator',
+				'role'   => 'administrator',
 			);
+
 			$administrators = get_users( $role );
+
 			$role = array(
 				'fields' => array( 'ID', 'display_name' ),
-				'role' => 'editor',
+				'role'   => 'editor',
 			);
+
 			$editors = get_users( $role );
+
 			$role = array(
 				'fields' => array( 'ID', 'display_name' ),
-				'role' => 'author',
+				'role'   => 'author',
 			);
+
 			$authors = get_users( $role );
 
 			$this->all_authors = array_merge( $administrators, $editors, $authors );
@@ -407,4 +425,3 @@ class S2_Forms {
 	// cache variables
 	var $all_authors = '';
 }
-?>

@@ -1,3 +1,9 @@
+= 10.24 =
+
+* Fixes for the Subscribers page - sorting and Multisite improvements
+* Code layout improvements
+* Other minor bug fixes and enhancements
+
 = 10.23 =
 
 * Improve REGEX for the old Subscribe2 token - props @pik256

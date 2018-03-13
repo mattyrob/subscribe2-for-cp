@@ -19,45 +19,45 @@ if ( ! class_exists( 'WP_List_Table' ) ) {
 if ( ! class_exists( 'Subscribe2_List_Table' ) ) {
 	if ( version_compare( $GLOBALS['wp_version'], '4.3', '<' ) ) {
 		require_once( S2PATH . 'classes/class-s2-list-table-legacy.php' );
-		$S2ListTable = new S2_List_Table_Legacy;
+		$s2_list_table = new S2_List_Table_Legacy;
 	} else {
 		require_once( S2PATH . 'classes/class-s2-list-table.php' );
-		$S2ListTable = new S2_List_Table;
+		$s2_list_table = new S2_List_Table;
 	}
 }
 
 // was anything POSTed ?
 if ( isset( $_POST['s2_admin'] ) ) {
-	if ( false === wp_verify_nonce( $_REQUEST['_wpnonce'], 'bulk-' . $S2ListTable->_args['plural'] ) ) {
+	if ( false === wp_verify_nonce( $_REQUEST['_wpnonce'], 'bulk-' . $s2_list_table->_args['plural'] ) ) {
 		die( '<p>' . __( 'Security error! Your request cannot be completed.', 'subscribe2' ) . '</p>' );
 	}
 
 	if ( ! empty( $_POST['addresses'] ) ) {
 		$reg_sub_error = '';
 		$pub_sub_error = '';
-		$unsub_error = '';
-		$email_error = '';
-		$message = '';
+		$unsub_error   = '';
+		$email_error   = '';
+		$message       = '';
 		foreach ( preg_split( '/[\s,]+/', $_POST['addresses'] ) as $email ) {
 			if ( false === $this->validate_email( $email ) ) {
-				('' === $email_error) ? $email_error = "$email" : $email_error .= ", $email";
+				( '' === $email_error ) ? $email_error = "$email" : $email_error .= ", $email";
 					continue;
 			} else {
 				$email = $this->sanitize_email( $email );
 				if ( isset( $_POST['subscribe'] ) ) {
 					if ( false !== $this->is_public( $email ) ) {
-						('' === $pub_sub_error) ? $pub_sub_error = "$email" : $pub_sub_error .= ", $email";
+						( '' === $pub_sub_error ) ? $pub_sub_error = "$email" : $pub_sub_error .= ", $email";
 						continue;
 					}
 					if ( $this->is_registered( $email ) ) {
-						('' === $reg_sub_error) ? $reg_sub_error = "$email" : $reg_sub_error .= ", $email";
+						( '' === $reg_sub_error ) ? $reg_sub_error = "$email" : $reg_sub_error .= ", $email";
 						continue;
 					}
 					$this->add( $email, true );
 					$message = '<div id="message" class="updated fade"><p><strong>' . __( 'Address(es) subscribed!', 'subscribe2' ) . '</strong></p></div>';
 				} elseif ( isset( $_POST['unsubscribe'] ) ) {
 					if ( false === $this->is_public( $email ) || $this->is_registered( $email ) ) {
-						('' === $unsub_error) ? $unsub_error = "$email" : $unsub_error .= ", $email";
+						( '' === $unsub_error ) ? $unsub_error = "$email" : $unsub_error .= ", $email";
 						continue;
 					}
 					$this->delete( $email );
@@ -66,16 +66,16 @@ if ( isset( $_POST['s2_admin'] ) ) {
 			}
 		}
 		if ( '' !== $reg_sub_error ) {
-			echo '<div id="message" class="error"><p><strong>' . __( 'Some emails were not processed, the following are already Registered Subscribers' , 'subscribe2' ) . ':<br />' . $reg_sub_error . '</strong></p></div>';
+			echo '<div id="message" class="error"><p><strong>' . __( 'Some emails were not processed, the following are already Registered Subscribers', 'subscribe2' ) . ':<br />' . $reg_sub_error . '</strong></p></div>';
 		}
 		if ( '' !== $pub_sub_error ) {
-			echo '<div id="message" class="error"><p><strong>' . __( 'Some emails were not processed, the following are already Public Subscribers' , 'subscribe2' ) . ':<br />' . $pub_sub_error . '</strong></p></div>';
+			echo '<div id="message" class="error"><p><strong>' . __( 'Some emails were not processed, the following are already Public Subscribers', 'subscribe2' ) . ':<br />' . $pub_sub_error . '</strong></p></div>';
 		}
 		if ( '' !== $unsub_error ) {
-			echo '<div id="message" class="error"><p><strong>' . __( 'Some emails were not processed, the following were not in the database' , 'subscribe2' ) . ':<br /> ' . $unsub_error . '</strong></p></div>';
+			echo '<div id="message" class="error"><p><strong>' . __( 'Some emails were not processed, the following were not in the database', 'subscribe2' ) . ':<br /> ' . $unsub_error . '</strong></p></div>';
 		}
 		if ( '' !== $email_error ) {
-			echo '<div id="message" class="error"><p><strong>' . __( 'Some emails were not processed, the following were invalid email addresses' , 'subscribe2' ) . ':<br /> ' . $email_error . '</strong></p></div>';
+			echo '<div id="message" class="error"><p><strong>' . __( 'Some emails were not processed, the following were invalid email addresses', 'subscribe2' ) . ':<br /> ' . $email_error . '</strong></p></div>';
 		}
 		if ( '' !== $message ) {
 			echo $message;
@@ -118,50 +118,58 @@ if ( isset( $_POST['s2_admin'] ) ) {
 if ( 'registered' === $current_tab ) {
 	// Get Registered Subscribers
 	$registered = $this->get_registered( 'return=emailid' );
-	$all_users = $this->get_all_registered( 'emailid' );
+	$all_users  = $this->get_all_registered( 'emailid' );
 	// safety check for our arrays
-	if ( '' === $registered ) { $registered = array(); }
-	if ( '' === $all_users ) { $all_users = array(); }
+	if ( '' === $registered ) {
+		$registered = array();
+	}
+	if ( '' === $all_users ) {
+		$all_users = array();
+	}
 } else {
 	//Get Public Subscribers
-	$confirmed = $this->get_public();
+	$confirmed   = $this->get_public();
 	$unconfirmed = $this->get_public( 0 );
 	// safety check for our arrays
-	if ( '' === $confirmed ) { $confirmed = array(); }
-	if ( '' === $unconfirmed ) { $unconfirmed = array(); }
+	if ( '' === $confirmed ) {
+		$confirmed = array();
+	}
+	if ( '' === $unconfirmed ) {
+		$unconfirmed = array();
+	}
 }
 
 $reminderform = false;
 if ( isset( $_REQUEST['what'] ) ) {
 	if ( 'public' === $_REQUEST['what'] ) {
-		$what = 'public';
+		$what        = 'public';
 		$subscribers = array_merge( (array) $confirmed, (array) $unconfirmed );
 	} elseif ( 'confirmed' === $_REQUEST['what'] ) {
-		$what = 'confirmed';
+		$what        = 'confirmed';
 		$subscribers = $confirmed;
 	} elseif ( 'unconfirmed' === $_REQUEST['what'] ) {
-		$what = 'unconfirmed';
+		$what        = 'unconfirmed';
 		$subscribers = $unconfirmed;
 		if ( ! empty( $subscribers ) ) {
 			$reminderemails = implode( ',', $subscribers );
-			$reminderform = true;
+			$reminderform   = true;
 		}
 	} elseif ( is_numeric( $_REQUEST['what'] ) ) {
-		$what = intval( $_REQUEST['what'] );
+		$what        = intval( $_REQUEST['what'] );
 		$subscribers = $this->get_registered( "cats=$what&return=emailid" );
 	} elseif ( 'registered' === $_REQUEST['what'] ) {
-		$what = 'registered';
+		$what        = 'registered';
 		$subscribers = $registered;
 	} elseif ( 'all_users' === $_REQUEST['what'] ) {
-		$what = 'all_users';
+		$what        = 'all_users';
 		$subscribers = $all_users;
 	}
 } else {
 	if ( 'public' === $current_tab ) {
-		$what = 'public';
+		$what        = 'public';
 		$subscribers = array_merge( (array) $confirmed, (array) $unconfirmed );
 	} else {
-		$what = 'all_users';
+		$what        = 'all_users';
 		$subscribers = $all_users;
 	}
 }
@@ -183,18 +191,18 @@ if ( ! empty( $_POST['s'] ) ) {
 	$subscribers = $result;
 }
 
-$S2ListTable->prepare_items();
+$s2_list_table->prepare_items();
 
 // show our form
 echo '<div class="wrap">';
 echo '<h1>' . __( 'Subscribers', 'subscribe2' ) . '</h1>' . "\r\n";
 $tabs = array(
-	'public' => __( 'Public Subscribers', 'subscribe2' ),
+	'public'     => __( 'Public Subscribers', 'subscribe2' ),
 	'registered' => __( 'Registered Subscribers', 'subscribe2' ),
 );
 echo '<h2 class="nav-tab-wrapper">';
 foreach ( $tabs as $tab_key => $tab_caption ) {
-	$active = ($current_tab === $tab_key) ? 'nav-tab-active' : '';
+	$active = ( $current_tab === $tab_key ) ? 'nav-tab-active' : '';
 	echo '<a class="nav-tab ' . $active . '" href="?page=s2_tools&amp;tab=' . $tab_key . '">' . $tab_caption . '</a>';
 }
 echo '</h2>';
@@ -217,7 +225,7 @@ switch ( $current_tab ) {
 		echo '<div class="s2_admin" id="s2_current_subscribers">' . "\r\n";
 		echo '<h2>' . __( 'Current Subscribers', 'subscribe2' ) . '</h2>' . "\r\n";
 		echo '<br />';
-		$cats = $this->all_cats();
+		$cats    = $this->all_cats();
 		$cat_ids = array();
 		foreach ( $cats as $cat ) {
 			$cat_ids[] = $cat->term_id;
@@ -258,7 +266,7 @@ if ( ! empty( $subscribers ) ) {
 	} else {
 		$exportcsv = '';
 		foreach ( $subscribers as $subscriber ) {
-			('' === $exportcsv) ? $exportcsv = $subscriber['user_email'] : $exportcsv .= ",\r\n" . $subscriber['user_email'];
+			( '' === $exportcsv ) ? $exportcsv = $subscriber['user_email'] : $exportcsv .= ",\r\n" . $subscriber['user_email'];
 		}
 	}
 	echo '<td style="width: 25%; text-align: right;"><input type="hidden" name="exportcsv" value="' . $exportcsv . '" />' . "\r\n";
@@ -269,8 +277,8 @@ if ( ! empty( $subscribers ) ) {
 echo '</tr></table>';
 
 // output our subscriber table
-$S2ListTable->search_box( __( 'Search', 'subscribe2' ), 'search_id' );
-$S2ListTable->display();
+$s2_list_table->search_box( __( 'Search', 'subscribe2' ), 'search_id' );
+$s2_list_table->display();
 echo '</div>' . "\r\n";
 
 // show bulk management form if filtered in some Registered Users
@@ -328,4 +336,3 @@ echo '</form></div>' . "\r\n";
 include( ABSPATH . 'wp-admin/admin-footer.php' );
 // just to be sure
 die;
-?>

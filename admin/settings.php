@@ -12,14 +12,17 @@ if ( isset( $_POST['s2_admin'] ) ) {
 	}
 
 	if ( isset( $_POST['reset'] ) ) {
-		$this->reset();
+		require_once( S2PATH . 'classes/class-s2-upgrade.php' );
+		global $s2_upgrade;
+		$s2_upgrade = new S2_Upgrade;
+		$s2_upgrade->reset();
 		echo '<div id="message" class="updated fade"><p><strong>' . __( 'Options reset!', 'subscribe2' ) . '</strong></p></div>';
 	} elseif ( isset( $_POST['preview'] ) ) {
 		global $user_email, $post;
 		$this->preview_email = true;
 		if ( 'never' === $this->subscribe2_options['email_freq'] ) {
 			$posts = get_posts( 'numberposts=1' );
-			$post = $posts[0];
+			$post  = $posts[0];
 			$this->publish( $post, $user_email );
 		} else {
 			do_action( 's2_digest_preview', $user_email );
@@ -42,8 +45,7 @@ if ( isset( $_POST['s2_admin'] ) ) {
 				}
 			} elseif ( in_array( $key, array( 'show_meta', 'show_button', 'ajax', 'widget', 'counterwidget', 's2meta_default', 'reg_override' ) ) ) {
 				// check box entries
-				( isset( $_POST[ $key ] ) && '1' === $_POST[ $key ] ) ? $newvalue = '1' : $newvalue = '0';
-				$this->subscribe2_options[ $key ] = $newvalue;
+				( isset( $_POST[ $key ] ) && '1' === $_POST[ $key ] ) ? $this->subscribe2_options[ $key ] = '1' : $this->subscribe2_options[ $key ] = '0';
 			} elseif ( 'appearance_users_tab' === $key ) {
 				$options = array( 'show_meta', 'show_button', 'ajax', 'widget', 'counterwidget', 's2meta_default' );
 				foreach ( $options as $option ) {
@@ -76,23 +78,23 @@ if ( isset( $_POST['s2_admin'] ) ) {
 				}
 			} elseif ( 'email_freq' === $key ) {
 				// send per-post or digest emails
-				$email_freq = $_POST['email_freq'];
-				$scheduled_time = wp_next_scheduled( 's2_digest_cron' );
+				$email_freq       = $_POST['email_freq'];
+				$scheduled_time   = wp_next_scheduled( 's2_digest_cron' );
 				$timestamp_offset = get_option( 'gmt_offset' ) * 60 * 60;
-				$crondate = ( isset( $_POST['crondate'] ) ) ? $_POST['crondate'] : 0;
-				$crontime = ( isset( $_POST['crondate'] ) ) ? $_POST['crontime'] : 0;
+				$crondate         = ( isset( $_POST['crondate'] ) ) ? $_POST['crondate'] : 0;
+				$crontime         = ( isset( $_POST['crondate'] ) ) ? $_POST['crontime'] : 0;
 				if ( $email_freq !== $this->subscribe2_options['email_freq'] || date_i18n( get_option( 'date_format' ), $scheduled_time + $timestamp_offset ) !== $crondate || date( 'G', $scheduled_time + $timestamp_offset ) !== $crontime ) {
 					$this->subscribe2_options['email_freq'] = $email_freq;
 					wp_clear_scheduled_hook( 's2_digest_cron' );
-					$scheds = (array) wp_get_schedules();
+					$scheds   = (array) wp_get_schedules();
 					$interval = ( isset( $scheds[ $email_freq ]['interval'] ) ) ? (int) $scheds[ $email_freq ]['interval'] : 0;
 					if ( 0 === $interval ) {
 						// if we are on per-post emails remove last_cron entry
 						unset( $this->subscribe2_options['last_s2cron'] );
 					} else {
 						// if we are using digest schedule the event and prime last_cron as now
-						$time = time() + $interval;
-						$srttimestamp = strtotime( $crondate ) + ($crontime * 60 * 60);
+						$time         = time() + $interval;
+						$srttimestamp = strtotime( $crondate ) + ( $crontime * 60 * 60 );
 						if ( false === $srttimestamp || 0 === $srttimestamp ) {
 							$srttimestamp = time();
 						}
@@ -121,8 +123,7 @@ if ( isset( $_POST['s2_admin'] ) ) {
 }
 
 // send error message if no WordPress page exists
-$sql = "SELECT ID FROM $wpdb->posts WHERE post_type='page' AND post_status='publish' LIMIT 1";
-$id = $wpdb->get_var( $sql );
+$id = $wpdb->get_var( "SELECT ID FROM `{$wpdb->prefix}posts` WHERE post_type='page' AND post_status='publish' LIMIT 1" );
 if ( empty( $id ) ) {
 	echo '<div id="page_message" class="error"><p class="s2_error"><strong>' . __( 'You must create a WordPress page for this plugin to work correctly.', 'subscribe2' ) . '</strong></p></div>';
 }
@@ -150,7 +151,7 @@ if ( 'blogname' === $this->subscribe2_options['sender'] ) {
 	$sender = get_bloginfo( 'admin_email' );
 } else {
 	$userdata = $this->get_userdata( $this->subscribe2_options['sender'] );
-	$sender = $userdata->user_email;
+	$sender   = $userdata->user_email;
 }
 list( $user, $domain ) = explode( '@', $sender, 2 );
 if ( ! stristr( esc_html( $_SERVER['SERVER_NAME'] ), $domain ) && 'author' !== $this->subscribe2_options['sender'] && '0' === $this->subscribe2_options['dismiss_sender_warning'] ) {
@@ -164,15 +165,15 @@ $current_tab = isset( $_GET['tab'] ) ? $_GET['tab'] : 'email';
 echo '<div class="wrap">';
 echo '<h1>' . __( 'Settings', 'subscribe2' ) . '</h1>' . "\r\n";
 $tabs = array(
-	'email' => __( 'Email Settings', 'subscribe2' ),
-	'templates' => __( 'Templates', 'subscribe2' ),
+	'email'      => __( 'Email Settings', 'subscribe2' ),
+	'templates'  => __( 'Templates', 'subscribe2' ),
 	'registered' => __( 'Registered Users', 'subscribe2' ),
 	'appearance' => __( 'Appearance', 'subscribe2' ),
-	'misc' => __( 'Miscellaneous', 'subscribe2' ),
+	'misc'       => __( 'Miscellaneous', 'subscribe2' ),
 );
 echo '<h2 class="nav-tab-wrapper">';
 foreach ( $tabs as $tab_key => $tab_caption ) {
-	$active = ($current_tab === $tab_key) ? 'nav-tab-active' : '';
+	$active = ( $current_tab === $tab_key ) ? 'nav-tab-active' : '';
 	echo '<a class="nav-tab ' . $active . '" href="?page=s2_settings&amp;tab=' . $tab_key . '">' . $tab_caption . '</a>';
 }
 echo '</h2>';
@@ -223,7 +224,7 @@ switch ( $current_tab ) {
 			$types = '';
 			echo __( 'Subscribe2 will send email notifications for the following custom post types', 'subscribe2' ) . ': <strong>';
 			foreach ( $s2_post_types as $type ) {
-				('' === $types) ? $types = ucwords( $type ) : $types .= ', ' . ucwords( $type );
+				( '' === $types ) ? $types = ucwords( $type ) : $types .= ', ' . ucwords( $type );
 			}
 			echo $types . '</strong><br /><br />' . "\r\n";
 		}
@@ -260,7 +261,7 @@ switch ( $current_tab ) {
 		echo '<br />' . __( 'eg. utm_source=subscribe2&amp;utm_medium=email&amp;utm_campaign=postnotify&amp;utm_id={ID}&amp;utm_title={TITLE}', 'subscribe2' ) . "\r\n";
 		echo '</p>' . "\r\n";
 		echo '</div>' . "\r\n";
-	break;
+		break;
 
 	case 'templates':
 		// email templates
@@ -277,7 +278,7 @@ switch ( $current_tab ) {
 		echo '<p class="submit"><input type="submit" class="button-secondary" name="preview" value="' . __( 'Send Email Preview', 'subscribe2' ) . '" /></p>' . "\r\n";
 		echo '<h3>' . __( 'Message substitutions', 'subscribe2' ) . '</h3>' . "\r\n";
 		echo '<dl>';
-		echo '<dt><b><em style="color: red">' . __( 'IF THE FOLLOWING KEYWORDS ARE ALSO IN YOUR POST THEY WILL BE SUBSTITUTED' ,'subscribe2' ) . '</em></b></dt><dd></dd>' . "\r\n";
+		echo '<dt><b><em style="color: red">' . __( 'IF THE FOLLOWING KEYWORDS ARE ALSO IN YOUR POST THEY WILL BE SUBSTITUTED', 'subscribe2' ) . '</em></b></dt><dd></dd>' . "\r\n";
 		echo '<dt><b>{BLOGNAME}</b></dt><dd>' . get_option( 'blogname' ) . '</dd>' . "\r\n";
 		echo '<dt><b>{BLOGLINK}</b></dt><dd>' . get_option( 'home' ) . '</dd>' . "\r\n";
 		echo '<dt><b>{TITLE}</b></dt><dd>' . __( "the post's title<br />(<i>for per-post emails only</i>)", 'subscribe2' ) . '</dd>' . "\r\n";
@@ -312,7 +313,7 @@ switch ( $current_tab ) {
 		echo '<textarea rows="9" cols="60" name="remind_email">' . stripslashes( $this->subscribe2_options['remind_email'] ) . '</textarea><br /><br />' . "\r\n";
 		echo '</td></tr></table>' . "\r\n";
 		echo '</div>' . "\r\n";
-	break;
+		break;
 
 	case 'registered':
 		// Access function to allow display for form elements
@@ -416,7 +417,7 @@ switch ( $current_tab ) {
 		echo '<label><input type="radio" name="one_click_profile" value="no"' . checked( $this->subscribe2_options['one_click_profile'], 'no', false ) . ' /> ';
 		echo __( 'No', 'subscribe2' ) . '</label>' . "\r\n";
 		echo '</p></div>' . "\r\n";
-	break;
+		break;
 
 	case 'appearance':
 		// Appearance options
@@ -460,7 +461,7 @@ switch ( $current_tab ) {
 		echo __( 'Use javascript to update IP address in Subscribe2 HTML form data? (useful if caching is enabled)', 'subscribe2' ) . '</label>' . "\r\n";
 		echo '</p>';
 		echo '</div>' . "\r\n";
-	break;
+		break;
 
 	case 'misc':
 		//barred domains
@@ -476,7 +477,7 @@ switch ( $current_tab ) {
 		echo '<a href="http://subscribe2.wordpress.com/">' . __( 'Plugin Blog', 'subscribe2' ) . '</a><br />';
 		echo '<a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&amp;hosted_button_id=2387904">' . __( 'Make a donation via PayPal', 'subscribe2' ) . '</a>';
 		echo '</div>' . "\r\n";
-	break;
+		break;
 
 }
 // submit
@@ -495,4 +496,3 @@ echo '</form></div>' . "\r\n";
 include( ABSPATH . 'wp-admin/admin-footer.php' );
 // just to be sure
 die;
-?>

@@ -12,9 +12,9 @@ if ( ( isset( $_POST['s2_admin'] ) && 'mail' === $_POST['s2_admin'] ) || isset( 
 	}
 
 	$subject = html_entity_decode( stripslashes( wp_kses( $this->substitute( $_POST['subject'] ), '' ) ), ENT_QUOTES );
-	$body = wpautop( $this->substitute( stripslashes( $_POST['content'] ) ), true );
+	$body    = wpautop( $this->substitute( stripslashes( $_POST['content'] ) ), true );
 	if ( '' !== $current_user->display_name || '' !== $current_user->user_email ) {
-		$this->myname = html_entity_decode( $current_user->display_name, ENT_QUOTES );
+		$this->myname  = html_entity_decode( $current_user->display_name, ENT_QUOTES );
 		$this->myemail = $current_user->user_email;
 	}
 	if ( isset( $_POST['send'] ) ) {
@@ -23,19 +23,19 @@ if ( ( isset( $_POST['s2_admin'] ) && 'mail' === $_POST['s2_admin'] ) || isset( 
 		} elseif ( 'unconfirmed' === $_POST['what'] ) {
 			$recipients = $this->get_public( 0 );
 		} elseif ( 'public' === $_POST['what'] ) {
-			$confirmed = $this->get_public();
+			$confirmed   = $this->get_public();
 			$unconfirmed = $this->get_public( 0 );
-			$recipients = array_merge( (array) $confirmed, (array) $unconfirmed );
+			$recipients  = array_merge( (array) $confirmed, (array) $unconfirmed );
 		} elseif ( is_numeric( $_POST['what'] ) ) {
-			$cat = intval( $_POST['what'] );
+			$cat        = intval( $_POST['what'] );
 			$recipients = $this->get_registered( "cats=$cat" );
 		} elseif ( 'all_users' === $_POST['what'] ) {
 			$recipients = $this->get_all_registered();
 		} elseif ( 'all' === $_POST['what'] ) {
-			$confirmed = $this->get_public();
+			$confirmed   = $this->get_public();
 			$unconfirmed = $this->get_public( 0 );
-			$registered = $this->get_all_registered();
-			$recipients = array_merge( (array) $confirmed, (array) $unconfirmed, (array) $registered );
+			$registered  = $this->get_all_registered();
+			$recipients  = array_merge( (array) $confirmed, (array) $unconfirmed, (array) $registered );
 		} else {
 			$recipients = $this->get_registered();
 		}
@@ -55,9 +55,12 @@ if ( ( isset( $_POST['s2_admin'] ) && 'mail' === $_POST['s2_admin'] ) || isset( 
 					'error'    => $_FILES['file']['error'][ $key ],
 					'size'     => $_FILES['file']['size'][ $key ],
 				);
-				$uploads[] = wp_handle_upload( $file, array(
-					'test_form' => false,
-				) );
+
+				$uploads[] = wp_handle_upload(
+					$file, array(
+						'test_form' => false,
+					)
+				);
 			}
 		}
 	}
@@ -74,12 +77,12 @@ if ( ( isset( $_POST['s2_admin'] ) && 'mail' === $_POST['s2_admin'] ) || isset( 
 
 	if ( empty( $body ) ) {
 		$error_message = __( 'Your email was empty', 'subscribe2' );
-		$status = false;
+		$status        = false;
 	} elseif ( isset( $upload_error ) ) {
 		$error_message = $upload_error;
-		$status = false;
+		$status        = false;
 	} else {
-		$status = $this->mail( $recipients, $subject, $body, 'text', $attachments );
+		$status        = $this->mail( $recipients, $subject, $body, 'html', $attachments );
 		$error_message = __( 'Check your settings and check with your hosting provider', 'subscribe2' );
 	}
 
@@ -137,4 +140,3 @@ function add_file_upload() {
 include( ABSPATH . 'wp-admin/admin-footer.php' );
 // just to be sure
 die;
-?>

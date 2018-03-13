@@ -20,7 +20,7 @@ echo '<div class="wrap">';
 
 global $user_ID;
 $userid = $s2_forms->get_userid();
-$user = get_userdata( $userid );
+$user   = get_userdata( $userid );
 
 if ( $userid === $user_ID ) {
 	echo '<h1>' . __( 'Your Notification Settings', 'subscribe2' ) . "</h1>\r\n";
@@ -45,4 +45,3 @@ echo '</div>' . "\r\n";
 include( ABSPATH . 'wp-admin/admin-footer.php' );
 // just to be sure
 die;
-?>
