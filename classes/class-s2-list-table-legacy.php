@@ -202,6 +202,7 @@ class S2_List_Table_Legacy extends WP_List_Table {
 			global $mysubscribe2, $current_user, $subscribers;
 			$message = array();
 			foreach ( $_REQUEST['subscriber'] as $address ) {
+				$address = trim( stripslashes( $address ) );
 				if ( false !== $mysubscribe2->is_public( $address ) ) {
 					$mysubscribe2->delete( $address );
 					$key = array_search( $address, $subscribers );
@@ -230,6 +231,7 @@ class S2_List_Table_Legacy extends WP_List_Table {
 			global $mysubscribe2, $current_user, $subscribers;
 			$mysubscribe2->ip = $current_user->user_login;
 			foreach ( $_REQUEST['subscriber'] as $address ) {
+				$address = trim( stripslashes( $address ) );
 				$mysubscribe2->toggle( $address );
 				if ( 'confirmed' === $_POST['what'] || 'unconfirmed' === $_POST['what'] ) {
 					$key = array_search( $address, $subscribers );
