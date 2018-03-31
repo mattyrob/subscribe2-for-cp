@@ -929,7 +929,7 @@ class S2_Core {
 	 * Function to ensure email is compliant with internet messaging standards
 	 */
 	function sanitize_email( $email ) {
-		$email = trim( $email );
+		$email = trim( stripslashes( $email ) );
 		if ( false === $this->validate_email( $email ) ) {
 			return;
 		}
@@ -943,6 +943,7 @@ class S2_Core {
 	 * Check email is valid
 	 */
 	function validate_email( $email ) {
+		$email = $this->sanitize_email( $email );
 		// Check the formatting is correct
 		if ( function_exists( 'filter_var' ) ) {
 			if ( false === filter_var( $email, FILTER_VALIDATE_EMAIL ) ) {
