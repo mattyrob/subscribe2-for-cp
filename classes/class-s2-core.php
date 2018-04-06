@@ -943,7 +943,6 @@ class S2_Core {
 	 * Check email is valid
 	 */
 	function validate_email( $email ) {
-		$email = $this->sanitize_email( $email );
 		// Check the formatting is correct
 		if ( function_exists( 'filter_var' ) ) {
 			if ( false === filter_var( $email, FILTER_VALIDATE_EMAIL ) ) {
