@@ -367,6 +367,12 @@ class S2_Core {
 			$s2_taxonomies = apply_filters( 's2_taxonomies', array( 'category' ) );
 		}
 
+		// get_the_time() uses the current locale of the admin user which may differ from the site locale
+		if ( get_user_locale() !== get_locale() ) {
+			switch_to_locale( get_locale() );
+			$locale_switched = true;
+		}
+
 		// we set these class variables so that we can avoid
 		// passing them in function calls a little later
 		$this->post_title      = '<a href="' . $this->get_tracking_link( get_permalink( $post->ID ) ) . '">' . html_entity_decode( __( $post->post_title ), ENT_QUOTES ) . '</a>';
@@ -374,6 +380,10 @@ class S2_Core {
 		$this->permalink       = get_permalink( $post->ID );
 		$this->post_date       = get_the_time( get_option( 'date_format' ), $post );
 		$this->post_time       = get_the_time( '', $post );
+
+		if ( isset( $locale_switched ) && true === $locale_switched ) {
+			switch_to_locale( get_user_locale() );
+		}
 
 		$author           = get_userdata( $post->post_author );
 		$this->authorname = html_entity_decode( apply_filters( 'the_author', $author->display_name ), ENT_QUOTES );

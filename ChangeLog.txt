@@ -1,3 +1,8 @@
+= 10.25 =
+
+* Dropped use of the 'Precedence' email header as use is controversial and not widely supported
+* Fix for date appearing in wrong language when authors use different language in WordPress admin to the main site language
+
 = 10.24 =
 
 * Fixes for the Subscribers page - sorting and Multisite improvements
