@@ -3,7 +3,7 @@ class S2_Counter_Widget extends WP_Widget {
 	/**
 	 * Declares the S2_Counter_widget class.
 	 */
-	function __construct() {
+	public function __construct() {
 		$widget_options = array(
 			'classname'                   => 's2_counter',
 			'description'                 => esc_html__( 'Subscriber Counter widget for Subscribe2', 'subscribe2' ),
@@ -20,7 +20,7 @@ class S2_Counter_Widget extends WP_Widget {
 	/**
 	 * Displays the Widget
 	 */
-	function widget( $args, $instance ) {
+	public function widget( $args, $instance ) {
 		$title      = empty( $instance['title'] ) ? 'Subscriber Count' : $instance['title'];
 		$s2w_bg     = empty( $instance['s2w_bg'] ) ? '#e3dacf' : $instance['s2w_bg'];
 		$s2w_fg     = empty( $instance['s2w_fg'] ) ? '#345797' : $instance['s2w_fg'];
@@ -45,14 +45,14 @@ class S2_Counter_Widget extends WP_Widget {
 	/**
 	 * Saves the widgets settings.
 	 */
-	function update( $new_instance, $old_instance ) {
+	public function update( $new_instance, $old_instance ) {
 		$instance               = $old_instance;
-		$instance['title']      = strip_tags( stripslashes( $new_instance['title'] ) );
-		$instance['s2w_bg']     = strip_tags( stripslashes( $new_instance['s2w_bg'] ) );
-		$instance['s2w_fg']     = strip_tags( stripslashes( $new_instance['s2w_fg'] ) );
-		$instance['s2w_width']  = strip_tags( stripslashes( $new_instance['s2w_width'] ) );
-		$instance['s2w_height'] = strip_tags( stripslashes( $new_instance['s2w_height'] ) );
-		$instance['s2w_font']   = strip_tags( stripslashes( $new_instance['s2w_font'] ) );
+		$instance['title']      = wp_strip_all_tags( stripslashes( $new_instance['title'] ) );
+		$instance['s2w_bg']     = wp_strip_all_tags( stripslashes( $new_instance['s2w_bg'] ) );
+		$instance['s2w_fg']     = wp_strip_all_tags( stripslashes( $new_instance['s2w_fg'] ) );
+		$instance['s2w_width']  = wp_strip_all_tags( stripslashes( $new_instance['s2w_width'] ) );
+		$instance['s2w_height'] = wp_strip_all_tags( stripslashes( $new_instance['s2w_height'] ) );
+		$instance['s2w_font']   = wp_strip_all_tags( stripslashes( $new_instance['s2w_font'] ) );
 
 		return $instance;
 	}
@@ -60,7 +60,7 @@ class S2_Counter_Widget extends WP_Widget {
 	/**
 	 * Creates the edit form for the widget.
 	 */
-	function form( $instance ) {
+	public function form( $instance ) {
 		// set some defaults
 		$options = get_option( 'widget_s2counter' );
 		if ( false === $options ) {

@@ -4,10 +4,15 @@ class S2_Core {
 	/**
 	 * Load translations
 	 */
-	function load_translations() {
+	public function load_translations() {
 		load_plugin_textdomain( 'subscribe2', false, S2DIR );
 		load_plugin_textdomain( 'subscribe2', false, S2DIR . 'languages/' );
-		$mofile = WP_LANG_DIR . '/subscribe2-' . apply_filters( 'plugin_locale', get_locale(), 'subscribe2' ) . '.mo';
+		if ( is_admin() && function_exists( 'get_user_locale' ) ) {
+			$locale = get_user_locale();
+		} else {
+			$locale = get_locale();
+		}
+		$mofile = WP_LANG_DIR . '/subscribe2-' . apply_filters( 'plugin_locale', $locale, 'subscribe2' ) . '.mo';
 		load_textdomain( 'subscribe2', $mofile );
 	} // end load_translations()
 
@@ -15,7 +20,7 @@ class S2_Core {
 	/**
 	 * Performs string substitutions for subscribe2 mail tags
 	 */
-	function substitute( $string = '', $digest_post_ids = array() ) {
+	public function substitute( $string = '', $digest_post_ids = array() ) {
 		if ( '' === $string ) {
 			return;
 		}
@@ -27,8 +32,11 @@ class S2_Core {
 		$link   = '<a href="' . $this->get_tracking_link( $this->permalink ) . '">' . $this->get_tracking_link( $this->permalink ) . '</a>';
 		$string = str_replace( '{PERMALINK}', $link, $string );
 		if ( strstr( $string, '{TINYLINK}' ) ) {
-			$tinylink = file_get_contents( 'http://tinyurl.com/api-create.php?url=' . urlencode( $this->get_tracking_link( $this->permalink ) ) );
-			if ( 'Error' !== $tinylink && false !== $tinylink ) {
+			$response = wp_safe_remote_get( 'http://tinyurl.com/api-create.php?url=' . rawurlencode( $this->get_tracking_link( $this->permalink ) ) );
+			if ( ! is_wp_error( $response ) ) {
+				$tinylink = wp_remote_retrieve_body( $response );
+			}
+			if ( false !== $tinylink ) {
 				$tlink  = '<a href="' . $tinylink . '">' . $tinylink . '</a>';
 				$string = str_replace( '{TINYLINK}', $tlink, $string );
 			} else {
@@ -54,13 +62,13 @@ class S2_Core {
 	/**
 	 * Delivers email to recipients in HTML or plaintext
 	 */
-	function mail( $recipients = array(), $subject = '', $message = '', $type = 'text', $attachments = array() ) {
+	public function mail( $recipients = array(), $subject = '', $message = '', $type = 'text', $attachments = array() ) {
 		if ( empty( $recipients ) || '' === $message ) {
 			return;
 		}
 
 		// Replace any escaped html symbols in subject then apply filter
-		$subject = strip_tags( html_entity_decode( $subject, ENT_QUOTES ) );
+		$subject = wp_strip_all_tags( html_entity_decode( $subject, ENT_QUOTES ) );
 		$subject = apply_filters( 's2_email_subject', $subject );
 
 		if ( 'html' === $type ) {
@@ -76,7 +84,7 @@ class S2_Core {
 			$headers = $this->headers( 'text' );
 			remove_all_filters( 'wp_mail_content_type' );
 			add_filter( 'wp_mail_content_type', array( $this, 'plain_email' ) );
-			$message  = strip_tags( html_entity_decode( $message, ENT_NOQUOTES ) );
+			$message  = wp_strip_all_tags( html_entity_decode( $message, ENT_NOQUOTES ) );
 			$mailtext = apply_filters( 's2_plain_email', $message );
 		}
 
@@ -88,7 +96,7 @@ class S2_Core {
 			foreach ( $recipients as $recipient ) {
 				$recipient = trim( $recipient );
 				// sanity check -- make sure we have a valid email
-				if ( ! is_email( $recipient ) || empty( $recipient ) ) {
+				if ( false === $this->validate_email( $recipient ) || empty( $recipient ) ) {
 					continue;
 				}
 				// Use the mail queue provided we are not sending a preview
@@ -104,7 +112,7 @@ class S2_Core {
 			foreach ( $recipients as $recipient ) {
 				$recipient = trim( $recipient );
 				// sanity check -- make sure we have a valid email
-				if ( ! is_email( $recipient ) ) {
+				if ( false === $this->validate_email( $recipient ) ) {
 					continue;
 				}
 				// and NOT the sender's email, since they'll get a copy anyway
@@ -121,7 +129,7 @@ class S2_Core {
 			foreach ( $recipients as $recipient ) {
 				$recipient = trim( $recipient );
 				// sanity check -- make sure we have a valid email
-				if ( ! is_email( $recipient ) ) {
+				if ( false === $this->validate_email( $recipient ) ) {
 					continue;
 				}
 				// and NOT the sender's email, since they'll get a copy anyway
@@ -162,7 +170,7 @@ class S2_Core {
 	/**
 	 * Construct standard set of email headers
 	 */
-	function headers( $type = 'text' ) {
+	public function headers( $type = 'text' ) {
 		if ( empty( $this->myname ) || empty( $this->myemail ) ) {
 			if ( 'blogname' === $this->subscribe2_options['sender'] ) {
 				$this->myname  = html_entity_decode( get_option( 'blogname' ), ENT_QUOTES );
@@ -195,7 +203,7 @@ class S2_Core {
 			$header['Reply-To'] = $this->myname . ' <' . $this->myemail . '>';
 		}
 		$header['Return-Path'] = '<' . $this->myemail . '>';
-		$header['Precedence']  = "list\nList-Id: " . html_entity_decode( get_option( 'blogname' ), ENT_QUOTES );
+		$header['List-ID'] = html_entity_decode( get_option( 'blogname' ), ENT_QUOTES ) . ' <' . strtolower( esc_html( $_SERVER['SERVER_NAME'] ) ) . '>';
 		if ( 'html' === $type ) {
 			// To send HTML mail, the Content-Type header must be set
 			$header['Content-Type'] = get_option( 'html_type' ) . '; charset="' . $char_set . '"';
@@ -218,21 +226,21 @@ class S2_Core {
 	/**
 	 * Function to set HTML Email in wp_mail()
 	 */
-	function html_email() {
+	public function html_email() {
 		return 'text/html';
 	}
 
 	/**
 	 * Function to set plain text Email in wp_mail()
 	 */
-	function plain_email() {
+	public function plain_email() {
 		return 'text/plain';
 	}
 
 	/**
 	 * Function to add UTM tracking details to links
 	 */
-	function get_tracking_link( $link ) {
+	public function get_tracking_link( $link ) {
 		if ( empty( $link ) ) {
 			return;
 		}
@@ -246,7 +254,7 @@ class S2_Core {
 			}
 			if ( strpos( $tracking, '{TITLE}' ) ) {
 				$id       = url_to_postid( $link );
-				$title    = urlencode( htmlentities( get_the_title( $id ), 1 ) );
+				$title    = rawurlencode( htmlentities( get_the_title( $id ), 1 ) );
 				$tracking = str_replace( '{TITLE}', $title, $tracking );
 			}
 			return $link . $delimiter . $tracking;
@@ -258,7 +266,7 @@ class S2_Core {
 	/**
 	 * Sends an email notification of a new post
 	 */
-	function publish( $post, $preview = '' ) {
+	public function publish( $post, $preview = '' ) {
 		if ( ! $post ) {
 			return $post;
 		}
@@ -351,7 +359,10 @@ class S2_Core {
 				$public = $this->get_public();
 			}
 			if ( 'page' === $post->post_type ) {
-				$post_cats_string = implode( ',', get_all_category_ids() );
+				$post_cats_string = implode( ',', get_terms( 'category', array(
+					'fields' => 'ids',
+					'get'    => 'all',
+				) ) );
 			} else {
 				$post_cats_string = implode( ',', $post_cats );
 			}
@@ -375,8 +386,8 @@ class S2_Core {
 
 		// we set these class variables so that we can avoid
 		// passing them in function calls a little later
-		$this->post_title      = '<a href="' . $this->get_tracking_link( get_permalink( $post->ID ) ) . '">' . html_entity_decode( __( $post->post_title ), ENT_QUOTES ) . '</a>';
-		$this->post_title_text = html_entity_decode( __( $post->post_title ), ENT_QUOTES );
+		$this->post_title      = '<a href="' . $this->get_tracking_link( get_permalink( $post->ID ) ) . '">' . html_entity_decode( $post->post_title, ENT_QUOTES ) . '</a>';
+		$this->post_title_text = html_entity_decode( $post->post_title, ENT_QUOTES );
 		$this->permalink       = get_permalink( $post->ID );
 		$this->post_date       = get_the_time( get_option( 'date_format' ), $post );
 		$this->post_time       = get_the_time( '', $post );
@@ -448,7 +459,7 @@ class S2_Core {
 			}
 		}
 
-		$plaintext = trim( strip_tags( $plaintext ) );
+		$plaintext = trim( wp_strip_all_tags( $plaintext ) );
 
 		if ( isset( $plaintext_links ) && '' !== $plaintext_links ) {
 			$plaintext .= "\r\n\r\n" . trim( $plaintext_links );
@@ -475,10 +486,10 @@ class S2_Core {
 			if ( false !== strpos( $excerpttext, '<!--more-->' ) ) {
 				list( $excerpt, $more ) = explode( '<!--more-->', $excerpttext, 2 );
 				// strip tags and trailing whitespace
-				$excerpt = trim( strip_tags( $excerpt ) );
+				$excerpt = trim( wp_strip_all_tags( $excerpt ) );
 			} else {
 				// no <!--more-->, so grab the first 55 words
-				$excerpt = trim( strip_tags( $excerpttext ) );
+				$excerpt = trim( wp_strip_all_tags( $excerpttext ) );
 				$words   = explode( ' ', $excerpt, $this->excerpt_length + 1 );
 				if ( count( $words ) > $this->excerpt_length ) {
 					array_pop( $words );
@@ -562,7 +573,7 @@ class S2_Core {
 	/**
 	Send confirmation email to a public subscriber
 	*/
-	function send_confirm( $action = '', $is_remind = false ) {
+	public function send_confirm( $action = '', $is_remind = false ) {
 		if ( 1 === $this->filtered ) {
 			return true;
 		}
@@ -622,7 +633,7 @@ class S2_Core {
 	/**
 	 * Return an array of all the public subscribers
 	 */
-	function get_public( $confirmed = 1 ) {
+	public function get_public( $confirmed = 1 ) {
 		global $wpdb;
 		if ( 1 === $confirmed ) {
 			if ( '' === $this->all_confirmed ) {
@@ -640,7 +651,7 @@ class S2_Core {
 	/**
 	 * Given a public subscriber ID, returns the email address
 	 */
-	function get_email( $id = 0 ) {
+	public function get_email( $id = 0 ) {
 		global $wpdb;
 
 		if ( ! $id ) {
@@ -652,7 +663,7 @@ class S2_Core {
 	/**
 	 * Given a public subscriber email, returns the subscriber ID
 	 */
-	function get_id( $email = '' ) {
+	public function get_id( $email = '' ) {
 		global $wpdb;
 
 		if ( ! $email ) {
@@ -663,9 +674,9 @@ class S2_Core {
 
 	/**
 	 * Add an public subscriber to the subscriber table
-	If added by admin it is immediately confirmed, otherwise as unconfirmed
+	 * If added by admin it is immediately confirmed, otherwise as unconfirmed
 	 */
-	function add( $email = '', $confirm = false ) {
+	public function add( $email = '', $confirm = false ) {
 		if ( 1 === $this->filtered ) {
 			return;
 		}
@@ -699,7 +710,7 @@ class S2_Core {
 	/**
 	 * Remove a public subscriber user from the subscription table
 	 */
-	function delete( $email = '' ) {
+	public function delete( $email = '' ) {
 		global $wpdb;
 
 		if ( false === $this->validate_email( $email ) ) {
@@ -711,7 +722,7 @@ class S2_Core {
 	/**
 	 * Toggle a public subscriber's status
 	 */
-	function toggle( $email = '' ) {
+	public function toggle( $email = '' ) {
 		global $wpdb;
 
 		if ( '' === $email || false === $this->validate_email( $email ) ) {
@@ -734,7 +745,7 @@ class S2_Core {
 	/**
 	 * Send reminder email to unconfirmed public subscribers
 	 */
-	function remind( $emails = '' ) {
+	public function remind( $emails = '' ) {
 		if ( '' === $emails ) {
 			return false;
 		}
@@ -752,7 +763,7 @@ class S2_Core {
 	/**
 	 * Is the supplied email address a public subscriber?
 	 */
-	function is_public( $email = '' ) {
+	public function is_public( $email = '' ) {
 		global $wpdb;
 
 		if ( '' === $email ) {
@@ -772,7 +783,7 @@ class S2_Core {
 	/**
 	 * Is the supplied email address a registered user of the blog?
 	 */
-	function is_registered( $email = '' ) {
+	public function is_registered( $email = '' ) {
 		global $wpdb;
 
 		if ( '' === $email ) {
@@ -790,7 +801,7 @@ class S2_Core {
 	/**
 	 * Return Registered User ID from email
 	 */
-	function get_user_id( $email = '' ) {
+	public function get_user_id( $email = '' ) {
 		global $wpdb;
 
 		if ( '' === $email ) {
@@ -805,7 +816,7 @@ class S2_Core {
 	/**
 	 * Return an array of all subscribers emails or IDs
 	 */
-	function get_all_registered( $return = 'email' ) {
+	public function get_all_registered( $return = 'email' ) {
 		global $wpdb;
 
 		if ( $this->s2_mu ) {
@@ -849,7 +860,7 @@ class S2_Core {
 	 * Return an array of registered subscribers
 	 * Collect all the registered users of the blog who are subscribed to the specified categories
 	 */
-	function get_registered( $args = '' ) {
+	public function get_registered( $args = '' ) {
 		global $wpdb;
 
 		parse_str( $args, $r );
@@ -938,10 +949,10 @@ class S2_Core {
 	/**
 	 * Function to ensure email is compliant with internet messaging standards
 	 */
-	function sanitize_email( $email ) {
+	public function sanitize_email( $email ) {
 		$email = trim( stripslashes( $email ) );
-		if ( false === $this->validate_email( $email ) ) {
-			return;
+		if ( false === $email ) {
+			return false;
 		}
 
 		// ensure that domain is in lowercase as per internet email standards http://www.ietf.org/rfc/rfc5321.txt
@@ -952,7 +963,7 @@ class S2_Core {
 	/**
 	 * Check email is valid
 	 */
-	function validate_email( $email ) {
+	public function validate_email( $email ) {
 		// Check the formatting is correct
 		if ( function_exists( 'filter_var' ) ) {
 			if ( false === filter_var( $email, FILTER_VALIDATE_EMAIL ) ) {
@@ -973,7 +984,7 @@ class S2_Core {
 	 * Create the appropriate usermeta values when a user registers
 	 * If the registering user had previously subscribed to notifications, this function will delete them from the public subscriber list first
 	 */
-	function register( $user_ID = 0, $consent = false ) {
+	public function register( $user_ID = 0, $consent = false ) {
 		global $wpdb;
 
 		if ( 0 === $user_ID ) {
@@ -1032,7 +1043,7 @@ class S2_Core {
 	/**
 	 * Get admin data from record 1 or first user with admin rights
 	 */
-	function get_userdata( $admin_id ) {
+	public function get_userdata( $admin_id ) {
 		global $wpdb, $userdata;
 
 		if ( is_numeric( $admin_id ) ) {
@@ -1059,7 +1070,7 @@ class S2_Core {
 	/**
 	 * Subscribe/unsubscribe user from one-click submission
 	 */
-	function one_click_handler( $user_ID, $action ) {
+	public function one_click_handler( $user_ID, $action ) {
 		if ( ! isset( $user_ID ) || ! isset( $action ) ) {
 			return;
 		}
@@ -1094,7 +1105,7 @@ class S2_Core {
 	/**
 	 * Get an object of all categories, include default and custom type
 	 */
-	function all_cats( $exclude = false, $orderby = 'slug' ) {
+	public function all_cats( $exclude = false, $orderby = 'slug' ) {
 		$all_cats      = array();
 		$s2_taxonomies = apply_filters( 's2_taxonomies', array( 'category' ) );
 
@@ -1132,7 +1143,7 @@ class S2_Core {
 	/**
 	 * Function to sanitise array of data for SQL
 	 */
-	function prepare_in_data( $data ) {
+	public function prepare_in_data( $data ) {
 		global $wpdb;
 		return $wpdb->prepare( '%s', $data );
 	} // end prepare_in_data()
@@ -1140,7 +1151,7 @@ class S2_Core {
 	/**
 	 * Filter for usermeta table key names to adjust them if needed for WPMU blogs
 	 */
-	function get_usermeta_keyname( $metaname ) {
+	public function get_usermeta_keyname( $metaname ) {
 		global $wpdb;
 
 		// Is this WordPressMU or not?
@@ -1152,6 +1163,7 @@ class S2_Core {
 				case 's2_autosub':
 				case 's2_authors':
 					return $wpdb->prefix . $metaname;
+				default:
 					break;
 			}
 		}
@@ -1162,7 +1174,7 @@ class S2_Core {
 	/**
 	 * Adds information to the WordPress registration screen for new users
 	 */
-	function register_form() {
+	public function register_form() {
 		if ( 'no' === $this->subscribe2_options['autosub'] ) {
 			return;
 		}
@@ -1181,7 +1193,7 @@ class S2_Core {
 	/**
 	 * Process function to add action if user selects to subscribe to posts during registration
 	 */
-	function register_post( $user_ID = 0 ) {
+	public function register_post( $user_ID = 0 ) {
 		global $_POST;
 		if ( 0 === $user_ID ) {
 			return;
@@ -1197,7 +1209,7 @@ class S2_Core {
 	/**
 	 * Display check box on comment page
 	 */
-	function s2_comment_meta_form( $submit_field ) {
+	public function s2_comment_meta_form( $submit_field ) {
 		if ( is_user_logged_in() ) {
 			$comment_meta_form = $this->profile;
 		} else {
@@ -1213,7 +1225,7 @@ class S2_Core {
 	/**
 	 * Process comment meta data
 	 */
-	function s2_comment_meta( $comment_id, $approved = 0 ) {
+	public function s2_comment_meta( $comment_id, $approved = 0 ) {
 		// return if email is empty - can happen if setting to require name and email for comments is disabled
 		if ( isset( $_POST['email'] ) && empty( $_POST['email'] ) ) {
 			return;
@@ -1245,7 +1257,7 @@ class S2_Core {
 	/**
 	 * Action subscribe requests made on comment forms when comments are approved
 	 */
-	function comment_status( $comment_id = 0 ) {
+	public function comment_status( $comment_id = 0 ) {
 		global $wpdb;
 
 		// get meta data
@@ -1292,16 +1304,16 @@ class S2_Core {
 	/**
 	 * Register the form widget
 	 */
-	function subscribe2_widget() {
-		require_once( S2PATH . 'classes/class-s2-form-widget.php' );
+	public function subscribe2_widget() {
+		require_once S2PATH . 'classes/class-s2-form-widget.php';
 		register_widget( 'S2_Form_Widget' );
 	} // end subscribe2_widget()
 
 	/**
 	 * Register the counter widget
 	 */
-	function counter_widget() {
-		require_once( S2PATH . 'classes/class-s2-counter-widget.php' );
+	public function counter_widget() {
+		require_once S2PATH . 'classes/class-s2-counter-widget.php';
 		register_widget( 'S2_Counter_Widget' );
 	} // end counter_widget()
 
@@ -1309,7 +1321,7 @@ class S2_Core {
 	/**
 	 * Add a weekly event to cron
 	 */
-	function add_weekly_sched( $scheds ) {
+	public function add_weekly_sched( $scheds ) {
 		$exists = false;
 		foreach ( $scheds as $sched ) {
 			if ( array_search( 604800, $sched ) ) {
@@ -1330,7 +1342,7 @@ class S2_Core {
 	/**
 	 * Handle post transitions for the digest email
 	 */
-	function digest_post_transitions( $new_status, $old_status, $post ) {
+	public function digest_post_transitions( $new_status, $old_status, $post ) {
 		if ( $new_status === $old_status ) {
 			return;
 		}
@@ -1351,7 +1363,7 @@ class S2_Core {
 	/**
 	 * Send a daily digest of today's new posts
 	 */
-	function subscribe2_cron( $preview = '', $resend = '' ) {
+	public function subscribe2_cron( $preview = '', $resend = '' ) {
 		if ( defined( 'DOING_S2_CRON' ) && DOING_S2_CRON ) {
 			return;
 		}
@@ -1680,7 +1692,7 @@ class S2_Core {
 	/**
 	 * Task to delete unconfirmed public subscribers after a defined interval
 	 */
-	function s2cleaner_task() {
+	public function s2cleaner_task() {
 		$unconfirmed = $this->get_public( 0 );
 		if ( empty( $unconfirmed ) ) {
 			return;
@@ -1699,7 +1711,6 @@ class S2_Core {
 				$this->delete( $email );
 			}
 		}
-		return;
 	} // end s2cleaner_task()
 
 	/**
@@ -1714,7 +1725,7 @@ class S2_Core {
 	/**
 	 * Subscribe2 constructor
 	 */
-	function s2init() {
+	public function s2init() {
 		global $wpdb, $wp_version, $wpmu_version;
 		// load the options
 		$this->subscribe2_options = get_option( 'subscribe2_options' );
@@ -1752,22 +1763,22 @@ class S2_Core {
 
 		// add action to handle WPMU subscriptions and unsubscriptions
 		if ( true === $this->s2_mu ) {
-			require_once( S2PATH . 'classes/class-s2-multisite.php' );
+			require_once S2PATH . 'classes/class-s2-multisite.php';
 			global $s2class_multisite;
-			$s2class_multisite = new S2_Multisite;
+			$s2class_multisite = new S2_Multisite();
 			if ( isset( $_GET['s2mu_subscribe'] ) || isset( $_GET['s2mu_unsubscribe'] ) ) {
 				add_action( 'init', array( &$s2class_multisite, 'wpmu_subscribe' ) );
 			}
 		}
 
 		// load our translations
-		add_action( 'plugins_loaded', array( &$this, 'load_translations' ) );
+		add_action( 'init', array( &$this, 'load_translations' ) );
 
 		// do we need to install anything?
 		if ( $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', "{$wpdb->prefix}subscribe2" ) ) !== "{$wpdb->prefix}subscribe2" ) {
-			require_once( S2PATH . 'classes/class-s2-upgrade.php' );
+			require_once S2PATH . 'classes/class-s2-upgrade.php';
 			global $s2_upgrade;
-			$s2_upgrade = new S2_Upgrade;
+			$s2_upgrade = new S2_Upgrade();
 			$s2_upgrade->install();
 		}
 
@@ -1775,8 +1786,8 @@ class S2_Core {
 		if ( false === $this->subscribe2_options || is_array( $this->subscribe2_options ) && S2VERSION !== $this->subscribe2_options['version'] ) {
 			global $s2_upgrade;
 			if ( ! is_a( $s2_upgrade, 'S2_Upgrade' ) ) {
-				require_once( S2PATH . 'classes/class-s2-upgrade.php' );
-				$s2_upgrade = new S2_Upgrade;
+				require_once S2PATH . 'classes/class-s2-upgrade.php';
+				$s2_upgrade = new S2_Upgrade();
 			}
 			add_action( 'shutdown', array( &$s2_upgrade, 'upgrade' ) );
 		}
@@ -1834,9 +1845,9 @@ class S2_Core {
 
 		// add ajax class if enabled
 		if ( '1' === $this->subscribe2_options['ajax'] ) {
-			require_once( S2PATH . 'classes/class-s2-ajax.php' );
+			require_once S2PATH . 'classes/class-s2-ajax.php';
 			global $mysubscribe2_ajax;
-			$mysubscribe2_ajax = new S2_Ajax;
+			$mysubscribe2_ajax = new S2_Ajax();
 		}
 
 		// Add actions specific to admin or frontend
@@ -1859,7 +1870,8 @@ class S2_Core {
 			// add write button
 			if ( '1' === $this->subscribe2_options['show_button'] ) {
 				if ( defined( 'GUTENBERG_VERSION' ) ) {
-					add_action( 'admin_init', array( &$this, 'gutenberg_block_editor_assets' ) );
+					add_action( 'admin_enqueue_scripts', array( &$this, 'gutenberg_block_editor_assets' ), 6 );
+					add_action( 'admin_enqueue_scripts', array( &$this, 'gutenberg_i18n' ), 6 );
 				} else {
 					add_action( 'admin_init', array( &$this, 'button_init' ) );
 				}
@@ -1927,57 +1939,19 @@ class S2_Core {
 		}
 	} // end s2init()
 
-	/* ===== our variables ===== */
-	// cache variables
-	var $subscribe2_options      = array();
-	var $all_confirmed           = '';
-	var $all_unconfirmed         = '';
-	var $all_registered_id       = '';
-	var $all_registered_email    = '';
-	var $all_registered_email_id = '';
-	var $excluded_cats           = '';
-	var $post_title              = '';
-	var $post_title_text         = '';
-	var $permalink               = '';
-	var $post_date               = '';
-	var $post_time               = '';
-	var $post_image              = '';
-	var $myname                  = '';
-	var $myemail                 = '';
-	var $authorname              = '';
-	var $post_cat_names          = '';
-	var $post_tag_names          = '';
-	var $post_count              = '';
-	var $signup_dates            = array();
-	var $filtered                = 0;
-	var $preview_email           = false;
+	/* ===== define some variables ===== */
+	// options
+	public $subscribe2_options = array();
+
+	// data sets
+	public $all_confirmed           = '';
+	public $all_unconfirmed         = '';
+	public $all_registered_id       = '';
+	public $all_registered_email    = '';
+	public $all_registered_email_id = '';
 
 	// state variables used to affect processing
-	var $s2_mu   = false;
-	var $action  = '';
-	var $email   = '';
-	var $message = '';
-	var $word_wrap;
-	var $excerpt_length;
-	var $site_switching;
-	var $clean_interval;
-
-	// some messages
-	var $please_log_in      = '';
-	var $profile            = '';
-	var $confirmation_sent  = '';
-	var $already_subscribed = '';
-	var $not_subscribed     = '';
-	var $not_an_email       = '';
-	var $barred_domain      = '';
-	var $error              = '';
-	var $mail_sent          = '';
-	var $mail_failed        = '';
-	var $form               = '';
-	var $no_such_email      = '';
-	var $added              = '';
-	var $deleted            = '';
-	var $subscribe          = '';
-	var $unsubscribe        = '';
-	var $confirm_subject    = '';
+	public $s2_mu    = false;
+	public $filtered = 0;
+	public $post_count;
 } // end class subscribe2

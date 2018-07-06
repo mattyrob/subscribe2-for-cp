@@ -129,14 +129,14 @@ echo '<div style="clear: both;"><p>&nbsp;</p></div>';
 <script type="text/javascript">
 //<![CDATA[
 function add_file_upload() {
-	var div = document.getElementById('upload_files');
-	var field = div.getElementsByTagName('input')[0];
-	div.appendChild(document.createElement("br"));
-	div.appendChild(field.cloneNode(false));
+	var div = document.getElementById( 'upload_files' );
+	var field = div.getElementsByTagName( 'input' )[0];
+	div.appendChild( document.createElement( 'br' ) );
+	div.appendChild( field.cloneNode( false ) );
 }
 //]]>
 </script>
 <?php
-include( ABSPATH . 'wp-admin/admin-footer.php' );
+require ABSPATH . 'wp-admin/admin-footer.php';
 // just to be sure
 die;

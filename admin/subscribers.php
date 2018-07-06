@@ -9,20 +9,20 @@ global $wpdb, $subscribers, $what, $current_tab;
 $current_tab = isset( $_GET['tab'] ) ? esc_attr( $_GET['tab'] ) : 'public';
 
 // Access function to allow display for form elements
-require_once( S2PATH . 'classes/class-s2-forms.php' );
-$s2_forms = new s2_forms;
+require_once S2PATH . 'classes/class-s2-forms.php';
+$s2_forms = new s2_forms();
 
 // Instantiate and prepare our table data - this also runs the bulk actions
 if ( ! class_exists( 'WP_List_Table' ) ) {
-	require_once( ABSPATH . 'wp-admin/includes/class-wp-list-table.php' );
+	require_once ABSPATH . 'wp-admin/includes/class-wp-list-table.php';
 }
 if ( ! class_exists( 'Subscribe2_List_Table' ) ) {
 	if ( version_compare( $GLOBALS['wp_version'], '4.3', '<' ) ) {
-		require_once( S2PATH . 'classes/class-s2-list-table-legacy.php' );
-		$s2_list_table = new S2_List_Table_Legacy;
+		require_once S2PATH . 'classes/class-s2-list-table-legacy.php';
+		$s2_list_table = new S2_List_Table_Legacy();
 	} else {
-		require_once( S2PATH . 'classes/class-s2-list-table.php' );
-		$s2_list_table = new S2_List_Table;
+		require_once S2PATH . 'classes/class-s2-list-table.php';
+		$s2_list_table = new S2_List_Table();
 	}
 }
 
@@ -120,6 +120,7 @@ if ( 'registered' === $current_tab ) {
 	// Get Registered Subscribers
 	$registered = $this->get_registered( 'return=emailid' );
 	$all_users  = $this->get_all_registered( 'emailid' );
+
 	// safety check for our arrays
 	if ( '' === $registered ) {
 		$registered = array();
@@ -334,6 +335,6 @@ if ( 'registered' === $current_tab ) {
 }
 echo '</form></div>' . "\r\n";
 
-include( ABSPATH . 'wp-admin/admin-footer.php' );
+require ABSPATH . 'wp-admin/admin-footer.php';
 // just to be sure
 die;

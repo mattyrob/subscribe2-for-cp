@@ -3,7 +3,7 @@ class S2_Ajax {
 	/**
 	 * Constructor
 	 */
-	function __construct() {
+	public function __construct() {
 		// if SCRIPT_DEBUG is true, use dev scripts
 		$this->script_debug = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '' : '.min';
 		if ( is_admin() ) {
@@ -12,9 +12,9 @@ class S2_Ajax {
 			add_filter( 's2_ajax_form', array( &$this, 's2_ajax_form_class' ), 1 );
 
 			global $s2_frontend;
-			require_once( S2PATH . 'classes/class-s2-core.php' );
-			require_once( S2PATH . 'classes/class-s2-frontend.php' );
-			$s2_frontend = new S2_Frontend;
+			require_once S2PATH . 'classes/class-s2-core.php';
+			require_once S2PATH . 'classes/class-s2-frontend.php';
+			$s2_frontend = new S2_Frontend();
 
 			$s2_frontend->subscribe2_options = get_option( 'subscribe2_options' );
 		} else {
@@ -26,7 +26,7 @@ class S2_Ajax {
 	/**
 	 * Add jQuery code and CSS to front pages for ajax form
 	 */
-	function add_ajax() {
+	public function add_ajax() {
 		// enqueue the jQuery script we need and let WordPress handle the dependencies
 		wp_enqueue_script( 'jquery-ui-dialog' );
 		$css = apply_filters( 's2_jqueryui_css', 'https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/ui-darkness/jquery-ui.css' );
@@ -48,8 +48,8 @@ class S2_Ajax {
 	/**
 	 * Ajax form handler
 	 */
-	function s2_ajax_form_handler() {
-		require_once( ABSPATH . '/wp-includes/shortcodes.php' );
+	public function s2_ajax_form_handler() {
+		require_once ABSPATH . '/wp-includes/shortcodes.php';
 
 		$response = str_replace( ':', '&', $_POST['data'] );
 		$response = str_replace( '-', '=', $response );
@@ -65,7 +65,7 @@ class S2_Ajax {
 	/**
 	 * Ajax submit handler
 	 */
-	function s2_ajax_submit_handler() {
+	public function s2_ajax_submit_handler() {
 		if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( $_POST['nonce'], 's2_ajax_form_nonce' ) ) {
 			echo '<p>' . __( 'There was an error validating your request. Please try again later.', 'subscribe2' ) . '</p>';
 			wp_die();
@@ -94,6 +94,7 @@ class S2_Ajax {
 			}
 			$check = $wpdb->get_var( $wpdb->prepare( "SELECT user_email FROM $wpdb->users WHERE user_email = %s", $s2_frontend->email ) );
 			if ( null !== $check ) {
+				// Translators: Link to login page
 				printf( __( 'To manage your subscription options please <a href="%1$s">login.</a>', 'subscribe2' ), get_option( 'siteurl' ) . '/wp-login.php' );
 			}
 			if ( 'subscribe' === $data['button'] ) {
@@ -129,7 +130,7 @@ class S2_Ajax {
 	/**
 	 * Filter to add ajax id to form
 	 */
-	function s2_ajax_form_class( $content ) {
+	public function s2_ajax_form_class( $content ) {
 		$content = str_replace( '<form', '<form id="s2ajaxform"', $content );
 		$content = str_replace( 'wp-login.php"', 'wp-login.php" style="text-decoration: underline;"', $content );
 		return $content;

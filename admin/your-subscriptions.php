@@ -3,8 +3,8 @@ if ( ! function_exists( 'add_action' ) ) {
 	exit();
 }
 
-require_once( S2PATH . 'classes/class-s2-forms.php' );
-$s2_forms = new S2_Forms;
+require_once S2PATH . 'classes/class-s2-forms.php';
+$s2_forms = new S2_Forms();
 $s2_forms->init();
 
 // was anything POSTed?
@@ -42,6 +42,6 @@ echo '</form>' . "\r\n";
 
 echo '</div>' . "\r\n";
 
-include( ABSPATH . 'wp-admin/admin-footer.php' );
+require ABSPATH . 'wp-admin/admin-footer.php';
 // just to be sure
 die;

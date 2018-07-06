@@ -3,7 +3,7 @@ class S2_Forms {
 	/**
 	 * Functions to Display content of Your Subscriptions page and process any input
 	 */
-	function init() {
+	public function init() {
 		add_action( 's2_subscription_submit', array( &$this, 's2_your_subscription_submit' ) );
 		add_action( 's2_subscription_form', array( &$this, 's2_your_subscription_form' ), 10, 2 );
 	} // end init()
@@ -11,7 +11,7 @@ class S2_Forms {
 	/**
 	 * Return appropriate user ID if user can edit other users subscriptions
 	 */
-	function get_userid() {
+	public function get_userid() {
 		if ( isset( $_GET['id'] ) ) {
 			if ( ! current_user_can( apply_filters( 's2_capability', 'manage_options', 'manage' ) ) ) {
 				die( '<p>' . __( 'Permission error! Your request cannot be completed.', 'subscribe2' ) . '</p>' );
@@ -35,7 +35,7 @@ class S2_Forms {
 	/**
 	 * Display the form to allow Regsitered users to amend their subscription
 	 */
-	function s2_your_subscription_form( $userid ) {
+	public function s2_your_subscription_form( $userid ) {
 		if ( ! is_int( $userid ) ) {
 			return false;
 		}
@@ -206,7 +206,7 @@ class S2_Forms {
 	/**
 	 * Process input from the form that allows Regsitered users to amend their subscription
 	 */
-	function s2_your_subscription_submit() {
+	public function s2_your_subscription_submit() {
 		global $mysubscribe2, $user_ID;
 
 		$userid = $this->get_userid();
@@ -289,7 +289,7 @@ class S2_Forms {
 	 * Display a table of categories with checkboxes
 	 * Optionally pre-select those categories specified
 	 */
-	function display_category_form( $selected = array(), $override = 1, $compulsory = array(), $name = 'category' ) {
+	public function display_category_form( $selected = array(), $override = 1, $compulsory = array(), $name = 'category' ) {
 		global $wpdb, $mysubscribe2;
 
 		if ( 0 === $override ) {
@@ -355,7 +355,7 @@ class S2_Forms {
 	 * Display a table of authors with checkboxes
 	 * Optionally pre-select those authors specified
 	 */
-	function display_author_form( $selected = array() ) {
+	public function display_author_form( $selected = array() ) {
 		$all_authors = $this->get_authors();
 
 		$half = ( count( $all_authors ) / 2 );
@@ -393,7 +393,7 @@ class S2_Forms {
 	/**
 	 * Collect an array of all author level users and above
 	 */
-	function get_authors() {
+	public function get_authors() {
 		if ( '' === $this->all_authors ) {
 			$role = array(
 				'fields' => array( 'ID', 'display_name' ),
@@ -421,7 +421,8 @@ class S2_Forms {
 		return apply_filters( 's2_authors', $this->all_authors );
 	} // end get_authors()
 
-	/* ===== our variables ===== */
-	// cache variables
-	var $all_authors = '';
+	/**
+	 * Define some variables
+	 */
+	private $all_authors;
 }

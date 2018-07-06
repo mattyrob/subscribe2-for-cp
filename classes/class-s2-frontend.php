@@ -3,17 +3,20 @@ class S2_Frontend extends S2_Core {
 	/**
 	 * Load all our strings
 	 */
-	function load_strings() {
+	public function load_strings() {
+		// Translators: Link to login page
 		$this->please_log_in = '<p class="s2_message">' . sprintf( __( 'To manage your subscription options please <a href="%1$s">login.</a>', 'subscribe2' ), get_option( 'siteurl' ) . '/wp-login.php' ) . '</p>';
 
-		$profile       = apply_filters( 's2_profile_link', get_option( 'siteurl' ) . '/wp-admin/admin.php?page=s2' );
+		$profile = apply_filters( 's2_profile_link', get_option( 'siteurl' ) . '/wp-admin/admin.php?page=s2' );
+		// Translators: Link to Profile page
 		$this->profile = '<p class="s2_message">' . sprintf( __( 'You may manage your subscription options from your <a href="%1$s">profile</a>', 'subscribe2' ), $profile ) . '</p>';
 		if ( true === $this->s2_mu ) {
 			global $blog_id;
 			$user_ID = get_current_user_id();
 			if ( ! is_user_member_of_blog( $user_ID, $blog_id ) ) {
 				// if we are on multisite and the user is not a member of this blog change the link
-				$mu_profile    = apply_filters( 's2_mu_profile_link', get_option( 'siteurl' ) . '/wp-admin/?s2mu_subscribe=' . $blog_id );
+				$mu_profile = apply_filters( 's2_mu_profile_link', get_option( 'siteurl' ) . '/wp-admin/?s2mu_subscribe=' . $blog_id );
+				// Translators: Link to Profile page
 				$this->profile = '<p class="s2_message">' . sprintf( __( '<a href="%1$s">Subscribe</a> to email notifications when this blog posts new content.', 'subscribe2' ), $mu_profile ) . '</p>';
 			}
 		}
@@ -46,7 +49,7 @@ class S2_Frontend extends S2_Core {
 	/**
 	 * Display our form; also handles (un)subscribe requests
 	 */
-	function shortcode( $atts ) {
+	public function shortcode( $atts ) {
 		$args = shortcode_atts(
 			array(
 				'hide'       => '',
@@ -108,8 +111,11 @@ class S2_Frontend extends S2_Core {
 		}
 
 		// allow remote setting of email in form
-		if ( isset( $_REQUEST['email'] ) && false !== $this->validate_email( $_REQUEST['email'] ) ) {
-			$value = $this->sanitize_email( $_REQUEST['email'] );
+		if ( isset( $_REQUEST['email'] ) ) {
+			$email = $this->sanitize_email( $_REQUEST['email'] );
+		}
+		if ( isset( $_REQUEST['email'] ) && false !== $this->validate_email( $email ) ) {
+			$value = $email;
 		} elseif ( 'true' === strtolower( $args['nojs'] ) ) {
 			$value = '';
 		} else {
@@ -230,7 +236,7 @@ class S2_Frontend extends S2_Core {
 	/**
 	 * Display form when deprecated <!--subscribe2--> is used
 	 */
-	function filter( $content = '' ) {
+	public function filter( $content = '' ) {
 		if ( '' === $content || ! strstr( $content, '<!--subscribe2-->' ) ) {
 			return $content;
 		}
@@ -243,7 +249,7 @@ class S2_Frontend extends S2_Core {
 	 * This is basically a trick: if the s2 variable is in the query string, just grab the first
 	 * static page and override it's contents later with title_filter()
 	 */
-	function query_filter() {
+	public function query_filter() {
 		// don't interfere if we've already done our thing
 		if ( 1 === $this->filtered ) {
 			return;
@@ -278,7 +284,7 @@ class S2_Frontend extends S2_Core {
 	/**
 	 * Overrides the page title
 	 */
-	function title_filter( $title ) {
+	public function title_filter( $title ) {
 		if ( in_the_loop() ) {
 			$code   = $_GET['s2'];
 			$action = intval( substr( $code, 0, 1 ) );
@@ -295,7 +301,7 @@ class S2_Frontend extends S2_Core {
 	/**
 	 * Confirm request from the link emailed to the user and email the admin
 	 */
-	function confirm( $content = '' ) {
+	public function confirm( $content = '' ) {
 		global $wpdb;
 
 		if ( 1 === $this->filtered && '' !== $this->message ) {
@@ -351,7 +357,7 @@ class S2_Frontend extends S2_Core {
 	/**
 	 * Prepare and send emails to admins on new subscriptions and unsubsriptions
 	 */
-	function admin_email( $action ) {
+	public function admin_email( $action ) {
 		if ( ! in_array( $action, array( 'subscribe', 'unsubscribe' ) ) ) {
 			return false;
 		}
@@ -389,7 +395,7 @@ class S2_Frontend extends S2_Core {
 	/**
 	 * Add hook for Minimeta Widget plugin
 	 */
-	function add_minimeta() {
+	public function add_minimeta() {
 		if ( 0 !== $this->subscribe2_options['s2page'] ) {
 			echo '<li><a href="' . get_permalink( $this->subscribe2_options['s2page'] ) . '">' . __( '[Un]Subscribe to Posts', 'subscribe2' ) . '</a></li>' . "\r\n";
 		}
@@ -398,7 +404,7 @@ class S2_Frontend extends S2_Core {
 	/**
 	 * Check email is not from a barred domain
 	 */
-	function is_barred( $email = '' ) {
+	public function is_barred( $email = '' ) {
 		if ( '' === $email ) {
 			return false;
 		}
@@ -439,7 +445,7 @@ class S2_Frontend extends S2_Core {
 	/**
 	 * Collect and return the IP address of the remote client machine
 	 */
-	function get_remote_ip() {
+	public function get_remote_ip() {
 		$remote_ip = false;
 
 		// In order of preference, with the best ones for this purpose first
@@ -470,7 +476,7 @@ class S2_Frontend extends S2_Core {
 	/**
 	 * Enqueue javascript ip updater code
 	 */
-	function js_ip_script() {
+	public function js_ip_script() {
 		wp_register_script( 's2_ip_updater', S2URL . 'include/s2-ip-updater' . $this->script_debug . '.js', array(), '1.0', true );
 		wp_enqueue_script( 's2_ip_updater' );
 	} // end js_ip_script()
@@ -478,7 +484,7 @@ class S2_Frontend extends S2_Core {
 	/**
 	 * Add ip updater library to footer
 	 */
-	function js_ip_library_script() {
+	public function js_ip_library_script() {
 		echo '<script async="async" src="https://api.ipify.org?format=jsonp&callback=getip"></script>' . "\r\n";
 	} // end js_ip_library_script()
 }

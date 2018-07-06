@@ -4,7 +4,7 @@ class S2_Multisite {
 	/**
 	 * Handles subscriptions and unsubscriptions for different blogs on WPMU installs
 	 */
-	function wpmu_subscribe() {
+	public function wpmu_subscribe() {
 		global $mysubscribe2;
 		// subscribe to new blog
 		if ( ! empty( $_GET['s2mu_subscribe'] ) ) {
@@ -73,14 +73,14 @@ class S2_Multisite {
 				switch_to_blog( key( $user_blogs ) );
 			} else {
 				// no longer a member of a blog
-				wp_redirect( get_option( 'siteurl' ) ); // redirect to front page
+				wp_safe_redirect( get_option( 'siteurl' ) ); // redirect to front page
 				exit( 0 );
 			}
 		}
 
 		// redirect to profile page
 		$url = get_option( 'siteurl' ) . '/wp-admin/admin.php?page=s2';
-		wp_redirect( $url );
+		wp_safe_redirect( $url );
 		exit( 0 );
 	} // end wpmu_subscribe()
 
@@ -88,7 +88,7 @@ class S2_Multisite {
 	 * Obtain a list of current WordPress multiuser blogs
 	 * Note this may affect performance but there is no alternative
 	 */
-	function get_mu_blog_list() {
+	public function get_mu_blog_list() {
 		global $wpdb;
 		$blogs = $wpdb->get_results( $wpdb->prepare( "SELECT blog_id, domain, path FROM $wpdb->blogs WHERE site_id = %d AND archived = '0' AND mature = '0' AND spam = '0' AND deleted = '0' ORDER BY registered DESC", $wpdb->siteid ), ARRAY_A );
 
@@ -107,7 +107,7 @@ class S2_Multisite {
 	/**
 	 * Register user details when new user is added to a multisite blog
 	 */
-	function wpmu_add_user( $user_ID = 0 ) {
+	public function wpmu_add_user( $user_ID = 0 ) {
 		global $mysubscribe2;
 		if ( 0 === $user_ID ) {
 			return;
@@ -122,7 +122,7 @@ class S2_Multisite {
 	/**
 	 * Delete user details when a user is removed from a multisite blog
 	 */
-	function wpmu_remove_user( $user_ID ) {
+	public function wpmu_remove_user( $user_ID ) {
 		global $mysubscribe2;
 		if ( 0 === $user_ID ) {
 			return;
@@ -142,7 +142,7 @@ class S2_Multisite {
 	/**
 	 * Rename WPMU widgets on upgrade without requiring user to re-enable
 	 */
-	function namechange_subscribe2_widget() {
+	public function namechange_subscribe2_widget() {
 		global $wpdb;
 		$blogs = $wpdb->get_col( "SELECT blog_id FROM {$wpdb->blogs}" );
 

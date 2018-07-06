@@ -1,12 +1,12 @@
 <?php
 /**
-List Table class used in WordPress 4.3.x and above
-*/
+ * List Table class used in WordPress 4.3.x and above
+ */
 class S2_List_Table extends WP_List_Table {
 	private $date_format = '';
 	private $time_format = '';
 
-	function __construct() {
+	public function __construct() {
 		global $status, $page;
 
 		parent::__construct(
@@ -20,7 +20,7 @@ class S2_List_Table extends WP_List_Table {
 		$this->time_format = get_option( 'time_format' );
 	}
 
-	function column_default( $item, $column_name ) {
+	public function column_default( $item, $column_name ) {
 		global $current_tab;
 		if ( 'registered' === $current_tab ) {
 			switch ( $column_name ) {
@@ -36,11 +36,11 @@ class S2_List_Table extends WP_List_Table {
 		}
 	}
 
-	function column_email( $item ) {
+	public function column_email( $item ) {
 		global $current_tab;
 		if ( 'registered' === $current_tab ) {
 			$actions = array(
-				'edit' => sprintf( '<a href="?page=%s&amp;id=%d">%s</a>', 's2', urlencode( $item['id'] ), __( 'Edit', 'subscribe2' ) ),
+				'edit' => sprintf( '<a href="?page=%s&amp;id=%d">%s</a>', 's2', rawurlencode( $item['id'] ), __( 'Edit', 'subscribe2' ) ),
 			);
 			return sprintf( '%1$s %2$s', $item['email'], $this->row_actions( $actions ) );
 		} else {
@@ -53,7 +53,7 @@ class S2_List_Table extends WP_List_Table {
 		}
 	}
 
-	function column_date( $item ) {
+	public function column_date( $item ) {
 		global $current_tab;
 		if ( 'registered' === $current_tab ) {
 			return $item['date'];
@@ -63,11 +63,11 @@ class S2_List_Table extends WP_List_Table {
 		}
 	}
 
-	function column_cb( $item ) {
+	public function column_cb( $item ) {
 		return sprintf( '<input type="checkbox" name="%1$s[]" value="%2$s" />', $this->_args['singular'], $item['email'] );
 	}
 
-	function get_columns() {
+	public function get_columns() {
 		global $current_tab;
 		if ( 'registered' === $current_tab ) {
 			$columns = array(
@@ -84,7 +84,7 @@ class S2_List_Table extends WP_List_Table {
 		return $columns;
 	}
 
-	function get_sortable_columns() {
+	public function get_sortable_columns() {
 		global $current_tab;
 		if ( 'registered' === $current_tab ) {
 			$sortable_columns = array(
@@ -99,7 +99,7 @@ class S2_List_Table extends WP_List_Table {
 		return $sortable_columns;
 	}
 
-	function print_column_headers( $with_id = true ) {
+	public function print_column_headers( $with_id = true ) {
 		list( $columns, $hidden, $sortable, $primary ) = $this->get_column_info();
 
 		$current_url = set_url_scheme( 'http://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'] );
@@ -127,7 +127,7 @@ class S2_List_Table extends WP_List_Table {
 
 		if ( ! empty( $columns['cb'] ) ) {
 			static $cb_counter = 1;
-			$columns['cb']     = '<label class="screen-reader-text" for="cb-select-all-' . $cb_counter . '">' . __( 'Select All' ) . '</label>'
+			$columns['cb']     = '<label class="screen-reader-text" for="cb-select-all-' . $cb_counter . '">' . __( 'Select All', 'subscribe2' ) . '</label>'
 				. '<input id="cb-select-all-' . $cb_counter . '" type="checkbox" />';
 			$cb_counter++;
 		}
@@ -175,7 +175,7 @@ class S2_List_Table extends WP_List_Table {
 		}
 	}
 
-	function get_bulk_actions() {
+	public function get_bulk_actions() {
 		global $current_tab;
 		if ( 'registered' === $current_tab ) {
 			if ( is_multisite() ) {
@@ -194,7 +194,7 @@ class S2_List_Table extends WP_List_Table {
 		}
 	}
 
-	function process_bulk_action() {
+	public function process_bulk_action() {
 		if ( in_array( $this->current_action(), array( 'delete', 'toggle' ) ) ) {
 			if ( ! isset( $_REQUEST['subscriber'] ) ) {
 				echo '<div id="message" class="error"><p><strong>' . __( 'No users were selected.', 'subscribe2' ) . '</strong></p></div>';
@@ -245,7 +245,7 @@ class S2_List_Table extends WP_List_Table {
 		}
 	}
 
-	function pagination( $which ) {
+	public function pagination( $which ) {
 		if ( empty( $this->_pagination_args ) ) {
 			return;
 		}
@@ -261,6 +261,7 @@ class S2_List_Table extends WP_List_Table {
 			$this->screen->render_screen_reader_content( 'heading_pagination' );
 		}
 
+		// Translators: Pagination
 		$output = '<span class="displaying-num">' . sprintf( _n( '%s item', '%s items', $total_items, 'subscribe2' ), number_format_i18n( $total_items ) ) . '</span>';
 
 		if ( isset( $_POST['what'] ) ) {
@@ -347,8 +348,10 @@ class S2_List_Table extends WP_List_Table {
 				strlen( $total_pages )
 			);
 		}
+
 		$html_total_pages = sprintf( "<span class='total-pages'>%s</span>", number_format_i18n( $total_pages ) );
-		$page_links[]     = $total_pages_before . sprintf( _x( '%1$s of %2$s', 'paging', 'subscribe2' ), $html_current_page, $html_total_pages ) . $total_pages_after;
+		// Translators: Pagination
+		$page_links[] = $total_pages_before . sprintf( _x( '%1$s of %2$s', 'paging', 'subscribe2' ), $html_current_page, $html_total_pages ) . $total_pages_after;
 
 		if ( $disable_next ) {
 			$page_links[] = '<span class="tablenav-pages-navspan" aria-hidden="true">&rsaquo;</span>';
@@ -383,12 +386,13 @@ class S2_List_Table extends WP_List_Table {
 		} else {
 			$page_class = ' no-pages';
 		}
+
 		$this->_pagination = "<div class='tablenav-pages{$page_class}'>$output</div>";
 
 		echo $this->_pagination;
 	}
 
-	function prepare_items() {
+	public function prepare_items() {
 		global $mysubscribe2, $subscribers, $current_tab;
 
 		$user          = get_current_user_id();

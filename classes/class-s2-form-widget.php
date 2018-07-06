@@ -3,7 +3,7 @@ class S2_Form_Widget extends WP_Widget {
 	/**
 	 * Declares the Subscribe2 widget class.
 	 */
-	function __construct() {
+	public function __construct() {
 		$widget_ops = array(
 			'classname'                   => 's2_form_widget',
 			'description'                 => esc_html__( 'Sidebar Widget for Subscribe2', 'subscribe2' ),
@@ -20,7 +20,7 @@ class S2_Form_Widget extends WP_Widget {
 	/**
 	 * Displays the Widget
 	 */
-	function widget( $args, $instance ) {
+	public function widget( $args, $instance ) {
 		$title             = empty( $instance['title'] ) ? __( 'Subscribe2', 'subscribe2' ) : $instance['title'];
 		$div               = empty( $instance['div'] ) ? 'search' : $instance['div'];
 		$widgetprecontent  = empty( $instance['widgetprecontent'] ) ? '' : $instance['widgetprecontent'];
@@ -73,14 +73,14 @@ class S2_Form_Widget extends WP_Widget {
 	/**
 	 * Saves the widgets settings.
 	 */
-	function update( $new_instance, $old_instance ) {
+	public function update( $new_instance, $old_instance ) {
 		$instance                      = $old_instance;
-		$instance['title']             = strip_tags( stripslashes( $new_instance['title'] ) );
-		$instance['div']               = strip_tags( stripslashes( $new_instance['div'] ) );
+		$instance['title']             = wp_strip_all_tags( stripslashes( $new_instance['title'] ) );
+		$instance['div']               = wp_strip_all_tags( stripslashes( $new_instance['div'] ) );
 		$instance['widgetprecontent']  = stripslashes( $new_instance['widgetprecontent'] );
 		$instance['widgetpostcontent'] = stripslashes( $new_instance['widgetpostcontent'] );
 		$instance['size']              = intval( stripslashes( $new_instance['size'] ) );
-		$instance['hidebutton']        = strip_tags( stripslashes( $new_instance['hidebutton'] ) );
+		$instance['hidebutton']        = wp_strip_all_tags( stripslashes( $new_instance['hidebutton'] ) );
 		$instance['postto']            = stripslashes( $new_instance['postto'] );
 		$instance['js']                = stripslashes( $new_instance['js'] );
 		$instance['noantispam']        = stripslashes( $new_instance['noantispam'] );
@@ -92,7 +92,7 @@ class S2_Form_Widget extends WP_Widget {
 	/**
 	 * Creates the edit form for the widget.
 	 */
-	function form( $instance ) {
+	public function form( $instance ) {
 		// set some defaults, getting any old options first
 		$options = get_option( 'widget_subscribe2widget' );
 		if ( false === $options ) {

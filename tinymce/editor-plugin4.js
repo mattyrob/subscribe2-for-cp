@@ -29,7 +29,7 @@
 
 			// load the CSS and enable it on the right class
 			ed.on('init', function () {
-				ed.dom.loadCSS( url + '/css/content.min.css' );
+				ed.dom.loadCSS( url + '/css/content.css' );
 
 				if ( ed.theme.onResolveName ) {
 					ed.theme.onResolveName.add(function ( th, o ) {

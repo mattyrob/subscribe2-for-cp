@@ -35,20 +35,20 @@ if ( version_compare( $GLOBALS['wp_version'], '3.3', '<' ) || ! function_exists(
 	if ( ! function_exists( 'add_action' ) ) {
 		$exit_msg = __( "I'm just a plugin, please don't call me directly", 'subscribe2' );
 	} else {
-		// Subscribe2 needs WordPress 3.3 or above, exit if not on a compatible version
-		$exit_msg = sprintf( __( 'This version of Subscribe2 requires WordPress 3.3 or greater. Please update %1$s or use an older version of %2$s.', 'subscribe2' ), '<a href="http://codex.wordpress.org/Updating_WordPress">WordPress</a>', '<a href="http://wordpress.org/extend/plugins/subscribe2/download/">Subscribe2</a>' );
+		// Translators: Subscribe2 needs WordPress 3.3 or above, exit if not on a compatible version
+		$exit_msg = sprintf( __( 'This version of Subscribe2 requires WordPress 3.3 or greater. Please update %1$s or use an older version of %2$s.', 'subscribe2' ), '<a href="http://codex.wordpress.org/Updating_WordPress">WordPress</a>', '<a href="https://semperplugins.com/subscribe2-html/">Subscribe2</a>' );
 	}
 	exit( $exit_msg );
 }
 
 // stop Subscribe2 being activated site wide on Multisite installs
 if ( ! function_exists( 'is_plugin_active_for_network' ) ) {
-	require_once( ABSPATH . '/wp-admin/includes/plugin.php' );
+	require_once ABSPATH . '/wp-admin/includes/plugin.php';
 }
 
 if ( is_plugin_active_for_network( plugin_basename( __FILE__ ) ) ) {
 	deactivate_plugins( plugin_basename( __FILE__ ) );
-	$exit_msg = __( 'Subscribe2 cannot be activated as a network plugin. Please activate it on a site level', 'subscribe2' );
+	$exit_msg = __( 'Subscribe2 HTML cannot be activated as a network plugin. Please activate it on a site level', 'subscribe2' );
 	exit( $exit_msg );
 }
 

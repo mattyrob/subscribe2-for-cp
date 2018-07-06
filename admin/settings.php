@@ -12,9 +12,9 @@ if ( isset( $_POST['s2_admin'] ) ) {
 	}
 
 	if ( isset( $_POST['reset'] ) ) {
-		require_once( S2PATH . 'classes/class-s2-upgrade.php' );
+		require_once S2PATH . 'classes/class-s2-upgrade.php';
 		global $s2_upgrade;
-		$s2_upgrade = new S2_Upgrade;
+		$s2_upgrade = new S2_Upgrade();
 		$s2_upgrade->reset();
 		echo '<div id="message" class="updated fade"><p><strong>' . __( 'Options reset!', 'subscribe2' ) . '</strong></p></div>';
 	} elseif ( isset( $_POST['preview'] ) ) {
@@ -155,6 +155,7 @@ if ( 'blogname' === $this->subscribe2_options['sender'] ) {
 }
 list( $user, $domain ) = explode( '@', $sender, 2 );
 if ( ! stristr( esc_html( $_SERVER['SERVER_NAME'] ), $domain ) && 'author' !== $this->subscribe2_options['sender'] && '0' === $this->subscribe2_options['dismiss_sender_warning'] ) {
+	// Translators: Warning message
 	echo '<div id="sender_message" class="error notice is-dismissible"><p class="s2_error"><strong>' . sprintf( __( 'You appear to be sending notifications from %1$s, which has a different domain name than your blog server %2$s. This may result in failed emails.', 'subscribe2' ), $sender, $_SERVER['SERVER_NAME'] ) . '</strong></p></div>';
 }
 
@@ -317,8 +318,8 @@ switch ( $current_tab ) {
 
 	case 'registered':
 		// Access function to allow display for form elements
-		require_once( S2PATH . 'classes/class-s2-forms.php' );
-		$s2_forms = new s2_forms;
+		require_once S2PATH . 'classes/class-s2-forms.php';
+		$s2_forms = new s2_forms();
 
 		// compulsory categories
 		echo '<div class="s2_admin" id="s2_compulsory_categories">' . "\r\n";
@@ -493,6 +494,6 @@ if ( 'misc' === $current_tab ) {
 }
 echo '</form></div>' . "\r\n";
 
-include( ABSPATH . 'wp-admin/admin-footer.php' );
+require ABSPATH . 'wp-admin/admin-footer.php';
 // just to be sure
 die;
