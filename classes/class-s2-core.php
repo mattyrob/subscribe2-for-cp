@@ -101,9 +101,9 @@ class S2_Core {
 				}
 				// Use the mail queue provided we are not sending a preview
 				if ( function_exists( 'wpmq_mail' ) && ! $this->preview_email ) {
-					@wp_mail( $recipient, $subject, $mailtext, $headers, $attachments, 0 );
+					$status = wp_mail( $recipient, $subject, $mailtext, $headers, $attachments, 0 );
 				} else {
-					@wp_mail( $recipient, $subject, $mailtext, $headers, $attachments );
+					$status = wp_mail( $recipient, $subject, $mailtext, $headers, $attachments );
 				}
 			}
 			return true;
@@ -159,10 +159,10 @@ class S2_Core {
 		if ( isset( $batch ) && ! empty( $batch ) ) {
 			foreach ( $batch as $bcc ) {
 					$newheaders = $headers . "$bcc\n";
-					$status     = @wp_mail( $this->myemail, $subject, $mailtext, $newheaders, $attachments );
+					$status     = wp_mail( $this->myemail, $subject, $mailtext, $newheaders, $attachments );
 			}
 		} else {
-			$status = @wp_mail( $this->myemail, $subject, $mailtext, $headers, $attachments );
+			$status = wp_mail( $this->myemail, $subject, $mailtext, $headers, $attachments );
 		}
 		return $status;
 	} // end mail()
@@ -203,7 +203,7 @@ class S2_Core {
 			$header['Reply-To'] = $this->myname . ' <' . $this->myemail . '>';
 		}
 		$header['Return-Path'] = '<' . $this->myemail . '>';
-		$header['List-ID'] = html_entity_decode( get_option( 'blogname' ), ENT_QUOTES ) . ' <' . strtolower( esc_html( $_SERVER['SERVER_NAME'] ) ) . '>';
+		$header['List-ID']     = html_entity_decode( get_option( 'blogname' ), ENT_QUOTES ) . ' <' . strtolower( esc_html( $_SERVER['SERVER_NAME'] ) ) . '>';
 		if ( 'html' === $type ) {
 			// To send HTML mail, the Content-Type header must be set
 			$header['Content-Type'] = get_option( 'html_type' ) . '; charset="' . $char_set . '"';
@@ -623,9 +623,9 @@ class S2_Core {
 
 		if ( true === $is_remind && function_exists( 'wpmq_mail' ) ) {
 			// could be sending lots of reminders so queue them if wpmq is enabled
-			@wp_mail( $this->email, $subject, $body, $mailheaders, '', 0 );
+			$status = wp_mail( $this->email, $subject, $body, $mailheaders, '', 0 );
 		} else {
-			return @wp_mail( $this->email, $subject, $body, $mailheaders );
+			return wp_mail( $this->email, $subject, $body, $mailheaders );
 		}
 	} // end send_confirm()
 
@@ -1535,7 +1535,7 @@ class S2_Core {
 
 			$digest_post_ids[] = $post->ID;
 
-			$post_title                           = html_entity_decode( __( $post->post_title ), ENT_QUOTES );
+			$post_title                           = html_entity_decode( $post->post_title, ENT_QUOTES );
 			( '' === $table ) ? $table           .= '* ' . $post_title : $table .= "\r\n* " . $post_title;
 			( '' === $tablelinks ) ? $tablelinks .= '* ' . $post_title : $tablelinks .= "\r\n* " . $post_title;
 			$message_post                        .= $post_title;
@@ -1716,7 +1716,7 @@ class S2_Core {
 	/**
 	Jetpack comments doesn't play nice, this function kills that module
 	*/
-	function s2_hide_jetpack_comments( $modules ) {
+	public function s2_hide_jetpack_comments( $modules ) {
 		unset( $modules['comments'] );
 		return $modules;
 	} // end s2_kill_jetpack_comments()

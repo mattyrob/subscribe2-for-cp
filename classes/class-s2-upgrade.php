@@ -544,7 +544,7 @@ class S2_Upgrade {
 		}
 	} // end upgrade10_14()
 
-	function upgrade10_23() {
+	private function upgrade10_23() {
 		global $mysubscribe2;
 		if ( isset( $mysubscribe2->subscribe2_options['entries'] ) ) {
 			unset( $mysubscribe2->subscribe2_options['entries'] );

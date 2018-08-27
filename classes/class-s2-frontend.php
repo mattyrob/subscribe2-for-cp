@@ -388,7 +388,7 @@ class S2_Frontend extends S2_Core {
 		$headers    = $this->headers();
 		// send individual emails so we don't reveal admin emails to each other
 		foreach ( $recipients as $recipient ) {
-			@wp_mail( $recipient, $subject, $message, $headers );
+			$status = wp_mail( $recipient, $subject, $message, $headers );
 		}
 	} // end admin_email()
 

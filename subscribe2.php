@@ -59,20 +59,17 @@ define( 'S2PATH', trailingslashit( dirname( __FILE__ ) ) );
 define( 'S2DIR', trailingslashit( dirname( plugin_basename( __FILE__ ) ) ) );
 define( 'S2URL', plugin_dir_url( dirname( __FILE__ ) ) . S2DIR );
 
-// Set maximum execution time to 5 minutes - won't affect safe mode
-$safe_mode = array( 'On', 'ON', 'on', 1 );
-if ( ! in_array( ini_get( 'safe_mode' ), $safe_mode ) && ini_get( 'max_execution_time' ) < 300 ) {
-	@ini_set( 'max_execution_time', 300 );
-}
+// Set maximum execution time to 5 minutes
+set_time_limit( 600 );
 
-require_once( S2PATH . 'classes/class-s2-core.php' );
+require_once S2PATH . 'classes/class-s2-core.php';
 if ( is_admin() ) {
-	require_once( S2PATH . 'classes/class-s2-admin.php' );
+	require_once S2PATH . 'classes/class-s2-admin.php';
 	global $mysubscribe2;
-	$mysubscribe2 = new S2_Admin;
+	$mysubscribe2 = new S2_Admin();
 } else {
-	require_once( S2PATH . 'classes/class-s2-frontend.php' );
+	require_once S2PATH . 'classes/class-s2-frontend.php';
 	global $mysubscribe2;
-	$mysubscribe2 = new S2_Frontend;
+	$mysubscribe2 = new S2_Frontend();
 }
 add_action( 'plugins_loaded', array( $mysubscribe2, 's2init' ) );
