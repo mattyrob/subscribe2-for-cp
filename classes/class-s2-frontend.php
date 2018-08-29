@@ -410,11 +410,12 @@ class S2_Frontend extends S2_Core {
 		}
 
 		list( $user, $domain ) = explode( '@', $email, 2 );
-		$domain                = '@' . $domain;
-		foreach ( preg_split( '/[\s,]+/', $this->subscribe2_options['barred'] ) as $barred_domain ) {
-			if ( false !== strpos( $barred_domain, '*' ) ) {
-				// wildcard domain checking
-				$url   = explode( '.', $barred_domain );
+
+		$domain = '@' . $domain;
+
+		foreach ( preg_split( '/[\s,]+/', $str ) as $barred_domain ) {
+			if ( false !== strpos( $barred_domain, '!' ) ) {
+				$url   = explode( '.', str_replace( '!', '', $barred_domain ) );
 				$count = count( $url );
 				// make sure our exploded domain has at least 2 components e.g. yahoo.*
 				if ( $count < 2 ) {
@@ -425,6 +426,35 @@ class S2_Frontend extends S2_Core {
 						unset( $url[ $i ] );
 					}
 				}
+
+				$new_barred_domain = '@' . strtolower( trim( implode( '.', $url ) ) );
+
+				if ( false !== strpos( $barred_domain, '*' ) ) {
+					$new_barred_subdomain = '.' . strtolower( trim( implode( '.', $url ) ) );
+					if ( false !== stripos( $domain, $new_barred_domain ) || false !== stripos( $domain, $new_barred_subdomain ) ) {
+						return false;
+					}
+				} else {
+					if ( false !== stripos( $domain, $new_barred_domain ) ) {
+						return false;
+					}
+				}
+			}
+
+			if ( false === strpos( $barred_domain, '!' ) && false !== strpos( $barred_domain, '*' ) ) {
+				// wildcard and explictly allowed checking
+				$url   = explode( '.', str_replace( '!', '', $barred_domain ) );
+				$count = count( $url );
+				// make sure our exploded domain has at least 2 components e.g. yahoo.*
+				if ( $count < 2 ) {
+					continue;
+				}
+				for ( $i = 0; $i < $count; $i++ ) {
+					if ( '*' === $url[ $i ] ) {
+						unset( $url[ $i ] );
+					}
+				}
+
 				$new_barred_domain    = '@' . strtolower( trim( implode( '.', $url ) ) );
 				$new_barred_subdomain = '.' . strtolower( trim( implode( '.', $url ) ) );
 
@@ -439,6 +469,7 @@ class S2_Frontend extends S2_Core {
 				}
 			}
 		}
+
 		return false;
 	} // end is_barred()
 
@@ -487,4 +518,7 @@ class S2_Frontend extends S2_Core {
 	public function js_ip_library_script() {
 		echo '<script async="async" src="https://api.ipify.org?format=jsonp&callback=getip"></script>' . "\r\n";
 	} // end js_ip_library_script()
+
+	/* ===== define some variables ===== */
+	public $profile = '';
 }

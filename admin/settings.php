@@ -46,11 +46,11 @@ if ( isset( $_POST['s2_admin'] ) ) {
 			} elseif ( in_array( $key, array( 'show_meta', 'show_button', 'ajax', 'widget', 'counterwidget', 's2meta_default', 'reg_override' ) ) ) {
 				// check box entries
 				( isset( $_POST[ $key ] ) && '1' === $_POST[ $key ] ) ? $this->subscribe2_options[ $key ] = '1' : $this->subscribe2_options[ $key ] = '0';
-			} elseif ( 'appearance_users_tab' === $key ) {
+			} elseif ( 'appearance_tab' === $key ) {
 				$options = array( 'show_meta', 'show_button', 'ajax', 'widget', 'counterwidget', 's2meta_default' );
 				foreach ( $options as $option ) {
 					if ( ! isset( $_POST[ $option ] ) ) {
-						$this->subscribe2_options[ $option ] = '';
+						$this->subscribe2_options[ $option ] = '0';
 					}
 				}
 			} elseif ( in_array( $key, array( 'notification_subject', 'mailtext', 'confirm_subject', 'confirm_email', 'remind_subject', 'remind_email', 's2_license_key' ) ) && ! empty( $_POST[ $key ] ) ) {
@@ -423,7 +423,7 @@ switch ( $current_tab ) {
 	case 'appearance':
 		// Appearance options
 		echo '<div class="s2_admin" id="s2_appearance_settings">' . "\r\n";
-		echo '<input type="hidden" name="appearance_users_tab" value="options" />' . "\r\n";
+		echo '<input type="hidden" name="appearance_tab" value="options" />' . "\r\n";
 		echo '<p>' . "\r\n";
 
 		// WordPress page ID where subscribe2 token is used
@@ -469,11 +469,12 @@ switch ( $current_tab ) {
 		echo '<div class="s2_admin" id="s2_barred_domains">' . "\r\n";
 		echo '<h3>' . __( 'Barred Domains', 'subscribe2' ) . '</h3>' . "\r\n";
 		echo '<p>' . "\r\n";
-		echo __( 'Enter domains to bar from public subscriptions (wildcards allowed): <br /> (Use a new line for each entry and omit the "@" symbol, for example *.email.com or yahoo.*)', 'subscribe2' );
+		echo __( 'Enter domains to bar for public subscriptions, wildcards (*) and exceptions (!) are allowed', 'subscribe2' ) . '<br />' . "\r\n";
+		echo __( 'Use a new line for each entry and omit the "@" symbol, for example !email.com, hotmail.com, yahoo.*', 'subscribe2' );
 		echo "\r\n" . '<br /><textarea style="width: 98%;" rows="4" cols="60" name="barred">' . esc_textarea( $this->subscribe2_options['barred'] ) . '</textarea>';
 		echo '</p>';
 		echo '<h3>' . __( 'Links', 'subscribe2' ) . '</h3>' . "\r\n";
-		echo '<a href="http://wordpress.org/extend/plugins/subscribe2/">' . __( 'Plugin Site', 'subscribe2' ) . '</a><br />';
+		echo '<a href="http://wordpress.org/plugins/subscribe2/">' . __( 'Plugin Site', 'subscribe2' ) . '</a><br />';
 		echo '<a href="http://wordpress.org/support/plugin/subscribe2">' . __( 'Plugin Forum', 'subscribe2' ) . '</a><br />';
 		echo '<a href="http://subscribe2.wordpress.com/">' . __( 'Plugin Blog', 'subscribe2' ) . '</a><br />';
 		echo '<a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&amp;hosted_button_id=2387904">' . __( 'Make a donation via PayPal', 'subscribe2' ) . '</a>';

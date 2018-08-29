@@ -1869,7 +1869,7 @@ class S2_Core {
 
 			// add write button
 			if ( '1' === $this->subscribe2_options['show_button'] ) {
-				if ( defined( 'GUTENBERG_VERSION' ) ) {
+				if ( function_exists( 'register_block_type' ) ) {
 					add_action( 'admin_enqueue_scripts', array( &$this, 'gutenberg_block_editor_assets' ), 6 );
 					add_action( 'admin_enqueue_scripts', array( &$this, 'gutenberg_i18n' ), 6 );
 				} else {

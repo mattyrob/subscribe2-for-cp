@@ -1,5 +1,5 @@
 // Version 1.0 - Initial version
-// Version 1.0.1 - fix for useOnce deprecation and improve Transition from unsaved block
+// Version 1.0.1 - fix for useOnce deprecation, improve Transition from unsaved block and update 'edit' to use clientid
 ( function( blocks, i18n, element, components, editor ) {
 	var el = element.createElement,
 		TextControl = components.TextControl,
@@ -300,7 +300,7 @@
 					el(
 						RadioControl,
 						{
-							id: 'hide',
+							clientId: 'hide',
 							label: i18n.__( 'Button Display Options', 'subscribe2' ),
 							selected: hide,
 							onChange: onChangeHide,
@@ -314,7 +314,7 @@
 					el(
 						TextControl,
 						{
-							id: 'id',
+							clientId: 'id',
 							type: 'number',
 							label: i18n.__( 'Page ID', 'subscribe2' ),
 							value: id,
@@ -324,7 +324,7 @@
 					el(
 						CheckboxControl,
 						{
-							id: 'nojs',
+							clientId: 'nojs',
 							label: i18n.__( 'Disable Javascript', 'subscribe2' ),
 							checked: nojs,
 							onChange: onChangeNojs
@@ -333,7 +333,7 @@
 					el(
 						CheckboxControl,
 						{
-							id: 'antispam',
+							clientId: 'antispam',
 							label: i18n.__( 'Disable Simple Anti-Spam Measures', 'subscribe2' ),
 							checked: antispam,
 							onChange: onChangeAntispam
@@ -342,7 +342,7 @@
 					el(
 						TextControl,
 						{
-							id: 'size',
+							clientId: 'size',
 							type: 'number',
 							label: i18n.__( 'Textbox size', 'subscribe2' ),
 							value: size,
@@ -352,7 +352,7 @@
 					el(
 						CheckboxControl,
 						{
-							id: 'wrap',
+							clientId: 'wrap',
 							label: i18n.__( 'Disable wrapping of form buttons', 'subscribe2' ),
 							checked: wrap,
 							onChange: onChangeWrap
@@ -361,7 +361,7 @@
 					el(
 						TextControl,
 						{
-							id: 'link',
+							clientId: 'link',
 							type: 'string',
 							label: i18n.__( 'Link Text', 'subscribe2' ),
 							value: link,
