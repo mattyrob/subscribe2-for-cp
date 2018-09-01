@@ -76,7 +76,7 @@
 				break;
 			case 'wrap':
 				if ( true === newVal ) {
-					wrap = ' wrap="true"]';
+					wrap = ' wrap="true"';
 				} else if ( false === newVal ) {
 					wrap = '';
 				}
@@ -300,7 +300,6 @@
 					el(
 						RadioControl,
 						{
-							clientId: 'hide',
 							label: i18n.__( 'Button Display Options', 'subscribe2' ),
 							selected: hide,
 							onChange: onChangeHide,
@@ -314,7 +313,6 @@
 					el(
 						TextControl,
 						{
-							clientId: 'id',
 							type: 'number',
 							label: i18n.__( 'Page ID', 'subscribe2' ),
 							value: id,
@@ -324,7 +322,6 @@
 					el(
 						CheckboxControl,
 						{
-							clientId: 'nojs',
 							label: i18n.__( 'Disable Javascript', 'subscribe2' ),
 							checked: nojs,
 							onChange: onChangeNojs
@@ -333,7 +330,6 @@
 					el(
 						CheckboxControl,
 						{
-							clientId: 'antispam',
 							label: i18n.__( 'Disable Simple Anti-Spam Measures', 'subscribe2' ),
 							checked: antispam,
 							onChange: onChangeAntispam
@@ -342,7 +338,6 @@
 					el(
 						TextControl,
 						{
-							clientId: 'size',
 							type: 'number',
 							label: i18n.__( 'Textbox size', 'subscribe2' ),
 							value: size,
@@ -352,7 +347,6 @@
 					el(
 						CheckboxControl,
 						{
-							clientId: 'wrap',
 							label: i18n.__( 'Disable wrapping of form buttons', 'subscribe2' ),
 							checked: wrap,
 							onChange: onChangeWrap
@@ -361,7 +355,6 @@
 					el(
 						TextControl,
 						{
-							clientId: 'link',
 							type: 'string',
 							label: i18n.__( 'Link Text', 'subscribe2' ),
 							value: link,
