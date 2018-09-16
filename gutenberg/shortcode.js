@@ -1,5 +1,5 @@
 // Version 1.0 - Initial version
-// Version 1.0.1 - fix for useOnce deprecation, improve Transition from unsaved block and update 'edit' to use clientid
+// Version 1.0.1 - fix for useOnce deprecation, improve Transition from unsaved block and update 'edit' drop use of id
 ( function( blocks, i18n, element, components, editor ) {
 	var el = element.createElement,
 		TextControl = components.TextControl,
