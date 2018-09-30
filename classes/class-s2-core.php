@@ -379,7 +379,7 @@ class S2_Core {
 		}
 
 		// get_the_time() uses the current locale of the admin user which may differ from the site locale
-		if ( get_user_locale() !== get_locale() ) {
+		if ( function_exists( 'get_user_locale' ) && get_user_locale() !== get_locale() ) {
 			switch_to_locale( get_locale() );
 			$locale_switched = true;
 		}
