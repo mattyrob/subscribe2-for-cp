@@ -424,5 +424,5 @@ class S2_Forms {
 	/**
 	 * Define some variables
 	 */
-	private $all_authors;
+	private $all_authors = '';
 }
