@@ -5,6 +5,7 @@
 * Gutenberg block updated for useOnce deprecation and transition to shortcode block improved from recently added and unsaved block
 * Fixed warning message on Your Subscriptions page
 * Further Coding Standard improvements
+* Add GDPR warning to Settings page for certain settings
 
 = 10.24 =
 
@@ -15,7 +16,7 @@
 = 10.23 =
 
 * Improve REGEX for the old Subscribe2 token - props @pik256
-* Introduce Gutenber Block for testing
+* Introduce Gutenberg Block for testing
 * Applied Grunt to packing for distribution so files are minified differently
 * Load external javascripts asynchronously
 * Improve Bulk Management user experience

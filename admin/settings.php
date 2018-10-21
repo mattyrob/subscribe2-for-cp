@@ -128,6 +128,13 @@ if ( empty( $id ) ) {
 	echo '<div id="page_message" class="error"><p class="s2_error"><strong>' . __( 'You must create a WordPress page for this plugin to work correctly.', 'subscribe2' ) . '</strong></p></div>';
 }
 
+// display error message for GDPR
+if ( defined( 'S2GDPR' ) && true === S2GDPR ) {
+	if ( 'yes' === $this->subscribe2_options['wpregdef'] || 'yes' === $this->subscribe2_options['autosub_def'] || 'yes' === $this->subscribe2_options['autosub_def'] || 'yes' === $this->subscribe2_options['comment_def'] ) {
+		echo '<div id="gdpr_message" class="error"><p class="s2_error"><strong>' . __( 'Your Settings may breach GDPR', 'subscribe2' ) . '</strong></p></div>';
+	}
+}
+
 if ( 'never' !== $this->subscribe2_options['email_freq'] ) {
 	$disallowed_keywords = array( '{TITLE}', '{TITLETEXT}', '{PERMALINK}', '{PERMAURL}', '{DATE}', '{TIME}', '{LINK}', '{ACTION}', '{REFERENCELINKS}' );
 } else {
@@ -360,8 +367,10 @@ switch ( $current_tab ) {
 		echo '<h3>' . __( 'Auto-Subscribe', 'subscribe2' ) . '</h3>' . "\r\n";
 		echo '<p>' . "\r\n";
 		echo __( 'Subscribe new users registering with your blog', 'subscribe2' ) . ':<br />' . "\r\n";
-		echo '<label><input type="radio" name="autosub" value="yes"' . checked( $this->subscribe2_options['autosub'], 'yes', false ) . ' /> ';
-		echo __( 'Automatically', 'subscribe2' ) . '</label>&nbsp;&nbsp;';
+		if ( defined( 'S2GDPR' ) && ( true === S2GDPR && 'yes' === $this->subscribe2_options['autosub'] ) || ( false === S2GDPR ) ) {
+			echo '<label><input type="radio" name="autosub" value="yes"' . checked( $this->subscribe2_options['autosub'], 'yes', false ) . ' /> ';
+			echo __( 'Automatically', 'subscribe2' ) . '</label>&nbsp;&nbsp;';
+		}
 		echo '<label><input type="radio" name="autosub" value="wpreg"' . checked( $this->subscribe2_options['autosub'], 'wpreg', false ) . ' /> ';
 		echo __( 'Display option on Registration Form', 'subscribe2' ) . '</label>&nbsp;&nbsp;';
 		echo '<label><input type="radio" name="autosub" value="no"' . checked( $this->subscribe2_options['autosub'], 'no', false ) . ' /> ';
@@ -371,11 +380,13 @@ switch ( $current_tab ) {
 		echo __( 'Yes', 'subscribe2' ) . '</label>&nbsp;&nbsp;';
 		echo '<label><input type="radio" name="newreg_override" value="no"' . checked( $this->subscribe2_options['newreg_override'], 'no', false ) . ' /> ';
 		echo __( 'No', 'subscribe2' ) . '</label><br /><br />' . "\r\n";
-		echo __( 'Registration Form option is checked by default', 'subscribe2' ) . ':<br />' . "\r\n";
-		echo '<label><input type="radio" name="wpregdef" value="yes"' . checked( $this->subscribe2_options['wpregdef'], 'yes', false ) . ' /> ';
-		echo __( 'Yes', 'subscribe2' ) . '</label>&nbsp;&nbsp;';
-		echo '<label><input type="radio" name="wpregdef" value="no"' . checked( $this->subscribe2_options['wpregdef'], 'no', false ) . ' /> ';
-		echo __( 'No', 'subscribe2' ) . '</label><br /><br />' . "\r\n";
+		if ( defined( 'S2GDPR' ) && ( true === S2GDPR && 'yes' === $this->subscribe2_options['wpregdef'] ) || ( false === S2GDPR ) ) {
+			echo __( 'Registration Form option is checked by default', 'subscribe2' ) . ':<br />' . "\r\n";
+			echo '<label><input type="radio" name="wpregdef" value="yes"' . checked( $this->subscribe2_options['wpregdef'], 'yes', false ) . ' /> ';
+			echo __( 'Yes', 'subscribe2' ) . '</label>&nbsp;&nbsp;';
+			echo '<label><input type="radio" name="wpregdef" value="no"' . checked( $this->subscribe2_options['wpregdef'], 'no', false ) . ' /> ';
+			echo __( 'No', 'subscribe2' ) . '</label><br /><br />' . "\r\n";
+		}
 		echo __( 'Auto-subscribe users to receive email as', 'subscribe2' ) . ': <br />' . "\r\n";
 		echo '<label><input type="radio" name="autoformat" value="html"' . checked( $this->subscribe2_options['autoformat'], 'html', false ) . ' /> ';
 		echo __( 'HTML - Full', 'subscribe2' ) . '</label>&nbsp;&nbsp;';
@@ -392,11 +403,13 @@ switch ( $current_tab ) {
 		echo __( 'No', 'subscribe2' ) . '</label>&nbsp;&nbsp;';
 		echo '<label><input type="radio" name="show_autosub" value="exclude"' . checked( $this->subscribe2_options['show_autosub'], 'exclude', false ) . ' /> ';
 		echo __( 'New categories are immediately excluded', 'subscribe2' ) . '</label><br /><br />';
-		echo __( 'Option for Registered Users to auto-subscribe to new categories is checked by default', 'subscribe2' ) . ': <br />' . "\r\n";
-		echo '<label><input type="radio" name="autosub_def" value="yes"' . checked( $this->subscribe2_options['autosub_def'], 'yes', false ) . ' /> ';
-		echo __( 'Yes', 'subscribe2' ) . '</label>&nbsp;&nbsp;';
-		echo '<label><input type="radio" name="autosub_def" value="no"' . checked( $this->subscribe2_options['autosub_def'], 'no', false ) . ' /> ';
-		echo __( 'No', 'subscribe2' ) . '</label><br /><br />';
+		if ( defined( 'S2GDPR' ) && ( true === S2GDPR && 'yes' === $this->subscribe2_options['autosub_def'] ) || ( false === S2GDPR ) ) {
+			echo __( 'Option for Registered Users to auto-subscribe to new categories is checked by default', 'subscribe2' ) . ': <br />' . "\r\n";
+			echo '<label><input type="radio" name="autosub_def" value="yes"' . checked( $this->subscribe2_options['autosub_def'], 'yes', false ) . ' /> ';
+			echo __( 'Yes', 'subscribe2' ) . '</label>&nbsp;&nbsp;';
+			echo '<label><input type="radio" name="autosub_def" value="no"' . checked( $this->subscribe2_options['autosub_def'], 'no', false ) . ' /> ';
+			echo __( 'No', 'subscribe2' ) . '</label><br /><br />';
+		}
 		// Hide these options if using Jetpack Comments
 		if ( ! class_exists( 'Jetpack_Comments' ) ) {
 			echo __( 'Display checkbox to allow subscriptions from the comment form', 'subscribe2' ) . ': <br />' . "\r\n";
@@ -406,11 +419,13 @@ switch ( $current_tab ) {
 			echo __( 'After the Comment Submit button', 'subscribe2' ) . '</label>&nbsp;&nbsp;';
 			echo '<label><input type="radio" name="comment_subs" value="no"' . checked( $this->subscribe2_options['comment_subs'], 'no', false ) . ' /> ';
 			echo __( 'No', 'subscribe2' ) . '</label><br /><br />';
-			echo __( 'Comment form checkbox is checked by default', 'subscribe2' ) . ': <br />' . "\r\n";
-			echo '<label><input type="radio" name="comment_def" value="yes"' . checked( $this->subscribe2_options['comment_def'], 'yes', false ) . ' /> ';
-			echo __( 'Yes', 'subscribe2' ) . '</label>&nbsp;&nbsp;';
-			echo '<label><input type="radio" name="comment_def" value="no"' . checked( $this->subscribe2_options['comment_def'], 'no', false ) . ' /> ';
-			echo __( 'No', 'subscribe2' ) . '</label><br /><br />' . "\r\n";
+			if ( defined( 'S2GDPR' ) && ( true === S2GDPR && 'yes' === $this->subscribe2_options['comment_def'] ) || ( false === S2GDPR ) ) {
+				echo __( 'Comment form checkbox is checked by default', 'subscribe2' ) . ': <br />' . "\r\n";
+				echo '<label><input type="radio" name="comment_def" value="yes"' . checked( $this->subscribe2_options['comment_def'], 'yes', false ) . ' /> ';
+				echo __( 'Yes', 'subscribe2' ) . '</label>&nbsp;&nbsp;';
+				echo '<label><input type="radio" name="comment_def" value="no"' . checked( $this->subscribe2_options['comment_def'], 'no', false ) . ' /> ';
+				echo __( 'No', 'subscribe2' ) . '</label><br /><br />' . "\r\n";
+			}
 		}
 		echo __( 'Show one-click subscription on profile page', 'subscribe2' ) . ':<br />' . "\r\n";
 		echo '<label><input type="radio" name="one_click_profile" value="yes"' . checked( $this->subscribe2_options['one_click_profile'], 'yes', false ) . ' /> ';
