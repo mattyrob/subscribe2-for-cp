@@ -87,7 +87,7 @@ class S2_Ajax {
 		} else {
 			if ( is_int( $s2_frontend->lockout ) && $s2_frontend->lockout > 0 ) {
 				$date = date( 'H:i:s.u', $s2_frontend->lockout );
-				$ips  = $wpdb->get_col( $wpdb->prepare( "SELECT ip FROM {$wpdb->prefix}subscribe2 WHERE date = CURDATE() AND time > SUBTIME(CURTIME(), %s)", $date ) );
+				$ips  = $wpdb->get_col( $wpdb->prepare( "SELECT ip FROM $wpdb->subscribe2 WHERE date = CURDATE() AND time > SUBTIME(CURTIME(), %s)", $date ) );
 				if ( in_array( $s2_frontend->ip, $ips ) ) {
 					echo '<p>' . __( 'Slow down, you move too fast.', 'subscribe2' ) . '</p>';
 				}

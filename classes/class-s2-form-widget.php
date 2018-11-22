@@ -52,7 +52,7 @@ class S2_Form_Widget extends WP_Widget {
 		if ( $nowrap ) {
 			$nowrap = ' wrap="false"';
 		}
-		$shortcode = '[subscribe2' . $hide . $postid . $size . $nojs . $noantispam . $nowrap . ']';
+		$shortcode = '[subscribe2' . $hide . $postid . $size . $nojs . $noantispam . $nowrap . ' widget="true"]';
 		echo $args['before_widget'];
 		if ( ! empty( $title ) ) {
 			echo $args['before_title'] . esc_attr( $title ) . $args['after_title'];

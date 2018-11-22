@@ -246,11 +246,13 @@ switch ( $current_tab ) {
 		echo __( 'Yes', 'subscribe2' ) . '</label>&nbsp;&nbsp;';
 		echo '<label><input type="radio" name="private" value="no"' . checked( $this->subscribe2_options['private'], 'no', false ) . ' /> ';
 		echo __( 'No', 'subscribe2' ) . '</label><br /><br />' . "\r\n";
-		echo __( 'Include Sticky Posts at the top of all Digest Notifications', 'subscribe2' ) . ': ';
-		echo '<label><input type="radio" name="stickies" value="yes"' . checked( $this->subscribe2_options['stickies'], 'yes', false ) . ' /> ';
-		echo __( 'Yes', 'subscribe2' ) . '</label>&nbsp;&nbsp;';
-		echo '<label><input type="radio" name="stickies" value="no"' . checked( $this->subscribe2_options['stickies'], 'no', false ) . ' /> ';
-		echo __( 'No', 'subscribe2' ) . '</label><br /><br />' . "\r\n";
+		if ( 'never' !== $this->subscribe2_options['email_freq'] ) {
+			echo __( 'Include Sticky Posts at the top of all Digest Notifications', 'subscribe2' ) . ': ';
+			echo '<label><input type="radio" name="stickies" value="yes"' . checked( $this->subscribe2_options['stickies'], 'yes', false ) . ' /> ';
+			echo __( 'Yes', 'subscribe2' ) . '</label>&nbsp;&nbsp;';
+			echo '<label><input type="radio" name="stickies" value="no"' . checked( $this->subscribe2_options['stickies'], 'no', false ) . ' /> ';
+			echo __( 'No', 'subscribe2' ) . '</label><br /><br />' . "\r\n";
+		}
 		echo __( 'Send Email From', 'subscribe2' ) . ': ';
 		echo '<label>' . "\r\n";
 		$this->admin_dropdown( true );

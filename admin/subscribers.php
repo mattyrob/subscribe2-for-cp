@@ -39,12 +39,11 @@ if ( isset( $_POST['s2_admin'] ) ) {
 		$email_error   = '';
 		$message       = '';
 		foreach ( preg_split( '/[\s,]+/', $_POST['addresses'] ) as $email ) {
-			$email = trim( stripslashes( $email ) );
+			$email = $this->sanitize_email( $email );
 			if ( false === $this->validate_email( $email ) ) {
 				( '' === $email_error ) ? $email_error = "$email" : $email_error .= ", $email";
 					continue;
 			} else {
-				$email = $this->sanitize_email( $email );
 				if ( isset( $_POST['subscribe'] ) ) {
 					if ( false !== $this->is_public( $email ) ) {
 						( '' === $pub_sub_error ) ? $pub_sub_error = "$email" : $pub_sub_error .= ", $email";

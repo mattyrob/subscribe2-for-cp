@@ -59,6 +59,7 @@ class S2_Frontend extends S2_Core {
 				'link'       => '',
 				'size'       => 20,
 				'wrap'       => 'true',
+				'widget'     => 'false',
 			), $atts
 		);
 
@@ -147,7 +148,7 @@ class S2_Frontend extends S2_Core {
 		} else {
 			$this->form = '<form name="s2form" method="post"' . $action . '><input type="hidden" name="ip" value="' . esc_html( $_SERVER['REMOTE_ADDR'] ) . '" />' . $antispam_text . '<p><label for="s2email">' . __( 'Your email:', 'subscribe2' ) . '</label><br /><input type="email" name="email" id="s2email" value="' . $value . '" size="' . $args['size'] . '" onfocus="if (this.value === \'' . $value . '\') {this.value = \'\';}" onblur="if (this.value === \'\') {this.value = \'' . $value . '\';}" />' . $wrap_text . $this->input_form_action . '</p></form>' . "\r\n";
 		}
-		$this->s2form = apply_filters( 's2_form', $this->form );
+		$this->s2form = apply_filters( 's2_form', $this->form, $args );
 
 		global $user_ID;
 		if ( 0 !== $user_ID ) {
@@ -179,7 +180,7 @@ class S2_Frontend extends S2_Core {
 				$this->ip = $_POST['ip'];
 				if ( is_int( $this->lockout ) && $this->lockout > 0 ) {
 					$date = date( 'H:i:s.u', $this->lockout );
-					$ips  = $wpdb->get_col( $wpdb->prepare( "SELECT ip FROM {$wpdb->prefix}subscribe2 WHERE date = CURDATE() AND time > SUBTIME(CURTIME(), %s)", $date ) );
+					$ips  = $wpdb->get_col( $wpdb->prepare( "SELECT ip FROM $wpdb->subscribe2 WHERE date = CURDATE() AND time > SUBTIME(CURTIME(), %s)", $date ) );
 					if ( in_array( $this->ip, $ips ) ) {
 						return __( 'Slow down, you move too fast.', 'subscribe2' );
 					}

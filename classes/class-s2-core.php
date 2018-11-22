@@ -637,12 +637,12 @@ class S2_Core {
 		global $wpdb;
 		if ( 1 === $confirmed ) {
 			if ( '' === $this->all_confirmed ) {
-				$this->all_confirmed = $wpdb->get_col( "SELECT email FROM {$wpdb->prefix}subscribe2 WHERE active='1'" );
+				$this->all_confirmed = $wpdb->get_col( "SELECT email FROM $wpdb->subscribe2 WHERE active='1'" );
 			}
 			return $this->all_confirmed;
 		} else {
 			if ( '' === $this->all_unconfirmed ) {
-				$this->all_unconfirmed = $wpdb->get_col( "SELECT email FROM {$wpdb->prefix}subscribe2 WHERE active='0'" );
+				$this->all_unconfirmed = $wpdb->get_col( "SELECT email FROM $wpdb->subscribe2 WHERE active='0'" );
 			}
 			return $this->all_unconfirmed;
 		}
@@ -657,7 +657,7 @@ class S2_Core {
 		if ( ! $id ) {
 			return false;
 		}
-		return $wpdb->get_var( $wpdb->prepare( "SELECT email FROM {$wpdb->prefix}subscribe2 WHERE id=%d", $id ) );
+		return $wpdb->get_var( $wpdb->prepare( "SELECT email FROM $wpdb->subscribe2 WHERE id=%d", $id ) );
 	} // end get_email()
 
 	/**
@@ -669,7 +669,7 @@ class S2_Core {
 		if ( ! $email ) {
 			return false;
 		}
-		return $wpdb->get_var( $wpdb->prepare( "SELECT id FROM {$wpdb->prefix}subscribe2 WHERE email=%s", $email ) );
+		return $wpdb->get_var( $wpdb->prepare( "SELECT id FROM $wpdb->subscribe2 WHERE email=%s", $email ) );
 	} // end get_id()
 
 	/**
@@ -693,16 +693,16 @@ class S2_Core {
 				return;
 			}
 			if ( $confirm ) {
-				$wpdb->query( $wpdb->prepare( "UPDATE {$wpdb->prefix}subscribe2 SET active='1', ip=%s WHERE CAST(email as binary)=%s", $this->ip, $email ) );
+				$wpdb->query( $wpdb->prepare( "UPDATE $wpdb->subscribe2 SET active='1', ip=%s WHERE CAST(email as binary)=%s", $this->ip, $email ) );
 			} else {
-				$wpdb->query( $wpdb->prepare( "UPDATE {$wpdb->prefix}subscribe2 SET date=CURDATE(), time=CURTIME() WHERE CAST(email as binary)=%s", $email ) );
+				$wpdb->query( $wpdb->prepare( "UPDATE $wpdb->subscribe2 SET date=CURDATE(), time=CURTIME() WHERE CAST(email as binary)=%s", $email ) );
 			}
 		} else {
 			if ( $confirm ) {
 				global $current_user;
-				$wpdb->query( $wpdb->prepare( "INSERT INTO {$wpdb->prefix}subscribe2 (email, active, date, time, ip) VALUES (%s, %d, CURDATE(), CURTIME(), %s)", $email, 1, $current_user->user_login ) );
+				$wpdb->query( $wpdb->prepare( "INSERT INTO $wpdb->subscribe2 (email, active, date, time, ip) VALUES (%s, %d, CURDATE(), CURTIME(), %s)", $email, 1, $current_user->user_login ) );
 			} else {
-				$wpdb->query( $wpdb->prepare( "INSERT INTO {$wpdb->prefix}subscribe2 (email, active, date, time, ip) VALUES (%s, %d, CURDATE(), CURTIME(), %s)", $email, 0, $this->ip ) );
+				$wpdb->query( $wpdb->prepare( "INSERT INTO $wpdb->subscribe2 (email, active, date, time, ip) VALUES (%s, %d, CURDATE(), CURTIME(), %s)", $email, 0, $this->ip ) );
 			}
 		}
 	} // end add()
@@ -716,7 +716,7 @@ class S2_Core {
 		if ( false === $this->validate_email( $email ) ) {
 			return false;
 		}
-		$wpdb->query( $wpdb->prepare( "DELETE FROM {$wpdb->prefix}subscribe2 WHERE CAST(email as binary)=%s LIMIT 1", $email ) );
+		$wpdb->query( $wpdb->prepare( "DELETE FROM $wpdb->subscribe2 WHERE CAST(email as binary)=%s LIMIT 1", $email ) );
 	} // end delete()
 
 	/**
@@ -736,9 +736,9 @@ class S2_Core {
 		}
 
 		if ( '0' === $status ) {
-			$wpdb->query( $wpdb->prepare( "UPDATE {$wpdb->prefix}subscribe2 SET active='1', conf_date=CURDATE(), conf_time=CURTIME(), conf_ip=%s WHERE CAST(email as binary)=%s LIMIT 1", $this->ip, $email ) );
+			$wpdb->query( $wpdb->prepare( "UPDATE $wpdb->subscribe2 SET active='1', conf_date=CURDATE(), conf_time=CURTIME(), conf_ip=%s WHERE CAST(email as binary)=%s LIMIT 1", $this->ip, $email ) );
 		} else {
-			$wpdb->query( $wpdb->prepare( "UPDATE {$wpdb->prefix}subscribe2 SET active='0', conf_date=CURDATE(), conf_time=CURTIME(), conf_ip=%s WHERE CAST(email as binary)=%s LIMIT 1", $this->ip, $email ) );
+			$wpdb->query( $wpdb->prepare( "UPDATE $wpdb->subscribe2 SET active='0', conf_date=CURDATE(), conf_time=CURTIME(), conf_ip=%s WHERE CAST(email as binary)=%s LIMIT 1", $this->ip, $email ) );
 		}
 	} // end toggle()
 
@@ -771,7 +771,7 @@ class S2_Core {
 		}
 
 		// run the query and force case sensitivity
-		$check = $wpdb->get_var( $wpdb->prepare( "SELECT active FROM {$wpdb->prefix}subscribe2 WHERE CAST(email as binary)=%s", $email ) );
+		$check = $wpdb->get_var( $wpdb->prepare( "SELECT active FROM $wpdb->subscribe2 WHERE CAST(email as binary)=%s", $email ) );
 		if ( '0' === $check || '1' === $check ) {
 			return $check;
 		} else {
@@ -1700,7 +1700,7 @@ class S2_Core {
 		global $wpdb;
 		$old_unconfirmed = $wpdb->get_col(
 			$wpdb->prepare(
-				"SELECT email FROM {$wpdb->prefix}subscribe2 WHERE active='0' AND date < DATE_SUB(CURDATE(), INTERVAL %d DAY) AND conf_date IS NULL",
+				"SELECT email FROM $wpdb->subscribe2 WHERE active='0' AND date < DATE_SUB(CURDATE(), INTERVAL %d DAY) AND conf_date IS NULL",
 				$this->clean_interval
 			)
 		);
@@ -1774,8 +1774,15 @@ class S2_Core {
 		// load our translations
 		add_action( 'init', array( &$this, 'load_translations' ) );
 
+		// define and register table name
+		$s2_table = $wpdb->prefix . 'subscribe2';
+		if ( ! isset( $wpdb->subscribe2 ) ) {
+			$wpdb->subscribe2 = $s2_table;
+			$wpdb->tables[]   = 'subscribe2';
+		}
+
 		// do we need to install anything?
-		if ( $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', "{$wpdb->prefix}subscribe2" ) ) !== "{$wpdb->prefix}subscribe2" ) {
+		if ( $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $wpdb->subscribe2 ) ) !== $wpdb->subscribe2 ) {
 			require_once S2PATH . 'classes/class-s2-upgrade.php';
 			global $s2_upgrade;
 			$s2_upgrade = new S2_Upgrade();
@@ -1872,6 +1879,9 @@ class S2_Core {
 				if ( function_exists( 'register_block_type' ) ) {
 					add_action( 'admin_enqueue_scripts', array( &$this, 'gutenberg_block_editor_assets' ), 6 );
 					add_action( 'admin_enqueue_scripts', array( &$this, 'gutenberg_i18n' ), 6 );
+					if ( function_exists( 'classic_editor_init_actions' ) ) {
+						add_action( 'admin_init', array( &$this, 'button_init' ) );
+					}
 				} else {
 					add_action( 'admin_init', array( &$this, 'button_init' ) );
 				}
@@ -1954,4 +1964,16 @@ class S2_Core {
 	public $s2_mu    = false;
 	public $filtered = 0;
 	public $post_count;
+
+	// state variable used in substitute() function
+	public $post_title;
+	public $post_title_text;
+	public $permalink;
+	public $post_date;
+	public $post_time;
+	public $myname;
+	public $myemail;
+	public $authorname;
+	public $post_cat_names;
+	public $post_tag_names;
 } // end class subscribe2

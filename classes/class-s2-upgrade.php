@@ -23,7 +23,7 @@ class S2_Upgrade {
 		}
 
 		$date = date( 'Y-m-d' );
-		$sql  = "CREATE TABLE {$wpdb->prefix}subscribe2 (
+		$sql  = "CREATE TABLE $wpdb->subscribe2 (
 			id int(11) NOT NULL auto_increment,
 			email varchar(64) NOT NULL default '',
 			active tinyint(1) default 0,
@@ -36,8 +36,7 @@ class S2_Upgrade {
 			PRIMARY KEY (id) ) $charset_collate";
 
 		// create the table, as needed
-		$table = $wpdb->prefix . 'subscribe2';
-		maybe_create_table( $table, $sql );
+		maybe_create_table( $wpdb->subscribe2, $sql );
 
 		// safety check if options exist and if not create them
 		if ( ! is_array( $mysubscribe2->subscribe2_options ) ) {
@@ -195,9 +194,8 @@ class S2_Upgrade {
 		if ( ! function_exists( 'maybe_add_column' ) ) {
 			require_once ABSPATH . 'wp-admin/install-helper.php';
 		}
-		$date  = date( 'Y-m-d' );
-		$table = $wpdb->prefix . 'subscribe2';
-		maybe_add_column( $table, 'date', "ALTER TABLE {$wpdb->prefix}subscribe2 ADD date DATE DEFAULT '$date' NOT NULL AFTER active" );
+		$date = date( 'Y-m-d' );
+		maybe_add_column( $wpdb->subscribe2, 'date', "ALTER TABLE $wpdb->subscribe2 ADD date DATE DEFAULT '$date' NOT NULL AFTER active" );
 
 		// update the options table to serialized format
 		$old_options = $wpdb->get_col( "SELECT option_name from $wpdb->options where option_name LIKE 's2%' AND option_name <> 's2_future_posts'" );
@@ -219,8 +217,7 @@ class S2_Upgrade {
 		if ( ! function_exists( 'maybe_add_column' ) ) {
 			require_once ABSPATH . 'wp-admin/install-helper.php';
 		}
-		$table = $wpdb->prefix . 'subscribe2';
-		maybe_add_column( $table, 'ip', "ALTER TABLE {$wpdb->prefix}subscribe2 ADD ip char(64) DEFAULT 'admin' NOT NULL AFTER date" );
+		maybe_add_column( $wpdb->subscribe2, 'ip', "ALTER TABLE $wpdb->subscribe2 ADD ip char(64) DEFAULT 'admin' NOT NULL AFTER date" );
 	} // end upgrade5_1()
 
 	private function upgrade5_6() {
@@ -244,7 +241,7 @@ class S2_Upgrade {
 		foreach ( $public_subscribers as $email ) {
 			$new_email = $mysubscribe2->sanitize_email( $email );
 			if ( $email !== $new_email ) {
-				$wpdb->get_results( $wpdb->prepare( "UPDATE {$wpdb->prefix}subscribe2 SET email=%s WHERE CAST(email as binary)=%s", $new_email, $email ) );
+				$wpdb->get_results( $wpdb->prepare( "UPDATE $wpdb->subscribe2 SET email=%s WHERE CAST(email as binary)=%s", $new_email, $email ) );
 			}
 		}
 	} // end upgrade5_9()
@@ -445,8 +442,7 @@ class S2_Upgrade {
 		if ( ! function_exists( 'maybe_add_column' ) ) {
 			require_once ABSPATH . 'wp-admin/install-helper.php';
 		}
-		$table = $wpdb->prefix . 'subscribe2';
-		maybe_add_column( $table, 'time', "ALTER TABLE {$wpdb->prefix}subscribe2 ADD time TIME DEFAULT '00:00:00' NOT NULL AFTER date" );
+		maybe_add_column( $wpdb->subscribe2, 'time', "ALTER TABLE $wpdb->subscribe2 ADD time TIME DEFAULT '00:00:00' NOT NULL AFTER date" );
 
 		// update postmeta field to a protected name, from version 8.5
 		$wpdb->query( "UPDATE $wpdb->postmeta SET meta_key = '_s2mail' WHERE meta_key = 's2mail'" );
@@ -459,10 +455,9 @@ class S2_Upgrade {
 		if ( ! function_exists( 'maybe_add_column' ) ) {
 			require_once ABSPATH . 'wp-admin/install-helper.php';
 		}
-		$table = $wpdb->prefix . 'subscribe2';
-		maybe_add_column( $table, 'conf_date', "ALTER TABLE {$wpdb->prefix}subscribe2 ADD conf_date DATE AFTER ip" );
-		maybe_add_column( $table, 'conf_time', "ALTER TABLE {$wpdb->prefix}subscribe2 ADD conf_time TIME AFTER conf_date" );
-		maybe_add_column( $table, 'conf_ip', "ALTER TABLE {$wpdb->prefix}subscribe2 ADD conf_ip char(64) AFTER conf_time" );
+		maybe_add_column( $wpdb->subscribe2, 'conf_date', "ALTER TABLE $wpdb->subscribe2 ADD conf_date DATE AFTER ip" );
+		maybe_add_column( $wpdb->subscribe2, 'conf_time', "ALTER TABLE $wpdb->subscribe2 ADD conf_time TIME AFTER conf_date" );
+		maybe_add_column( $wpdb->subscribe2, 'conf_ip', "ALTER TABLE $wpdb->subscribe2 ADD conf_ip char(64) AFTER conf_time" );
 
 		// remove unnecessary table data
 		$wpdb->query( "DELETE FROM $wpdb->usermeta WHERE meta_key = 's2_cat'" );
@@ -522,8 +517,7 @@ class S2_Upgrade {
 		if ( ! function_exists( 'maybe_add_column' ) ) {
 			require_once ABSPATH . 'wp-admin/install-helper.php';
 		}
-		$table = $wpdb->prefix . 'subscribe2';
-		maybe_add_column( $table, 'time', "ALTER TABLE {$wpdb->prefix}subscribe2 ADD time TIME DEFAULT '00:00:00' NOT NULL AFTER date" );
+		maybe_add_column( $wpdb->subscribe2, 'time', "ALTER TABLE $wpdb->subscribe2 ADD time TIME DEFAULT '00:00:00' NOT NULL AFTER date" );
 	} // end upgrade8_8()
 
 	private function upgrade9_5() {

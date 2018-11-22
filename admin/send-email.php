@@ -6,7 +6,7 @@ if ( ! function_exists( 'add_action' ) ) {
 global $wpdb, $current_user;
 
 // was anything POSTed?
-if ( ( isset( $_POST['s2_admin'] ) && 'mail' === $_POST['s2_admin'] ) || isset( $_GET['delete-draft'] ) ) {
+if ( isset( $_POST['s2_admin'] ) && 'mail' === $_POST['s2_admin'] ) {
 	if ( false === wp_verify_nonce( $_REQUEST['_wpnonce'], 'subscribe2-write_subscribers' . S2VERSION ) ) {
 		die( '<p>' . __( 'Security error! Your request cannot be completed.', 'subscribe2' ) . '</p>' );
 	}

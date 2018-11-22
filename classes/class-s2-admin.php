@@ -339,7 +339,7 @@ class S2_Admin extends S2_Core {
 			'subscribe2-shortcode',
 			S2URL . 'gutenberg/shortcode' . $this->script_debug . '.js',
 			array( 'wp-blocks', 'wp-i18n', 'wp-element', 'wp-components', 'wp-editor' ),
-			'1.0.1'
+			'1.0.2'
 		);
 
 		register_block_type(
@@ -473,7 +473,7 @@ class S2_Admin extends S2_Core {
 		if ( ! empty( $this->signup_dates ) ) {
 			return $this->signup_dates[ $email ];
 		} else {
-			$results = $wpdb->get_results( "SELECT email, date FROM {$wpdb->prefix}subscribe2", ARRAY_N );
+			$results = $wpdb->get_results( "SELECT email, date FROM $wpdb->subscribe2", ARRAY_N );
 			foreach ( $results as $result ) {
 				$this->signup_dates[ $result[0] ] = $result[1];
 			}
@@ -493,7 +493,7 @@ class S2_Admin extends S2_Core {
 		if ( ! empty( $this->signup_times ) ) {
 			return $this->signup_times[ $email ];
 		} else {
-			$results = $wpdb->get_results( "SELECT email, time FROM {$wpdb->prefix}subscribe2", ARRAY_N );
+			$results = $wpdb->get_results( "SELECT email, time FROM $wpdb->subscribe2", ARRAY_N );
 			foreach ( $results as $result ) {
 				$this->signup_times[ $result[0] ] = $result[1];
 			}
@@ -513,7 +513,7 @@ class S2_Admin extends S2_Core {
 		if ( ! empty( $this->signup_ips ) ) {
 			return $this->signup_ips[ $email ];
 		} else {
-			$results = $wpdb->get_results( "SELECT email, ip FROM {$wpdb->prefix}subscribe2", ARRAY_N );
+			$results = $wpdb->get_results( "SELECT email, ip FROM $wpdb->subscribe2", ARRAY_N );
 			foreach ( $results as $result ) {
 				$this->signup_ips[ $result[0] ] = $result[1];
 			}
@@ -624,8 +624,8 @@ class S2_Admin extends S2_Core {
 		$all_cats = $this->all_cats( false );
 
 		// count the number of subscribers
-		$count['confirmed']   = $wpdb->get_var( "SELECT COUNT(id) FROM {$wpdb->prefix}subscribe2 WHERE active='1'" );
-		$count['unconfirmed'] = $wpdb->get_var( "SELECT COUNT(id) FROM {$wpdb->prefix}subscribe2 WHERE active='0'" );
+		$count['confirmed']   = $wpdb->get_var( "SELECT COUNT(id) FROM $wpdb->subscribe2 WHERE active='1'" );
+		$count['unconfirmed'] = $wpdb->get_var( "SELECT COUNT(id) FROM $wpdb->subscribe2 WHERE active='0'" );
 		if ( in_array( 'unconfirmed', $exclude ) ) {
 			$count['public'] = $count['confirmed'];
 		} elseif ( in_array( 'confirmed', $exclude ) ) {
