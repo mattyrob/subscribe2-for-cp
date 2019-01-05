@@ -100,7 +100,7 @@ class S2_Core {
 					continue;
 				}
 				// Use the mail queue provided we are not sending a preview
-				if ( function_exists( 'wpmq_mail' ) && ! $this->preview_email ) {
+				if ( function_exists( 'wpmq_mail' ) && ! isset( $this->preview_email ) ) {
 					$status = wp_mail( $recipient, $subject, $mailtext, $headers, $attachments, 0 );
 				} else {
 					$status = wp_mail( $recipient, $subject, $mailtext, $headers, $attachments );
@@ -533,6 +533,8 @@ class S2_Core {
 		$html_excerpt_body  = str_replace( '{POST}', $html_excerpt, $html_excerpt_body );
 
 		if ( '' !== $preview ) {
+			$this->preview_email = true;
+
 			$this->myemail = $preview;
 			$this->myname  = __( 'Plain Text Excerpt Preview', 'subscribe2' );
 			$this->mail( array( $preview ), $subject, $plain_excerpt_body );
@@ -1857,6 +1859,17 @@ class S2_Core {
 			$mysubscribe2_ajax = new S2_Ajax();
 		}
 
+		// Check if Block Editor is in use
+		if ( function_exists( 'register_block_type' ) && ! function_exists( 'classic_editor_init_actions' ) && false === has_filter( 'use_block_editor_for_post', '__return_false' ) ) {
+			$this->block_editor = true;
+		}
+
+		if ( true === $this->block_editor ) {
+			require_once S2PATH . 'classes/class-s2-block-editor.php';
+			global $mysubscribe2_block_editor;
+			$mysubscribe2_block_editor = new S2_Block_Editor();
+		}
+
 		// Add actions specific to admin or frontend
 		if ( is_admin() ) {
 			//add menu, authoring and category admin actions
@@ -1875,16 +1888,8 @@ class S2_Core {
 			}
 
 			// add write button
-			if ( '1' === $this->subscribe2_options['show_button'] ) {
-				if ( function_exists( 'register_block_type' ) ) {
-					add_action( 'admin_enqueue_scripts', array( &$this, 'gutenberg_block_editor_assets' ), 6 );
-					add_action( 'admin_enqueue_scripts', array( &$this, 'gutenberg_i18n' ), 6 );
-					if ( function_exists( 'classic_editor_init_actions' ) ) {
-						add_action( 'admin_init', array( &$this, 'button_init' ) );
-					}
-				} else {
-					add_action( 'admin_init', array( &$this, 'button_init' ) );
-				}
+			if ( '1' === $this->subscribe2_options['show_button'] && false === $this->block_editor ) {
+				add_action( 'admin_init', array( &$this, 'button_init' ) );
 			}
 
 			// add counterwidget css and js
@@ -1952,6 +1957,9 @@ class S2_Core {
 	/* ===== define some variables ===== */
 	// options
 	public $subscribe2_options = array();
+
+	// check for block editor
+	public $block_editor = false;
 
 	// data sets
 	public $all_confirmed           = '';

@@ -142,11 +142,18 @@ class S2_Frontend extends S2_Core {
 		// get remote IP address
 		$remote_ip = $this->get_remote_ip();
 
+		// form name
+		if ( 'true' === $args['widget'] ) {
+			$form_name = 's2form-widget';
+		} else {
+			$form_name = 's2form';
+		}
+
 		// build default form
 		if ( 'true' === strtolower( $args['nojs'] ) ) {
-			$this->form = '<form name="s2form" method="post"' . $action . '><input type="hidden" name="ip" value="' . esc_html( $_SERVER['REMOTE_ADDR'] ) . '" />' . $antispam_text . '<p><label for="s2email">' . __( 'Your email:', 'subscribe2' ) . '</label><br /><input type="email" name="email" id="s2email" value="' . $value . '" size="' . $args['size'] . '" />' . $wrap_text . $this->input_form_action . '</p></form>';
+			$this->form = '<form name="' . $form_name . '" method="post"' . $action . '><input type="hidden" name="ip" value="' . esc_html( $_SERVER['REMOTE_ADDR'] ) . '" />' . $antispam_text . '<p><label for="s2email">' . __( 'Your email:', 'subscribe2' ) . '</label><br /><input type="email" name="email" id="s2email" value="' . $value . '" size="' . $args['size'] . '" />' . $wrap_text . $this->input_form_action . '</p></form>';
 		} else {
-			$this->form = '<form name="s2form" method="post"' . $action . '><input type="hidden" name="ip" value="' . esc_html( $_SERVER['REMOTE_ADDR'] ) . '" />' . $antispam_text . '<p><label for="s2email">' . __( 'Your email:', 'subscribe2' ) . '</label><br /><input type="email" name="email" id="s2email" value="' . $value . '" size="' . $args['size'] . '" onfocus="if (this.value === \'' . $value . '\') {this.value = \'\';}" onblur="if (this.value === \'\') {this.value = \'' . $value . '\';}" />' . $wrap_text . $this->input_form_action . '</p></form>' . "\r\n";
+			$this->form = '<form name="' . $form_name . '" method="post"' . $action . '><input type="hidden" name="ip" value="' . esc_html( $_SERVER['REMOTE_ADDR'] ) . '" />' . $antispam_text . '<p><label for="s2email">' . __( 'Your email:', 'subscribe2' ) . '</label><br /><input type="email" name="email" id="s2email" value="' . $value . '" size="' . $args['size'] . '" onfocus="if (this.value === \'' . $value . '\') {this.value = \'\';}" onblur="if (this.value === \'\') {this.value = \'' . $value . '\';}" />' . $wrap_text . $this->input_form_action . '</p></form>' . "\r\n";
 		}
 		$this->s2form = apply_filters( 's2_form', $this->form, $args );
 
@@ -414,7 +421,7 @@ class S2_Frontend extends S2_Core {
 
 		$domain = '@' . $domain;
 
-		foreach ( preg_split( '/[\s,]+/', $str ) as $barred_domain ) {
+		foreach ( preg_split( '/[\s,]+/', $this->subscribe2_options['barred'] ) as $barred_domain ) {
 			if ( false !== strpos( $barred_domain, '!' ) ) {
 				$url   = explode( '.', str_replace( '!', '', $barred_domain ) );
 				$count = count( $url );

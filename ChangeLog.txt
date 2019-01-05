@@ -1,3 +1,10 @@
+= 10.26 =
+
+* Fixed a bug in barred domain checking
+* Migrate email override meta box to a sidebar for the 'Gutenberg' block editor
+* Migrate email preview meta box to a sidebar for the 'Gutenberg' block editor
+* Moved new Block Editor code to separate class
+
 = 10.25 =
 
 * Dropped use of the 'Precedence' email header as use is controversial and not widely supported

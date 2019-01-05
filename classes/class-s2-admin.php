@@ -330,51 +330,6 @@ class S2_Admin extends S2_Core {
 		return $arr;
 	} // end mce_button()
 
-	public function gutenberg_block_editor_assets() {
-		global $pagenow;
-		if ( ! in_array( $pagenow, array( 'post-new.php', 'post.php', 'page-new.php', 'page.php' ) ) ) {
-			return;
-		}
-		wp_enqueue_script(
-			'subscribe2-shortcode',
-			S2URL . 'gutenberg/shortcode' . $this->script_debug . '.js',
-			array( 'wp-blocks', 'wp-i18n', 'wp-element', 'wp-components', 'wp-editor' ),
-			'1.0.2'
-		);
-
-		register_block_type(
-			'subscribe2-html/shortcode', array(
-				'editor_script' => 'subscribe2-shortcode',
-			)
-		);
-	} // end gutenberg_block_editor_assets()
-
-	public function gutenberg_i18n() {
-		global $pagenow;
-		if ( ! in_array( $pagenow, array( 'post-new.php', 'post.php', 'page-new.php', 'page.php' ) ) ) {
-			return;
-		}
-
-		$translations = get_translations_for_domain( 'subscribe2' );
-
-		$locale_data = array(
-			'' => array(
-				'domain'       => 'subscribe2',
-				'lang'         => get_user_locale(),
-				'plural_forms' => 'nplurals=2; plural=n != 1;',
-			),
-		);
-
-		foreach ( $translations->entries as $msgid => $entry ) {
-			$locale_data[ $msgid ] = $entry->translations;
-		}
-
-		wp_add_inline_script(
-			'wp-i18n',
-			'wp.i18n.setLocaleData( ' . wp_json_encode( $locale_data ) . ', "subscribe2" );'
-		);
-	} // end gutenberg_i18n()
-
 	/* ===== widget functions ===== */
 	/**
 	 * Function to add css and js files to admin header
@@ -394,27 +349,28 @@ class S2_Admin extends S2_Core {
 	 * Create meta box on write pages
 	 */
 	public function s2_meta_init() {
+		if ( true === $this->block_editor ) {
+			return;
+		}
+
 		if ( 'yes' === $this->subscribe2_options['pages'] ) {
 			$s2_post_types = array( 'page', 'post' );
 		} else {
 			$s2_post_types = array( 'post' );
 		}
+
 		$s2_post_types = apply_filters( 's2_post_types', $s2_post_types );
-		if ( defined( 'GUTENBERG_VERSION' ) ) {
-			$location = 'side';
-		} else {
-			$location = 'advanced';
-		}
+
 		foreach ( $s2_post_types as $s2_post_type ) {
 			add_meta_box(
 				'subscribe2',
 				__( 'Subscribe2 Notification Override', 'subscribe2' ),
 				array( &$this, 's2_override_meta' ),
 				$s2_post_type,
-				$location,
+				'advanced',
 				'default',
 				array(
-					'__block_editor_compatible_meta_box' => true,
+					'__block_editor_compatible_meta_box' => false,
 				)
 			);
 		}
