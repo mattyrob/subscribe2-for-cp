@@ -637,16 +637,19 @@ class S2_Core {
 	 */
 	public function get_public( $confirmed = 1 ) {
 		global $wpdb;
+		static $all_confirmed   = '';
+		static $all_unconfirmed = '';
+
 		if ( 1 === $confirmed ) {
-			if ( '' === $this->all_confirmed ) {
-				$this->all_confirmed = $wpdb->get_col( "SELECT email FROM $wpdb->subscribe2 WHERE active='1'" );
+			if ( '' === $all_confirmed ) {
+				$all_confirmed = $wpdb->get_col( "SELECT email FROM $wpdb->subscribe2 WHERE active='1'" );
 			}
-			return $this->all_confirmed;
+			return $all_confirmed;
 		} else {
-			if ( '' === $this->all_unconfirmed ) {
-				$this->all_unconfirmed = $wpdb->get_col( "SELECT email FROM $wpdb->subscribe2 WHERE active='0'" );
+			if ( '' === $all_unconfirmed ) {
+				$all_unconfirmed = $wpdb->get_col( "SELECT email FROM $wpdb->subscribe2 WHERE active='0'" );
 			}
-			return $this->all_unconfirmed;
+			return $all_unconfirmed;
 		}
 	} // end get_public()
 
@@ -820,40 +823,43 @@ class S2_Core {
 	 */
 	public function get_all_registered( $return = 'email' ) {
 		global $wpdb;
+		static $all_registered_id       = '';
+		static $all_registered_email_id = '';
+		static $all_registered_email    = '';
 
 		if ( $this->s2_mu ) {
 			if ( 'ID' === $return ) {
-				if ( '' === $this->all_registered_id ) {
-					$this->all_registered_id = $wpdb->get_col( "SELECT user_id FROM $wpdb->usermeta WHERE meta_key='{$wpdb->prefix}capabilities'" );
+				if ( '' === $all_registered_id ) {
+					$all_registered_id = $wpdb->get_col( "SELECT user_id FROM $wpdb->usermeta WHERE meta_key='{$wpdb->prefix}capabilities'" );
 				}
-				return $this->all_registered_id;
+				return $all_registered_id;
 			} elseif ( 'emailid' === $return ) {
-				if ( '' === $this->all_registered_email_id ) {
-					$this->all_registered_email_id = $wpdb->get_results( "SELECT a.user_email, a.ID FROM $wpdb->users AS a INNER JOIN $wpdb->usermeta AS b on a.ID = b.user_id WHERE b.meta_key ='{$wpdb->prefix}capabilities'", ARRAY_A );
+				if ( '' === $all_registered_email_id ) {
+					$all_registered_email_id = $wpdb->get_results( "SELECT a.user_email, a.ID FROM $wpdb->users AS a INNER JOIN $wpdb->usermeta AS b on a.ID = b.user_id WHERE b.meta_key ='{$wpdb->prefix}capabilities'", ARRAY_A );
 				}
-				return $this->all_registered_email_id;
+				return $all_registered_email_id;
 			} else {
-				if ( '' === $this->all_registered_email ) {
-					$this->all_registered_email = $wpdb->get_col( "SELECT a.user_email FROM $wpdb->users AS a INNER JOIN $wpdb->usermeta AS b ON a.ID = b.user_id WHERE b.meta_key='{$wpdb->prefix}capabilities'" );
+				if ( '' === $all_registered_email ) {
+					$all_registered_email = $wpdb->get_col( "SELECT a.user_email FROM $wpdb->users AS a INNER JOIN $wpdb->usermeta AS b ON a.ID = b.user_id WHERE b.meta_key='{$wpdb->prefix}capabilities'" );
 				}
-				return $this->all_registered_email;
+				return $all_registered_email;
 			}
 		} else {
 			if ( 'ID' === $return ) {
-				if ( '' === $this->all_registered_id ) {
-					$this->all_registered_id = $wpdb->get_col( "SELECT ID FROM $wpdb->users" );
+				if ( '' === $all_registered_id ) {
+					$all_registered_id = $wpdb->get_col( "SELECT ID FROM $wpdb->users" );
 				}
-				return $this->all_registered_id;
+				return $all_registered_id;
 			} elseif ( 'emailid' === $return ) {
-				if ( '' === $this->all_registered_email_id ) {
-					$this->all_registered_email_id = $wpdb->get_results( "SELECT user_email, ID FROM $wpdb->users", ARRAY_A );
+				if ( '' === $all_registered_email_id ) {
+					$all_registered_email_id = $wpdb->get_results( "SELECT user_email, ID FROM $wpdb->users", ARRAY_A );
 				}
-				return $this->all_registered_email_id;
+				return $all_registered_email_id;
 			} else {
-				if ( '' === $this->all_registered_email ) {
-					$this->all_registered_email = $wpdb->get_col( "SELECT user_email FROM $wpdb->users" );
+				if ( '' === $all_registered_email ) {
+					$all_registered_email = $wpdb->get_col( "SELECT user_email FROM $wpdb->users" );
 				}
-				return $this->all_registered_email;
+				return $all_registered_email;
 			}
 		}
 	} // end get_all_registered()
@@ -1960,13 +1966,6 @@ class S2_Core {
 
 	// check for block editor
 	public $block_editor = false;
-
-	// data sets
-	public $all_confirmed           = '';
-	public $all_unconfirmed         = '';
-	public $all_registered_id       = '';
-	public $all_registered_email    = '';
-	public $all_registered_email_id = '';
 
 	// state variables used to affect processing
 	public $s2_mu    = false;

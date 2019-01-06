@@ -12,23 +12,24 @@
 		CheckboxControl = components.CheckboxControl,
 		Button = components.Button,
 		select = data.select,
+		dispatch = data.dispatch,
 		withSelect = data.withSelect,
 		withDispatch = data.withDispatch,
 		Compose = compose.compose;
 
 
 	var CheckboxControlMeta = Compose(
-		withSelect( function( select ) {
-			var s2mail = select( 'core/editor' ).getEditedPostAttribute( 'meta' )._s2mail;
+		withSelect( function( select, props ) {
+			var s2mail = select( 'core/editor' ).getEditedPostAttribute( 'meta' )[ props.fieldName ];
 			return {
 				metaChecked: ( 'no' === s2mail ? true : false )
 			};
 		} ),
-		withDispatch( function( dispatch ) {
+		withDispatch( function( dispatch, props ) {
 			return {
 				setMetaChecked: function( value ) {
 					var s2mail = ( true === value ? 'no' : 'yes'  );
-					dispatch( 'core/editor' ).editPost( { meta: { '_s2mail': s2mail } } );
+					dispatch( 'core/editor' ).editPost( { meta: { [ props.fieldName ]: s2mail } } );
 					dispatch( 'core/editor' ).savePost();
 				}
 			};
@@ -47,8 +48,9 @@
   	} );
 
   	var buttonClick = function() {
-  		var postid = select( 'core/editor').getCurrentPostId();
+  		var postid = select( 'core/editor' ).getCurrentPostId();
 		apiFetch( { path: '/s2/v1/preview/' + postid } );
+		dispatch( 'core/notices' ).createInfoNotice( __( 'Attempt made to send email preview', 'subscribe2' ) );
 	};
 
 	var s2sidebar = function () {
@@ -84,7 +86,10 @@
 						PanelRow,
 						{},
 						el(
-							CheckboxControlMeta
+							CheckboxControlMeta,
+							{
+								fieldName: '_s2mail'
+							}
 						)
 					)
 				),

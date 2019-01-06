@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Subscribe2 10.26\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/subscribe2\n"
-"POT-Creation-Date: 2019-01-05 21:34:15+00:00\n"
+"POT-Creation-Date: 2019-01-06 14:33:54+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -1164,45 +1164,45 @@ msgstr ""
 msgid "HTML Full Preview"
 msgstr ""
 
-#: classes/class-s2-core.php:1185
+#: classes/class-s2-core.php:1191
 msgid "Check here to Subscribe to email notifications for new posts"
 msgstr ""
 
-#: classes/class-s2-core.php:1190
+#: classes/class-s2-core.php:1196
 msgid ""
 "By registering with this blog you are also agreeing to receive email "
 "notifications for new posts but you can unsubscribe at anytime"
 msgstr ""
 
-#: classes/class-s2-core.php:1218
+#: classes/class-s2-core.php:1224
 msgid "Check here to Subscribe to notifications for new posts"
 msgstr ""
 
-#: classes/class-s2-core.php:1337
+#: classes/class-s2-core.php:1343
 msgid "Weekly"
 msgstr ""
 
-#: classes/class-s2-core.php:1548 classes/class-s2-core.php:1549
+#: classes/class-s2-core.php:1554 classes/class-s2-core.php:1555
 msgid "Author"
 msgstr ""
 
-#: classes/class-s2-core.php:1555
+#: classes/class-s2-core.php:1561
 msgid "Posted on"
 msgstr ""
 
-#: classes/class-s2-core.php:1579 classes/class-s2-core.php:1580
+#: classes/class-s2-core.php:1585 classes/class-s2-core.php:1586
 msgid "Posted in"
 msgstr ""
 
-#: classes/class-s2-core.php:1591 classes/class-s2-core.php:1592
+#: classes/class-s2-core.php:1597 classes/class-s2-core.php:1598
 msgid "Tagged as"
 msgstr ""
 
-#: classes/class-s2-core.php:1670
+#: classes/class-s2-core.php:1676
 msgid "Digest Email"
 msgstr ""
 
-#: classes/class-s2-core.php:1683
+#: classes/class-s2-core.php:1689
 msgid "Digest Preview"
 msgstr ""
 
@@ -1612,23 +1612,27 @@ msgid "Subscribe2 HTML Shortcode"
 msgstr ""
 
 #: gutenberg/gutenberg-translations.php:21
+msgid "Attempt made to send email preview"
+msgstr ""
+
 #: gutenberg/gutenberg-translations.php:22
+#: gutenberg/gutenberg-translations.php:23
 msgid "Subscribe2 Sidebar"
 msgstr ""
 
-#: gutenberg/gutenberg-translations.php:23
+#: gutenberg/gutenberg-translations.php:24
 msgid "Subscribe2 Override"
 msgstr ""
 
-#: gutenberg/gutenberg-translations.php:24
+#: gutenberg/gutenberg-translations.php:25
 msgid "Subscribe2 Preview"
 msgstr ""
 
-#: gutenberg/gutenberg-translations.php:25
+#: gutenberg/gutenberg-translations.php:26
 msgid "Send preview email of this post to currently logged in user:"
 msgstr ""
 
-#: gutenberg/gutenberg-translations.php:26
+#: gutenberg/gutenberg-translations.php:27
 msgid "Send Preview"
 msgstr ""
 
