@@ -191,7 +191,7 @@ class S2_Admin extends S2_Core {
 	 * Insert Javascript and CSS into admin_headers
 	 */
 	public function checkbox_form_js() {
-		wp_register_script( 's2_checkbox', S2URL . 'include/s2-checkbox' . $this->script_debug . '.js', array( 'jquery' ), '1.3' );
+		wp_register_script( 's2_checkbox', S2URL . 'include/s2-checkbox' . $this->script_debug . '.js', array( 'jquery' ), '1.4' );
 		wp_enqueue_script( 's2_checkbox' );
 	} //end checkbox_form_js()
 
@@ -201,23 +201,23 @@ class S2_Admin extends S2_Core {
 	} // end user_admin_css()
 
 	public function option_form_js() {
-		wp_register_script( 's2_edit', S2URL . 'include/s2-edit' . $this->script_debug . '.js', array( 'jquery' ), '1.2' );
+		wp_register_script( 's2_edit', S2URL . 'include/s2-edit' . $this->script_debug . '.js', array( 'jquery' ), '1.3' );
 		wp_enqueue_script( 's2_edit' );
 		if ( 'never' !== $this->subscribe2_options['email_freq'] ) {
 			wp_enqueue_script( 'jquery-ui-datepicker' );
 			wp_enqueue_style( 'jquery-style', 'https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css' );
-			wp_register_script( 's2_date_time', S2URL . 'include/s2-date-time' . $this->script_debug . '.js', array( 'jquery-ui-datepicker' ), '1.0' );
+			wp_register_script( 's2_date_time', S2URL . 'include/s2-date-time' . $this->script_debug . '.js', array( 'jquery-ui-datepicker' ), '1.1' );
 			wp_enqueue_script( 's2_date_time' );
 		}
 	} // end option_form_js()
 
 	public function dismiss_js() {
-		wp_register_script( 's2_dismiss', S2URL . 'include/s2-dismiss' . $this->script_debug . '.js', array( 'jquery' ), '1.0', true );
+		wp_register_script( 's2_dismiss', S2URL . 'include/s2-dismiss' . $this->script_debug . '.js', array( 'jquery' ), '1.1', true );
 		$translation_array = array(
 			'ajaxurl' => admin_url( 'admin-ajax.php' ),
 			'nonce'   => wp_create_nonce( 's2_dismiss_nonce' ),
 		);
-		wp_localize_script( 's2_dismiss', 's2_dismiss_script_strings', $translation_array );
+		wp_localize_script( 's2_dismiss', 's2DismissScriptStrings', $translation_array );
 		wp_enqueue_script( 's2_dismiss' );
 	} // end dismiss_js()
 
@@ -231,7 +231,7 @@ class S2_Admin extends S2_Core {
 	} // end s2_dismiss_notice_handler()
 
 	public function subscribers_form_js() {
-		wp_register_script( 's2_subscribers', S2URL . 'include/s2-subscribers' . $this->script_debug . '.js', array(), '1.4' );
+		wp_register_script( 's2_subscribers', S2URL . 'include/s2-subscribers' . $this->script_debug . '.js', array(), '1.5' );
 		$translation_array = array(
 			'registered_confirm_single' => __( 'You are about to delete a registered user account, any posts made by this user will be assigned to you. Are you sure?', 'subscribe2' ),
 			'registered_confirm_plural' => __( 'You are about to delete registered user accounts, any posts made by these users will be assigned to you. Are you sure?', 'subscribe2' ),
@@ -241,7 +241,7 @@ class S2_Admin extends S2_Core {
 			'bulk_manage_single'        => __( 'You are about to make Bulk Management changes to the selected Registered User. Are you sure?', 'subscribe2' ),
 			'bulk_manage_plural'        => __( 'You are about to make Bulk Management changes to the selected Registered Users. Are you sure?', 'subscribe2' ),
 		);
-		wp_localize_script( 's2_subscribers', 's2_script_strings', $translation_array );
+		wp_localize_script( 's2_subscribers', 's2ScriptStrings', $translation_array );
 		wp_enqueue_script( 's2_subscribers' );
 	} // end subscribers_form_js()
 
@@ -339,7 +339,7 @@ class S2_Admin extends S2_Core {
 		if ( false !== stripos( esc_url( $_SERVER['REQUEST_URI'] ), 'widgets.php' ) ) {
 			wp_enqueue_style( 'farbtastic' );
 			wp_enqueue_script( 'farbtastic' );
-			wp_register_script( 's2_colorpicker', S2URL . 'include/s2-colorpicker' . $this->script_debug . '.js', array( 'farbtastic' ), '1.2' );
+			wp_register_script( 's2_colorpicker', S2URL . 'include/s2-colorpicker' . $this->script_debug . '.js', array( 'farbtastic' ), '1.3' );
 			wp_enqueue_script( 's2_colorpicker' );
 		}
 	} // end widget_s2_counter_css_and_js()
@@ -747,7 +747,7 @@ class S2_Admin extends S2_Core {
 			echo '<input type="hidden" id="jscrontime" value="' . date_i18n( $time_format, $scheduled_time + $offset ) . '" />';
 			echo '<span id="s2cron_1"><span id="s2crondate" style="background-color: #FFFBCC">' . date_i18n( $date_format, $scheduled_time + $offset ) . '</span>';
 			echo ' @ <span id="s2crontime" style="background-color: #FFFBCC">' . date_i18n( $time_format, $scheduled_time + $offset ) . '</span> ';
-			echo '<a href="#" onclick="s2_show(\'cron\'); return false;">' . __( 'Edit', 'subscribe2' ) . '</a></span>' . "\r\n";
+			echo '<a href="#" onclick="s2Show(\'cron\'); return false;">' . __( 'Edit', 'subscribe2' ) . '</a></span>' . "\r\n";
 			echo '<span id="s2cron_2">' . "\r\n";
 			echo '<input id="s2datepicker" name="crondate" value="' . date_i18n( $date_format, $scheduled_time + $offset ) . '">' . "\r\n";
 			$hours        = array( '12:00 am', '1:00 am', '2:00 am', '3:00 am', '4:00 am', '5:00 am', '6:00 am', '7:00 am', '8:00 am', '9:00 am', '10:00 am', '11:00 am', '12:00 pm', '1:00 pm', '2:00 pm', '3:00 pm', '4:00 pm', '5:00 pm', '6:00 pm', '7:00 pm', '8:00 pm', '9:00 pm', '10:00 pm', '11:00 pm' );
@@ -761,8 +761,8 @@ class S2_Admin extends S2_Core {
 				echo '>' . $value . '</option>' . "\r\n";
 			}
 			echo '</select>' . "\r\n";
-			echo '<a href="#" onclick="s2_cron_update(\'cron\'); return false;">' . __( 'Update', 'subscribe2' ) . '</a>' . "\r\n";
-			echo '<a href="#" onclick="s2_cron_revert(\'cron\'); return false;">' . __( 'Revert', 'subscribe2' ) . '</a></span>' . "\r\n";
+			echo '<a href="#" onclick="s2CronUpdate(\'cron\'); return false;">' . __( 'Update', 'subscribe2' ) . '</a>' . "\r\n";
+			echo '<a href="#" onclick="s2CronRevert(\'cron\'); return false;">' . __( 'Revert', 'subscribe2' ) . '</a></span>' . "\r\n";
 			if ( ! empty( $this->subscribe2_options['last_s2cron'] ) ) {
 				echo '<p>' . __( 'Attempt to resend the last Digest Notification email', 'subscribe2' ) . ': ';
 				echo '<input type="submit" class="button-secondary" name="resend" value="' . __( 'Resend Digest', 'subscribe2' ) . '" /></p>' . "\r\n";

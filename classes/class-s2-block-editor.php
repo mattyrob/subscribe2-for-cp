@@ -82,7 +82,7 @@ class S2_Block_Editor {
 			'subscribe2-shortcode',
 			S2URL . 'gutenberg/shortcode' . $this->script_debug . '.js',
 			array( 'wp-blocks', 'wp-i18n', 'wp-element', 'wp-components', 'wp-editor' ),
-			'1.0.2'
+			'1.1'
 		);
 
 		register_block_type(

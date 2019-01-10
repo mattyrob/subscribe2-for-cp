@@ -35,13 +35,13 @@ class S2_Ajax {
 		}
 		wp_register_style( 'jquery-ui-style', $css );
 		wp_enqueue_style( 'jquery-ui-style' );
-		wp_register_script( 's2-ajax', S2URL . 'include/s2-ajax' . $this->script_debug . '.js', array(), '1.2' );
+		wp_register_script( 's2-ajax', S2URL . 'include/s2-ajax' . $this->script_debug . '.js', array(), '1.3' );
 		$translation_array = array(
 			'ajaxurl' => admin_url( 'admin-ajax.php' ),
 			'title'   => __( 'Subscribe to this blog', 'subscribe2' ),
 			'nonce'   => wp_create_nonce( 's2_ajax_form_nonce' ),
 		);
-		wp_localize_script( 's2-ajax', 's2_ajax_script_strings', $translation_array );
+		wp_localize_script( 's2-ajax', 's2AjaxScriptStrings', $translation_array );
 		wp_enqueue_script( 's2-ajax' );
 	} // end add_ajax()
 

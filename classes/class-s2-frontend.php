@@ -144,7 +144,7 @@ class S2_Frontend extends S2_Core {
 
 		// form name
 		if ( 'true' === $args['widget'] ) {
-			$form_name = 's2form-widget';
+			$form_name = 's2formwidget';
 		} else {
 			$form_name = 's2form';
 		}
@@ -516,7 +516,7 @@ class S2_Frontend extends S2_Core {
 	 * Enqueue javascript ip updater code
 	 */
 	public function js_ip_script() {
-		wp_register_script( 's2_ip_updater', S2URL . 'include/s2-ip-updater' . $this->script_debug . '.js', array(), '1.0', true );
+		wp_register_script( 's2_ip_updater', S2URL . 'include/s2-ip-updater' . $this->script_debug . '.js', array(), '1.1', true );
 		wp_enqueue_script( 's2_ip_updater' );
 	} // end js_ip_script()
 

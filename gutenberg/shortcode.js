@@ -1,6 +1,8 @@
 // Version 1.0 - Initial version
 // Version 1.0.1 - fix for useOnce deprecation, improve Transition from unsaved block and update 'edit' drop use of id
 // Version 1.0.2 - fixed issue with transformation of text box size at default value
+// Version 1.1 - eslinted and fixed bug in transformation of wrap attribute
+
 ( function( blocks, i18n, element, components, editor ) {
 	var el = element.createElement,
 		TextControl = components.TextControl,
@@ -9,7 +11,13 @@
 
 	function s2shortcode( props, control, newVal ) {
 		var attributes = props.attributes || '';
-		var hide = '', id = '', nojs = '', antispam = '', size = '', wrap = '', link = '';
+		var hide = '',
+			id = '',
+			nojs = '',
+			antispam = '',
+			size = '',
+			wrap = '',
+			link = '';
 
 		// First we define the shortcode parameters from known Control values
 		if ( 'subscribe' === attributes.hide ) {
@@ -77,7 +85,7 @@
 				break;
 			case 'wrap':
 				if ( true === newVal ) {
-					wrap = ' wrap="true"';
+					wrap = ' wrap="false"';
 				} else if ( false === newVal ) {
 					wrap = '';
 				}
@@ -148,7 +156,7 @@
 						if ( undefined === content.shortcode || '' === content.shortcode ) {
 							content.shortcode = '[subscribe2]';
 						}
-						return blocks.createBlock( 'core/shortcode', { text: content.shortcode } );
+						return blocks.createBlock( 'core/shortcode', { text: content.shortcode });
 					}
 				}
 			],
@@ -157,12 +165,12 @@
 					type: 'block',
 					blocks: [ 'core/shortcode' ],
 					transform: function( content ) {
+						var shortcode, params, param, hide, id, nojs, antispam, size, wrap, link, i;
 						if ( 'subscribe2' === content.text.substr( 1, 10 ) ) {
-							var shortcode = content.text;
-							var params = content.text.replace( /^\[subscribe2|\]$/g, '' ).replace( /^\s+|\s+$/g, '' ).split( /['"]\s/g );
-							var param, hide, id, nojs, antispam, size, wrap, link;
+							shortcode = content.text;
+							params = content.text.replace( /^\[subscribe2|\]$/g, '' ).replace( /^\s+|\s+$/g, '' ).split( /['"]\s/g );
 
-							for ( var i = 0; i < params.length; i++ ) {
+							for ( i = 0; i < params.length; i++ ) {
 								param = params[i].split( '=' );
 								if ( 'hide' === param[0] ) {
 									hide = param[1].replace( /['"]+/g, '' );
@@ -171,16 +179,16 @@
 									id = param[1].replace( /['"]+/g, '' );
 								}
 								if ( 'nojs' === param[0] ) {
-									nojs = param[1].replace( /['"]+/g, '' ) === 'true';
+									nojs = 'true' === param[1].replace( /['"]+/g, '' );
 								}
 								if ( 'antispam' === param[0] ) {
-									antispam = param[1].replace( /['"]+/g, '' ) === 'true';
+									antispam = 'true' === param[1].replace( /['"]+/g, '' );
 								}
 								if ( 'size' === param[0] ) {
 									size = param[1].replace( /['"]+/g, '' );
 								}
 								if ( 'wrap' === param[0] ) {
-									wrap = param[1].replace( /['"]+/g, '' ) === 'false';
+									wrap = 'false' === param[1].replace( /['"]+/g, '' );
 								}
 								if ( 'link' === param[0] ) {
 									link = param[1].replace( /^['"]|['"]$/g, '' );
@@ -196,7 +204,7 @@
 								size: size,
 								wrap: wrap,
 								link: link
-							} );
+							});
 						}
 					}
 				},
@@ -266,31 +274,31 @@
 
 			function onChangeHide( newHide ) {
 				props.attributes.shortcode = s2shortcode( props, 'hide', newHide );
-				props.setAttributes( { hide: newHide } );
+				props.setAttributes({ hide: newHide });
 			}
 			function onChangeId( newId ) {
 				props.attributes.shortcode = s2shortcode( props, 'id', newId );
-				props.setAttributes( { id: newId } );
+				props.setAttributes({ id: newId });
 			}
 			function onChangeNojs( newNojs ) {
 				props.attributes.shortcode = s2shortcode( props, 'nojs', newNojs );
-				props.setAttributes( { nojs: newNojs } );
+				props.setAttributes({ nojs: newNojs });
 			}
 			function onChangeAntispam( newAntispam ) {
 				props.attributes.shortcode = s2shortcode( props, 'antispam', newAntispam );
-				props.setAttributes( { antispam: newAntispam } );
+				props.setAttributes({ antispam: newAntispam });
 			}
 			function onChangeSize( newSize ) {
 				props.attributes.shortcode = s2shortcode( props, 'size', newSize );
-				props.setAttributes( { size: newSize } );
+				props.setAttributes({ size: newSize });
 			}
 			function onChangeWrap( newWrap ) {
 				props.attributes.shortcode = s2shortcode( props, 'wrap', newWrap );
-				props.setAttributes( { wrap: newWrap } );
+				props.setAttributes({ wrap: newWrap });
 			}
 			function onChangeLink( newLink ) {
 				props.attributes.shortcode = s2shortcode( props, 'link', newLink );
-				props.setAttributes( { link: newLink } );
+				props.setAttributes({ link: newLink });
 			}
 
 			return [
@@ -374,11 +382,11 @@
 		save: function( props ) {
 			return el( element.RawHTML, null, '<p>' + props.attributes.shortcode + '</p>' );
 		}
-	} );
-} ) (
+	});
+} (
 	window.wp.blocks,
 	window.wp.i18n,
 	window.wp.element,
 	window.wp.components,
 	window.wp.editor
-);
+) );

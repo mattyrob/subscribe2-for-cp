@@ -309,13 +309,13 @@ if ( 'registered' === $current_tab ) {
 		} else {
 			$s2_forms->display_category_form( $categories, 0 );
 		}
-		echo '<p class="submit"><button class="button-primary" name="sub_categories" onclick="return bm_check();">' . __( 'Bulk Update Categories', 'subscribe2' ) . '</button></p>';
+		echo '<p class="submit"><button class="button-primary" name="sub_categories" onclick="return bmCheck();">' . __( 'Bulk Update Categories', 'subscribe2' ) . '</button></p>';
 		echo '<br />' . __( 'Send email as', 'subscribe2' ) . ':' . "\r\n";
 		echo '<label><input type="radio" name="format" value="html"' . checked( $format, 'html', false ) . ' /> ' . __( 'HTML - Full', 'subscribe2' ) . '</label>&nbsp;&nbsp;' . "\r\n";
 		echo '<label><input type="radio" name="format" value="html_excerpt"' . checked( $format, 'html_excerpt', false ) . ' /> ' . __( 'HTML - Excerpt', 'subscribe2' ) . '</label>&nbsp;&nbsp;' . "\r\n";
 		echo '<label><input type="radio" name="format" value="post"' . checked( $format, 'post', false ) . ' /> ' . __( 'Plain Text - Full', 'subscribe2' ) . '</label>&nbsp;&nbsp;' . "\r\n";
 		echo '<label><input type="radio" name="format" value="excerpt"' . checked( $format, 'excerpt', false ) . '/> ' . __( 'Plain Text - Excerpt', 'subscribe2' ) . '</label>' . "\r\n";
-		echo '<p class="submit"><button class="button-primary" name="sub_format" onclick="return bm_check();">' . __( 'Bulk Update Format', 'subscribe2' ) . '</button></p>';
+		echo '<p class="submit"><button class="button-primary" name="sub_format" onclick="return bmCheck();">' . __( 'Bulk Update Format', 'subscribe2' ) . '</button></p>';
 	} else {
 		$sub_cats = '';
 		if ( isset( $_POST['sub_category'] ) ) {
@@ -328,7 +328,7 @@ if ( 'registered' === $current_tab ) {
 		echo __( 'Yes', 'subscribe2' ) . '</label>&nbsp;&nbsp;' . "\r\n";
 		echo '<label><input type="radio" name="sub_category" value="-1"' . checked( $sub_cats, '-1', false ) . ' /> ';
 		echo __( 'No', 'subscribe2' ) . '</label>';
-		echo '<p class="submit"><button class="button-primary" name="sub_digest" onclick="return bm_check();">' . __( 'Bulk Update Digest Subscription', 'subscribe2' ) . '</button></p>';
+		echo '<p class="submit"><button class="button-primary" name="sub_digest" onclick="return bmCheck();">' . __( 'Bulk Update Digest Subscription', 'subscribe2' ) . '</button></p>';
 	}
 	echo '</div>' . "\r\n";
 }

@@ -200,11 +200,11 @@ switch ( $current_tab ) {
 		echo '<p>' . "\r\n";
 		echo __( 'Restrict the number of <strong>recipients per email</strong> to (0 for unlimited)', 'subscribe2' ) . ': ';
 		echo '<span id="s2bcclimit_1"><span id="s2bcclimit" style="background-color: #FFFBCC">' . $this->subscribe2_options['bcclimit'] . '</span> ';
-		echo '<a href="#" onclick="s2_show(\'bcclimit\'); return false;">' . __( 'Edit', 'subscribe2' ) . '</a></span>' . "\r\n";
+		echo '<a href="#" onclick="s2Show(\'bcclimit\'); return false;">' . __( 'Edit', 'subscribe2' ) . '</a></span>' . "\r\n";
 		echo '<span id="s2bcclimit_2">' . "\r\n";
 		echo '<input type="text" name="bcclimit" value="' . $this->subscribe2_options['bcclimit'] . '" size="3" />' . "\r\n";
-		echo '<a href="#" onclick="s2_update(\'bcclimit\'); return false;">' . __( 'Update', 'subscribe2' ) . '</a>' . "\r\n";
-		echo '<a href="#" onclick="s2_revert(\'bcclimit\'); return false;">' . __( 'Revert', 'subscribe2' ) . '</a></span>' . "\n";
+		echo '<a href="#" onclick="s2Update(\'bcclimit\'); return false;">' . __( 'Update', 'subscribe2' ) . '</a>' . "\r\n";
+		echo '<a href="#" onclick="s2Revert(\'bcclimit\'); return false;">' . __( 'Revert', 'subscribe2' ) . '</a></span>' . "\n";
 
 		echo '<br /><br />' . __( 'Send Admins notifications for new', 'subscribe2' ) . ': ';
 		echo '<label><input type="radio" name="admin_email" value="subs"' . checked( $this->subscribe2_options['admin_email'], 'subs', false ) . ' />' . "\r\n";
