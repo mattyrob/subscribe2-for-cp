@@ -19,14 +19,14 @@
 			// Register commands
 			ed.addCommand( 'mceSubscribe2', function() {
 				ed.execCommand( 'mceInsertContent', 0, pb );
-			});
+			} );
 
 			// Register buttons
 			ed.addButton( 'subscribe2', {
 				title: 'Insert Subscribe2 Token',
 				image: url + '/../include/s2-button.png',
 				cmd: cls
-			});
+			} );
 
 			// load the CSS and enable it on the right class
 			ed.onInit.add( function() {
@@ -36,9 +36,9 @@
 						if ( 'IMG' === o.node.nodeName && ed.dom.hasClass( o.node, cls ) ) {
 							o.name = 'subscribe2';
 						}
-					});
+					} );
 				}
-			});
+			} );
 
 			// allow selection of the image placeholder
 			ed.onClick.add( function( ed, e ) {
@@ -46,19 +46,19 @@
 				if ( 'IMG' === e.nodeName && ed.dom.hasClass( e, cls ) ) {
 					ed.selection.select( e );
 				}
-			});
+			} );
 
 			// re-enable the CSS when the node changes
 			ed.onNodeChange.add( function( ed, cm, n ) {
 				cm.setActive( 'subscribe2', 'IMG' === n.nodeName && ed.dom.hasClass( n, cls ) );
-			});
+			} );
 
 			// create an array of replaced shortcodes so we have additional parameters
 			// then swap in the graphic
 			ed.onBeforeSetContent.add( function( ed, o ) {
 				pbreplaced = o.content.match( pbRE );
 				o.content = o.content.replace( pbRE, pb );
-			});
+			} );
 
 			// swap back the array of shortcodes to preserve parameters
 			// replace any other instances with the default shortcode
@@ -74,9 +74,9 @@
 							im = shortcode;
 						}
 						return im;
-					});
+					} );
 				}
-			});
+			} );
 		},
 
 		getInfo: function() {
@@ -88,7 +88,7 @@
 				version: tinymce.majorVersion + '.' + tinymce.minorVersion
 			};
 		}
-	});
+	} );
 
 	// Register plugin
 	tinymce.PluginManager.add( 'subscribe2', tinymce.plugins.Subscribe2Plugin );

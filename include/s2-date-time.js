@@ -2,7 +2,7 @@
 // Version 1.1 - eslinted
 
 jQuery( document ).ready( function() {
-	jQuery( '#s2datepicker' ).datepicker({
+	jQuery( '#s2datepicker' ).datepicker( {
 		dateFormat: 'MM d, yy'
-	});
-});
+	} );
+} );

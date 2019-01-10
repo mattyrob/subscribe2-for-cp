@@ -10,4 +10,4 @@ jQuery( document ).on( 'click', '#sender_message .notice-dismiss', function() {
 
 	};
 	jQuery.post( ajaxurl, data );
-});
+} );

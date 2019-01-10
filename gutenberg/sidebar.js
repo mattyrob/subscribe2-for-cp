@@ -23,16 +23,16 @@
 			return {
 				metaChecked: ( 'no' === s2mail ? true : false )
 			};
-		}),
+		} ),
 		withDispatch( function( dispatch, props ) {
 			return {
 				setMetaChecked: function( value ) {
 					var s2mail = ( true === value ? 'no' : 'yes'  );
-					dispatch( 'core/editor' ).editPost({ meta: { [props.fieldName]: s2mail } });
+					dispatch( 'core/editor' ).editPost( { meta: { [props.fieldName]: s2mail } } );
 					dispatch( 'core/editor' ).savePost();
 				}
 			};
-		})
+		} )
 	) ( function( props ) {
 		return el(
 			CheckboxControl,
@@ -44,11 +44,11 @@
 				}
 			}
 		);
-	});
+	} );
 
 	var buttonClick = function() {
 		var postid = select( 'core/editor' ).getCurrentPostId();
-		apiFetch({ path: '/s2/v1/preview/' + postid });
+		apiFetch( { path: '/s2/v1/preview/' + postid } );
 		dispatch( 'core/notices' ).createInfoNotice( __( 'Attempt made to send email preview', 'subscribe2' ) );
 	};
 
@@ -126,7 +126,7 @@
 
 	registerPlugin( 'subscribe2-sidebar', {
 		render: s2sidebar
-	});
+	} );
 } (
 	wp.plugins,
 	wp.element,

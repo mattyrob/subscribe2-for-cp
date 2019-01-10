@@ -19,14 +19,14 @@
 			// Register commands
 			ed.addCommand( 'mceSubscribe2', function() {
 				ed.execCommand( 'mceInsertContent', 0, pb );
-			});
+			} );
 
 			// Register buttons
 			ed.addButton( 'subscribe2', {
 				title: 'Insert Subscribe2 Token',
 				image: url + '/../include/s2-button.png',
 				cmd: cls
-			});
+			} );
 
 			// load the CSS and enable it on the right class
 			ed.on( 'init', function() {
@@ -37,16 +37,16 @@
 						if ( 'IMG' === o.node.nodeName && ed.dom.hasClass( o.node, cls ) ) {
 							o.name = 'subscribe2';
 						}
-					});
+					} );
 				}
-			});
+			} );
 
 			// create an array of replaced shortcodes so we have additional parameters
 			// then swap in the graphic
 			ed.on( 'BeforeSetContent', function( ed ) {
 				pbreplaced = ed.content.match( pbRE );
 				ed.content = ed.content.replace( pbRE, pb );
-			});
+			} );
 
 			// swap back the array of shortcodes to preserve parameters
 			// replace any other instances with the default shortcode
@@ -62,9 +62,9 @@
 							im = shortcode;
 						}
 						return im;
-					});
+					} );
 				}
-			});
+			} );
 		},
 
 		getInfo: function() {
@@ -76,7 +76,7 @@
 				version: tinymce.majorVersion + '.' + tinymce.minorVersion
 			};
 		}
-	});
+	} );
 
 	// Register plugin
 	tinymce.PluginManager.add( 'subscribe2', tinymce.plugins.Subscribe2Plugin );

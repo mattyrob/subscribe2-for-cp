@@ -16,16 +16,16 @@ s2jQuery( document ).ready( function() {
 		event.preventDefault();
 		jQuery.post( ajaxurl, data, function( response ) {
 			dialog.html( response );
-		});
-		dialog.dialog({
+		} );
+		dialog.dialog( {
 			modal: true,
 			zIndex: 10000,
 			minWidth: 350,
 			minHeight: 300,
 			title: s2AjaxScriptStrings.title
-		});
+		} );
 		dialog.dialog( 'open' );
-	});
+	} );
 	s2jQuery( document ).on( 'submit', '#s2ajaxform', function( event ) {
 		var email = s2jQuery( '#s2ajaxform input[name=email]' ).val();
 		var ip = s2jQuery( '#s2ajaxform input[name=ip]' ).val();
@@ -64,18 +64,18 @@ s2jQuery( document ).ready( function() {
 			};
 			jQuery.post( ajaxurl, data, function( response ) {
 				dialog.html( response );
-			});
+			} );
 		}
-	});
+	} );
 
 	// Allows detection of which button was clicked
 	s2jQuery( document ).on( 'click', '#s2ajaxform input[type=submit]', function() {
 		s2jQuery( '#s2ajaxform input[type=submit]' ).removeAttr( 'clicked' );
 		s2jQuery( this ).attr( 'clicked', 'true' );
-	});
+	} );
 
 	// when form is closed return to default
 	s2jQuery( document ).on( 'dialogclose', function() {
 		dialog.html( dialog );
-	});
-});
+	} );
+} );

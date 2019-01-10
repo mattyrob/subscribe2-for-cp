@@ -156,7 +156,7 @@
 						if ( undefined === content.shortcode || '' === content.shortcode ) {
 							content.shortcode = '[subscribe2]';
 						}
-						return blocks.createBlock( 'core/shortcode', { text: content.shortcode });
+						return blocks.createBlock( 'core/shortcode', { text: content.shortcode } );
 					}
 				}
 			],
@@ -204,7 +204,7 @@
 								size: size,
 								wrap: wrap,
 								link: link
-							});
+							} );
 						}
 					}
 				},
@@ -274,31 +274,31 @@
 
 			function onChangeHide( newHide ) {
 				props.attributes.shortcode = s2shortcode( props, 'hide', newHide );
-				props.setAttributes({ hide: newHide });
+				props.setAttributes( { hide: newHide } );
 			}
 			function onChangeId( newId ) {
 				props.attributes.shortcode = s2shortcode( props, 'id', newId );
-				props.setAttributes({ id: newId });
+				props.setAttributes( { id: newId } );
 			}
 			function onChangeNojs( newNojs ) {
 				props.attributes.shortcode = s2shortcode( props, 'nojs', newNojs );
-				props.setAttributes({ nojs: newNojs });
+				props.setAttributes( { nojs: newNojs } );
 			}
 			function onChangeAntispam( newAntispam ) {
 				props.attributes.shortcode = s2shortcode( props, 'antispam', newAntispam );
-				props.setAttributes({ antispam: newAntispam });
+				props.setAttributes( { antispam: newAntispam } );
 			}
 			function onChangeSize( newSize ) {
 				props.attributes.shortcode = s2shortcode( props, 'size', newSize );
-				props.setAttributes({ size: newSize });
+				props.setAttributes( { size: newSize } );
 			}
 			function onChangeWrap( newWrap ) {
 				props.attributes.shortcode = s2shortcode( props, 'wrap', newWrap );
-				props.setAttributes({ wrap: newWrap });
+				props.setAttributes( { wrap: newWrap } );
 			}
 			function onChangeLink( newLink ) {
 				props.attributes.shortcode = s2shortcode( props, 'link', newLink );
-				props.setAttributes({ link: newLink });
+				props.setAttributes( { link: newLink } );
 			}
 
 			return [
@@ -382,7 +382,7 @@
 		save: function( props ) {
 			return el( element.RawHTML, null, '<p>' + props.attributes.shortcode + '</p>' );
 		}
-	});
+	} );
 } (
 	window.wp.blocks,
 	window.wp.i18n,

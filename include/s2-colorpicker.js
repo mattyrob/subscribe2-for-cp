@@ -19,21 +19,21 @@ jQuery( document ).ready( function() {
 				picker = this.id;
 				return false; // stop looping
 			}
-		});
+		} );
 
 		jQuery( this ).on( 'focusin', function() {
 			jQuery( '.s2_colorpicker' ).slideUp();
 			jQuery.farbtastic( '#' + picker ).linkTo( this );
 			jQuery( '#' + picker ).slideDown();
-		});
+		} );
 
 		jQuery( this ).on( 'focusout', function() {
 			jQuery( '#' + picker ).slideUp();
-		});
+		} );
 
 		jQuery( this ).trigger( 'focus' );
-	});
+	} );
 	jQuery( '.colorpickerField' ).each( function() {
 		jQuery.farbtastic( '#' + this.id ).linkTo( this );
-	});
-});
+	} );
+} );
