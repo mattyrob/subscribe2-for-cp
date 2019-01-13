@@ -9,7 +9,7 @@ class S2_Upgrade {
 		// load our translations and strings
 		$mysubscribe2->load_translations();
 
-		// include upgrade-functions for maybe_create_table;
+		// include upgrade functions
 		if ( ! function_exists( 'maybe_create_table' ) ) {
 			require_once ABSPATH . 'wp-admin/install-helper.php';
 		}
@@ -54,7 +54,7 @@ class S2_Upgrade {
 				}
 			}
 		}
-	} // end install()
+	}
 
 	/**
 	 * Reset our options
@@ -70,7 +70,7 @@ class S2_Upgrade {
 		require S2PATH . 'include/options.php';
 		$mysubscribe2->subscribe2_options['version'] = S2VERSION;
 		update_option( 'subscribe2_options', $mysubscribe2->subscribe2_options );
-	} // end reset()
+	}
 
 	/**
 	 * Core upgrade function for the database and settings
@@ -185,12 +185,12 @@ class S2_Upgrade {
 		}
 		// let's make sure that the 's2_authors' key exists on every site for all Registered Users too
 		$this->upgrade7_0();
-	} // end upgrade_core()
+	}
 
 	private function upgrade2_3() {
 		global $mysubscribe2, $wpdb;
 
-		// include upgrade-functions for maybe_add_column;
+		// include upgrade functions
 		if ( ! function_exists( 'maybe_add_column' ) ) {
 			require_once ABSPATH . 'wp-admin/install-helper.php';
 		}
@@ -208,17 +208,17 @@ class S2_Upgrade {
 				delete_option( $option );
 			}
 		}
-	} // end upgrade2_3()
+	}
 
 	private function upgrade5_1() {
 		global $mysubscribe2, $wpdb;
 
-		// include upgrade-functions for maybe_add_column;
+		// include upgrade functions
 		if ( ! function_exists( 'maybe_add_column' ) ) {
 			require_once ABSPATH . 'wp-admin/install-helper.php';
 		}
 		maybe_add_column( $wpdb->subscribe2, 'ip', "ALTER TABLE $wpdb->subscribe2 ADD ip char(64) DEFAULT 'admin' NOT NULL AFTER date" );
-	} // end upgrade5_1()
+	}
 
 	private function upgrade5_6() {
 		global $mysubscribe2;
@@ -229,7 +229,7 @@ class S2_Upgrade {
 		if ( 'full' === $mysubscribe2->subscribe2_options['autoformat'] ) {
 			$mysubscribe2->subscribe2_options['autoformat'] = 'post';
 		}
-	} // end upgrade5_6()
+	}
 
 	private function upgrade5_9() {
 		global $mysubscribe2, $wpdb;
@@ -244,7 +244,7 @@ class S2_Upgrade {
 				$wpdb->get_results( $wpdb->prepare( "UPDATE $wpdb->subscribe2 SET email=%s WHERE CAST(email as binary)=%s", $new_email, $email ) );
 			}
 		}
-	} // end upgrade5_9()
+	}
 
 	private function upgrade6_4() {
 		global $mysubscribe2;
@@ -403,7 +403,7 @@ class S2_Upgrade {
 				}
 			}
 		}
-	} // end upgrade6_4()
+	}
 
 	private function upgrade7_0() {
 		global $mysubscribe2, $wpdb;
@@ -433,12 +433,12 @@ class S2_Upgrade {
 				}
 			}
 		}
-	} // end upgrade7_0()
+	}
 
 	private function upgrade8_5() {
 		global $mysubscribe2, $wpdb;
 
-		// include upgrade-functions for maybe_add_column;
+		// include upgrade functions
 		if ( ! function_exists( 'maybe_add_column' ) ) {
 			require_once ABSPATH . 'wp-admin/install-helper.php';
 		}
@@ -446,12 +446,12 @@ class S2_Upgrade {
 
 		// update postmeta field to a protected name, from version 8.5
 		$wpdb->query( "UPDATE $wpdb->postmeta SET meta_key = '_s2mail' WHERE meta_key = 's2mail'" );
-	} // end upgrade8_5()
+	}
 
 	private function upgrade8_6() {
 		global $mysubscribe2, $wpdb;
 
-		// include upgrade-functions for maybe_add_column;
+		// include upgrade functions
 		if ( ! function_exists( 'maybe_add_column' ) ) {
 			require_once ABSPATH . 'wp-admin/install-helper.php';
 		}
@@ -477,7 +477,7 @@ class S2_Upgrade {
 			$cats = implode( ',', $old_cats );
 			update_user_meta( $user->ID, $mysubscribe2->get_usermeta_keyname( 's2_subscribed' ), $cats );
 		}
-	} // end upgrade8_6()
+	}
 
 	private function upgrade8_8() {
 		// to ensure compulsory category collects all users we need there to be s2_subscribed meta-keys for all users
@@ -518,7 +518,7 @@ class S2_Upgrade {
 			require_once ABSPATH . 'wp-admin/install-helper.php';
 		}
 		maybe_add_column( $wpdb->subscribe2, 'time', "ALTER TABLE $wpdb->subscribe2 ADD time TIME DEFAULT '00:00:00' NOT NULL AFTER date" );
-	} // end upgrade8_8()
+	}
 
 	private function upgrade9_5() {
 		global $mysubscribe2;
@@ -526,7 +526,7 @@ class S2_Upgrade {
 			$mysubscribe2->subscribe2_options['last_s2cron'] = '';
 			unset( $mysubscribe2->subscribe2_options['previous_s2cron'] );
 		}
-	} // end upgrade9_5()
+	}
 
 	private function upgrade10_14() {
 		global $mysubscribe2;
@@ -536,12 +536,19 @@ class S2_Upgrade {
 		if ( ! isset( $mysubscribe2->subscribe2_options['dismiss_sender_warning'] ) ) {
 			$mysubscribe2->subscribe2_options['dismiss_sender_warning'] = '0';
 		}
-	} // end upgrade10_14()
+	}
+
+	private function upgrade10_15() {
+		global $mysubscribe2;
+		if ( ! isset( $mysubscribe2->subscribe2_options['js_ip_updater'] ) ) {
+			$mysubscribe2->subscribe2_options['js_ip_updater'] = '0';
+		}
+	}
 
 	private function upgrade10_23() {
 		global $mysubscribe2;
 		if ( isset( $mysubscribe2->subscribe2_options['entries'] ) ) {
 			unset( $mysubscribe2->subscribe2_options['entries'] );
 		}
-	} // end upgrade10_23()
+	}
 }

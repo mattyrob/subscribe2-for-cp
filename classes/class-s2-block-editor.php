@@ -4,7 +4,7 @@ class S2_Block_Editor {
 	 * Constructor
 	 */
 	public function __construct() {
-		// if SCRIPT_DEBUG is true, use dev scripts
+		// maybe use dev scripts
 		$this->script_debug = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '' : '.min';
 
 		add_action( 'init', array( &$this, 'register_s2_meta' ) );
@@ -14,13 +14,15 @@ class S2_Block_Editor {
 			add_action( 'admin_enqueue_scripts', array( &$this, 'gutenberg_block_editor_assets' ), 6 );
 			add_action( 'admin_enqueue_scripts', array( &$this, 'gutenberg_i18n' ), 6 );
 		}
-	} // end __construct()
+	}
 
 	/**
 	 * Register _s2mail meta data for Block Editor
 	 */
 	public function register_s2_meta() {
-		register_meta( 'post', '_s2mail',
+		register_meta(
+			'post',
+			'_s2mail',
 			array(
 				'show_in_rest'  => true,
 				'single'        => true,
@@ -30,14 +32,16 @@ class S2_Block_Editor {
 				},
 			)
 		);
-	} // end register_s2_meta()
+	}
 
 	/**
 	 * Register REST endpointsfor preview email
 	 */
 	public function register_preview_endpoint() {
 		register_rest_route(
-			's2/v1', '/preview/(?P<id>[0-9]+)', array(
+			's2/v1',
+			'/preview/(?P<id>[0-9]+)',
+			array(
 				'methods'             => WP_REST_Server::READABLE,
 				'callback'            => array( $this, 'preview' ),
 				'args'                => array(
@@ -52,7 +56,7 @@ class S2_Block_Editor {
 				},
 			)
 		);
-	} // end register_preview_endpoint()
+	}
 
 	/**
 	 * Function to trigger Preview email on REST API request
@@ -67,7 +71,7 @@ class S2_Block_Editor {
 		}
 		$mysubscribe2->publish( $post, $current_user->user_email );
 		return true;
-	} // end preview()
+	}
 
 	/**
 	 * Enqueue Block Editor assets
@@ -86,7 +90,8 @@ class S2_Block_Editor {
 		);
 
 		register_block_type(
-			'subscribe2-html/shortcode', array(
+			'subscribe2-html/shortcode',
+			array(
 				'editor_script' => 'subscribe2-shortcode',
 			)
 		);
@@ -97,7 +102,7 @@ class S2_Block_Editor {
 			array( 'wp-plugins', 'wp-element', 'wp-i18n', 'wp-edit-post', 'wp-components', 'wp-data', 'wp-compose', 'wp-api-fetch' ),
 			'1.0'
 		);
-	} // end gutenberg_block_editor_assets()
+	}
 
 	/**
 	 * Handle translation of Block Editor assets
@@ -126,5 +131,5 @@ class S2_Block_Editor {
 			'wp-i18n',
 			'wp.i18n.setLocaleData( ' . wp_json_encode( $locale_data ) . ', "subscribe2" );'
 		);
-	} // end gutenberg_i18n()
+	}
 }

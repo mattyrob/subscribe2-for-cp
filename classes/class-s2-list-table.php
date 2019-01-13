@@ -109,7 +109,8 @@ class S2_List_Table extends WP_List_Table {
 			$current_url = add_query_arg(
 				array(
 					'what' => $_REQUEST['what'],
-				), $current_url
+				),
+				$current_url
 			);
 		}
 
@@ -278,7 +279,8 @@ class S2_List_Table extends WP_List_Table {
 			$current_url = add_query_arg(
 				array(
 					'what' => $_REQUEST['what'],
-				), $current_url
+				),
+				$current_url
 			);
 		}
 
@@ -286,7 +288,8 @@ class S2_List_Table extends WP_List_Table {
 			$current_url = add_query_arg(
 				array(
 					's' => $_POST['s'],
-				), $current_url
+				),
+				$current_url
 			);
 		}
 

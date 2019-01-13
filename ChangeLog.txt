@@ -4,6 +4,9 @@
 * Migrate email override meta box to a sidebar for the 'Gutenberg' block editor
 * Migrate email preview meta box to a sidebar for the 'Gutenberg' block editor
 * Moved new Block Editor code to separate class
+* Fixed issue in transition of wrap parameter in the new Block when changing to and from the shortcode block
+* Updated to latest PHP Code sniff standards and cleansed files
+* Other minor bug fixes and enhancements
 
 = 10.25 =
 

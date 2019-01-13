@@ -6,7 +6,7 @@ class S2_Forms {
 	public function init() {
 		add_action( 's2_subscription_submit', array( &$this, 's2_your_subscription_submit' ) );
 		add_action( 's2_subscription_form', array( &$this, 's2_your_subscription_form' ), 10, 2 );
-	} // end init()
+	}
 
 	/**
 	 * Return appropriate user ID if user can edit other users subscriptions
@@ -30,7 +30,7 @@ class S2_Forms {
 			return $user_ID;
 		}
 		return $userid;
-	} // end get_userid()
+	}
 
 	/**
 	 * Display the form to allow Regsitered users to amend their subscription
@@ -201,7 +201,7 @@ class S2_Forms {
 			}
 			echo '</div>' . "\r\n";
 		}
-	} // end s2_your_subscription_form()
+	}
 
 	/**
 	 * Process input from the form that allows Regsitered users to amend their subscription
@@ -283,7 +283,7 @@ class S2_Forms {
 		}
 
 		echo '<div id="message" class="updated fade"><p><strong>' . __( 'Subscription preferences updated.', 'subscribe2' ) . '</strong></p></div>' . "\r\n";
-	} // end s2_your_subscription_submit()
+	}
 
 	/**
 	 * Display a table of categories with checkboxes
@@ -349,7 +349,7 @@ class S2_Forms {
 		}
 		echo '</td></tr>' . "\r\n";
 		echo '</table>' . "\r\n";
-	} // end display_category_form()
+	}
 
 	/**
 	 * Display a table of authors with checkboxes
@@ -388,7 +388,7 @@ class S2_Forms {
 		}
 		echo '</td></tr>' . "\r\n";
 		echo '</table>' . "\r\n";
-	} // end display_author_form()
+	}
 
 	/**
 	 * Collect an array of all author level users and above
@@ -419,7 +419,7 @@ class S2_Forms {
 			$this->all_authors = array_merge( $administrators, $editors, $authors );
 		}
 		return apply_filters( 's2_authors', $this->all_authors );
-	} // end get_authors()
+	}
 
 	/**
 	 * Define some variables

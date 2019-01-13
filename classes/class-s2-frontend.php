@@ -43,7 +43,7 @@ class S2_Frontend extends S2_Core {
 		$this->subscribe = __( 'subscribe', 'subscribe2' ); //ACTION replacement in subscribing confirmation email
 
 		$this->unsubscribe = __( 'unsubscribe', 'subscribe2' ); //ACTION replacement in unsubscribing in confirmation email
-	} // end load_strings()
+	}
 
 	/* ===== template and filter functions ===== */
 	/**
@@ -60,7 +60,8 @@ class S2_Frontend extends S2_Core {
 				'size'       => 20,
 				'wrap'       => 'true',
 				'widget'     => 'false',
-			), $atts
+			),
+			$atts
 		);
 
 		// if link is true return a link to the page with the ajax class
@@ -239,7 +240,7 @@ class S2_Frontend extends S2_Core {
 			}
 		}
 		return $this->s2form;
-	} // end shortcode()
+	}
 
 	/**
 	 * Display form when deprecated <!--subscribe2--> is used
@@ -250,7 +251,7 @@ class S2_Frontend extends S2_Core {
 		}
 
 		return preg_replace( '/(<p>)?(\n)*<!--subscribe2-->(\n)*(<\/p>)?/', do_shortcode( '[subscribe2]' ), $content );
-	} // end filter()
+	}
 
 	/**
 	 * Overrides the default query when handling a (un)subscription confirmation
@@ -287,7 +288,7 @@ class S2_Frontend extends S2_Core {
 				);
 			}
 		}
-	} // end query_filter()
+	}
 
 	/**
 	 * Overrides the page title
@@ -304,7 +305,7 @@ class S2_Frontend extends S2_Core {
 		} else {
 			return $title;
 		}
-	} // end title_filter()
+	}
 
 	/**
 	 * Confirm request from the link emailed to the user and email the admin
@@ -360,7 +361,7 @@ class S2_Frontend extends S2_Core {
 		if ( '' !== $this->message ) {
 			return $this->message;
 		}
-	} // end confirm()
+	}
 
 	/**
 	 * Prepare and send emails to admins on new subscriptions and unsubsriptions
@@ -398,7 +399,7 @@ class S2_Frontend extends S2_Core {
 		foreach ( $recipients as $recipient ) {
 			$status = wp_mail( $recipient, $subject, $message, $headers );
 		}
-	} // end admin_email()
+	}
 
 	/**
 	 * Add hook for Minimeta Widget plugin
@@ -407,7 +408,7 @@ class S2_Frontend extends S2_Core {
 		if ( 0 !== $this->subscribe2_options['s2page'] ) {
 			echo '<li><a href="' . get_permalink( $this->subscribe2_options['s2page'] ) . '">' . __( '[Un]Subscribe to Posts', 'subscribe2' ) . '</a></li>' . "\r\n";
 		}
-	} // end add_minimeta()
+	}
 
 	/**
 	 * Check email is not from a barred domain
@@ -479,7 +480,7 @@ class S2_Frontend extends S2_Core {
 		}
 
 		return false;
-	} // end is_barred()
+	}
 
 	/**
 	 * Collect and return the IP address of the remote client machine
@@ -510,7 +511,7 @@ class S2_Frontend extends S2_Core {
 		}
 
 		return $remote_ip;
-	} // end get_remote_ip()
+	}
 
 	/**
 	 * Enqueue javascript ip updater code
@@ -518,14 +519,14 @@ class S2_Frontend extends S2_Core {
 	public function js_ip_script() {
 		wp_register_script( 's2_ip_updater', S2URL . 'include/s2-ip-updater' . $this->script_debug . '.js', array(), '1.1', true );
 		wp_enqueue_script( 's2_ip_updater' );
-	} // end js_ip_script()
+	}
 
 	/**
 	 * Add ip updater library to footer
 	 */
 	public function js_ip_library_script() {
 		echo '<script async="async" src="https://api.ipify.org?format=jsonp&callback=getip"></script>' . "\r\n";
-	} // end js_ip_library_script()
+	}
 
 	/* ===== define some variables ===== */
 	public $profile = '';

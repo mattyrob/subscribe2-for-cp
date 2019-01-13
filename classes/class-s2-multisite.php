@@ -82,7 +82,7 @@ class S2_Multisite {
 		$url = get_option( 'siteurl' ) . '/wp-admin/admin.php?page=s2';
 		wp_safe_redirect( $url );
 		exit( 0 );
-	} // end wpmu_subscribe()
+	}
 
 	/**
 	 * Obtain a list of current WordPress multiuser blogs
@@ -102,7 +102,7 @@ class S2_Multisite {
 		}
 
 		return apply_filters( 's2_mu_blog_list', $blog_list );
-	} // end get_mu_blog_list()
+	}
 
 	/**
 	 * Register user details when new user is added to a multisite blog
@@ -117,7 +117,7 @@ class S2_Multisite {
 		} else {
 			$mysubscribe2->register( $user_ID, false );
 		}
-	} // end wpmu_add_user()
+	}
 
 	/**
 	 * Delete user details when a user is removed from a multisite blog
@@ -137,7 +137,7 @@ class S2_Multisite {
 			}
 		}
 		delete_user_meta( $user_ID, $mysubscribe2->get_usermeta_keyname( 's2_subscribed' ) );
-	} // end wpmu_remove_user()
+	}
 
 	/**
 	 * Rename WPMU widgets on upgrade without requiring user to re-enable
@@ -170,5 +170,5 @@ class S2_Multisite {
 			}
 			restore_current_blog();
 		}
-	} // end namechange_subscribe2_widget()
+	}
 }

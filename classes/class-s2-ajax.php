@@ -4,7 +4,7 @@ class S2_Ajax {
 	 * Constructor
 	 */
 	public function __construct() {
-		// if SCRIPT_DEBUG is true, use dev scripts
+		// maybe use dev scripts
 		$this->script_debug = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '' : '.min';
 		if ( is_admin() ) {
 			add_action( 'wp_ajax_nopriv_subscribe2_form', array( &$this, 's2_ajax_form_handler' ) );
@@ -21,7 +21,7 @@ class S2_Ajax {
 			// add actions for ajax form if enabled
 			add_action( 'wp_enqueue_scripts', array( &$this, 'add_ajax' ) );
 		}
-	} // end __construct
+	}
 
 	/**
 	 * Add jQuery code and CSS to front pages for ajax form
@@ -43,7 +43,7 @@ class S2_Ajax {
 		);
 		wp_localize_script( 's2-ajax', 's2AjaxScriptStrings', $translation_array );
 		wp_enqueue_script( 's2-ajax' );
-	} // end add_ajax()
+	}
 
 	/**
 	 * Ajax form handler
@@ -60,7 +60,7 @@ class S2_Ajax {
 		$content = apply_filters( 's2_ajax_form', $content );
 		echo $content;
 		exit();
-	} // end s2_ajax_handler()
+	}
 
 	/**
 	 * Ajax submit handler
@@ -125,7 +125,7 @@ class S2_Ajax {
 			}
 		}
 		wp_die();
-	} // end s2_ajax_submit_handler()
+	}
 
 	/**
 	 * Filter to add ajax id to form
@@ -134,5 +134,5 @@ class S2_Ajax {
 		$content = str_replace( '<form', '<form id="s2ajaxform"', $content );
 		$content = str_replace( 'wp-login.php"', 'wp-login.php" style="text-decoration: underline;"', $content );
 		return $content;
-	} // end s2_ajax_form_class()
+	}
 }

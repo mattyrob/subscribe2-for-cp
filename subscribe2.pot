@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Subscribe2 10.26\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/subscribe2\n"
-"POT-Creation-Date: 2019-01-06 14:33:54+00:00\n"
+"POT-Creation-Date: 2019-01-13 15:09:50+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -155,16 +155,16 @@ msgid ""
 "unlimited)"
 msgstr ""
 
-#: admin/settings.php:203 classes/class-s2-admin.php:750
+#: admin/settings.php:203 classes/class-s2-admin.php:751
 #: classes/class-s2-list-table-legacy.php:43 classes/class-s2-list-table.php:43
 msgid "Edit"
 msgstr ""
 
-#: admin/settings.php:206 classes/class-s2-admin.php:764
+#: admin/settings.php:206 classes/class-s2-admin.php:765
 msgid "Update"
 msgstr ""
 
-#: admin/settings.php:207 classes/class-s2-admin.php:765
+#: admin/settings.php:207 classes/class-s2-admin.php:766
 msgid "Revert"
 msgstr ""
 
@@ -658,12 +658,12 @@ msgid "Enter addresses, one per line or comma-separated"
 msgstr ""
 
 #: admin/subscribers.php:221 admin/subscribers.php:305
-#: classes/class-s2-forms.php:195 classes/class-s2-frontend.php:83
+#: classes/class-s2-forms.php:195 classes/class-s2-frontend.php:84
 msgid "Subscribe"
 msgstr ""
 
 #: admin/subscribers.php:222 admin/subscribers.php:306
-#: classes/class-s2-forms.php:174 classes/class-s2-frontend.php:82
+#: classes/class-s2-forms.php:174 classes/class-s2-frontend.php:83
 msgid "Unsubscribe"
 msgstr ""
 
@@ -1067,39 +1067,39 @@ msgstr ""
 msgid "For each Post"
 msgstr ""
 
-#: classes/class-s2-admin.php:741
+#: classes/class-s2-admin.php:742
 msgid "Current UTC time is"
 msgstr ""
 
-#: classes/class-s2-admin.php:743
+#: classes/class-s2-admin.php:744
 msgid "Current blog time is"
 msgstr ""
 
-#: classes/class-s2-admin.php:745
+#: classes/class-s2-admin.php:746
 msgid "Next email notification will be sent when your blog time is after"
 msgstr ""
 
-#: classes/class-s2-admin.php:767
+#: classes/class-s2-admin.php:768
 msgid "Attempt to resend the last Digest Notification email"
 msgstr ""
 
-#: classes/class-s2-admin.php:768
+#: classes/class-s2-admin.php:769
 msgid "Resend Digest"
 msgstr ""
 
-#: classes/class-s2-admin.php:1044
+#: classes/class-s2-admin.php:1045
 msgid "Email subscription"
 msgstr ""
 
-#: classes/class-s2-admin.php:1046
+#: classes/class-s2-admin.php:1047
 msgid "Subscribe / Unsubscribe"
 msgstr ""
 
-#: classes/class-s2-admin.php:1047
+#: classes/class-s2-admin.php:1048
 msgid "Receive notifications"
 msgstr ""
 
-#: classes/class-s2-admin.php:1048
+#: classes/class-s2-admin.php:1049
 msgid "Check if you want to receive email notification when new posts are published"
 msgstr ""
 
@@ -1126,7 +1126,7 @@ msgid ""
 "please use an alternative email address."
 msgstr ""
 
-#: classes/class-s2-ajax.php:92 classes/class-s2-frontend.php:192
+#: classes/class-s2-ajax.php:92 classes/class-s2-frontend.php:193
 msgid "Slow down, you move too fast."
 msgstr ""
 
@@ -1148,61 +1148,61 @@ msgstr ""
 msgid "That email address is not subscribed."
 msgstr ""
 
-#: classes/class-s2-core.php:539
+#: classes/class-s2-core.php:552
 msgid "Plain Text Excerpt Preview"
 msgstr ""
 
-#: classes/class-s2-core.php:541
+#: classes/class-s2-core.php:554
 msgid "Plain Text Full Preview"
 msgstr ""
 
-#: classes/class-s2-core.php:543
+#: classes/class-s2-core.php:556
 msgid "HTML Excerpt Preview"
 msgstr ""
 
-#: classes/class-s2-core.php:545
+#: classes/class-s2-core.php:558
 msgid "HTML Full Preview"
 msgstr ""
 
-#: classes/class-s2-core.php:1191
+#: classes/class-s2-core.php:1205
 msgid "Check here to Subscribe to email notifications for new posts"
 msgstr ""
 
-#: classes/class-s2-core.php:1196
+#: classes/class-s2-core.php:1210
 msgid ""
 "By registering with this blog you are also agreeing to receive email "
 "notifications for new posts but you can unsubscribe at anytime"
 msgstr ""
 
-#: classes/class-s2-core.php:1224
+#: classes/class-s2-core.php:1238
 msgid "Check here to Subscribe to notifications for new posts"
 msgstr ""
 
-#: classes/class-s2-core.php:1343
+#: classes/class-s2-core.php:1357
 msgid "Weekly"
 msgstr ""
 
-#: classes/class-s2-core.php:1554 classes/class-s2-core.php:1555
+#: classes/class-s2-core.php:1570 classes/class-s2-core.php:1571
 msgid "Author"
 msgstr ""
 
-#: classes/class-s2-core.php:1561
+#: classes/class-s2-core.php:1577
 msgid "Posted on"
 msgstr ""
 
-#: classes/class-s2-core.php:1585 classes/class-s2-core.php:1586
+#: classes/class-s2-core.php:1601 classes/class-s2-core.php:1602
 msgid "Posted in"
 msgstr ""
 
-#: classes/class-s2-core.php:1597 classes/class-s2-core.php:1598
+#: classes/class-s2-core.php:1613 classes/class-s2-core.php:1614
 msgid "Tagged as"
 msgstr ""
 
-#: classes/class-s2-core.php:1676
+#: classes/class-s2-core.php:1692
 msgid "Digest Email"
 msgstr ""
 
-#: classes/class-s2-core.php:1689
+#: classes/class-s2-core.php:1705
 msgid "Digest Preview"
 msgstr ""
 
@@ -1428,130 +1428,130 @@ msgstr ""
 msgid "unsubscribe"
 msgstr ""
 
-#: classes/class-s2-frontend.php:123
+#: classes/class-s2-frontend.php:124
 msgid "Enter email address..."
 msgstr ""
 
-#: classes/class-s2-frontend.php:154 classes/class-s2-frontend.php:156
+#: classes/class-s2-frontend.php:155 classes/class-s2-frontend.php:157
 msgid "Your email:"
 msgstr ""
 
-#: classes/class-s2-frontend.php:300
+#: classes/class-s2-frontend.php:301
 msgid "Subscription Confirmation"
 msgstr ""
 
-#: classes/class-s2-frontend.php:302
+#: classes/class-s2-frontend.php:303
 msgid "Unsubscription Confirmation"
 msgstr ""
 
-#: classes/class-s2-frontend.php:375
+#: classes/class-s2-frontend.php:376
 msgid "New Subscription"
 msgstr ""
 
-#: classes/class-s2-frontend.php:376
+#: classes/class-s2-frontend.php:377
 msgid "subscribed to email notifications!"
 msgstr ""
 
-#: classes/class-s2-frontend.php:378
+#: classes/class-s2-frontend.php:379
 msgid "New Unsubscription"
 msgstr ""
 
-#: classes/class-s2-frontend.php:379
+#: classes/class-s2-frontend.php:380
 msgid "unsubscribed from email notifications!"
 msgstr ""
 
-#: classes/class-s2-frontend.php:408
+#: classes/class-s2-frontend.php:409
 msgid "[Un]Subscribe to Posts"
 msgstr ""
 
-#: classes/class-s2-list-table-legacy.php:130
-#: classes/class-s2-list-table.php:130
+#: classes/class-s2-list-table-legacy.php:131
+#: classes/class-s2-list-table.php:131
 msgid "Select All"
 msgstr ""
 
-#: classes/class-s2-list-table-legacy.php:182
-#: classes/class-s2-list-table-legacy.php:187
-#: classes/class-s2-list-table.php:185 classes/class-s2-list-table.php:190
+#: classes/class-s2-list-table-legacy.php:183
+#: classes/class-s2-list-table-legacy.php:188
+#: classes/class-s2-list-table.php:186 classes/class-s2-list-table.php:191
 msgid "Delete"
 msgstr ""
 
-#: classes/class-s2-list-table-legacy.php:188
-#: classes/class-s2-list-table.php:191
+#: classes/class-s2-list-table-legacy.php:189
+#: classes/class-s2-list-table.php:192
 msgid "Toggle"
 msgstr ""
 
-#: classes/class-s2-list-table-legacy.php:197
-#: classes/class-s2-list-table.php:200
+#: classes/class-s2-list-table-legacy.php:198
+#: classes/class-s2-list-table.php:201
 msgid "No users were selected."
 msgstr ""
 
-#: classes/class-s2-list-table-legacy.php:210
-#: classes/class-s2-list-table.php:213
+#: classes/class-s2-list-table-legacy.php:211
+#: classes/class-s2-list-table.php:214
 msgid "Address(es) deleted!"
 msgstr ""
 
-#: classes/class-s2-list-table-legacy.php:214
-#: classes/class-s2-list-table.php:217
+#: classes/class-s2-list-table-legacy.php:215
+#: classes/class-s2-list-table.php:218
 msgid "Delete failed! You cannot delete some or all of these users."
 msgstr ""
 
-#: classes/class-s2-list-table-legacy.php:217
-#: classes/class-s2-list-table.php:220
+#: classes/class-s2-list-table-legacy.php:218
+#: classes/class-s2-list-table.php:221
 msgid ""
 "Registered user(s) deleted! Any posts made by these users were assigned to "
 "you."
 msgstr ""
 
-#: classes/class-s2-list-table-legacy.php:241
-#: classes/class-s2-list-table.php:244
+#: classes/class-s2-list-table-legacy.php:242
+#: classes/class-s2-list-table.php:245
 msgid "Status changed!"
 msgstr ""
 
-#: classes/class-s2-list-table-legacy.php:258
-#: classes/class-s2-list-table.php:265
+#: classes/class-s2-list-table-legacy.php:259
+#: classes/class-s2-list-table.php:266
 #. Translators: Pagination
 msgid "%s item"
 msgid_plural "%s items"
 msgstr[0] ""
 msgstr[1] ""
 
-#: classes/class-s2-list-table-legacy.php:304
+#: classes/class-s2-list-table-legacy.php:307
 msgid "Go to the first page"
 msgstr ""
 
-#: classes/class-s2-list-table-legacy.php:312
+#: classes/class-s2-list-table-legacy.php:315
 msgid "Go to the previous page"
 msgstr ""
 
-#: classes/class-s2-list-table-legacy.php:322
+#: classes/class-s2-list-table-legacy.php:325
 msgid "Current page"
 msgstr ""
 
-#: classes/class-s2-list-table-legacy.php:335
+#: classes/class-s2-list-table-legacy.php:338
 msgid "Go to the next page"
 msgstr ""
 
-#: classes/class-s2-list-table-legacy.php:343
+#: classes/class-s2-list-table-legacy.php:346
 msgid "Go to the last page"
 msgstr ""
 
-#: classes/class-s2-list-table.php:324
+#: classes/class-s2-list-table.php:327
 msgid "First page"
 msgstr ""
 
-#: classes/class-s2-list-table.php:335
+#: classes/class-s2-list-table.php:338
 msgid "Previous page"
 msgstr ""
 
-#: classes/class-s2-list-table.php:342 classes/class-s2-list-table.php:346
+#: classes/class-s2-list-table.php:345 classes/class-s2-list-table.php:349
 msgid "Current Page"
 msgstr ""
 
-#: classes/class-s2-list-table.php:362
+#: classes/class-s2-list-table.php:365
 msgid "Next page"
 msgstr ""
 
-#: classes/class-s2-list-table.php:373
+#: classes/class-s2-list-table.php:376
 msgid "Last page"
 msgstr ""
 
@@ -1736,8 +1736,8 @@ msgctxt "column name"
 msgid "Date"
 msgstr ""
 
-#: classes/class-s2-list-table-legacy.php:330
-#: classes/class-s2-list-table.php:354
+#: classes/class-s2-list-table-legacy.php:333
+#: classes/class-s2-list-table.php:357
 #. Translators: Pagination
 msgctxt "paging"
 msgid "%1$s of %2$s"

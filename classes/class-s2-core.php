@@ -14,7 +14,7 @@ class S2_Core {
 		}
 		$mofile = WP_LANG_DIR . '/subscribe2-' . apply_filters( 'plugin_locale', $locale, 'subscribe2' ) . '.mo';
 		load_textdomain( 'subscribe2', $mofile );
-	} // end load_translations()
+	}
 
 	/* ===== mail handling ===== */
 	/**
@@ -57,7 +57,7 @@ class S2_Core {
 		} else {
 			return apply_filters( 's2_custom_keywords', $string );
 		}
-	} // end substitute()
+	}
 
 	/**
 	 * Delivers email to recipients in HTML or plaintext
@@ -165,7 +165,7 @@ class S2_Core {
 			$status = wp_mail( $this->myemail, $subject, $mailtext, $headers, $attachments );
 		}
 		return $status;
-	} // end mail()
+	}
 
 	/**
 	 * Construct standard set of email headers
@@ -221,7 +221,7 @@ class S2_Core {
 		$headers .= "\n";
 
 		return $headers;
-	} // end headers()
+	}
 
 	/**
 	 * Function to set HTML Email in wp_mail()
@@ -261,7 +261,7 @@ class S2_Core {
 		} else {
 			return $link;
 		}
-	} // end get_tracking_link()
+	}
 
 	/**
 	 * Sends an email notification of a new post
@@ -316,7 +316,9 @@ class S2_Core {
 
 			$s2_taxonomies = apply_filters( 's2_taxonomies', array( 'category' ) );
 			$post_cats     = wp_get_object_terms(
-				$post->ID, $s2_taxonomies, array(
+				$post->ID,
+				$s2_taxonomies,
+				array(
 					'fields' => 'ids',
 				)
 			);
@@ -359,10 +361,16 @@ class S2_Core {
 				$public = $this->get_public();
 			}
 			if ( 'page' === $post->post_type ) {
-				$post_cats_string = implode( ',', get_terms( 'category', array(
-					'fields' => 'ids',
-					'get'    => 'all',
-				) ) );
+				$post_cats_string = implode(
+					',',
+					get_terms(
+						'category',
+						array(
+							'fields' => 'ids',
+							'get'    => 'all',
+						)
+					)
+				);
 			} else {
 				$post_cats_string = implode( ',', $post_cats );
 			}
@@ -399,7 +407,7 @@ class S2_Core {
 		$author           = get_userdata( $post->post_author );
 		$this->authorname = html_entity_decode( apply_filters( 'the_author', $author->display_name ), ENT_QUOTES );
 
-		// do we send as admin, or post author?
+		// do we send as admin or post author?
 		if ( 'author' === $this->subscribe2_options['sender'] ) {
 			// get author details
 			$user          = &$author;
@@ -416,15 +424,20 @@ class S2_Core {
 		}
 
 		$this->post_cat_names = implode(
-			', ', wp_get_object_terms(
-				$post->ID, $s2_taxonomies, array(
+			', ',
+			wp_get_object_terms(
+				$post->ID,
+				$s2_taxonomies,
+				array(
 					'fields' => 'names',
 				)
 			)
 		);
 		$this->post_tag_names = implode(
-			', ', wp_get_post_tags(
-				$post->ID, array(
+			', ',
+			wp_get_post_tags(
+				$post->ID,
+				array(
 					'fields' => 'names',
 				)
 			)
@@ -570,7 +583,7 @@ class S2_Core {
 			$recipients = apply_filters( 's2_send_public_subscribers', $public, $post->ID );
 			$this->mail( $recipients, $subject, $plain_excerpt_body, 'text' );
 		}
-	} // end publish()
+	}
 
 	/**
 	Send confirmation email to a public subscriber
@@ -629,7 +642,7 @@ class S2_Core {
 		} else {
 			return wp_mail( $this->email, $subject, $body, $mailheaders );
 		}
-	} // end send_confirm()
+	}
 
 	/* ===== Public Subscriber functions ===== */
 	/**
@@ -651,7 +664,7 @@ class S2_Core {
 			}
 			return $all_unconfirmed;
 		}
-	} // end get_public()
+	}
 
 	/**
 	 * Given a public subscriber ID, returns the email address
@@ -663,7 +676,7 @@ class S2_Core {
 			return false;
 		}
 		return $wpdb->get_var( $wpdb->prepare( "SELECT email FROM $wpdb->subscribe2 WHERE id=%d", $id ) );
-	} // end get_email()
+	}
 
 	/**
 	 * Given a public subscriber email, returns the subscriber ID
@@ -675,7 +688,7 @@ class S2_Core {
 			return false;
 		}
 		return $wpdb->get_var( $wpdb->prepare( "SELECT id FROM $wpdb->subscribe2 WHERE email=%s", $email ) );
-	} // end get_id()
+	}
 
 	/**
 	 * Add an public subscriber to the subscriber table
@@ -710,7 +723,7 @@ class S2_Core {
 				$wpdb->query( $wpdb->prepare( "INSERT INTO $wpdb->subscribe2 (email, active, date, time, ip) VALUES (%s, %d, CURDATE(), CURTIME(), %s)", $email, 0, $this->ip ) );
 			}
 		}
-	} // end add()
+	}
 
 	/**
 	 * Remove a public subscriber user from the subscription table
@@ -722,7 +735,7 @@ class S2_Core {
 			return false;
 		}
 		$wpdb->query( $wpdb->prepare( "DELETE FROM $wpdb->subscribe2 WHERE CAST(email as binary)=%s LIMIT 1", $email ) );
-	} // end delete()
+	}
 
 	/**
 	 * Toggle a public subscriber's status
@@ -745,7 +758,7 @@ class S2_Core {
 		} else {
 			$wpdb->query( $wpdb->prepare( "UPDATE $wpdb->subscribe2 SET active='0', conf_date=CURDATE(), conf_time=CURTIME(), conf_ip=%s WHERE CAST(email as binary)=%s LIMIT 1", $this->ip, $email ) );
 		}
-	} // end toggle()
+	}
 
 	/**
 	 * Send reminder email to unconfirmed public subscribers
@@ -782,7 +795,7 @@ class S2_Core {
 		} else {
 			return false;
 		}
-	} // end is_public()
+	}
 
 	/* ===== Registered User and Subscriber functions ===== */
 	/**
@@ -801,7 +814,7 @@ class S2_Core {
 		} else {
 			return false;
 		}
-	} // end is_registered()
+	}
 
 	/**
 	 * Return Registered User ID from email
@@ -816,7 +829,7 @@ class S2_Core {
 		$id = $wpdb->get_var( $wpdb->prepare( "SELECT id FROM $wpdb->users WHERE user_email=%s", $email ) );
 
 		return $id;
-	} // end get_user_id()
+	}
 
 	/**
 	 * Return an array of all subscribers emails or IDs
@@ -862,7 +875,7 @@ class S2_Core {
 				return $all_registered_email;
 			}
 		}
-	} // end get_all_registered()
+	}
 
 	/**
 	 * Return an array of registered subscribers
@@ -923,14 +936,14 @@ class S2_Core {
 					"SELECT a.user_id FROM $wpdb->usermeta AS a INNER JOIN $wpdb->usermeta AS e ON a.user_id = e.user_id " . $join . "WHERE a.meta_key='{$wpdb->prefix}capabilities' AND e.meta_key=%s AND e.meta_value <> ''" . $and,
 					$this->get_usermeta_keyname( 's2_subscribed' )
 				)
-			); // WPCS: unprepared SQL OK.
+			);
 		} else {
 			$result = $wpdb->get_col(
 				$wpdb->prepare(
 					"SELECT a.user_id FROM $wpdb->usermeta AS a " . $join . "WHERE a.meta_key=%s AND a.meta_value <> ''" . $and,
 					$this->get_usermeta_keyname( 's2_subscribed' )
 				)
-			); // WPCS: unprepared SQL OK.
+			);
 		}
 
 		if ( empty( $result ) || false === $result ) {
@@ -940,9 +953,9 @@ class S2_Core {
 		}
 
 		if ( 'emailid' === $r['return'] ) {
-			$registered = $wpdb->get_results( "SELECT user_email, ID FROM $wpdb->users WHERE ID IN ($ids)", ARRAY_A ); // WPCS: unprepared SQL OK.
+			$registered = $wpdb->get_results( "SELECT user_email, ID FROM $wpdb->users WHERE ID IN ($ids)", ARRAY_A );
 		} else {
-			$registered = $wpdb->get_col( "SELECT user_email FROM $wpdb->users WHERE ID IN ($ids)" ); // WPCS: unprepared SQL OK.
+			$registered = $wpdb->get_col( "SELECT user_email FROM $wpdb->users WHERE ID IN ($ids)" );
 		}
 
 		if ( empty( $registered ) ) {
@@ -952,7 +965,7 @@ class S2_Core {
 		// apply filter to registered users to add or remove additional addresses, pass args too for additional control
 		$registered = apply_filters( 's2_registered_subscribers', $registered, $args );
 		return $registered;
-	} // end get_registered()
+	}
 
 	/**
 	 * Function to ensure email is compliant with internet messaging standards
@@ -966,7 +979,7 @@ class S2_Core {
 		// ensure that domain is in lowercase as per internet email standards http://www.ietf.org/rfc/rfc5321.txt
 		list( $name, $domain ) = explode( '@', $email, 2 );
 		return apply_filters( 's2_sanitize_email', $name . '@' . strtolower( $domain ) );
-	} // end sanitize_email()
+	}
 
 	/**
 	 * Check email is valid
@@ -986,7 +999,7 @@ class S2_Core {
 		} else {
 			return is_email( $email );
 		}
-	} // end validate_email()
+	}
 
 	/**
 	 * Create the appropriate usermeta values when a user registers
@@ -1046,7 +1059,7 @@ class S2_Core {
 			update_user_meta( $user_ID, $this->get_usermeta_keyname( 's2_authors' ), '' );
 		}
 		return $user_ID;
-	} // end register()
+	}
 
 	/**
 	 * Get admin data from record 1 or first user with admin rights
@@ -1120,7 +1133,8 @@ class S2_Core {
 		foreach ( $s2_taxonomies as $taxonomy ) {
 			if ( taxonomy_exists( $taxonomy ) ) {
 				$all_cats = array_merge(
-					$all_cats, get_categories(
+					$all_cats,
+					get_categories(
 						array(
 							'hide_empty' => false,
 							'orderby'    => $orderby,
@@ -1146,7 +1160,7 @@ class S2_Core {
 		}
 
 		return $all_cats;
-	} // end all_cats()
+	}
 
 	/**
 	 * Function to sanitise array of data for SQL
@@ -1154,7 +1168,7 @@ class S2_Core {
 	public function prepare_in_data( $data ) {
 		global $wpdb;
 		return $wpdb->prepare( '%s', $data );
-	} // end prepare_in_data()
+	}
 
 	/**
 	 * Filter for usermeta table key names to adjust them if needed for WPMU blogs
@@ -1177,7 +1191,7 @@ class S2_Core {
 		}
 		// Not MU or not a prefixed option name
 		return $metaname;
-	} // end get_usermeta_keyname()
+	}
 
 	/**
 	 * Adds information to the WordPress registration screen for new users
@@ -1196,7 +1210,7 @@ class S2_Core {
 			echo __( 'By registering with this blog you are also agreeing to receive email notifications for new posts but you can unsubscribe at anytime', 'subscribe2' ) . '.<br />' . "\r\n";
 			echo '</center></p>' . "\r\n";
 		}
-	} // end register_form()
+	}
 
 	/**
 	 * Process function to add action if user selects to subscribe to posts during registration
@@ -1211,7 +1225,7 @@ class S2_Core {
 		} else {
 			$this->register( $user_ID, false );
 		}
-	} // end register_post()
+	}
 
 	/* ===== comment subscriber functions ===== */
 	/**
@@ -1228,7 +1242,7 @@ class S2_Core {
 		} else {
 			return $submit_field . '<br />' . $comment_meta_form;
 		}
-	} // end s2_comment_meta_form()
+	}
 
 	/**
 	 * Process comment meta data
@@ -1260,7 +1274,7 @@ class S2_Core {
 					break;
 			}
 		}
-	} // end s2_comment_meta()
+	}
 
 	/**
 	 * Action subscribe requests made on comment forms when comments are approved
@@ -1306,7 +1320,7 @@ class S2_Core {
 		}
 
 		return $comment_id;
-	} // end comment_status()
+	}
 
 	/* ===== widget functions ===== */
 	/**
@@ -1315,7 +1329,7 @@ class S2_Core {
 	public function subscribe2_widget() {
 		require_once S2PATH . 'classes/class-s2-form-widget.php';
 		register_widget( 'S2_Form_Widget' );
-	} // end subscribe2_widget()
+	}
 
 	/**
 	 * Register the counter widget
@@ -1323,7 +1337,7 @@ class S2_Core {
 	public function counter_widget() {
 		require_once S2PATH . 'classes/class-s2-counter-widget.php';
 		register_widget( 'S2_Counter_Widget' );
-	} // end counter_widget()
+	}
 
 	/* ===== wp-cron functions ===== */
 	/**
@@ -1345,7 +1359,7 @@ class S2_Core {
 		}
 
 		return $scheds;
-	} // end add_weekly_sched()
+	}
 
 	/**
 	 * Handle post transitions for the digest email
@@ -1366,7 +1380,7 @@ class S2_Core {
 		}
 
 		update_post_meta( $post->ID, '_s2_digest_post_status', ( 'publish' === $new_status ) ? 'pending' : 'draft' );
-	} // end digest_post_transitions()
+	}
 
 	/**
 	 * Send a daily digest of today's new posts
@@ -1415,7 +1429,7 @@ class S2_Core {
 			} else {
 				$sql   = "SELECT ID, post_title, post_excerpt, post_content, post_type, post_password, post_date, post_author FROM $wpdb->posts AS a INNER JOIN $wpdb->postmeta AS b ON b.post_id = a.ID";
 				$sql  .= " AND b.meta_key = '_s2_digest_post_status' AND b.meta_value = 'pending' WHERE post_status IN ($status) AND post_type IN ($type) ORDER BY post_date " . ( ( 'desc' === $this->subscribe2_options['cron_order'] ) ? 'DESC' : 'ASC' );
-				$posts = $wpdb->get_results( $sql ); // WPCS: unprepared SQL OK.
+				$posts = $wpdb->get_results( $sql );
 			}
 		} else {
 			// we are sending a preview
@@ -1471,7 +1485,9 @@ class S2_Core {
 			}
 			$ids[]            = $post->ID;
 			$post_cats        = wp_get_object_terms(
-				$post->ID, $s2_taxonomies, array(
+				$post->ID,
+				$s2_taxonomies,
+				array(
 					'fields' => 'ids',
 				)
 			);
@@ -1695,7 +1711,7 @@ class S2_Core {
 			$recipients           = array_merge( (array) $public, (array) $registered );
 			$this->mail( $recipients, $subject, $mailtext, $digest_format );
 		}
-	} // end subscribe2_cron()
+	}
 
 	/**
 	 * Task to delete unconfirmed public subscribers after a defined interval
@@ -1719,7 +1735,7 @@ class S2_Core {
 				$this->delete( $email );
 			}
 		}
-	} // end s2cleaner_task()
+	}
 
 	/**
 	Jetpack comments doesn't play nice, this function kills that module
@@ -1727,7 +1743,7 @@ class S2_Core {
 	public function s2_hide_jetpack_comments( $modules ) {
 		unset( $modules['comments'] );
 		return $modules;
-	} // end s2_kill_jetpack_comments()
+	}
 
 	/* ===== Our constructor ===== */
 	/**
@@ -1738,7 +1754,7 @@ class S2_Core {
 		// load the options
 		$this->subscribe2_options = get_option( 'subscribe2_options' );
 
-		// if SCRIPT_DEBUG is true, use dev scripts
+		// maybe use dev scripts
 		$this->script_debug = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '' : '.min';
 
 		$this->word_wrap = apply_filters( 's2_word_wrap', 78 );
@@ -1958,7 +1974,7 @@ class S2_Core {
 				add_action( 'wp_footer', array( &$this, 'js_ip_library_script' ), 20 );
 			}
 		}
-	} // end s2init()
+	}
 
 	/* ===== define some variables ===== */
 	// options
@@ -1983,4 +1999,4 @@ class S2_Core {
 	public $authorname;
 	public $post_cat_names;
 	public $post_tag_names;
-} // end class subscribe2
+}

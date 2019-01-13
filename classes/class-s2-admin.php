@@ -28,7 +28,7 @@ class S2_Admin extends S2_Core {
 
 		$s2mail = add_submenu_page( 's2', __( 'Send Email', 'subscribe2' ), __( 'Send Email', 'subscribe2' ), apply_filters( 's2_capability', 'publish_posts', 'send' ), 's2_posts', array( &$this, 'write_menu' ) );
 		add_action( 'load-' . $s2mail, array( &$this, 'mail_help' ) );
-	} // end admin_menu()
+	}
 
 	/**
 	 * Contextual Help
@@ -52,7 +52,7 @@ class S2_Admin extends S2_Core {
 				)
 			);
 		}
-	} // end user_help()
+	}
 
 	public function subscribers_help() {
 		$screen = get_current_screen();
@@ -79,7 +79,7 @@ class S2_Admin extends S2_Core {
 				'</p><p>' . __( 'On this page registered subscribers can be viewed and searched. User accounts can be deleted from here with any posts created by those users being assigned to the currently logged in user. Bulk changes can be applied to all user settings changing their subscription email format and categories.', 'subscribe2' ) . '</p>',
 			)
 		);
-	} // end subscribers_help()
+	}
 
 	public function subscribers_options() {
 		$option = 'per_page';
@@ -90,7 +90,7 @@ class S2_Admin extends S2_Core {
 			'option'  => 'subscribers_per_page',
 		);
 		add_screen_option( $option, $args );
-	} // end subscribers_options
+	}
 
 	public function subscribers_set_screen_option( $status, $option, $value ) {
 		if ( 'subscribers_per_page' === $option && false === $status ) {
@@ -99,7 +99,7 @@ class S2_Admin extends S2_Core {
 			}
 			return $value;
 		}
-	} // end subscribers_set_screen_option()
+	}
 
 	public function settings_help() {
 		$screen = get_current_screen();
@@ -166,7 +166,7 @@ class S2_Admin extends S2_Core {
 				'</p>',
 			)
 		);
-	} // end settings_help()
+	}
 
 	public function mail_help() {
 		$screen = get_current_screen();
@@ -178,14 +178,14 @@ class S2_Admin extends S2_Core {
 				'</p><p>' . __( '<strong>Preview</strong> will send a preview of the email to the currently logged in user. <strong>Send</strong> will send the email to the recipient list.', 'subscribe2' ) . '</p>',
 			)
 		);
-	} // end send_email_help()
+	}
 
 	/**
 	 * Hook for Admin Drop Down Icons
 	 */
 	public function ozh_s2_icon() {
 		return S2URL . 'include/email-edit.png';
-	} // end ozh_s2_icon()
+	}
 
 	/**
 	 * Insert Javascript and CSS into admin_headers
@@ -193,12 +193,12 @@ class S2_Admin extends S2_Core {
 	public function checkbox_form_js() {
 		wp_register_script( 's2_checkbox', S2URL . 'include/s2-checkbox' . $this->script_debug . '.js', array( 'jquery' ), '1.4' );
 		wp_enqueue_script( 's2_checkbox' );
-	} //end checkbox_form_js()
+	}
 
 	public function user_admin_css() {
 		wp_register_style( 's2_user_admin', S2URL . 'include/s2-user-admin' . $this->script_debug . '.css', array(), '1.0' );
 		wp_enqueue_style( 's2_user_admin' );
-	} // end user_admin_css()
+	}
 
 	public function option_form_js() {
 		wp_register_script( 's2_edit', S2URL . 'include/s2-edit' . $this->script_debug . '.js', array( 'jquery' ), '1.3' );
@@ -209,7 +209,7 @@ class S2_Admin extends S2_Core {
 			wp_register_script( 's2_date_time', S2URL . 'include/s2-date-time' . $this->script_debug . '.js', array( 'jquery-ui-datepicker' ), '1.1' );
 			wp_enqueue_script( 's2_date_time' );
 		}
-	} // end option_form_js()
+	}
 
 	public function dismiss_js() {
 		wp_register_script( 's2_dismiss', S2URL . 'include/s2-dismiss' . $this->script_debug . '.js', array( 'jquery' ), '1.1', true );
@@ -219,7 +219,7 @@ class S2_Admin extends S2_Core {
 		);
 		wp_localize_script( 's2_dismiss', 's2DismissScriptStrings', $translation_array );
 		wp_enqueue_script( 's2_dismiss' );
-	} // end dismiss_js()
+	}
 
 	public function s2_dismiss_notice_handler() {
 		if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( $_POST['nonce'], 's2_dismiss_nonce' ) ) {
@@ -228,7 +228,7 @@ class S2_Admin extends S2_Core {
 		$this->subscribe2_options['dismiss_sender_warning'] = '1';
 		update_option( 'subscribe2_options', $this->subscribe2_options );
 		wp_die();
-	} // end s2_dismiss_notice_handler()
+	}
 
 	public function subscribers_form_js() {
 		wp_register_script( 's2_subscribers', S2URL . 'include/s2-subscribers' . $this->script_debug . '.js', array(), '1.5' );
@@ -243,13 +243,13 @@ class S2_Admin extends S2_Core {
 		);
 		wp_localize_script( 's2_subscribers', 's2ScriptStrings', $translation_array );
 		wp_enqueue_script( 's2_subscribers' );
-	} // end subscribers_form_js()
+	}
 
 	public function subscribers_css() {
 		echo '<style type="text/css">';
 		echo '.wp-list-table .column-date { width: 15%; }';
 		echo '</style>';
-	} // end subscribers_css()
+	}
 
 	/**
 	 * Adds a links directly to the settings page from the plugin page
@@ -260,7 +260,7 @@ class S2_Admin extends S2_Core {
 			$links[] = '<a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&amp;hosted_button_id=2387904"><b>' . __( 'Donate', 'subscribe2' ) . '</b></a>';
 		}
 		return $links;
-	} // end plugin_links()
+	}
 
 	/* ===== Menus ===== */
 	/**
@@ -268,28 +268,28 @@ class S2_Admin extends S2_Core {
 	 */
 	public function subscribers_menu() {
 		require_once S2PATH . 'admin/subscribers.php';
-	} // end subscribers_menu()
+	}
 
 	/**
 	 * Our settings page
 	 */
 	public function settings_menu() {
 		require_once S2PATH . 'admin/settings.php';
-	} // end settings_menu()
+	}
 
 	/**
 	 * Our profile menu
 	 */
 	public function user_menu() {
 		require_once S2PATH . 'admin/your-subscriptions.php';
-	} // end user_menu()
+	}
 
 	/**
 	 * Display the Write sub-menu
 	 */
 	public function write_menu() {
 		require_once S2PATH . 'admin/send-email.php';
-	} // end write_menu()
+	}
 
 	/* ===== Write Toolbar Button Functions ===== */
 	/**
@@ -310,7 +310,7 @@ class S2_Admin extends S2_Core {
 		} else {
 			wp_enqueue_script( 'subscribe2_button', S2URL . 'include/s2-button' . $this->script_debug . '.js', array( 'quicktags' ), '2.0' );
 		}
-	} // end button_init()
+	}
 
 	/**
 	 * Add buttons for Rich Text Editor
@@ -323,12 +323,12 @@ class S2_Admin extends S2_Core {
 		}
 		$arr['subscribe2'] = $path;
 		return $arr;
-	} // end mce_plugin()
+	}
 
 	public function mce_button( $arr ) {
 		$arr[] = 'subscribe2';
 		return $arr;
-	} // end mce_button()
+	}
 
 	/* ===== widget functions ===== */
 	/**
@@ -342,7 +342,7 @@ class S2_Admin extends S2_Core {
 			wp_register_script( 's2_colorpicker', S2URL . 'include/s2-colorpicker' . $this->script_debug . '.js', array( 'farbtastic' ), '1.3' );
 			wp_enqueue_script( 's2_colorpicker' );
 		}
-	} // end widget_s2_counter_css_and_js()
+	}
 
 	/* ===== meta box functions to allow per-post override ===== */
 	/**
@@ -374,7 +374,7 @@ class S2_Admin extends S2_Core {
 				)
 			);
 		}
-	} // end s2_meta_init()
+	}
 
 	/**
 	 * Meta override box code
@@ -389,7 +389,7 @@ class S2_Admin extends S2_Core {
 			echo ' checked="checked"';
 		}
 		echo ' />';
-	} // end s2_override_meta()
+	}
 
 	/**
 	 * Meta override box form handler
@@ -414,7 +414,7 @@ class S2_Admin extends S2_Core {
 		} else {
 			update_post_meta( $post_id, '_s2mail', 'yes' );
 		}
-	} // end s2_meta_box_handler()
+	}
 
 	/* ===== WordPress menu helper functions ===== */
 	/**
@@ -435,7 +435,7 @@ class S2_Admin extends S2_Core {
 			}
 			return $this->signup_dates[ $email ];
 		}
-	} // end signup_date()
+	}
 
 	/**
 	 * Collects the signup time for all public subscribers
@@ -455,7 +455,7 @@ class S2_Admin extends S2_Core {
 			}
 			return $this->signup_times[ $email ];
 		}
-	} // end signup_time()
+	}
 
 	/**
 	 * Collects the ip address for all public subscribers
@@ -475,7 +475,7 @@ class S2_Admin extends S2_Core {
 			}
 			return $this->signup_ips[ $email ];
 		}
-	} // end signup_ip()
+	}
 
 	/**
 	 * Export subscriber emails and other details to CSV
@@ -521,7 +521,7 @@ class S2_Admin extends S2_Core {
 		}
 
 		return $exportcsv;
-	} // end prepare_export()
+	}
 
 	/**
 	 * Display a table of post formats supported by the currently active theme
@@ -558,7 +558,7 @@ class S2_Admin extends S2_Core {
 		}
 		echo '</td></tr>' . "\r\n";
 		echo '</table>' . "\r\n";
-	} // end display_format_form()
+	}
 
 	/**
 	 * Display a drop-down form to select subscribers
@@ -651,7 +651,7 @@ class S2_Admin extends S2_Core {
 		if ( false !== $submit ) {
 			echo '&nbsp;<input type="submit" class="button-secondary" value="' . $submit . '" />' . "\r\n";
 		}
-	} // end display_subscriber_dropdown()
+	}
 
 	/**
 	 * Display a drop down list of administrator level users and
@@ -698,7 +698,7 @@ class S2_Admin extends S2_Core {
 			echo '>' . $admin->display_name . '</option>' . "\r\n";
 		}
 		echo '</select>' . "\r\n";
-	} // end admin_dropdown()
+	}
 
 	/**
 	 * Display a dropdown of choices for digest email frequency
@@ -719,7 +719,8 @@ class S2_Admin extends S2_Core {
 					'interval' => 0,
 					'display'  => __( 'For each Post', 'subscribe2' ),
 				),
-			), $schedule
+			),
+			$schedule
 		);
 
 		$sort = array();
@@ -770,7 +771,7 @@ class S2_Admin extends S2_Core {
 		} else {
 			echo '<br />';
 		}
-	} // end display_digest_choices()
+	}
 
 	/**
 	 * Create and display a dropdown list of pages
@@ -798,7 +799,7 @@ class S2_Admin extends S2_Core {
 		}
 
 		echo $option;
-	} // end pages_dropdown()
+	}
 
 	/**
 	 * Subscribe all registered users to category selected on Admin Manage Page
@@ -812,7 +813,7 @@ class S2_Admin extends S2_Core {
 		$useremails = explode( ",\r\n", $emails );
 		$useremails = implode( ', ', array_map( array( $this, 'prepare_in_data' ), $useremails ) );
 
-		$user_ids = $wpdb->get_col( "SELECT ID FROM $wpdb->users WHERE user_email IN ($useremails)" ); // WPCS: unprepared SQL OK.
+		$user_ids = $wpdb->get_col( "SELECT ID FROM $wpdb->users WHERE user_email IN ($useremails)" );
 
 		foreach ( $user_ids as $user_id ) {
 			$old_cats = get_user_meta( $user_id, $this->get_usermeta_keyname( 's2_subscribed' ), true );
@@ -831,7 +832,7 @@ class S2_Admin extends S2_Core {
 			}
 			unset( $newcats );
 		}
-	} // end subscribe_registered_users()
+	}
 
 	/**
 	 * Unsubscribe all registered users to category selected on Admin Manage Page
@@ -865,7 +866,7 @@ class S2_Admin extends S2_Core {
 			}
 			unset( $remain );
 		}
-	} // end unsubscribe_registered_users()
+	}
 
 	/**
 	 * Handles bulk changes to email format for Registered Subscribers
@@ -882,7 +883,7 @@ class S2_Admin extends S2_Core {
 		$ids        = implode( ',', array_map( array( $this, 'prepare_in_data' ), $ids ) );
 		$sql        = "UPDATE $wpdb->usermeta SET meta_value='{$format}' WHERE meta_key='" . $this->get_usermeta_keyname( 's2_format' ) . "' AND user_id IN ($ids)";
 		$wpdb->query( $sql ); // WPCS: unprepared SQL OK.
-	} // end format_change()
+	}
 
 	/**
 	 * Handles bulk update to digest preferences
@@ -926,7 +927,7 @@ class S2_Admin extends S2_Core {
 				delete_user_meta( $user_id, $this->get_usermeta_keyname( 's2_subscribed' ) );
 			}
 		}
-	} // end digest_change()
+	}
 
 	/* ===== functions to handle addition and removal of WordPress categories ===== */
 	/**
@@ -996,7 +997,7 @@ class S2_Admin extends S2_Core {
 			$this->subscribe2_options['exclude'] = implode( ',', $excluded_cats );
 			update_option( 'subscribe2_options', $this->subscribe2_options );
 		}
-	} // end new_category()
+	}
 
 	/**
 	 * Automatically delete subscriptions to a category when it is deleted
@@ -1034,7 +1035,7 @@ class S2_Admin extends S2_Core {
 			$remain = array_diff( $old_cats, (array) $deleted_category );
 			update_user_meta( $user_id, $this->get_usermeta_keyname( 's2_subscribed' ), implode( ',', $remain ) );
 		}
-	} // end delete_category()
+	}
 
 	/* ===== functions to show & handle one-click subscription ===== */
 	/**
@@ -1047,7 +1048,7 @@ class S2_Admin extends S2_Core {
 		echo '<td><label><input type="checkbox" name="sub2-one-click-subscribe" value="1" ' . checked( ! get_user_meta( $user->ID, $this->get_usermeta_keyname( 's2_subscribed' ), true ), false, false ) . ' /> ' . __( 'Receive notifications', 'subscribe2' ) . '</label><br />' . "\r\n";
 		echo '<span class="description">' . __( 'Check if you want to receive email notification when new posts are published', 'subscribe2' ) . '</span>' . "\r\n";
 		echo '</td></tr></table>' . "\r\n";
-	} // end one_click_profile_form()
+	}
 
 	/**
 	 * Handle submission from profile one-click subscription
@@ -1064,7 +1065,7 @@ class S2_Admin extends S2_Core {
 			// Unsubscribe
 			$this->one_click_handler( $user_id, 'unsubscribe' );
 		}
-	} // end one_click_profile_form_save()
+	}
 
 	/**
 	 * Core function to hook the digest email preview to the action on the Settings page
@@ -1074,7 +1075,7 @@ class S2_Admin extends S2_Core {
 			return;
 		}
 		$this->subscribe2_cron( $user_email );
-	} // end digest_preview()
+	}
 
 	/**
 	 * Core function to hook the resent digest email to the action on the Settings page
@@ -1083,5 +1084,5 @@ class S2_Admin extends S2_Core {
 		if ( 'resend' === $resend ) {
 			$this->subscribe2_cron( '', 'resend' );
 		}
-	} // end digest_resend()
+	}
 }
