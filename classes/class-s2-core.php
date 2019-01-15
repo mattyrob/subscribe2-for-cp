@@ -1882,7 +1882,7 @@ class S2_Core {
 		}
 
 		// Check if Block Editor is in use
-		if ( function_exists( 'register_block_type' ) && ! function_exists( 'classic_editor_init_actions' ) && false === has_filter( 'use_block_editor_for_post', '__return_false' ) ) {
+		if ( function_exists( 'register_block_type' ) && ! class_exists( 'Classic_Editor' ) && false === has_filter( 'use_block_editor_for_post', '__return_false' ) ) {
 			$this->block_editor = true;
 		}
 

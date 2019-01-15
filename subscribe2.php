@@ -11,7 +11,7 @@ Text Domain: subscribe2
 */
 
 /*
-Copyright (C) 2006-18 Matthew Robinson
+Copyright (C) 2006-19 Matthew Robinson
 Based on the Original Subscribe2 plugin by
 Copyright (C) 2005 Scott Merrill (skippy@skippy.net)
 
