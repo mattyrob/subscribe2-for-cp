@@ -501,14 +501,8 @@ class S2_Core {
 				// strip tags and trailing whitespace
 				$excerpt = trim( wp_strip_all_tags( $excerpt ) );
 			} else {
-				// no <!--more-->, so grab the first 55 words
-				$excerpt = trim( wp_strip_all_tags( $excerpttext ) );
-				$words   = explode( ' ', $excerpt, $this->excerpt_length + 1 );
-				if ( count( $words ) > $this->excerpt_length ) {
-					array_pop( $words );
-					array_push( $words, '[...]' );
-					$excerpt = implode( ' ', $words );
-				}
+				// no <!--more-->, so create excerpt
+				$excerpt = $this->create_excerpt( $excerpttext );
 			}
 		}
 		$html_excerpt = trim( $post->post_excerpt );
@@ -519,17 +513,8 @@ class S2_Core {
 				// balance HTML tags and then strip leading and trailing whitespace
 				$html_excerpt = trim( balanceTags( $html_excerpt, true ) );
 			} else {
-				// no <!--more-->, so grab the first 55 words
-				$words = explode( ' ', $content, $this->excerpt_length + 1 );
-				if ( count( $words ) > $this->excerpt_length ) {
-					array_pop( $words );
-					array_push( $words, '[...]' );
-					$html_excerpt = implode( ' ', $words );
-					// balance HTML tags and then strip leading and trailing whitespace
-					$html_excerpt = trim( balanceTags( $html_excerpt, true ) );
-				} else {
-					$html_excerpt = $content;
-				}
+				// no <!--more-->, so create excerpt
+				$html_excerpt = $this->create_excerpt( $content, true );
 			}
 		}
 
@@ -583,6 +568,42 @@ class S2_Core {
 			$recipients = apply_filters( 's2_send_public_subscribers', $public, $post->ID );
 			$this->mail( $recipients, $subject, $plain_excerpt_body, 'text' );
 		}
+	}
+
+	/**
+	 * Function to create excerpts for emailing
+	 */
+	public function create_excerpt( $text, $html = false ) {
+		$excerpt_on_words = apply_filters( 's2_excerpt_words', true );
+		if ( false === $html ) {
+			$excerpt = trim( wp_strip_all_tags( $text ) );
+		} else {
+			$excerpt = strip_shortcodes( $text );
+		}
+
+		if ( true === $excerpt_on_words ) {
+			$words = explode( ' ', $excerpt, $this->excerpt_length + 1 );
+		} else {
+			$words = preg_split( '//u', $excerpt, $this->excerpt_length + 1 );
+		}
+
+		if ( count( $words ) > $this->excerpt_length ) {
+			array_pop( $words );
+			array_push( $words, '[...]' );
+		}
+
+		if ( true === $excerpt_on_words ) {
+			$excerpt = implode( ' ', $words );
+		} else {
+			$excerpt = implode( '', $words );
+		}
+
+		if ( true === $html ) {
+			// balance HTML tags and then strip leading and trailing whitespace
+			$excerpt = trim( balanceTags( $excerpt, true ) );
+		}
+
+		return $excerpt;
 	}
 
 	/**
@@ -1626,14 +1647,7 @@ class S2_Core {
 					$excerpt              = strip_tags( $excerpt );
 					$excerpt              = strip_shortcodes( $excerpt );
 				} else {
-					$excerpt = strip_tags( $post->post_content );
-					$excerpt = strip_shortcodes( $excerpt );
-					$words   = explode( ' ', $excerpt, $this->excerpt_length + 1 );
-					if ( count( $words ) > $this->excerpt_length ) {
-						array_pop( $words );
-						array_push( $words, '[...]' );
-						$excerpt = implode( ' ', $words );
-					}
+					$excerpt = $this->create_excerpt( $excerpt, true );
 				}
 				// strip leading and trailing whitespace
 				$excerpt = trim( $excerpt );
