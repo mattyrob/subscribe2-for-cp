@@ -114,7 +114,7 @@ class S2_Forms {
 
 		// list of subscribed blogs on WordPress mu
 		if ( $mysubscribe2->s2_mu && ! isset( $_GET['email'] ) ) {
-			global $blog_id, $current_user, $s2class_multisite;
+			global $blog_id, $s2class_multisite;
 			$s2blog_id    = $blog_id;
 			$current_user = wp_get_current_user();
 			$blogs        = $s2class_multisite->get_mu_blog_list();
@@ -131,7 +131,7 @@ class S2_Forms {
 				if ( ! is_array( $current_plugins ) ) {
 					$current_plugins = (array) $current_plugins;
 				}
-				if ( ! in_array( S2DIR . 'subscribe2.php', $current_plugins ) ) {
+				if ( ! in_array( S2DIR . 'subscribe2.php', $current_plugins, true ) ) {
 					continue;
 				}
 
@@ -323,19 +323,19 @@ class S2_Forms {
 
 			if ( 0 === $j ) {
 				echo '<label><input class="checkall_' . $name . '" type="checkbox" name="' . $name . '[]" value="' . $cat->term_id . '"';
-				if ( in_array( $cat->term_id, $selected ) || in_array( $cat->term_id, $compulsory ) ) {
+				if ( in_array( (string) $cat->term_id, $selected, true ) || in_array( (string) $cat->term_id, $compulsory, true ) ) {
 					echo ' checked="checked"';
 				}
-				if ( in_array( $cat->term_id, $compulsory ) && 'category' === $name ) {
+				if ( in_array( (string) $cat->term_id, $compulsory, true ) && 'category' === $name ) {
 					echo ' DISABLED';
 				}
 				echo ' /> <abbr title="' . $cat->slug . '">' . $cat_name . '</abbr></label><br />' . "\r\n";
 			} else {
 				echo '<label><input class="checkall_' . $name . '" type="checkbox" name="' . $name . '[]" value="' . $cat->term_id . '"';
-				if ( in_array( $cat->term_id, $selected ) || in_array( $cat->term_id, $compulsory ) ) {
+				if ( in_array( (string) $cat->term_id, $selected, true ) || in_array( (string) $cat->term_id, $compulsory, true ) ) {
 					echo ' checked="checked"';
 				}
-				if ( in_array( $cat->term_id, $compulsory ) && 'category' === $name ) {
+				if ( in_array( (string) $cat->term_id, $compulsory, true ) && 'category' === $name ) {
 					echo ' DISABLED';
 				}
 				echo ' /> <abbr title="' . $cat->slug . '">' . $cat_name . '</abbr></label><br />' . "\r\n";
@@ -373,13 +373,13 @@ class S2_Forms {
 			}
 			if ( 0 === $j ) {
 				echo '<label><input class="checkall_author" type="checkbox" name="author[]" value="' . $author->ID . '"';
-				if ( in_array( $author->ID, $selected ) ) {
+				if ( in_array( $author->ID, $selected, true ) ) {
 						echo ' checked="checked"';
 				}
 				echo ' /> ' . $author->display_name . '</label><br />' . "\r\n";
 			} else {
 				echo '<label><input class="checkall_author" type="checkbox" name="author[]" value="' . $author->ID . '"';
-				if ( in_array( $author->ID, $selected ) ) {
+				if ( in_array( $author->ID, $selected, true ) ) {
 					echo ' checked="checked"';
 				}
 				echo ' /> ' . $author->display_name . '</label><br />' . "\r\n";

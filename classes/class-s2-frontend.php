@@ -189,7 +189,7 @@ class S2_Frontend extends S2_Core {
 				if ( is_int( $this->lockout ) && $this->lockout > 0 ) {
 					$date = date( 'H:i:s.u', $this->lockout );
 					$ips  = $wpdb->get_col( $wpdb->prepare( "SELECT ip FROM $wpdb->subscribe2 WHERE date = CURDATE() AND time > SUBTIME(CURTIME(), %s)", $date ) );
-					if ( in_array( $this->ip, $ips ) ) {
+					if ( in_array( $this->ip, $ips, true ) ) {
 						return __( 'Slow down, you move too fast.', 'subscribe2' );
 					}
 				}
@@ -367,7 +367,7 @@ class S2_Frontend extends S2_Core {
 	 * Prepare and send emails to admins on new subscriptions and unsubsriptions
 	 */
 	public function admin_email( $action ) {
-		if ( ! in_array( $action, array( 'subscribe', 'unsubscribe' ) ) ) {
+		if ( ! in_array( $action, array( 'subscribe', 'unsubscribe' ), true ) ) {
 			return false;
 		}
 
@@ -525,7 +525,7 @@ class S2_Frontend extends S2_Core {
 	 * Add ip updater library to footer
 	 */
 	public function js_ip_library_script() {
-		echo '<script async="async" src="https://api.ipify.org?format=jsonp&callback=getip"></script>' . "\r\n";
+		echo '<script async="async" src="https://api.ipify.org?format=jsonp&callback=getip"></script>' . "\r\n"; // phpcs:ignore WordPress.WP.EnqueuedResources
 	}
 
 	/* ===== define some variables ===== */

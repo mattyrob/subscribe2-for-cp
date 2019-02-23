@@ -48,4 +48,4 @@ function s2_uninstall() {
 
 	// drop the subscribe2 table
 	$wpdb->query( "DROP TABLE IF EXISTS {$wpdb->prefix}subscribe2" );
-} // end s2_uninstall()
+}

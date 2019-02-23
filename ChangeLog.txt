@@ -1,3 +1,11 @@
+= 10.27 =
+
+* Tightened checks for Coding Standards
+* Fixed bug in category form display caused by tighter coding standards
+* Save Editor content before sending preview email for better user experience
+* Update Excerpt creation code for languages that don't use spaces - props Masatoshi Hakoshima
+* Tidied up unused globals
+
 = 10.26 =
 
 * Fixed a bug in barred domain checking

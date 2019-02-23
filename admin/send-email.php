@@ -3,7 +3,7 @@ if ( ! function_exists( 'add_action' ) ) {
 	exit();
 }
 
-global $wpdb, $current_user;
+global $current_user;
 
 // was anything POSTed?
 if ( isset( $_POST['s2_admin'] ) && 'mail' === $_POST['s2_admin'] ) {
@@ -27,8 +27,8 @@ if ( isset( $_POST['s2_admin'] ) && 'mail' === $_POST['s2_admin'] ) {
 			$unconfirmed = $this->get_public( 0 );
 			$recipients  = array_merge( (array) $confirmed, (array) $unconfirmed );
 		} elseif ( is_numeric( $_POST['what'] ) ) {
-			$cat        = intval( $_POST['what'] );
-			$recipients = $this->get_registered( "cats=$cat" );
+			$category   = intval( $_POST['what'] );
+			$recipients = $this->get_registered( "cats=$category" );
 		} elseif ( 'all_users' === $_POST['what'] ) {
 			$recipients = $this->get_all_registered();
 		} elseif ( 'all' === $_POST['what'] ) {
@@ -57,7 +57,8 @@ if ( isset( $_POST['s2_admin'] ) && 'mail' === $_POST['s2_admin'] ) {
 				);
 
 				$uploads[] = wp_handle_upload(
-					$file, array(
+					$file,
+					array(
 						'test_form' => false,
 					)
 				);
@@ -77,16 +78,16 @@ if ( isset( $_POST['s2_admin'] ) && 'mail' === $_POST['s2_admin'] ) {
 
 	if ( empty( $body ) ) {
 		$error_message = __( 'Your email was empty', 'subscribe2' );
-		$status        = false;
+		$success       = false;
 	} elseif ( isset( $upload_error ) ) {
 		$error_message = $upload_error;
-		$status        = false;
+		$success       = false;
 	} else {
-		$status        = $this->mail( $recipients, $subject, $body, 'html', $attachments );
+		$success       = $this->mail( $recipients, $subject, $body, 'html', $attachments );
 		$error_message = __( 'Check your settings and check with your hosting provider', 'subscribe2' );
 	}
 
-	if ( $status ) {
+	if ( $success ) {
 		if ( isset( $_POST['preview'] ) ) {
 			$message = '<p class="s2_message">' . __( 'Preview message sent!', 'subscribe2' ) . '</p>';
 		} elseif ( isset( $_POST['send'] ) ) {

@@ -3,7 +3,7 @@ if ( ! function_exists( 'add_action' ) ) {
 	exit();
 }
 
-global $wpdb, $subscribers, $what, $current_tab;
+global $subscribers, $what, $current_tab;
 
 // detect or define which tab we are in
 $current_tab = isset( $_GET['tab'] ) ? esc_attr( $_GET['tab'] ) : 'public';
@@ -197,12 +197,12 @@ $s2_list_table->prepare_items();
 // show our form
 echo '<div class="wrap">';
 echo '<h1>' . __( 'Subscribers', 'subscribe2' ) . '</h1>' . "\r\n";
-$tabs = array(
+$s2tabs = array(
 	'public'     => __( 'Public Subscribers', 'subscribe2' ),
 	'registered' => __( 'Registered Subscribers', 'subscribe2' ),
 );
 echo '<h2 class="nav-tab-wrapper">';
-foreach ( $tabs as $tab_key => $tab_caption ) {
+foreach ( $s2tabs as $tab_key => $tab_caption ) {
 	$active = ( $current_tab === $tab_key ) ? 'nav-tab-active' : '';
 	echo '<a class="nav-tab ' . $active . '" href="?page=s2_tools&amp;tab=' . $tab_key . '">' . $tab_caption . '</a>';
 }
@@ -228,8 +228,8 @@ switch ( $current_tab ) {
 		echo '<br />';
 		$cats    = $this->all_cats();
 		$cat_ids = array();
-		foreach ( $cats as $cat ) {
-			$cat_ids[] = $cat->term_id;
+		foreach ( $cats as $category ) {
+			$cat_ids[] = $category->term_id;
 		}
 		$exclude = array_merge( array( 'all', 'all_users', 'registered' ), $cat_ids );
 		break;

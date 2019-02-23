@@ -33,9 +33,9 @@ class S2_Ajax {
 		if ( is_ssl() ) {
 			$css = str_replace( 'http:', 'https:', $css );
 		}
-		wp_register_style( 'jquery-ui-style', $css );
+		wp_register_style( 'jquery-ui-style', $css, array(), '1.11.4' );
 		wp_enqueue_style( 'jquery-ui-style' );
-		wp_register_script( 's2-ajax', S2URL . 'include/s2-ajax' . $this->script_debug . '.js', array(), '1.3' );
+		wp_register_script( 's2-ajax', S2URL . 'include/s2-ajax' . $this->script_debug . '.js', array(), '1.3', true );
 		$translation_array = array(
 			'ajaxurl' => admin_url( 'admin-ajax.php' ),
 			'title'   => __( 'Subscribe to this blog', 'subscribe2' ),
@@ -88,7 +88,7 @@ class S2_Ajax {
 			if ( is_int( $s2_frontend->lockout ) && $s2_frontend->lockout > 0 ) {
 				$date = date( 'H:i:s.u', $s2_frontend->lockout );
 				$ips  = $wpdb->get_col( $wpdb->prepare( "SELECT ip FROM $wpdb->subscribe2 WHERE date = CURDATE() AND time > SUBTIME(CURTIME(), %s)", $date ) );
-				if ( in_array( $s2_frontend->ip, $ips ) ) {
+				if ( in_array( $s2_frontend->ip, $ips, true ) ) {
 					echo '<p>' . __( 'Slow down, you move too fast.', 'subscribe2' ) . '</p>';
 				}
 			}

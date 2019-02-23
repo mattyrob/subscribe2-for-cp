@@ -191,7 +191,7 @@ class S2_Admin extends S2_Core {
 	 * Insert Javascript and CSS into admin_headers
 	 */
 	public function checkbox_form_js() {
-		wp_register_script( 's2_checkbox', S2URL . 'include/s2-checkbox' . $this->script_debug . '.js', array( 'jquery' ), '1.4' );
+		wp_register_script( 's2_checkbox', S2URL . 'include/s2-checkbox' . $this->script_debug . '.js', array( 'jquery' ), '1.4', true );
 		wp_enqueue_script( 's2_checkbox' );
 	}
 
@@ -201,12 +201,12 @@ class S2_Admin extends S2_Core {
 	}
 
 	public function option_form_js() {
-		wp_register_script( 's2_edit', S2URL . 'include/s2-edit' . $this->script_debug . '.js', array( 'jquery' ), '1.3' );
+		wp_register_script( 's2_edit', S2URL . 'include/s2-edit' . $this->script_debug . '.js', array( 'jquery' ), '1.3', true );
 		wp_enqueue_script( 's2_edit' );
 		if ( 'never' !== $this->subscribe2_options['email_freq'] ) {
 			wp_enqueue_script( 'jquery-ui-datepicker' );
-			wp_enqueue_style( 'jquery-style', 'https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css' );
-			wp_register_script( 's2_date_time', S2URL . 'include/s2-date-time' . $this->script_debug . '.js', array( 'jquery-ui-datepicker' ), '1.1' );
+			wp_enqueue_style( 'jquery-style', 'https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css', array(), '1.11.4' );
+			wp_register_script( 's2_date_time', S2URL . 'include/s2-date-time' . $this->script_debug . '.js', array( 'jquery-ui-datepicker' ), '1.1', true );
 			wp_enqueue_script( 's2_date_time' );
 		}
 	}
@@ -231,7 +231,7 @@ class S2_Admin extends S2_Core {
 	}
 
 	public function subscribers_form_js() {
-		wp_register_script( 's2_subscribers', S2URL . 'include/s2-subscribers' . $this->script_debug . '.js', array(), '1.5' );
+		wp_register_script( 's2_subscribers', S2URL . 'include/s2-subscribers' . $this->script_debug . '.js', array(), '1.5', true );
 		$translation_array = array(
 			'registered_confirm_single' => __( 'You are about to delete a registered user account, any posts made by this user will be assigned to you. Are you sure?', 'subscribe2' ),
 			'registered_confirm_plural' => __( 'You are about to delete registered user accounts, any posts made by these users will be assigned to you. Are you sure?', 'subscribe2' ),
@@ -297,7 +297,7 @@ class S2_Admin extends S2_Core {
 	 */
 	public function button_init() {
 		global $pagenow;
-		if ( ! in_array( $pagenow, array( 'post-new.php', 'post.php', 'page-new.php', 'page.php' ) ) && ! strpos( esc_url( $_SERVER['REQUEST_URI'] ), 'page=s2_posts' ) ) {
+		if ( ! in_array( $pagenow, array( 'post-new.php', 'post.php', 'page-new.php', 'page.php' ), true ) && ! strpos( esc_url( $_SERVER['REQUEST_URI'] ), 'page=s2_posts' ) ) {
 			return;
 		}
 		if ( ! current_user_can( 'edit_posts' ) && ! current_user_can( 'edit_pages' ) ) {
@@ -308,7 +308,7 @@ class S2_Admin extends S2_Core {
 			add_filter( 'mce_external_plugins', array( &$this, 'mce_plugin' ) );
 			add_filter( 'mce_buttons', array( &$this, 'mce_button' ) );
 		} else {
-			wp_enqueue_script( 'subscribe2_button', S2URL . 'include/s2-button' . $this->script_debug . '.js', array( 'quicktags' ), '2.0' );
+			wp_enqueue_script( 'subscribe2_button', S2URL . 'include/s2-button' . $this->script_debug . '.js', array( 'quicktags' ), '2.0', true );
 		}
 	}
 
@@ -339,7 +339,7 @@ class S2_Admin extends S2_Core {
 		if ( false !== stripos( esc_url( $_SERVER['REQUEST_URI'] ), 'widgets.php' ) ) {
 			wp_enqueue_style( 'farbtastic' );
 			wp_enqueue_script( 'farbtastic' );
-			wp_register_script( 's2_colorpicker', S2URL . 'include/s2-colorpicker' . $this->script_debug . '.js', array( 'farbtastic' ), '1.3' );
+			wp_register_script( 's2_colorpicker', S2URL . 'include/s2-colorpicker' . $this->script_debug . '.js', array( 'farbtastic' ), '1.3', true );
 			wp_enqueue_script( 's2_colorpicker' );
 		}
 	}
@@ -504,7 +504,7 @@ class S2_Admin extends S2_Core {
 				$cats            = explode( ',', get_user_meta( $user_id, $this->get_usermeta_keyname( 's2_subscribed' ), true ) );
 				$subscribed_cats = '';
 				foreach ( $cat_ids as $cat ) {
-					( in_array( $cat, $cats ) ) ? $subscribed_cats .= ',Yes' : $subscribed_cats .= ',No';
+					( in_array( $cat, $cats, true ) ) ? $subscribed_cats .= ',Yes' : $subscribed_cats .= ',No';
 				}
 
 				$exportcsv .= $subscriber . ',';
@@ -543,13 +543,13 @@ class S2_Admin extends S2_Core {
 
 			if ( 0 === $j ) {
 				echo '<label><input class="checkall_format" type="checkbox" name="format[]" value="' . $format . '"';
-				if ( in_array( $format, $selected ) ) {
+				if ( in_array( $format, $selected, true ) ) {
 						echo ' checked="checked"';
 				}
 				echo ' /> ' . ucwords( $format ) . '</label><br />' . "\r\n";
 			} else {
 				echo '<label><input class="checkall_format" type="checkbox" name="format[]" value="' . $format . '"';
-				if ( in_array( $format, $selected ) ) {
+				if ( in_array( $format, $selected, true ) ) {
 							echo ' checked="checked"';
 				}
 				echo ' /> ' . ucwords( $format ) . '</label><br />' . "\r\n";
@@ -582,9 +582,9 @@ class S2_Admin extends S2_Core {
 		// count the number of subscribers
 		$count['confirmed']   = $wpdb->get_var( "SELECT COUNT(id) FROM $wpdb->subscribe2 WHERE active='1'" );
 		$count['unconfirmed'] = $wpdb->get_var( "SELECT COUNT(id) FROM $wpdb->subscribe2 WHERE active='0'" );
-		if ( in_array( 'unconfirmed', $exclude ) ) {
+		if ( in_array( 'unconfirmed', $exclude, true ) ) {
 			$count['public'] = $count['confirmed'];
-		} elseif ( in_array( 'confirmed', $exclude ) ) {
+		} elseif ( in_array( 'confirmed', $exclude, true ) ) {
 			$count['public'] = $count['unconfirmed'];
 		} else {
 			$count['public'] = ( $count['confirmed'] + $count['unconfirmed'] );
@@ -605,7 +605,7 @@ class S2_Admin extends S2_Core {
 			$compulsory = explode( ',', $this->subscribe2_options['compulsory'] );
 			if ( $this->s2_mu ) {
 				foreach ( $all_cats as $cat ) {
-					if ( in_array( $cat->term_id, $compulsory ) ) {
+					if ( in_array( $cat->term_id, $compulsory, true ) ) {
 						$count[ $cat->name ] = $count['all_users'];
 					} else {
 						$count[ $cat->name ] = $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(a.meta_key) FROM $wpdb->usermeta AS a INNER JOIN $wpdb->usermeta AS b ON a.user_id = b.user_id WHERE a.meta_key='" . $wpdb->prefix . "capabilities' AND b.meta_key=%s", $this->get_usermeta_keyname( 's2_cat' ) . $cat->term_id ) );
@@ -613,7 +613,7 @@ class S2_Admin extends S2_Core {
 				}
 			} else {
 				foreach ( $all_cats as $cat ) {
-					if ( in_array( $cat->term_id, $compulsory ) ) {
+					if ( in_array( $cat->term_id, $compulsory, true ) ) {
 						$count[ $cat->name ] = $count['all_users'];
 					} else {
 						$count[ $cat->name ] = $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(meta_value) FROM $wpdb->usermeta WHERE meta_key=%s", $this->get_usermeta_keyname( 's2_cat' ) . $cat->term_id ) );
@@ -624,7 +624,7 @@ class S2_Admin extends S2_Core {
 
 		echo '<select name="what">' . "\r\n";
 		foreach ( $who as $whom => $display ) {
-			if ( in_array( $whom, $exclude ) ) {
+			if ( in_array( $whom, $exclude, true ) ) {
 				continue;
 			}
 
@@ -637,7 +637,7 @@ class S2_Admin extends S2_Core {
 
 		if ( $count['registered'] > 0 && 'never' === $this->subscribe2_options['email_freq'] ) {
 			foreach ( $all_cats as $cat ) {
-				if ( in_array( $cat->term_id, $exclude ) ) {
+				if ( in_array( $cat->term_id, $exclude, true ) ) {
 					continue;
 				}
 				echo '<option value="' . $cat->term_id . '"';
@@ -813,7 +813,7 @@ class S2_Admin extends S2_Core {
 		$useremails = explode( ",\r\n", $emails );
 		$useremails = implode( ', ', array_map( array( $this, 'prepare_in_data' ), $useremails ) );
 
-		$user_ids = $wpdb->get_col( "SELECT ID FROM $wpdb->users WHERE user_email IN ($useremails)" );
+		$user_ids = $wpdb->get_col( "SELECT ID FROM $wpdb->users WHERE user_email IN ($useremails)" ); // phpcs:ignore WordPress.DB.PreparedSQL
 
 		foreach ( $user_ids as $user_id ) {
 			$old_cats = get_user_meta( $user_id, $this->get_usermeta_keyname( 's2_subscribed' ), true );
@@ -846,7 +846,7 @@ class S2_Admin extends S2_Core {
 		$useremails = explode( ",\r\n", $emails );
 		$useremails = implode( ', ', array_map( array( $this, 'prepare_in_data' ), $useremails ) );
 
-		$user_ids = $wpdb->get_col( "SELECT ID FROM $wpdb->users WHERE user_email IN ($useremails)" ); // WPCS: unprepared SQL OK.
+		$user_ids = $wpdb->get_col( "SELECT ID FROM $wpdb->users WHERE user_email IN ($useremails)" ); // phpcs:ignore WordPress.DB.PreparedSQL
 
 		foreach ( $user_ids as $user_id ) {
 			$old_cats = explode( ',', get_user_meta( $user_id, $this->get_usermeta_keyname( 's2_subscribed' ), true ) );
@@ -879,10 +879,10 @@ class S2_Admin extends S2_Core {
 		global $wpdb;
 		$useremails = explode( ",\r\n", $emails );
 		$useremails = implode( ', ', array_map( array( $this, 'prepare_in_data' ), $useremails ) );
-		$ids        = $wpdb->get_col( "SELECT ID FROM $wpdb->users WHERE user_email IN ($useremails)" ); // WPCS: unprepared SQL OK.
+		$ids        = $wpdb->get_col( "SELECT ID FROM $wpdb->users WHERE user_email IN ($useremails)" ); // phpcs:ignore WordPress.DB.PreparedSQL
 		$ids        = implode( ',', array_map( array( $this, 'prepare_in_data' ), $ids ) );
 		$sql        = "UPDATE $wpdb->usermeta SET meta_value='{$format}' WHERE meta_key='" . $this->get_usermeta_keyname( 's2_format' ) . "' AND user_id IN ($ids)";
-		$wpdb->query( $sql ); // WPCS: unprepared SQL OK.
+		$wpdb->query( $sql ); // phpcs:ignore WordPress.DB.PreparedSQL
 	}
 
 	/**
@@ -897,7 +897,7 @@ class S2_Admin extends S2_Core {
 		$useremails = explode( ",\r\n", $emails );
 		$useremails = implode( ', ', array_map( array( $this, 'prepare_in_data' ), $useremails ) );
 
-		$user_ids = $wpdb->get_col( "SELECT ID FROM $wpdb->users WHERE user_email IN ($useremails)" ); // WPCS: unprepared SQL OK.
+		$user_ids = $wpdb->get_col( "SELECT ID FROM $wpdb->users WHERE user_email IN ($useremails)" ); // phpcs:ignore WordPress.DB.PreparedSQL
 
 		if ( 'digest' === $digest ) {
 			$exclude = explode( ',', $this->subscribe2_options['exclude'] );

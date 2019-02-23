@@ -21,9 +21,9 @@ if ( isset( $_POST['s2_admin'] ) ) {
 		global $user_email, $post;
 		$this->preview_email = true;
 		if ( 'never' === $this->subscribe2_options['email_freq'] ) {
-			$posts = get_posts( 'numberposts=1' );
-			$post  = $posts[0];
-			$this->publish( $post, $user_email );
+			$preview_posts = get_posts( 'numberposts=1' );
+			$preview_post  = $preview_posts[0];
+			$this->publish( $preview_post, $user_email );
 		} else {
 			do_action( 's2_digest_preview', $user_email );
 		}
@@ -38,12 +38,12 @@ if ( isset( $_POST['s2_admin'] ) ) {
 		}
 	} elseif ( isset( $_POST['submit'] ) ) {
 		foreach ( $_POST as $key => $value ) {
-			if ( in_array( $key, array( 'bcclimit', 's2page' ) ) ) {
+			if ( in_array( $key, array( 'bcclimit', 's2page' ), true ) ) {
 				// numerical inputs fixed for old option names
 				if ( is_numeric( $_POST[ $key ] ) && $_POST[ $key ] >= 0 ) {
 					$this->subscribe2_options[ $key ] = (int) $_POST[ $key ];
 				}
-			} elseif ( in_array( $key, array( 'show_meta', 'show_button', 'ajax', 'widget', 'counterwidget', 's2meta_default', 'reg_override' ) ) ) {
+			} elseif ( in_array( $key, array( 'show_meta', 'show_button', 'ajax', 'widget', 'counterwidget', 's2meta_default', 'reg_override' ), true ) ) {
 				// check box entries
 				( isset( $_POST[ $key ] ) && '1' === $_POST[ $key ] ) ? $this->subscribe2_options[ $key ] = '1' : $this->subscribe2_options[ $key ] = '0';
 			} elseif ( 'appearance_tab' === $key ) {
@@ -53,10 +53,10 @@ if ( isset( $_POST['s2_admin'] ) ) {
 						$this->subscribe2_options[ $option ] = '0';
 					}
 				}
-			} elseif ( in_array( $key, array( 'notification_subject', 'mailtext', 'confirm_subject', 'confirm_email', 'remind_subject', 'remind_email', 's2_license_key' ) ) && ! empty( $_POST[ $key ] ) ) {
+			} elseif ( in_array( $key, array( 'notification_subject', 'mailtext', 'confirm_subject', 'confirm_email', 'remind_subject', 'remind_email' ), true ) && ! empty( $_POST[ $key ] ) ) {
 				// email subject and body templates
 				$this->subscribe2_options[ $key ] = trim( $_POST[ $key ] );
-			} elseif ( in_array( $key, array( 'compulsory', 'exclude', 'format' ) ) ) {
+			} elseif ( in_array( $key, array( 'compulsory', 'exclude', 'format' ), true ) ) {
 				sort( $_POST[ $key ] );
 				$newvalue = implode( ',', $_POST[ $key ] );
 
@@ -123,14 +123,14 @@ if ( isset( $_POST['s2_admin'] ) ) {
 }
 
 // send error message if no WordPress page exists
-$id = $wpdb->get_var( "SELECT ID FROM `{$wpdb->prefix}posts` WHERE post_type='page' AND post_status='publish' LIMIT 1" );
-if ( empty( $id ) ) {
+$page_id = $wpdb->get_var( "SELECT ID FROM `{$wpdb->prefix}posts` WHERE post_type='page' AND post_status='publish' LIMIT 1" );
+if ( empty( $page_id ) ) {
 	echo '<div id="page_message" class="error"><p class="s2_error"><strong>' . __( 'You must create a WordPress page for this plugin to work correctly.', 'subscribe2' ) . '</strong></p></div>';
 }
 
 // display error message for GDPR
 if ( defined( 'S2GDPR' ) && true === S2GDPR ) {
-	if ( 'yes' === $this->subscribe2_options['wpregdef'] || 'yes' === $this->subscribe2_options['autosub_def'] || 'yes' === $this->subscribe2_options['autosub_def'] || 'yes' === $this->subscribe2_options['comment_def'] ) {
+	if ( 'yes' === $this->subscribe2_options['autosub'] || 'yes' === $this->subscribe2_options['wpregdef'] || 'yes' === $this->subscribe2_options['autosub_def'] || 'yes' === $this->subscribe2_options['comment_def'] ) {
 		echo '<div id="gdpr_message" class="error"><p class="s2_error"><strong>' . __( 'Your Settings may breach GDPR', 'subscribe2' ) . '</strong></p></div>';
 	}
 }
@@ -157,8 +157,8 @@ if ( false !== $disallowed ) {
 if ( 'blogname' === $this->subscribe2_options['sender'] ) {
 	$sender = get_bloginfo( 'admin_email' );
 } else {
-	$userdata = $this->get_userdata( $this->subscribe2_options['sender'] );
-	$sender   = $userdata->user_email;
+	$user   = $this->get_userdata( $this->subscribe2_options['sender'] );
+	$sender = $user->user_email;
 }
 list( $user, $domain ) = explode( '@', $sender, 2 );
 if ( ! stristr( esc_html( $_SERVER['SERVER_NAME'] ), $domain ) && 'author' !== $this->subscribe2_options['sender'] && '0' === $this->subscribe2_options['dismiss_sender_warning'] ) {
@@ -172,7 +172,7 @@ $current_tab = isset( $_GET['tab'] ) ? $_GET['tab'] : 'email';
 // show our form
 echo '<div class="wrap">';
 echo '<h1>' . __( 'Settings', 'subscribe2' ) . '</h1>' . "\r\n";
-$tabs = array(
+$s2tabs = array(
 	'email'      => __( 'Email Settings', 'subscribe2' ),
 	'templates'  => __( 'Templates', 'subscribe2' ),
 	'registered' => __( 'Registered Users', 'subscribe2' ),
@@ -180,7 +180,7 @@ $tabs = array(
 	'misc'       => __( 'Miscellaneous', 'subscribe2' ),
 );
 echo '<h2 class="nav-tab-wrapper">';
-foreach ( $tabs as $tab_key => $tab_caption ) {
+foreach ( $s2tabs as $tab_key => $tab_caption ) {
 	$active = ( $current_tab === $tab_key ) ? 'nav-tab-active' : '';
 	echo '<a class="nav-tab ' . $active . '" href="?page=s2_settings&amp;tab=' . $tab_key . '">' . $tab_caption . '</a>';
 }
@@ -231,8 +231,8 @@ switch ( $current_tab ) {
 		if ( ! empty( $s2_post_types ) ) {
 			$types = '';
 			echo __( 'Subscribe2 will send email notifications for the following custom post types', 'subscribe2' ) . ': <strong>';
-			foreach ( $s2_post_types as $type ) {
-				( '' === $types ) ? $types = ucwords( $type ) : $types .= ', ' . ucwords( $type );
+			foreach ( $s2_post_types as $s2_post_type ) {
+				( '' === $types ) ? $types = ucwords( $s2_post_type ) : $types .= ', ' . ucwords( $s2_post_type );
 			}
 			echo $types . '</strong><br /><br />' . "\r\n";
 		}

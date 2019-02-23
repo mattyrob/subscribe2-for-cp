@@ -152,7 +152,7 @@ class S2_Upgrade {
 
 		$mysubscribe2->subscribe2_options['version'] = S2VERSION;
 		update_option( 'subscribe2_options', $mysubscribe2->subscribe2_options );
-	} // end upgrade()
+	}
 
 	private function upgrade_core() {
 		// let's take the time to double check data for registered users
@@ -276,7 +276,7 @@ class S2_Upgrade {
 				if ( strstr( $subscribed, '-1' ) ) {
 					// make sure we remove '-1' from any settings
 					$old_cats = explode( ',', $subscribed );
-					$pos      = array_search( '-1', $old_cats );
+					$pos      = array_search( '-1', $old_cats, true );
 					unset( $old_cats[ $pos ] );
 					$cats = implode( ',', $old_cats );
 					update_user_meta( $user_ID, $mysubscribe2->get_usermeta_keyname( 's2_subscribed' ), $cats );
@@ -348,7 +348,7 @@ class S2_Upgrade {
 				foreach ( $users as $user ) {
 					$subscribed = get_user_meta( $user->ID, $mysubscribe2->get_usermeta_keyname( 's2_subscribed' ), true );
 					$old_cats   = explode( ',', $subscribed );
-					$pos        = array_search( '-1', $old_cats );
+					$pos        = array_search( '-1', $old_cats, true );
 					unset( $old_cats[ $pos ] );
 					$cats = implode( ',', $old_cats );
 					update_user_meta( $user->ID, $mysubscribe2->get_usermeta_keyname( 's2_subscribed' ), $cats );
@@ -370,7 +370,7 @@ class S2_Upgrade {
 
 				// load blogs of user (only if we need them)
 				$blogs = array();
-				if ( count( $categories ) > 0 && ! in_array( '-1', $categories ) ) {
+				if ( count( $categories ) > 0 && ! in_array( '-1', $categories, true ) ) {
 					$blogs = get_blogs_of_user( $user_ID, true );
 				}
 

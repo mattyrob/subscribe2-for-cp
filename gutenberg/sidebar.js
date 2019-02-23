@@ -48,6 +48,7 @@
 
 	var buttonClick = function() {
 		var postid = select( 'core/editor' ).getCurrentPostId();
+		dispatch( 'core/editor' ).savePost();
 		apiFetch( { path: '/s2/v1/preview/' + postid } );
 		dispatch( 'core/notices' ).createInfoNotice( __( 'Attempt made to send email preview', 'subscribe2' ) );
 	};

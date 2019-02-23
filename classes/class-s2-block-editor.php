@@ -78,7 +78,7 @@ class S2_Block_Editor {
 	 */
 	public function gutenberg_block_editor_assets() {
 		global $pagenow;
-		if ( ! in_array( $pagenow, array( 'post-new.php', 'post.php', 'page-new.php', 'page.php' ) ) ) {
+		if ( ! in_array( $pagenow, array( 'post-new.php', 'post.php', 'page-new.php', 'page.php' ), true ) ) {
 			return;
 		}
 
@@ -86,7 +86,8 @@ class S2_Block_Editor {
 			'subscribe2-shortcode',
 			S2URL . 'gutenberg/shortcode' . $this->script_debug . '.js',
 			array( 'wp-blocks', 'wp-i18n', 'wp-element', 'wp-components', 'wp-editor' ),
-			'1.1'
+			'1.1',
+			true
 		);
 
 		register_block_type(
@@ -100,7 +101,8 @@ class S2_Block_Editor {
 			'subscribe2-sidebar',
 			S2URL . 'gutenberg/sidebar' . $this->script_debug . '.js',
 			array( 'wp-plugins', 'wp-element', 'wp-i18n', 'wp-edit-post', 'wp-components', 'wp-data', 'wp-compose', 'wp-api-fetch' ),
-			'1.0'
+			'1.0',
+			true
 		);
 	}
 
@@ -109,7 +111,7 @@ class S2_Block_Editor {
 	 */
 	public function gutenberg_i18n() {
 		global $pagenow;
-		if ( ! in_array( $pagenow, array( 'post-new.php', 'post.php', 'page-new.php', 'page.php' ) ) ) {
+		if ( ! in_array( $pagenow, array( 'post-new.php', 'post.php', 'page-new.php', 'page.php' ), true ) ) {
 			return;
 		}
 

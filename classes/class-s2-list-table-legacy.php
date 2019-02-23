@@ -137,7 +137,7 @@ class S2_List_Table_Legacy extends WP_List_Table {
 			$class = array( 'manage-column', "column-$column_key" );
 
 			$style = '';
-			if ( in_array( $column_key, $hidden ) ) {
+			if ( in_array( $column_key, $hidden, true ) ) {
 				$style = 'display:none;';
 			}
 
@@ -193,7 +193,7 @@ class S2_List_Table_Legacy extends WP_List_Table {
 	}
 
 	public function process_bulk_action() {
-		if ( in_array( $this->current_action(), array( 'delete', 'toggle' ) ) ) {
+		if ( in_array( $this->current_action(), array( 'delete', 'toggle' ), true ) ) {
 			if ( ! isset( $_REQUEST['subscriber'] ) ) {
 				echo '<div id="message" class="error"><p><strong>' . __( 'No users were selected.', 'subscribe2' ) . '</strong></p></div>';
 				return;
@@ -206,7 +206,7 @@ class S2_List_Table_Legacy extends WP_List_Table {
 				$address = trim( stripslashes( $address ) );
 				if ( false !== $mysubscribe2->is_public( $address ) ) {
 					$mysubscribe2->delete( $address );
-					$key = array_search( $address, $subscribers );
+					$key = array_search( $address, $subscribers, true );
 					unset( $subscribers[ $key ] );
 					$message['public_deleted'] = __( 'Address(es) deleted!', 'subscribe2' );
 				} else {
@@ -217,7 +217,7 @@ class S2_List_Table_Legacy extends WP_List_Table {
 					} else {
 						$message['reg_deleted'] = __( 'Registered user(s) deleted! Any posts made by these users were assigned to you.', 'subscribe2' );
 						foreach ( $subscribers as $key => $data ) {
-							if ( in_array( $address, $data ) ) {
+							if ( in_array( $address, $data, true ) ) {
 								unset( $subscribers[ $key ] );
 							}
 						}
@@ -235,7 +235,7 @@ class S2_List_Table_Legacy extends WP_List_Table {
 				$address = trim( stripslashes( $address ) );
 				$mysubscribe2->toggle( $address );
 				if ( 'confirmed' === $_POST['what'] || 'unconfirmed' === $_POST['what'] ) {
-					$key = array_search( $address, $subscribers );
+					$key = array_search( $address, $subscribers, true );
 					unset( $subscribers[ $key ] );
 				}
 			}
