@@ -574,7 +574,8 @@ class S2_Core {
 	 * Function to create excerpts for emailing
 	 */
 	public function create_excerpt( $text, $html = false ) {
-		$excerpt_on_words = apply_filters( 's2_excerpt_words', true );
+		$excerpt_on_words = apply_filters( 's2_excerpt_on_words', true );
+
 		if ( false === $html ) {
 			$excerpt = trim( wp_strip_all_tags( $text ) );
 		} else {
