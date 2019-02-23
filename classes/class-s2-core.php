@@ -582,10 +582,10 @@ class S2_Core {
 			$excerpt = strip_shortcodes( $text );
 		}
 
-		if ( true === $excerpt_on_words ) {
-			$words = explode( ' ', $excerpt, $this->excerpt_length + 1 );
-		} else {
+		if ( true !== $excerpt_on_words ) {
 			$words = preg_split( '//u', $excerpt, $this->excerpt_length + 1 );
+		} else {
+			$words = explode( ' ', $excerpt, $this->excerpt_length + 1 );
 		}
 
 		if ( count( $words ) > $this->excerpt_length ) {
@@ -593,10 +593,10 @@ class S2_Core {
 			array_push( $words, '[...]' );
 		}
 
-		if ( true === $excerpt_on_words ) {
-			$excerpt = implode( ' ', $words );
-		} else {
+		if ( true !== $excerpt_on_words ) {
 			$excerpt = implode( '', $words );
+		} else {
+			$excerpt = implode( ' ', $words );
 		}
 
 		if ( true === $html ) {
