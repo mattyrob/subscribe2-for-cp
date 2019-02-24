@@ -608,8 +608,8 @@ class S2_Core {
 	}
 
 	/**
-	Send confirmation email to a public subscriber
-	*/
+	 * Send confirmation email to a public subscriber
+	 */
 	public function send_confirm( $action = '', $is_remind = false ) {
 		if ( 1 === $this->filtered ) {
 			return true;
