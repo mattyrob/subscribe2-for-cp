@@ -6,6 +6,7 @@
 * Update Excerpt creation code for languages that don't use spaces - props Masatoshi Hakoshima
 * Improved layout and efficiency of JavaScript files
 * Enable Preview emails for Classic Editor users
+* Update to use latest jQuery UI css library
 * Tidied up unused globals
 
 = 10.26 =
