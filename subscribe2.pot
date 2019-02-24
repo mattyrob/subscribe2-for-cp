@@ -2,9 +2,9 @@
 # This file is distributed under the same license as the Subscribe2 package.
 msgid ""
 msgstr ""
-"Project-Id-Version: Subscribe2 10.26\n"
+"Project-Id-Version: Subscribe2 10.27\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/subscribe2\n"
-"POT-Creation-Date: 2019-01-13 15:09:50+00:00\n"
+"POT-Creation-Date: 2019-02-24 11:49:50+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -29,51 +29,51 @@ msgstr ""
 msgid "Security error! Your request cannot be completed."
 msgstr ""
 
-#: admin/send-email.php:79
+#: admin/send-email.php:80
 msgid "Your email was empty"
 msgstr ""
 
-#: admin/send-email.php:86
+#: admin/send-email.php:87
 msgid "Check your settings and check with your hosting provider"
 msgstr ""
 
-#: admin/send-email.php:91
+#: admin/send-email.php:92
 msgid "Preview message sent!"
 msgstr ""
 
-#: admin/send-email.php:93
+#: admin/send-email.php:94
 msgid "Message sent!"
 msgstr ""
 
-#: admin/send-email.php:97
+#: admin/send-email.php:98
 msgid "Message failed!"
 msgstr ""
 
-#: admin/send-email.php:104
+#: admin/send-email.php:105
 msgid "Send an email to subscribers"
 msgstr ""
 
-#: admin/send-email.php:112
+#: admin/send-email.php:113
 msgid "A message from"
 msgstr ""
 
-#: admin/send-email.php:117
+#: admin/send-email.php:118
 msgid "Subject"
 msgstr ""
 
-#: admin/send-email.php:120
+#: admin/send-email.php:121
 msgid "Add More Files"
 msgstr ""
 
-#: admin/send-email.php:122
+#: admin/send-email.php:123
 msgid "Recipients:"
 msgstr ""
 
-#: admin/send-email.php:125
+#: admin/send-email.php:126
 msgid "Preview"
 msgstr ""
 
-#: admin/send-email.php:125
+#: admin/send-email.php:126
 msgid "Send"
 msgstr ""
 
@@ -1148,61 +1148,61 @@ msgstr ""
 msgid "That email address is not subscribed."
 msgstr ""
 
-#: classes/class-s2-core.php:552
+#: classes/class-s2-core.php:537
 msgid "Plain Text Excerpt Preview"
 msgstr ""
 
-#: classes/class-s2-core.php:554
+#: classes/class-s2-core.php:539
 msgid "Plain Text Full Preview"
 msgstr ""
 
-#: classes/class-s2-core.php:556
+#: classes/class-s2-core.php:541
 msgid "HTML Excerpt Preview"
 msgstr ""
 
-#: classes/class-s2-core.php:558
+#: classes/class-s2-core.php:543
 msgid "HTML Full Preview"
 msgstr ""
 
-#: classes/class-s2-core.php:1205
+#: classes/class-s2-core.php:1227
 msgid "Check here to Subscribe to email notifications for new posts"
 msgstr ""
 
-#: classes/class-s2-core.php:1210
+#: classes/class-s2-core.php:1232
 msgid ""
 "By registering with this blog you are also agreeing to receive email "
 "notifications for new posts but you can unsubscribe at anytime"
 msgstr ""
 
-#: classes/class-s2-core.php:1238
+#: classes/class-s2-core.php:1260
 msgid "Check here to Subscribe to notifications for new posts"
 msgstr ""
 
-#: classes/class-s2-core.php:1357
+#: classes/class-s2-core.php:1379
 msgid "Weekly"
 msgstr ""
 
-#: classes/class-s2-core.php:1570 classes/class-s2-core.php:1571
+#: classes/class-s2-core.php:1592 classes/class-s2-core.php:1593
 msgid "Author"
 msgstr ""
 
-#: classes/class-s2-core.php:1577
+#: classes/class-s2-core.php:1599
 msgid "Posted on"
 msgstr ""
 
-#: classes/class-s2-core.php:1601 classes/class-s2-core.php:1602
+#: classes/class-s2-core.php:1626 classes/class-s2-core.php:1627
 msgid "Posted in"
 msgstr ""
 
-#: classes/class-s2-core.php:1613 classes/class-s2-core.php:1614
+#: classes/class-s2-core.php:1640 classes/class-s2-core.php:1641
 msgid "Tagged as"
 msgstr ""
 
-#: classes/class-s2-core.php:1692
+#: classes/class-s2-core.php:1712
 msgid "Digest Email"
 msgstr ""
 
-#: classes/class-s2-core.php:1705
+#: classes/class-s2-core.php:1725
 msgid "Digest Preview"
 msgstr ""
 

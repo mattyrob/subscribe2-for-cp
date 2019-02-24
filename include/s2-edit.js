@@ -5,11 +5,13 @@
 // Version 1.3 - eslinted
 
 // hide our span before page loads
-jQuery( document ).ready( function() {
-	jQuery( '#s2bcclimit_2' ).hide();
-	jQuery( '#s2entries_2' ).hide();
-	jQuery( '#s2cron_2' ).hide();
-} );
+jQuery( document ).ready(
+	function() {
+			jQuery( '#s2bcclimit_2' ).hide();
+			jQuery( '#s2entries_2' ).hide();
+			jQuery( '#s2cron_2' ).hide();
+	}
+);
 
 //show span on clicking the edit link
 function s2Show( id ) {
@@ -53,9 +55,11 @@ function s2CronRevert( id ) {
 	jQuery( 'input[name="' + id + 'date"]' ).val( date );
 	jQuery( '#s2' + id + 'date' ).html( date );
 	time = jQuery( '#js' + id + 'time' ).val();
-	jQuery( '[name=' + id + 'time] option' ).filter( function() {
-		return ( this.text === time );
-	} ).prop( 'selected', true ).parent().focus();
+	jQuery( '[name=' + id + 'time] option' ).filter(
+		function() {
+				return ( this.text === time );
+		}
+	).prop( 'selected', true ).parent().focus();
 	jQuery( '#s2' + id + 'time' ).html( time );
 	s2Hide( id );
 }

@@ -9,16 +9,16 @@
 
 function s2BulkActionCheck() {
 	if ( null !== document.getElementById( 'doaction' ) ) {
-		document.getElementById( 'doaction' ).onclick = submitHandler;
+		document.getElementById( 'doaction' ).onclick  = submitHandler;
 		document.getElementById( 'doaction2' ).onclick = submitHandler;
 	}
 }
 function submitHandler() {
 	var location, action1, action2, agree, selected;
 	location = document.getElementById( 's2_location' );
-	action1 = document.getElementById( 'bulk-action-selector-top' );
-	action2 = document.getElementById( 'bulk-action-selector-bottom' );
-	agree = false;
+	action1  = document.getElementById( 'bulk-action-selector-top' );
+	action2  = document.getElementById( 'bulk-action-selector-bottom' );
+	agree    = false;
 	selected = document.querySelectorAll( 'input[name="subscriber[]"]:checked' ).length;
 	if ( 0 === selected ) {
 		return true;
@@ -44,7 +44,7 @@ function submitHandler() {
 }
 function bmCheck() {
 	var agree, selected;
-	agree = false;
+	agree    = false;
 	selected = document.querySelectorAll( 'input[name="subscriber[]"]:checked' ).length;
 	if ( 0 === selected ) {
 		agree = window.confirm( s2ScriptStrings.bulk_manage_all );

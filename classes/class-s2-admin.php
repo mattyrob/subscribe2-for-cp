@@ -373,6 +373,17 @@ class S2_Admin extends S2_Core {
 					'__block_editor_compatible_meta_box' => false,
 				)
 			);
+			add_meta_box(
+				'subscribe2-preview',
+				__( 'Subscribe2 Preview', 'subscribe2' ),
+				array( &$this, 's2_preview_meta' ),
+				$s2_post_type,
+				'side',
+				'default',
+				array(
+					'__block_editor_compatible_meta_box' => false,
+				)
+			);
 		}
 	}
 
@@ -413,6 +424,24 @@ class S2_Admin extends S2_Core {
 			update_post_meta( $post_id, '_s2mail', $_POST['s2_meta_field'] );
 		} else {
 			update_post_meta( $post_id, '_s2mail', 'yes' );
+		}
+	}
+
+	/**
+	 * Meta preview box code
+	 */
+	public function s2_preview_meta() {
+		echo '<p>' . __( 'Send preview email of this post to currently logged in user:', 'subscribe2' ) . '</p>' . "\r\n";
+		echo '<input class="button" name="s2_preview" type="submit" value="' . __( 'Send Preview', 'subscribe2' ) . '" />' . "\r\n";
+	}
+
+	/**
+	 * Meta preview box handler
+	 */
+	public function s2_preview_handler() {
+		if ( isset( $_POST['s2_preview'] ) ) {
+			global $post, $current_user;
+			$this->publish( $post, $current_user->user_email );
 		}
 	}
 

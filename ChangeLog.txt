@@ -4,6 +4,8 @@
 * Fixed bug in category form display caused by tighter coding standards
 * Save Editor content before sending preview email for better user experience
 * Update Excerpt creation code for languages that don't use spaces - props Masatoshi Hakoshima
+* Improved layout and efficiency of JavaScript files
+* Enable Preview emails for Classic Editor users
 * Tidied up unused globals
 
 = 10.26 =

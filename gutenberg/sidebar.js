@@ -1,50 +1,56 @@
 // Version 1.0 - Initial version
 
 ( function( plugins, element, i18n, editPost, components, data, compose, apiFetch ) {
-	var registerPlugin = plugins.registerPlugin,
-		el = element.createElement,
-		__ = i18n.__,
-		Fragment = element.Fragment,
-		PluginSidebar = editPost.PluginSidebar,
+	var registerPlugin            = plugins.registerPlugin,
+		el                        = element.createElement,
+		__                        = i18n.__,
+		Fragment                  = element.Fragment,
+		PluginSidebar             = editPost.PluginSidebar,
 		PluginSidebarMoreMenuItem = editPost.PluginSidebarMoreMenuItem,
-		PanelBody = components.PanelBody,
-		PanelRow = components.PanelRow,
-		CheckboxControl = components.CheckboxControl,
-		Button = components.Button,
-		select = data.select,
-		dispatch = data.dispatch,
-		withSelect = data.withSelect,
-		withDispatch = data.withDispatch,
-		Compose = compose.compose;
+		PanelBody                 = components.PanelBody,
+		PanelRow                  = components.PanelRow,
+		CheckboxControl           = components.CheckboxControl,
+		Button                    = components.Button,
+		select                    = data.select,
+		dispatch                  = data.dispatch,
+		withSelect                = data.withSelect,
+		withDispatch              = data.withDispatch,
+		Compose                   = compose.compose;
 
 	var CheckboxControlMeta = Compose(
-		withSelect( function( select, props ) {
-			var s2mail = select( 'core/editor' ).getEditedPostAttribute( 'meta' )[ props.fieldName ];
-			return {
-				metaChecked: ( 'no' === s2mail ? true : false )
-			};
-		} ),
-		withDispatch( function( dispatch, props ) {
-			return {
-				setMetaChecked: function( value ) {
-					var s2mail = ( true === value ? 'no' : 'yes'  );
-					dispatch( 'core/editor' ).editPost( { meta: { [props.fieldName]: s2mail } } );
-					dispatch( 'core/editor' ).savePost();
-				}
-			};
-		} )
-	) ( function( props ) {
-		return el(
-			CheckboxControl,
-			{
-				label: __( 'Check here to disable sending of an email notification for this post/page', 'subscribe2' ),
-				checked: props.metaChecked,
-				onChange: function( content ) {
-					props.setMetaChecked( content );
-				}
+		withSelect(
+			function( select, props ) {
+					var s2mail = select( 'core/editor' ).getEditedPostAttribute( 'meta' )[ props.fieldName ];
+					return {
+						metaChecked: ( 'no' === s2mail ? true : false )
+				};
 			}
-		);
-	} );
+		),
+		withDispatch(
+			function( dispatch, props ) {
+					return {
+						setMetaChecked: function( value ) {
+							var s2mail = ( true === value ? 'no' : 'yes'  );
+							dispatch( 'core/editor' ).editPost( { meta: { [props.fieldName]: s2mail } } );
+							dispatch( 'core/editor' ).savePost();
+						}
+				};
+			}
+		)
+	)(
+		function( props ) {
+				return el(
+					CheckboxControl,
+					{
+						label: __( 'Check here to disable sending of an email notification for this post/page', 'subscribe2' ),
+						checked: props.metaChecked,
+						onChange: function( content ) {
+							props.setMetaChecked( content );
+						}
+					}
+				);
+		}
+	);
 
 	var buttonClick = function() {
 		var postid = select( 'core/editor' ).getCurrentPostId();
@@ -125,9 +131,12 @@
 		);
 	};
 
-	registerPlugin( 'subscribe2-sidebar', {
-		render: s2sidebar
-	} );
+	registerPlugin(
+		'subscribe2-sidebar',
+		{
+			render: s2sidebar
+		}
+	);
 } (
 	wp.plugins,
 	wp.element,
