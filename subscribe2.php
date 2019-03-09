@@ -61,7 +61,9 @@ define( 'S2URL', plugin_dir_url( dirname( __FILE__ ) ) . S2DIR );
 define( 'S2GDPR', true );
 
 // Set maximum execution time to 5 minutes
-set_time_limit( 600 );
+if ( function_exists( 'set_time_limit' ) ) {
+	set_time_limit( 600 );
+}
 
 require_once S2PATH . 'classes/class-s2-core.php';
 if ( is_admin() ) {
