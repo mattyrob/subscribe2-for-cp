@@ -533,7 +533,7 @@ class S2_Admin extends S2_Core {
 				$cats            = explode( ',', get_user_meta( $user_id, $this->get_usermeta_keyname( 's2_subscribed' ), true ) );
 				$subscribed_cats = '';
 				foreach ( $cat_ids as $cat ) {
-					( in_array( $cat, $cats, true ) ) ? $subscribed_cats .= ',Yes' : $subscribed_cats .= ',No';
+					( in_array( (string) $cat, $cats, true ) ) ? $subscribed_cats .= ',Yes' : $subscribed_cats .= ',No';
 				}
 
 				$exportcsv .= $subscriber . ',';
@@ -634,7 +634,7 @@ class S2_Admin extends S2_Core {
 			$compulsory = explode( ',', $this->subscribe2_options['compulsory'] );
 			if ( $this->s2_mu ) {
 				foreach ( $all_cats as $cat ) {
-					if ( in_array( $cat->term_id, $compulsory, true ) ) {
+					if ( in_array( (string) $cat->term_id, $compulsory, true ) ) {
 						$count[ $cat->name ] = $count['all_users'];
 					} else {
 						$count[ $cat->name ] = $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(a.meta_key) FROM $wpdb->usermeta AS a INNER JOIN $wpdb->usermeta AS b ON a.user_id = b.user_id WHERE a.meta_key='" . $wpdb->prefix . "capabilities' AND b.meta_key=%s", $this->get_usermeta_keyname( 's2_cat' ) . $cat->term_id ) );
@@ -642,7 +642,7 @@ class S2_Admin extends S2_Core {
 				}
 			} else {
 				foreach ( $all_cats as $cat ) {
-					if ( in_array( $cat->term_id, $compulsory, true ) ) {
+					if ( in_array( (string) $cat->term_id, $compulsory, true ) ) {
 						$count[ $cat->name ] = $count['all_users'];
 					} else {
 						$count[ $cat->name ] = $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(meta_value) FROM $wpdb->usermeta WHERE meta_key=%s", $this->get_usermeta_keyname( 's2_cat' ) . $cat->term_id ) );
@@ -666,7 +666,7 @@ class S2_Admin extends S2_Core {
 
 		if ( $count['registered'] > 0 && 'never' === $this->subscribe2_options['email_freq'] ) {
 			foreach ( $all_cats as $cat ) {
-				if ( in_array( $cat->term_id, $exclude, true ) ) {
+				if ( in_array( (string) $cat->term_id, $exclude, true ) ) {
 					continue;
 				}
 				echo '<option value="' . $cat->term_id . '"';

@@ -331,7 +331,7 @@ class S2_Core {
 			// is the current post assigned to any categories
 			// which should not generate a notification email?
 			foreach ( explode( ',', $this->subscribe2_options['exclude'] ) as $cat ) {
-				if ( in_array( $cat, $post_cats, true ) ) {
+				if ( in_array( (int) $cat, $post_cats, true ) ) {
 					$check = true;
 				}
 			}
@@ -1174,7 +1174,7 @@ class S2_Core {
 			// need to use $id like this as this is a mixed array / object
 			$id = 0;
 			foreach ( $all_cats as $cat ) {
-				if ( in_array( $cat->term_id, $excluded, true ) ) {
+				if ( in_array( (string) $cat->term_id, $excluded, true ) ) {
 					unset( $all_cats[ $id ] );
 				}
 				$id++;
@@ -1525,7 +1525,7 @@ class S2_Core {
 					// is the current post assigned to any categories
 					// which should not generate a notification email?
 					foreach ( explode( ',', $this->subscribe2_options['exclude'] ) as $cat ) {
-						if ( in_array( $cat, $post_cats, true ) ) {
+						if ( in_array( (int) $cat, $post_cats, true ) ) {
 							$check = true;
 						}
 					}
