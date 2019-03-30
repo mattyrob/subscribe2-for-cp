@@ -1,3 +1,9 @@
+= 10.28 =
+
+* Fix warning message for when set_time_limit() is disabled in php.ini
+* Remove unused variable to fix error message
+* Fixes for strict in_array() checks
+
 = 10.27 =
 
 * Tightened checks for Coding Standards
