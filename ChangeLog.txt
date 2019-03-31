@@ -1,3 +1,7 @@
+= 10.29 =
+
+* Trim unused back-ported code from Subscribe2 HTML
+
 = 10.28 =
 
 * Fix warning message for when set_time_limit() is disabled in php.ini

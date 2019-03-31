@@ -160,12 +160,7 @@ class S2_Frontend extends S2_Core {
 
 		global $user_ID;
 		if ( 0 !== $user_ID ) {
-			if ( in_the_loop() && '1' === $this->subscribe2_options['frontend_form'] ) {
-				global $s2_frontend_form;
-				return $s2_frontend_form->frontend_form( $this->profile );
-			} else {
-				return $this->profile;
-			}
+			return $this->profile;
 		}
 
 		if ( isset( $_POST['subscribe'] ) || isset( $_POST['unsubscribe'] ) ) {
