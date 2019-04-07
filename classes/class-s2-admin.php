@@ -371,6 +371,7 @@ class S2_Admin extends S2_Core {
 				'default',
 				array(
 					'__block_editor_compatible_meta_box' => false,
+					'__back_compat_meta_box'             => true,
 				)
 			);
 			add_meta_box(
@@ -382,6 +383,19 @@ class S2_Admin extends S2_Core {
 				'default',
 				array(
 					'__block_editor_compatible_meta_box' => false,
+					'__back_compat_meta_box'             => true,
+				)
+			);
+			add_meta_box(
+				'subscribe2-resend',
+				__( 'Subscribe2 Resend', 'subscribe2' ),
+				array( &$this, 's2_resend_meta' ),
+				$s2_post_type,
+				'side',
+				'default',
+				array(
+					'__block_editor_compatible_meta_box' => false,
+					'__back_compat_meta_box'             => true,
 				)
 			);
 		}
@@ -442,6 +456,29 @@ class S2_Admin extends S2_Core {
 		if ( isset( $_POST['s2_preview'] ) ) {
 			global $post, $current_user;
 			$this->publish( $post, $current_user->user_email );
+		}
+	}
+
+	/**
+	 * Meta resend box code
+	 */
+	public function s2_resend_meta() {
+		global $post;
+		if ( 'publish' === $post->post_status || ( 'private' === $post->post_status && 'yes' === $this->subscribe2_options['private'] ) ) {
+			echo '<p>' . __( 'Resend the notification email of this post to current subscribers:', 'subscribe2' ) . '</p>' . "\r\n";
+			echo '<input class="button" name="s2_resend" type="submit" value="' . __( 'Resend Notification', 'subscribe2' ) . '" />' . "\r\n";
+		} else {
+			echo '<p>' . __( 'This post has not been published yet or is a private post and Subscribe2 HTML is not configured to send notifications for priavte posts. Resending is not currently possible.', 'subscribe2' ) . '</p>' . "\r\n";
+		}
+	}
+
+	/**
+	 * Meta resend box handler
+	 */
+	public function s2_resend_handler() {
+		if ( isset( $_POST['s2_resend'] ) ) {
+			global $post;
+			$this->publish( $post );
 		}
 	}
 

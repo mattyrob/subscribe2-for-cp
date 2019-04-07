@@ -9,6 +9,8 @@ class S2_Block_Editor {
 
 		add_action( 'init', array( &$this, 'register_s2_meta' ) );
 		add_action( 'rest_api_init', array( $this, 'register_preview_endpoint' ) );
+		add_action( 'rest_api_init', array( $this, 'register_resend_endpoint' ) );
+		add_action( 'rest_api_init', array( $this, 'register_settings_endpoint' ) );
 
 		if ( is_admin() ) {
 			add_action( 'admin_enqueue_scripts', array( &$this, 'gutenberg_block_editor_assets' ), 6 );
@@ -35,7 +37,7 @@ class S2_Block_Editor {
 	}
 
 	/**
-	 * Register REST endpointsfor preview email
+	 * Register REST endpoints for preview email
 	 */
 	public function register_preview_endpoint() {
 		register_rest_route(
@@ -47,7 +49,55 @@ class S2_Block_Editor {
 				'args'                => array(
 					'id' => array(
 						'validate_callback' => function( $param ) {
-							return preg_match( '/\\d/', $param ) > 0;
+							return is_numeric( $param );
+						},
+					),
+				),
+				'permission_callback' => function () {
+					return current_user_can( 'edit_posts' );
+				},
+			)
+		);
+	}
+
+	/**
+	 * Register REST endpoints for resending emails
+	 */
+	public function register_resend_endpoint() {
+		register_rest_route(
+			's2/v1',
+			'/resend/(?P<id>[0-9]+)',
+			array(
+				'methods'             => WP_REST_Server::READABLE,
+				'callback'            => array( $this, 'resend' ),
+				'args'                => array(
+					'id' => array(
+						'validate_callback' => function( $param ) {
+							return is_numeric( $param );
+						},
+					),
+				),
+				'permission_callback' => function () {
+					return current_user_can( 'edit_posts' );
+				},
+			)
+		);
+	}
+
+	/**
+	 * Register REST endpoints for surfacing settings
+	 */
+	public function register_settings_endpoint() {
+		register_rest_route(
+			's2/v1',
+			'/settings/(?P<setting>[a-z0-9_]+)',
+			array(
+				'methods'             => WP_REST_Server::READABLE,
+				'callback'            => array( $this, 'setting' ),
+				'args'                => array(
+					'id' => array(
+						'validate_callback' => function( $param ) {
+							return preg_match( '/^[a-z0-9_]+$/', $param ) > 0;
 						},
 					),
 				),
@@ -69,8 +119,37 @@ class S2_Block_Editor {
 		if ( 0 === $current_user->ID ) {
 			return false;
 		}
+
 		$mysubscribe2->publish( $post, $current_user->user_email );
 		return true;
+	}
+
+	/**
+	 * Function to trigger resending of email on REST API request
+	 */
+	public function resend( $data ) {
+		global $mysubscribe2;
+		$post = get_post( intval( $data['id'] ) );
+
+		$current_user = wp_get_current_user();
+		if ( 0 === $current_user->ID ) {
+			return false;
+		}
+
+		$mysubscribe2->publish( $post );
+		return true;
+	}
+
+	/**
+	 * Function to return value for passed setting
+	 */
+	public function setting( $data ) {
+		global $mysubscribe2;
+		if ( array_key_exists( $data['setting'], $mysubscribe2->subscribe2_options ) ) {
+			return $mysubscribe2->subscribe2_options[ $data['setting'] ];
+		}
+
+		return false;
 	}
 
 	/**
@@ -101,7 +180,7 @@ class S2_Block_Editor {
 			'subscribe2-sidebar',
 			S2URL . 'gutenberg/sidebar' . $this->script_debug . '.js',
 			array( 'wp-plugins', 'wp-element', 'wp-i18n', 'wp-edit-post', 'wp-components', 'wp-data', 'wp-compose', 'wp-api-fetch' ),
-			'1.0',
+			'1.1',
 			true
 		);
 	}

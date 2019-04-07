@@ -1,6 +1,9 @@
 = 10.29 =
 
 * Trim unused back-ported code from Subscribe2 HTML
+* Allow definition of S2GDPR constant anywhere
+* Mark old meta boxes as existing for backwards compatibility
+* Add meta box to authoring page to enable easy resending of notifications for published posts
 
 = 10.28 =
 

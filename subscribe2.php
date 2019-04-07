@@ -58,7 +58,6 @@ define( 'S2VERSION', '10.28' );
 define( 'S2PATH', trailingslashit( dirname( __FILE__ ) ) );
 define( 'S2DIR', trailingslashit( dirname( plugin_basename( __FILE__ ) ) ) );
 define( 'S2URL', plugin_dir_url( dirname( __FILE__ ) ) . S2DIR );
-define( 'S2GDPR', true );
 
 // Set maximum execution time to 5 minutes
 if ( function_exists( 'set_time_limit' ) ) {
