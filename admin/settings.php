@@ -283,7 +283,7 @@ switch ( $current_tab ) {
 		echo __( 'Subject Line', 'subscribe2' ) . ': ';
 		echo '<input type="text" name="notification_subject" value="' . stripslashes( $this->subscribe2_options['notification_subject'] ) . '" size="45" />';
 		echo '<br />' . "\r\n";
-		echo '<textarea rows="9" cols="60" name="mailtext">' . stripslashes( $this->subscribe2_options['mailtext'] ) . '</textarea>' . "\r\n";
+		echo '<textarea rows="9" cols="60" name="mailtext" style="width:95%;">' . stripslashes( $this->subscribe2_options['mailtext'] ) . '</textarea>' . "\r\n";
 		echo '</td><td style="vertical-align: top;" rowspan="3">';
 		echo '<p class="submit"><input type="submit" class="button-secondary" name="preview" value="' . __( 'Send Email Preview', 'subscribe2' ) . '" /></p>' . "\r\n";
 		echo '<h3>' . __( 'Message substitutions', 'subscribe2' ) . '</h3>' . "\r\n";
@@ -315,12 +315,12 @@ switch ( $current_tab ) {
 		echo __( 'Subscribe / Unsubscribe confirmation email', 'subscribe2' ) . ':<br />' . "\r\n";
 		echo __( 'Subject Line', 'subscribe2' ) . ': ';
 		echo '<input type="text" name="confirm_subject" value="' . stripslashes( $this->subscribe2_options['confirm_subject'] ) . '" size="45" /><br />' . "\r\n";
-		echo '<textarea rows="9" cols="60" name="confirm_email">' . stripslashes( $this->subscribe2_options['confirm_email'] ) . '</textarea>' . "\r\n";
+		echo '<textarea rows="9" cols="60" name="confirm_email" style="width:95%;">' . stripslashes( $this->subscribe2_options['confirm_email'] ) . '</textarea>' . "\r\n";
 		echo '</td></tr><tr><td style="vertical-align: top; height: 350px; min-height: 350px;">';
 		echo __( 'Reminder email to Unconfirmed Subscribers', 'subscribe2' ) . ':<br />' . "\r\n";
 		echo __( 'Subject Line', 'subscribe2' ) . ': ';
 		echo '<input type="text" name="remind_subject" value="' . stripslashes( $this->subscribe2_options['remind_subject'] ) . '" size="45" /><br />' . "\r\n";
-		echo '<textarea rows="9" cols="60" name="remind_email">' . stripslashes( $this->subscribe2_options['remind_email'] ) . '</textarea><br /><br />' . "\r\n";
+		echo '<textarea rows="9" cols="60" name="remind_email" style="width:95%;">' . stripslashes( $this->subscribe2_options['remind_email'] ) . '</textarea><br /><br />' . "\r\n";
 		echo '</td></tr></table>' . "\r\n";
 		echo '</div>' . "\r\n";
 		break;

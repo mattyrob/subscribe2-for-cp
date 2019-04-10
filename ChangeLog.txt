@@ -1,6 +1,8 @@
 = 10.29 =
 
 * Trim unused back-ported code from Subscribe2 HTML
+* Fixed issue in Subscriber dropdown filter that displayed category names in the Public Subscriber dropdown
+* Textareas in the Settings page are now more responsive to screen displays
 
 = 10.28 =
 

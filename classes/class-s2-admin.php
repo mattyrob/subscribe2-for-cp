@@ -371,6 +371,7 @@ class S2_Admin extends S2_Core {
 				'default',
 				array(
 					'__block_editor_compatible_meta_box' => false,
+					'__back_compat_meta_box'             => true,
 				)
 			);
 			add_meta_box(
@@ -382,6 +383,7 @@ class S2_Admin extends S2_Core {
 				'default',
 				array(
 					'__block_editor_compatible_meta_box' => false,
+					'__back_compat_meta_box'             => true,
 				)
 			);
 		}
@@ -595,7 +597,7 @@ class S2_Admin extends S2_Core {
 	 * $submit is the text to use on the Submit button
 	 */
 	public function display_subscriber_dropdown( $selected = 'registered', $submit = '', $exclude = array() ) {
-		global $wpdb;
+		global $wpdb, $current_tab;
 
 		$who = array(
 			'all'         => __( 'All Users and Subscribers', 'subscribe2' ),
@@ -664,7 +666,7 @@ class S2_Admin extends S2_Core {
 			echo '>' . $display . ' (' . ( $count[ $whom ] ) . ')</option>' . "\r\n";
 		}
 
-		if ( $count['registered'] > 0 && 'never' === $this->subscribe2_options['email_freq'] ) {
+		if ( 'public' !== $current_tab && $count['registered'] > 0 && 'never' === $this->subscribe2_options['email_freq'] ) {
 			foreach ( $all_cats as $cat ) {
 				if ( in_array( (string) $cat->term_id, $exclude, true ) ) {
 					continue;
@@ -676,6 +678,7 @@ class S2_Admin extends S2_Core {
 				echo '> &nbsp;&nbsp;' . $cat->name . '&nbsp;(' . $count[ $cat->name ] . ') </option>' . "\r\n";
 			}
 		}
+
 		echo '</select>';
 		if ( false !== $submit ) {
 			echo '&nbsp;<input type="submit" class="button-secondary" value="' . $submit . '" />' . "\r\n";
