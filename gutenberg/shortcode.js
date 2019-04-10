@@ -151,121 +151,121 @@
 			},
 			transforms: {
 				to: [
-					{
-						type: 'block',
-						blocks: [ 'core/shortcode' ],
-						transform: function( content ) {
-							if ( undefined === content.shortcode || '' === content.shortcode ) {
-								content.shortcode = '[subscribe2]';
-							}
-							return blocks.createBlock( 'core/shortcode', { text: content.shortcode } );
+				{
+					type: 'block',
+					blocks: [ 'core/shortcode' ],
+					transform: function( content ) {
+						if ( undefined === content.shortcode || '' === content.shortcode ) {
+							content.shortcode = '[subscribe2]';
 						}
+						return blocks.createBlock( 'core/shortcode', { text: content.shortcode } );
 					}
+				}
 				],
 				from: [
-					{
-						type: 'block',
-						blocks: [ 'core/shortcode' ],
-						transform: function( content ) {
-							var shortcode, params, param, hide, id, nojs, antispam, size, wrap, link, i, l;
-							if ( 'subscribe2' === content.text.substr( 1, 10 ) ) {
-								shortcode = content.text;
-								params    = content.text.replace( /^\[subscribe2|\]$/g, '' ).replace( /^\s+|\s+$/g, '' ).split( /['"]\s/g );
-								l         = params.length;
+				{
+					type: 'block',
+					blocks: [ 'core/shortcode' ],
+					transform: function( content ) {
+						var shortcode, params, param, hide, id, nojs, antispam, size, wrap, link, i, l;
+						if ( 'subscribe2' === content.text.substr( 1, 10 ) ) {
+							shortcode = content.text;
+							params    = content.text.replace( /^\[subscribe2|\]$/g, '' ).replace( /^\s+|\s+$/g, '' ).split( /['"]\s/g );
+							l         = params.length;
 
-								for ( i = 0; i < l; i++ ) {
-									param = params[i].split( '=' );
-									if ( 'hide' === param[0] ) {
-										hide = param[1].replace( /['"]+/g, '' );
-									}
-									if ( 'id' === param[0] ) {
-										id = param[1].replace( /['"]+/g, '' );
-									}
-									if ( 'nojs' === param[0] ) {
-										nojs = 'true' === param[1].replace( /['"]+/g, '' );
-									}
-									if ( 'antispam' === param[0] ) {
-										antispam = 'true' === param[1].replace( /['"]+/g, '' );
-									}
-									if ( 'size' === param[0] ) {
-										size = param[1].replace( /['"]+/g, '' );
-									}
-									if ( 'wrap' === param[0] ) {
-										wrap = 'false' === param[1].replace( /['"]+/g, '' );
-									}
-									if ( 'link' === param[0] ) {
-										link = param[1].replace( /^['"]|['"]$/g, '' );
-									}
+							for ( i = 0; i < l; i++ ) {
+								param = params[i].split( '=' );
+								if ( 'hide' === param[0] ) {
+									hide = param[1].replace( /['"]+/g, '' );
 								}
-
-								return blocks.createBlock(
-									'subscribe2-html/shortcode',
-									{
-										shortcode: shortcode,
-										hide: hide,
-										id: id,
-										nojs: nojs,
-										antispam: antispam,
-										size: size,
-										wrap: wrap,
-										link: link
-									}
-								);
+								if ( 'id' === param[0] ) {
+									id = param[1].replace( /['"]+/g, '' );
+								}
+								if ( 'nojs' === param[0] ) {
+									nojs = 'true' === param[1].replace( /['"]+/g, '' );
+								}
+								if ( 'antispam' === param[0] ) {
+									antispam = 'true' === param[1].replace( /['"]+/g, '' );
+								}
+								if ( 'size' === param[0] ) {
+									size = param[1].replace( /['"]+/g, '' );
+								}
+								if ( 'wrap' === param[0] ) {
+									wrap = 'false' === param[1].replace( /['"]+/g, '' );
+								}
+								if ( 'link' === param[0] ) {
+									link = param[1].replace( /^['"]|['"]$/g, '' );
+								}
 							}
+
+							return blocks.createBlock(
+								'subscribe2-html/shortcode',
+								{
+									shortcode: shortcode,
+									hide: hide,
+									id: id,
+									nojs: nojs,
+									antispam: antispam,
+									size: size,
+									wrap: wrap,
+									link: link
+								}
+							);
 						}
-					},
-					{
-						type: 'shortcode',
-						tag: 'subscribe2',
-						attributes: {
-							shortcode: {
-								type: 'string',
-								selector: 'p'
-							},
-							hide: {
-								type: 'string',
-								shortcode: function( content ) {
-									return content.named.hide || 'none';
-								}
-							},
-							id: {
-								type: 'string',
-								shortcode: function( content ) {
-									return content.named.id || '';
-								}
-							},
-							nojs: {
-								type: 'boolean',
-								shortcode: function( content ) {
-									return content.named.nojs || false;
-								}
-							},
-							antispam: {
-								type: 'boolean',
-								shortcode: function( content ) {
-									return content.named.antispam || false;
-								}
-							},
-							size: {
-								type: 'number',
-								shortcode: function( content ) {
-									return content.named.size || '20';
-								}
-							},
-							wrap: {
-								type: 'boolean',
-								shortcode: function( content ) {
-									return content.named.wrap || false;
-								}
-							},
-							link: {
-								type: 'string',
-								shortcode: function( content ) {
-									return content.named.link || '';
-								}
+					}
+				},
+				{
+					type: 'shortcode',
+					tag: 'subscribe2',
+					attributes: {
+						shortcode: {
+							type: 'string',
+							selector: 'p'
+						},
+						hide: {
+							type: 'string',
+							shortcode: function( content ) {
+								return content.named.hide || 'none';
+							}
+						},
+						id: {
+							type: 'string',
+							shortcode: function( content ) {
+								return content.named.id || '';
+							}
+						},
+						nojs: {
+							type: 'boolean',
+							shortcode: function( content ) {
+								return content.named.nojs || false;
+							}
+						},
+						antispam: {
+							type: 'boolean',
+							shortcode: function( content ) {
+								return content.named.antispam || false;
+							}
+						},
+						size: {
+							type: 'number',
+							shortcode: function( content ) {
+								return content.named.size || '20';
+							}
+						},
+						wrap: {
+							type: 'boolean',
+							shortcode: function( content ) {
+								return content.named.wrap || false;
+							}
+						},
+						link: {
+							type: 'string',
+							shortcode: function( content ) {
+								return content.named.link || '';
 							}
 						}
 					}
+				}
 				]
 			},
 			edit: function( props ) {
@@ -309,74 +309,74 @@
 
 				return [
 					isSelected && el(
-					editor.InspectorControls,
-					{ key: 'subscribe2-html/inspector' },
-					el( 'h3', {}, i18n.__( 'Subscribe2 Shortcode Parameters', 'subscribe2' ) ),
-					el(
-						RadioControl,
-						{
-							label: i18n.__( 'Button Display Options', 'subscribe2' ),
-							selected: hide,
-							onChange: onChangeHide,
-							options: [
-								{ value: 'none', label: i18n.__( 'Show Both Buttons', 'subscribe2' ) },
-								{ value: 'subscribe', label: i18n.__( 'Hide Subscribe Button', 'subscribe2' ) },
-								{ value: 'unsubscribe', label: i18n.__( 'Hide Unsubscribe Button', 'subscribe2' ) }
-							]
+						editor.InspectorControls,
+						{ key: 'subscribe2-html/inspector' },
+						el( 'h3', {}, i18n.__( 'Subscribe2 Shortcode Parameters', 'subscribe2' ) ),
+						el(
+							RadioControl,
+							{
+								label: i18n.__( 'Button Display Options', 'subscribe2' ),
+								selected: hide,
+								onChange: onChangeHide,
+								options: [
+									{ value: 'none', label: i18n.__( 'Show Both Buttons', 'subscribe2' ) },
+									{ value: 'subscribe', label: i18n.__( 'Hide Subscribe Button', 'subscribe2' ) },
+									{ value: 'unsubscribe', label: i18n.__( 'Hide Unsubscribe Button', 'subscribe2' ) }
+								]
 							}
+						),
+						el(
+							TextControl,
+							{
+								type: 'number',
+								label: i18n.__( 'Page ID', 'subscribe2' ),
+								value: id,
+								onChange: onChangeId
+								}
+						),
+						el(
+							CheckboxControl,
+							{
+								label: i18n.__( 'Disable Javascript', 'subscribe2' ),
+								checked: nojs,
+								onChange: onChangeNojs
+								}
+						),
+						el(
+							CheckboxControl,
+							{
+								label: i18n.__( 'Disable Simple Anti-Spam Measures', 'subscribe2' ),
+								checked: antispam,
+								onChange: onChangeAntispam
+								}
+						),
+						el(
+							TextControl,
+							{
+								type: 'number',
+								label: i18n.__( 'Textbox size', 'subscribe2' ),
+								value: size,
+								onChange: onChangeSize
+								}
+						),
+						el(
+							CheckboxControl,
+							{
+								label: i18n.__( 'Disable wrapping of form buttons', 'subscribe2' ),
+								checked: wrap,
+								onChange: onChangeWrap
+								}
+						),
+						el(
+							TextControl,
+							{
+								type: 'string',
+								label: i18n.__( 'Link Text', 'subscribe2' ),
+								value: link,
+								onChange: onChangeLink
+								}
+						)
 					),
-					el(
-						TextControl,
-						{
-							type: 'number',
-							label: i18n.__( 'Page ID', 'subscribe2' ),
-							value: id,
-							onChange: onChangeId
-							}
-					),
-					el(
-						CheckboxControl,
-						{
-							label: i18n.__( 'Disable Javascript', 'subscribe2' ),
-							checked: nojs,
-							onChange: onChangeNojs
-							}
-					),
-					el(
-						CheckboxControl,
-						{
-							label: i18n.__( 'Disable Simple Anti-Spam Measures', 'subscribe2' ),
-							checked: antispam,
-							onChange: onChangeAntispam
-							}
-					),
-					el(
-						TextControl,
-						{
-							type: 'number',
-							label: i18n.__( 'Textbox size', 'subscribe2' ),
-							value: size,
-							onChange: onChangeSize
-							}
-					),
-					el(
-						CheckboxControl,
-						{
-							label: i18n.__( 'Disable wrapping of form buttons', 'subscribe2' ),
-							checked: wrap,
-							onChange: onChangeWrap
-							}
-					),
-					el(
-						TextControl,
-						{
-							type: 'string',
-							label: i18n.__( 'Link Text', 'subscribe2' ),
-							value: link,
-							onChange: onChangeLink
-							}
-					)
-				),
 					el(
 						'div',
 						{

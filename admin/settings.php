@@ -369,7 +369,7 @@ switch ( $current_tab ) {
 		echo '<h3>' . __( 'Auto-Subscribe', 'subscribe2' ) . '</h3>' . "\r\n";
 		echo '<p>' . "\r\n";
 		echo __( 'Subscribe new users registering with your blog', 'subscribe2' ) . ':<br />' . "\r\n";
-		if ( defined( 'S2GDPR' ) && ( true === S2GDPR && 'yes' === $this->subscribe2_options['autosub'] ) || ( false === S2GDPR ) ) {
+		if ( defined( 'S2GDPR' ) && ( ( true === S2GDPR && 'yes' === $this->subscribe2_options['autosub'] ) || ( false === S2GDPR ) ) ) {
 			echo '<label><input type="radio" name="autosub" value="yes"' . checked( $this->subscribe2_options['autosub'], 'yes', false ) . ' /> ';
 			echo __( 'Automatically', 'subscribe2' ) . '</label>&nbsp;&nbsp;';
 		}
@@ -382,7 +382,7 @@ switch ( $current_tab ) {
 		echo __( 'Yes', 'subscribe2' ) . '</label>&nbsp;&nbsp;';
 		echo '<label><input type="radio" name="newreg_override" value="no"' . checked( $this->subscribe2_options['newreg_override'], 'no', false ) . ' /> ';
 		echo __( 'No', 'subscribe2' ) . '</label><br /><br />' . "\r\n";
-		if ( defined( 'S2GDPR' ) && ( true === S2GDPR && 'yes' === $this->subscribe2_options['wpregdef'] ) || ( false === S2GDPR ) ) {
+		if ( defined( 'S2GDPR' ) && ( ( true === S2GDPR && 'yes' === $this->subscribe2_options['wpregdef'] ) || ( false === S2GDPR ) ) ) {
 			echo __( 'Registration Form option is checked by default', 'subscribe2' ) . ':<br />' . "\r\n";
 			echo '<label><input type="radio" name="wpregdef" value="yes"' . checked( $this->subscribe2_options['wpregdef'], 'yes', false ) . ' /> ';
 			echo __( 'Yes', 'subscribe2' ) . '</label>&nbsp;&nbsp;';
@@ -405,7 +405,7 @@ switch ( $current_tab ) {
 		echo __( 'No', 'subscribe2' ) . '</label>&nbsp;&nbsp;';
 		echo '<label><input type="radio" name="show_autosub" value="exclude"' . checked( $this->subscribe2_options['show_autosub'], 'exclude', false ) . ' /> ';
 		echo __( 'New categories are immediately excluded', 'subscribe2' ) . '</label><br /><br />';
-		if ( defined( 'S2GDPR' ) && ( true === S2GDPR && 'yes' === $this->subscribe2_options['autosub_def'] ) || ( false === S2GDPR ) ) {
+		if ( defined( 'S2GDPR' ) && ( ( true === S2GDPR && 'yes' === $this->subscribe2_options['autosub_def'] ) || ( false === S2GDPR ) ) ) {
 			echo __( 'Option for Registered Users to auto-subscribe to new categories is checked by default', 'subscribe2' ) . ': <br />' . "\r\n";
 			echo '<label><input type="radio" name="autosub_def" value="yes"' . checked( $this->subscribe2_options['autosub_def'], 'yes', false ) . ' /> ';
 			echo __( 'Yes', 'subscribe2' ) . '</label>&nbsp;&nbsp;';
@@ -421,7 +421,7 @@ switch ( $current_tab ) {
 			echo __( 'After the Comment Submit button', 'subscribe2' ) . '</label>&nbsp;&nbsp;';
 			echo '<label><input type="radio" name="comment_subs" value="no"' . checked( $this->subscribe2_options['comment_subs'], 'no', false ) . ' /> ';
 			echo __( 'No', 'subscribe2' ) . '</label><br /><br />';
-			if ( defined( 'S2GDPR' ) && ( true === S2GDPR && 'yes' === $this->subscribe2_options['comment_def'] ) || ( false === S2GDPR ) ) {
+			if ( defined( 'S2GDPR' ) && ( ( true === S2GDPR && 'yes' === $this->subscribe2_options['comment_def'] ) || ( false === S2GDPR ) ) ) {
 				echo __( 'Comment form checkbox is checked by default', 'subscribe2' ) . ': <br />' . "\r\n";
 				echo '<label><input type="radio" name="comment_def" value="yes"' . checked( $this->subscribe2_options['comment_def'], 'yes', false ) . ' /> ';
 				echo __( 'Yes', 'subscribe2' ) . '</label>&nbsp;&nbsp;';

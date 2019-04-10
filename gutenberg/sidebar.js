@@ -1,4 +1,13 @@
 // Version 1.0 - Initial version
+// Version 1.1 - Add Resend functionality
+
+var privSetting = '';
+
+wp.apiFetch( { path: '/s2/v1/settings/private' } ).then(
+	function ( setting ) {
+		privSetting = setting;
+	}
+);
 
 ( function( plugins, element, i18n, editPost, components, data, compose, apiFetch ) {
 	var registerPlugin            = plugins.registerPlugin,
@@ -20,43 +29,89 @@
 	var CheckboxControlMeta = Compose(
 		withSelect(
 			function( select, props ) {
-					var s2mail = select( 'core/editor' ).getEditedPostAttribute( 'meta' )[ props.fieldName ];
-					return {
-						metaChecked: ( 'no' === s2mail ? true : false )
+				var s2mail = select( 'core/editor' ).getEditedPostAttribute( 'meta' )[ props.fieldName ];
+				return {
+					metaChecked: ( 'no' === s2mail ? true : false )
 				};
 			}
 		),
 		withDispatch(
 			function( dispatch, props ) {
-					return {
-						setMetaChecked: function( value ) {
-							var s2mail = ( true === value ? 'no' : 'yes'  );
-							dispatch( 'core/editor' ).editPost( { meta: { [props.fieldName]: s2mail } } );
-							dispatch( 'core/editor' ).savePost();
-						}
+				return {
+					setMetaChecked: function( value ) {
+						var s2mail = ( true === value ? 'no' : 'yes'  );
+						dispatch( 'core/editor' ).editPost( { meta: { [ props.fieldName ]: s2mail } } );
+						dispatch( 'core/editor' ).savePost();
+					}
 				};
 			}
 		)
 	)(
 		function( props ) {
-				return el(
-					CheckboxControl,
-					{
-						label: __( 'Check here to disable sending of an email notification for this post/page', 'subscribe2' ),
-						checked: props.metaChecked,
-						onChange: function( content ) {
-							props.setMetaChecked( content );
-						}
+			return el(
+				CheckboxControl,
+				{
+					label: __( 'Check here to disable sending of an email notification for this post/page', 'subscribe2' ),
+					checked: props.metaChecked,
+					onChange: function( content ) {
+						props.setMetaChecked( content );
 					}
-				);
+				}
+			);
 		}
 	);
 
-	var buttonClick = function() {
+	var maybeRenderResend = function( privSetting ) {
+		if ( 'publish' === select( 'core/editor' ).getEditedPostAttribute( 'status' ) ) {
+			return renderResendPanel();
+		} else if ( 'private' === select( 'core/editor' ).getEditedPostAttribute( 'status' ) && 'yes' === privSetting ) {
+			return renderResendPanel();
+		}
+	};
+
+	var renderResendPanel = function() {
+		return el(
+			PanelBody,
+			{
+				title: __( 'Subscribe2 Resend', 'subscribe2' ),
+				initialOpen: false
+			},
+			el(
+				PanelRow,
+				{},
+				el(
+					'div',
+					null,
+					__( 'Resend the notification email of this post to current subscribers:', 'subscribe2' )
+				)
+			),
+			el(
+				PanelRow,
+				{},
+				el(
+					Button,
+					{
+						isDefault: true,
+						onClick: resendClick
+					},
+					__( 'Resend Notification', 'subscribe2' )
+				)
+			)
+		);
+	};
+
+	var previewClick = function() {
 		var postid = select( 'core/editor' ).getCurrentPostId();
 		dispatch( 'core/editor' ).savePost();
 		apiFetch( { path: '/s2/v1/preview/' + postid } );
 		dispatch( 'core/notices' ).createInfoNotice( __( 'Attempt made to send email preview', 'subscribe2' ) );
+	};
+
+	var resendClick = function() {
+		var postid = select( 'core/editor' ).getCurrentPostId();
+		dispatch( 'core/editor' ).savePost();
+		apiFetch( { path: '/s2/v1/resend/' + postid } );
+		dispatch( 'core/notices' ).createInfoNotice( __( 'Attempt made to resend email notification', 'subscribe2' ) );
 	};
 
 	var s2sidebar = function() {
@@ -103,7 +158,7 @@
 					PanelBody,
 					{
 						title: __( 'Subscribe2 Preview', 'subscribe2' ),
-						initialOpen: true
+						initialOpen: false
 					},
 					el(
 						PanelRow,
@@ -121,12 +176,13 @@
 							Button,
 							{
 								isDefault: true,
-								onClick: buttonClick
+								onClick: previewClick
 							},
 							__( 'Send Preview', 'subscribe2' )
 						)
 					)
-				)
+				),
+				maybeRenderResend( privSetting )
 			)
 		);
 	};

@@ -1919,6 +1919,7 @@ class S2_Core {
 			add_action( 'admin_menu', array( &$this, 's2_meta_init' ) );
 			add_action( 'save_post', array( &$this, 's2_meta_handler' ) );
 			add_action( 'save_post', array( &$this, 's2_preview_handler' ) );
+			add_action( 'save_post', array( &$this, 's2_resend_handler' ) );
 			add_action( 'create_category', array( &$this, 'new_category' ) );
 			add_action( 'delete_category', array( &$this, 'delete_category' ) );
 
