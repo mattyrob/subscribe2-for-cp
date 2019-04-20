@@ -6,6 +6,7 @@
 * Allow definition of S2GDPR constant anywhere
 * Mark old meta boxes as existing for backwards compatibility
 * Add meta box to authoring page to enable easy resending of notifications for published posts
+* Fix for missing posts in Digest email
 
 = 10.28 =
 
