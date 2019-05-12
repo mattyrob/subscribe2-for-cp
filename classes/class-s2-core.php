@@ -1996,6 +1996,8 @@ class S2_Core {
 				add_action( 'wp_footer', array( &$this, 'js_ip_library_script' ), 20 );
 			}
 		}
+
+        require_once S2PATH . 'classes/mo-notice.php';
 	}
 
 	/* ===== define some variables ===== */
