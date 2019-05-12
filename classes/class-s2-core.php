@@ -1959,6 +1959,9 @@ class S2_Core {
 			// subscriber page options handler
 			add_filter( 'set-screen-option', array( &$this, 'subscribers_set_screen_option' ), 10, 3 );
 
+			// MailOptin admin notices
+			require_once S2PATH . 'classes/mo-notice.php';
+
 			// capture CSV export
 			if ( isset( $_POST['s2_admin'] ) && isset( $_POST['csv'] ) ) {
 				$date = date( 'Y-m-d' );
@@ -1996,8 +1999,6 @@ class S2_Core {
 				add_action( 'wp_footer', array( &$this, 'js_ip_library_script' ), 20 );
 			}
 		}
-
-        require_once S2PATH . 'classes/mo-notice.php';
 	}
 
 	/* ===== define some variables ===== */
