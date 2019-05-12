@@ -7,13 +7,22 @@ class S2_Core {
 	public function load_translations() {
 		load_plugin_textdomain( 'subscribe2', false, S2DIR );
 		load_plugin_textdomain( 'subscribe2', false, S2DIR . 'languages/' );
+
 		if ( is_admin() && function_exists( 'get_user_locale' ) ) {
 			$locale = get_user_locale();
 		} else {
 			$locale = get_locale();
 		}
+
 		$mofile = WP_LANG_DIR . '/subscribe2-' . apply_filters( 'plugin_locale', $locale, 'subscribe2' ) . '.mo';
-		load_textdomain( 'subscribe2', $mofile );
+		if ( file_exists( $mofile ) && is_readable( $mofile ) ) {
+			load_textdomain( 'subscribe2', $mofile );
+		}
+
+		$mofile = WP_LANG_DIR . '/plugins/subscribe2-' . apply_filters( 'plugin_locale', $locale, 'subscribe2' ) . '.mo';
+		if ( file_exists( $mofile ) && is_readable( $mofile ) ) {
+			load_textdomain( 'subscribe2', $mofile );
+		}
 	}
 
 	/* ===== mail handling ===== */

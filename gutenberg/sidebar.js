@@ -1,11 +1,27 @@
 // Version 1.0 - Initial version
 // Version 1.1 - Add Resend functionality
 
-var privSetting = '';
+var privateSetting = '';
 
 wp.apiFetch( { path: '/s2/v1/settings/private' } ).then(
 	function ( setting ) {
-		privSetting = setting;
+		privateSetting = setting;
+	}
+);
+
+wp.apiFetch( { path: '/s2/v1/settings/s2meta_default' } ).then(
+	function ( setting ) {
+		var s2mail = wp.data.select( 'core/editor' ).getEditedPostAttribute( 'meta' )._s2mail;
+
+		if ( '' === s2mail ) {
+			if ( '0' === setting ) {
+				s2mail = 'yes';
+			} else if ( '1' === setting ) {
+				s2mail = 'no';
+			}
+			wp.data.dispatch( 'core/editor' ).editPost( { meta: { '_s2mail': s2mail } } );
+			wp.data.dispatch( 'core/editor' ).savePost();
+		}
 	}
 );
 
@@ -61,10 +77,10 @@ wp.apiFetch( { path: '/s2/v1/settings/private' } ).then(
 		}
 	);
 
-	var maybeRenderResend = function( privSetting ) {
+	var maybeRenderResend = function() {
 		if ( 'publish' === select( 'core/editor' ).getEditedPostAttribute( 'status' ) ) {
 			return renderResendPanel();
-		} else if ( 'private' === select( 'core/editor' ).getEditedPostAttribute( 'status' ) && 'yes' === privSetting ) {
+		} else if ( 'private' === select( 'core/editor' ).getEditedPostAttribute( 'status' ) && 'yes' === privateSetting ) {
 			return renderResendPanel();
 		}
 	};
@@ -182,7 +198,7 @@ wp.apiFetch( { path: '/s2/v1/settings/private' } ).then(
 						)
 					)
 				),
-				maybeRenderResend( privSetting )
+				maybeRenderResend()
 			)
 		);
 	};

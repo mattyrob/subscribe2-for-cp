@@ -8,6 +8,8 @@
 * Add meta box to authoring page to enable easy resending of notifications for published posts
 * Fix for missing posts in Digest email
 * Fix for malformed digest emails
+* Apply default override setting to Block Editor sidebar panel
+* Enable translation files from more locations
 
 = 10.28 =
 
