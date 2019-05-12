@@ -7,6 +7,7 @@
 * Mark old meta boxes as existing for backwards compatibility
 * Add meta box to authoring page to enable easy resending of notifications for published posts
 * Fix for missing posts in Digest email
+* Fix for malformed digest emails
 
 = 10.28 =
 

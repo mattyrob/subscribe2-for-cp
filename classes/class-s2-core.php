@@ -577,7 +577,7 @@ class S2_Core {
 		$excerpt_on_words = apply_filters( 's2_excerpt_on_words', true );
 
 		if ( false === $html ) {
-			$excerpt = trim( wp_strip_all_tags( $text ) );
+			$excerpt = trim( wp_strip_all_tags( strip_shortcodes( $text ) ) );
 		} else {
 			$excerpt = strip_shortcodes( $text );
 		}
@@ -1653,7 +1653,7 @@ class S2_Core {
 					$excerpt              = wp_strip_all_tags( $excerpt );
 					$excerpt              = strip_shortcodes( $excerpt );
 				} else {
-					$excerpt = $this->create_excerpt( $excerpt, true );
+					$excerpt = $this->create_excerpt( $excerpt );
 				}
 				// strip leading and trailing whitespace
 				$excerpt = trim( $excerpt );
