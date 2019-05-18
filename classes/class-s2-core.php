@@ -1925,7 +1925,7 @@ class S2_Core {
 		if ( is_admin() ) {
 			//add menu, authoring and category admin actions
 			add_action( 'admin_menu', array( &$this, 'admin_menu' ) );
-			add_action( 'admin_menu', array( &$this, 's2_meta_init' ) );
+			add_action( 'add_meta_boxes', array( &$this, 's2_meta_init' ), 10, 2 );
 			add_action( 'save_post', array( &$this, 's2_meta_handler' ) );
 			add_action( 'save_post', array( &$this, 's2_preview_handler' ) );
 			add_action( 'save_post', array( &$this, 's2_resend_handler' ) );
