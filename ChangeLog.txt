@@ -1,3 +1,7 @@
+= 10.30 =
+
+* Code efficiency enhancements
+
 = 10.29 =
 
 * Trim unused back-ported code from Subscribe2 HTML

@@ -365,45 +365,45 @@ class S2_Admin extends S2_Core {
 			return;
 		}
 
-		foreach ( $s2_post_types as $s2_post_type ) {
+		add_meta_box(
+			'subscribe2',
+			__( 'Subscribe2 Notification Override', 'subscribe2' ),
+			array( &$this, 's2_override_meta' ),
+			$post_type,
+			'advanced',
+			'default',
+			array(
+				'__block_editor_compatible_meta_box' => false,
+				'__back_compat_meta_box'             => true,
+			)
+		);
+
+		add_meta_box(
+			'subscribe2-preview',
+			__( 'Subscribe2 Preview', 'subscribe2' ),
+			array( &$this, 's2_preview_meta' ),
+			$post_type,
+			'side',
+			'default',
+			array(
+				'__block_editor_compatible_meta_box' => false,
+				'__back_compat_meta_box'             => true,
+			)
+		);
+
+		if ( 'publish' === $post->post_status || ( 'private' === $post->post_status && 'yes' === $this->subscribe2_options['private'] ) ) {
 			add_meta_box(
-				'subscribe2',
-				__( 'Subscribe2 Notification Override', 'subscribe2' ),
-				array( &$this, 's2_override_meta' ),
-				$s2_post_type,
-				'advanced',
-				'default',
-				array(
-					'__block_editor_compatible_meta_box' => false,
-					'__back_compat_meta_box'             => true,
-				)
-			);
-			add_meta_box(
-				'subscribe2-preview',
-				__( 'Subscribe2 Preview', 'subscribe2' ),
-				array( &$this, 's2_preview_meta' ),
-				$s2_post_type,
+				'subscribe2-resend',
+				__( 'Subscribe2 Resend', 'subscribe2' ),
+				array( &$this, 's2_resend_meta' ),
+				$post_type,
 				'side',
 				'default',
 				array(
 					'__block_editor_compatible_meta_box' => false,
-					'__back_compat_meta_box'             => true,
+					'__back_compat_meta_box' => true,
 				)
 			);
-			if ( 'publish' === $post->post_status || ( 'private' === $post->post_status && 'yes' === $this->subscribe2_options['private'] ) ) {
-				add_meta_box(
-					'subscribe2-resend',
-					__( 'Subscribe2 Resend', 'subscribe2' ),
-					array( &$this, 's2_resend_meta' ),
-					$s2_post_type,
-					'side',
-					'default',
-					array(
-						'__block_editor_compatible_meta_box' => false,
-						'__back_compat_meta_box' => true,
-					)
-				);
-			}
 		}
 	}
 
