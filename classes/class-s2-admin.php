@@ -460,6 +460,9 @@ class S2_Admin extends S2_Core {
 	 */
 	public function s2_preview_handler() {
 		if ( isset( $_POST['s2_preview'] ) ) {
+			if ( defined( 'DOING_CRON' ) && DOING_CRON ) {
+				return;
+			}
 			global $post, $current_user;
 			$this->publish( $post, $current_user->user_email );
 		}
@@ -478,6 +481,9 @@ class S2_Admin extends S2_Core {
 	 */
 	public function s2_resend_handler() {
 		if ( isset( $_POST['s2_resend'] ) ) {
+			if ( defined( 'DOING_CRON' ) && DOING_CRON ) {
+				return;
+			}
 			global $post;
 			$this->publish( $post );
 		}

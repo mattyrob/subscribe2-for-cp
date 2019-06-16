@@ -1,6 +1,7 @@
 = 10.30 =
 
 * Code efficiency enhancements
+* Avoid duplication of preview and resend emails due to cron spawning of browser requests
 
 = 10.29 =
 
