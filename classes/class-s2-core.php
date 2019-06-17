@@ -1021,8 +1021,16 @@ class S2_Core {
 			if ( false === filter_var( $email, FILTER_VALIDATE_EMAIL ) ) {
 				return false;
 			}
+		}
+
+		if ( true === apply_filters( 's2_validate_email_with_dns', true ) ) {
 			$domain = explode( '@', $email, 2 );
-			if ( true === checkdnsrr( $domain[1] ) ) {
+			if ( function_exists( 'idn_to_ascii' ) ) {
+				$check_domain = idn_to_ascii( $domain[1] );
+			} else {
+				$check_domain = $domain[1];
+			}
+			if ( true === checkdnsrr( $check_domain, 'MX' ) ) {
 				return $email;
 			} else {
 				return false;

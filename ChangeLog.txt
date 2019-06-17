@@ -1,3 +1,7 @@
+= 10.31 =
+
+* Enhance DNS check when validating email addresses
+
 = 10.30 =
 
 * Code efficiency enhancements
