@@ -105,7 +105,7 @@ class S2_Core {
 			foreach ( $recipients as $recipient ) {
 				$recipient = trim( $recipient );
 				// sanity check -- make sure we have a valid email
-				if ( false === $this->validate_email( $recipient ) || empty( $recipient ) ) {
+				if ( false === is_email( $recipient ) || empty( $recipient ) ) {
 					continue;
 				}
 				// Use the mail queue provided we are not sending a preview
@@ -121,7 +121,7 @@ class S2_Core {
 			foreach ( $recipients as $recipient ) {
 				$recipient = trim( $recipient );
 				// sanity check -- make sure we have a valid email
-				if ( false === $this->validate_email( $recipient ) ) {
+				if ( false === is_email( $recipient ) ) {
 					continue;
 				}
 				// and NOT the sender's email, since they'll get a copy anyway
@@ -138,7 +138,7 @@ class S2_Core {
 			foreach ( $recipients as $recipient ) {
 				$recipient = trim( $recipient );
 				// sanity check -- make sure we have a valid email
-				if ( false === $this->validate_email( $recipient ) ) {
+				if ( false === is_email( $recipient ) ) {
 					continue;
 				}
 				// and NOT the sender's email, since they'll get a copy anyway
