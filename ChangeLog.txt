@@ -1,6 +1,7 @@
 = 10.31 =
 
 * Enhance DNS check when validating email addresses
+* Pass full email as second parameter to 's2_sanitize_email' filter
 
 = 10.30 =
 

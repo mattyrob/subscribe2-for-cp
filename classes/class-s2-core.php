@@ -1009,7 +1009,7 @@ class S2_Core {
 
 		// ensure that domain is in lowercase as per internet email standards http://www.ietf.org/rfc/rfc5321.txt
 		list( $name, $domain ) = explode( '@', $email, 2 );
-		return apply_filters( 's2_sanitize_email', $name . '@' . strtolower( $domain ) );
+		return apply_filters( 's2_sanitize_email', $name . '@' . strtolower( $domain ), $email );
 	}
 
 	/**
