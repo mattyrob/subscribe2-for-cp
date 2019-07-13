@@ -83,7 +83,7 @@ if ( isset( $_POST['s2_admin'] ) ) {
 				$timestamp_offset = get_option( 'gmt_offset' ) * 60 * 60;
 				$crondate         = ( isset( $_POST['crondate'] ) ) ? $_POST['crondate'] : 0;
 				$crontime         = ( isset( $_POST['crondate'] ) ) ? $_POST['crontime'] : 0;
-				if ( $email_freq !== $this->subscribe2_options['email_freq'] || date_i18n( get_option( 'date_format' ), $scheduled_time + $timestamp_offset ) !== $crondate || date( 'G', $scheduled_time + $timestamp_offset ) !== $crontime ) {
+				if ( $email_freq !== $this->subscribe2_options['email_freq'] || date_i18n( get_option( 'date_format' ), $scheduled_time + $timestamp_offset ) !== $crondate || gmdate( 'G', $scheduled_time + $timestamp_offset ) !== $crontime ) {
 					$this->subscribe2_options['email_freq'] = $email_freq;
 					wp_clear_scheduled_hook( 's2_digest_cron' );
 					$scheds   = (array) wp_get_schedules();

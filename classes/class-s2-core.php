@@ -1981,7 +1981,7 @@ class S2_Core {
 
 			// capture CSV export
 			if ( isset( $_POST['s2_admin'] ) && isset( $_POST['csv'] ) ) {
-				$date = date( 'Y-m-d' );
+				$date = gmdate( 'Y-m-d' );
 				header( 'Content-Description: File Transfer' );
 				header( 'Content-type: application/octet-stream' );
 				header( "Content-Disposition: attachment; filename=subscribe2_users_$date.csv" );

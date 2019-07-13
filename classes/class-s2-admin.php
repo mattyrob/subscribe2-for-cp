@@ -401,7 +401,7 @@ class S2_Admin extends S2_Core {
 				'default',
 				array(
 					'__block_editor_compatible_meta_box' => false,
-					'__back_compat_meta_box' => true,
+					'__back_compat_meta_box'             => true,
 				)
 			);
 		}
