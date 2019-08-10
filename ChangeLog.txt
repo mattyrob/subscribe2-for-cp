@@ -6,6 +6,7 @@
 * Better escaping of subscriber email data when reporting errors to Subscribers page
 * Fix some Coding Standards Issues
 * Correct maximum execution time limit to 5 minutes
+* Fix some new Coding Standards errors and warnings
 
 = 10.30 =
 

@@ -150,7 +150,7 @@ foreach ( $disallowed_keywords as $disallowed_keyword ) {
 $template_link = '<a href="' . admin_url( 'admin.php?page=s2_settings&tab=templates' ) . '">' . __( 'Modify your template', 'subscribe2' ) . '</a>';
 if ( false !== $disallowed ) {
 	$disallowed_keywords = __( 'Your chosen email type (per-post or digest) does not support the following keywords:', 'subscribe2' );
-	echo '<div id="keyword_message" class="error"><p class="s2_error"><strong>' . $disallowed_keywords . '</strong><br />' . implode( $disallowed, ', ' ) . '<br />' . $template_link . '</p></div>';
+	echo '<div id="keyword_message" class="error"><p class="s2_error"><strong>' . $disallowed_keywords . '</strong><br />' . implode( ', ', $disallowed ) . '<br />' . $template_link . '</p></div>';
 }
 
 // send error message if sender email address is off-domain
@@ -160,8 +160,8 @@ if ( 'blogname' === $this->subscribe2_options['sender'] ) {
 	$user   = $this->get_userdata( $this->subscribe2_options['sender'] );
 	$sender = $user->user_email;
 }
-list( $user, $domain ) = explode( '@', $sender, 2 );
-if ( ! stristr( esc_html( $_SERVER['SERVER_NAME'] ), $domain ) && 'author' !== $this->subscribe2_options['sender'] && '0' === $this->subscribe2_options['dismiss_sender_warning'] ) {
+list( $user, $sender_domain ) = explode( '@', $sender, 2 );
+if ( ! stristr( esc_html( $_SERVER['SERVER_NAME'] ), $sender_domain ) && 'author' !== $this->subscribe2_options['sender'] && '0' === $this->subscribe2_options['dismiss_sender_warning'] ) {
 	// Translators: Warning message
 	echo '<div id="sender_message" class="error notice is-dismissible"><p class="s2_error"><strong>' . sprintf( __( 'You appear to be sending notifications from %1$s, which has a different domain name than your blog server %2$s. This may result in failed emails.', 'subscribe2' ), $sender, $_SERVER['SERVER_NAME'] ) . '</strong></p></div>';
 }
