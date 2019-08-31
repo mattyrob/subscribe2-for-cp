@@ -1,4 +1,4 @@
-=== Subscribe2 HTML ===
+=== Subscribe2 ===
 Contributors: MattyRob
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&amp;hosted_button_id=2387904
 Tags: posts, subscription, email, subscribe, notify, notification
