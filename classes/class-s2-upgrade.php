@@ -252,7 +252,6 @@ class S2_Upgrade {
 		$mysubscribe2->subscribe2_options['remind_email']         = preg_replace( $regex, $replace, $mysubscribe2->subscribe2_options['remind_email'] );
 		$mysubscribe2->subscribe2_options['remind_subject']       = preg_replace( $regex, $replace, $mysubscribe2->subscribe2_options['remind_subject'] );
 
-
 		$args = array(
 			'relation'   => 'AND',
 			'meta_query' => array(

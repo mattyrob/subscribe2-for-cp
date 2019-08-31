@@ -316,8 +316,7 @@ class S2_Admin extends S2_Core {
 	 * Add buttons for Rich Text Editor
 	 */
 	public function mce_plugin( $arr ) {
-		$path = S2URL . 'tinymce/editor-plugin4' . $this->script_debug . '.js';
-		$arr['subscribe2'] = $path;
+		$arr['subscribe2'] = S2URL . 'tinymce/editor-plugin4' . $this->script_debug . '.js';
 		return $arr;
 	}
 
