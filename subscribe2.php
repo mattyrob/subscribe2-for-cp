@@ -3,7 +3,7 @@
 Plugin Name: Subscribe2
 Plugin URI: https://subscribe2.wordpress.com/
 Description: Notifies an email list when new entries are posted.
-Version: 10.29
+Version: 10.31
 Author: Subscribe2
 Author URI: https://subscribe2.wordpress.com/
 Licence: GPLv3
@@ -54,7 +54,7 @@ if ( is_plugin_active_for_network( plugin_basename( __FILE__ ) ) ) {
 
 // our version number. Don't touch this or any line below
 // unless you know exactly what you are doing
-define( 'S2VERSION', '10.29' );
+define( 'S2VERSION', '10.31' );
 define( 'S2PATH', trailingslashit( dirname( __FILE__ ) ) );
 define( 'S2DIR', trailingslashit( dirname( plugin_basename( __FILE__ ) ) ) );
 define( 'S2URL', plugin_dir_url( dirname( __FILE__ ) ) . S2DIR );
