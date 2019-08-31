@@ -17,13 +17,8 @@ if ( ! class_exists( 'WP_List_Table' ) ) {
 	require_once ABSPATH . 'wp-admin/includes/class-wp-list-table.php';
 }
 if ( ! class_exists( 'Subscribe2_List_Table' ) ) {
-	if ( version_compare( $GLOBALS['wp_version'], '4.3', '<' ) ) {
-		require_once S2PATH . 'classes/class-s2-list-table-legacy.php';
-		$s2_list_table = new S2_List_Table_Legacy();
-	} else {
-		require_once S2PATH . 'classes/class-s2-list-table.php';
-		$s2_list_table = new S2_List_Table();
-	}
+	require_once S2PATH . 'classes/class-s2-list-table.php';
+	$s2_list_table = new S2_List_Table();
 }
 
 // was anything POSTed ?

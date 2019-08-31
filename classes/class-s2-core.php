@@ -1810,10 +1810,6 @@ class S2_Core {
 			$this->lockout > 86399;
 		}
 
-		// get the WordPress release number for in code version comparisons
-		$tmp              = explode( '-', $wp_version, 2 );
-		$this->wp_release = $tmp[0];
-
 		// Is this WordPressMU or not?
 		if ( isset( $wpmu_version ) || strpos( $wp_version, 'wordpress-mu' ) ) {
 			$this->s2_mu = true;

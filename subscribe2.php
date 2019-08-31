@@ -31,7 +31,7 @@ You should have received a copy of the GNU General Public License
 along with Subscribe2. If not, see <http://www.gnu.org/licenses/>.
 */
 
-if ( version_compare( $GLOBALS['wp_version'], '3.3', '<' ) || ! function_exists( 'add_action' ) ) {
+if ( version_compare( $GLOBALS['wp_version'], '4.7', '<' ) || ! function_exists( 'add_action' ) ) {
 	if ( ! function_exists( 'add_action' ) ) {
 		$exit_msg = __( "I'm just a plugin, please don't call me directly", 'subscribe2' );
 	} else {
