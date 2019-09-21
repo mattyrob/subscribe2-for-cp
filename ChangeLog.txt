@@ -7,6 +7,8 @@
 * Fix some Coding Standards Issues
 * Correct maximum execution time limit to 5 minutes
 * Fix some new Coding Standards errors and warnings
+* Clean unused gloabl variables
+* Implemented compatibility with Fusion Builder
 
 = 10.30 =
 
