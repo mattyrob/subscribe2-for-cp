@@ -7,7 +7,7 @@
 * Fix some Coding Standards Issues
 * Correct maximum execution time limit to 5 minutes
 * Fix some new Coding Standards errors and warnings
-* Clean unused gloabl variables
+* Clean unused global variables
 * Implemented compatibility with Fusion Builder
 * Fix error caused by menu registration in WordPress 5.3
 
