@@ -464,6 +464,14 @@ class S2_Core {
 		$plaintext   = preg_replace( '/<s[^>]*>(.*)<\/s>/Ui', '', $plaintext );
 		$plaintext   = preg_replace( '/<strike[^>]*>(.*)<\/strike>/Ui', '', $plaintext );
 		$plaintext   = preg_replace( '/<del[^>]*>(.*)<\/del>/Ui', '', $plaintext );
+
+		// Fix for how the Block Editor stores lists
+		if ( true === $this->block_editor ) {
+			$plaintext = str_replace( '</li><', "</li>\n<", $plaintext );
+		}
+
+		// Add filter here so $plaintext can be filtered to correct for layout needs
+		$plaintext = apply_filters( 's2_plaintext', $plaintext );
 		$excerpttext = $plaintext;
 
 		if ( strstr( $mailtext, '{REFERENCELINKS}' ) ) {

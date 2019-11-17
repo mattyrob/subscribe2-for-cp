@@ -1,3 +1,8 @@
+= 10.32 =
+
+* Apply fix for poor list layout in plaintext emails when using Block Editor - thank to @eightize
+* Introduce 's2_plaintext' filter to allow plaintext to be filtered before tags are stripped to correct for layout needs
+
 = 10.31 =
 
 * Enhance DNS check when validating email addresses
