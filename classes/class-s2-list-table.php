@@ -22,17 +22,10 @@ class S2_List_Table extends WP_List_Table {
 
 	public function column_default( $item, $column_name ) {
 		global $current_tab;
-		if ( 'registered' === $current_tab ) {
-			switch ( $column_name ) {
-				case 'email':
-					return $item[ $column_name ];
-			}
-		} else {
-			switch ( $column_name ) {
-				case 'email':
-				case 'date':
-					return $item[ $column_name ];
-			}
+		switch ( $column_name ) {
+			case 'email':
+			case 'date':
+				return $item[ $column_name ];
 		}
 	}
 
@@ -56,7 +49,8 @@ class S2_List_Table extends WP_List_Table {
 	public function column_date( $item ) {
 		global $current_tab;
 		if ( 'registered' === $current_tab ) {
-			return $item['date'];
+			$timestamp = strtotime( $item['date'] );
+			return sprintf( '<abbr title="%2$s">%1$s</abbr>', date_i18n( $this->date_format, $timestamp ), date_i18n( $this->time_format, $timestamp ) );
 		} else {
 			$timestamp = strtotime( $item['date'] . ' ' . $item['time'] );
 			return sprintf( '<abbr title="%2$s">%1$s</abbr>', date_i18n( $this->date_format, $timestamp ), date_i18n( $this->time_format, $timestamp ) );
@@ -69,33 +63,20 @@ class S2_List_Table extends WP_List_Table {
 
 	public function get_columns() {
 		global $current_tab;
-		if ( 'registered' === $current_tab ) {
-			$columns = array(
-				'cb'    => '<input type="checkbox" />',
-				'email' => _x( 'Email', 'column name', 'subscribe2' ),
-			);
-		} else {
-			$columns = array(
-				'cb'    => '<input type="checkbox" />',
-				'email' => _x( 'Email', 'column name', 'subscribe2' ),
-				'date'  => _x( 'Date', 'column name', 'subscribe2' ),
-			);
-		}
+		$columns = array(
+			'cb'    => '<input type="checkbox" />',
+			'email' => _x( 'Email', 'column name', 'subscribe2' ),
+			'date'  => _x( 'Date', 'column name', 'subscribe2' ),
+		);
 		return $columns;
 	}
 
 	public function get_sortable_columns() {
 		global $current_tab;
-		if ( 'registered' === $current_tab ) {
-			$sortable_columns = array(
-				'email' => array( 'email', true ),
-			);
-		} else {
-			$sortable_columns = array(
-				'email' => array( 'email', true ),
-				'date'  => array( 'date', false ),
-			);
-		}
+		$sortable_columns = array(
+			'email' => array( 'email', true ),
+			'date'  => array( 'date', false ),
+		);
 		return $sortable_columns;
 	}
 
@@ -429,6 +410,7 @@ class S2_List_Table extends WP_List_Table {
 				$data[] = array(
 					'email' => $subscriber['user_email'],
 					'id'    => $subscriber['ID'],
+					'date'  => get_userdata( $subscriber['ID'] )->user_registered,
 				);
 			}
 		}
