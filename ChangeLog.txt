@@ -3,6 +3,7 @@
 * Apply fix for poor list layout in plaintext emails when using Block Editor - thank to @eightize
 * Introduce 's2_plaintext' filter to allow plaintext to be filtered before tags are stripped to correct for layout needs
 * Show join date for Registered Subscribers with data from WordPress table
+* Fix email templates to preserve line spacing on new installs and resets
 
 = 10.31 =
 
