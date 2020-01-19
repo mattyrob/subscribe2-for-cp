@@ -57,10 +57,12 @@ if ( ! class_exists( 'MO_Admin_Notice' ) ) {
 						<p>
 							<?php
 							printf(
-								// Translators: Mail Optin admin notice
-								__( 'Free optin form plugin that will %1$sincrease your email list subscribers%2$s and keep them engaged with %1$sautomated and schedule newsletters%2$s.', 'subscribe2' ),
-								'<span class="mo-stylize"><strong>',
-								'</strong></span>'
+								wp_kses_post(
+									// Translators: Mail Optin admin notice
+									__( 'Free optin form plugin that will %1$sincrease your email list subscribers%2$s and keep them engaged with %1$sautomated and schedule newsletters%2$s.', 'subscribe2' ),
+									'<span class="mo-stylize"><strong>',
+									'</strong></span>'
+								)
 							);
 							?>
 						</p>
@@ -68,22 +70,22 @@ if ( ! class_exists( 'MO_Admin_Notice' ) ) {
 					</div>
 					<div class="mo-notice-other-half">
 						<?php if ( ! $this->is_plugin_installed() ) : ?>
-							<a class="button button-primary button-hero" id="mo-install-mailoptin-plugin" href="<?php echo $install_url; ?>">
-								<?php _e( 'Install MailOptin Now for Free!', 'subscribe2' ); ?>
+							<a class="button button-primary button-hero" id="mo-install-mailoptin-plugin" href="<?php echo esc_url( $install_url ); ?>">
+								<?php esc_html_e( 'Install MailOptin Now for Free!', 'subscribe2' ); ?>
 							</a>
 						<?php endif; ?>
 						<?php if ( $this->is_plugin_installed() && ! $this->is_plugin_active() ) : ?>
-							<a class="button button-primary button-hero" id="mo-activate-mailoptin-plugin" href="<?php echo $activate_url; ?>">
-								<?php _e( 'Activate MailOptin Now!', 'subscribe2' ); ?>
+							<a class="button button-primary button-hero" id="mo-activate-mailoptin-plugin" href="<?php echo esc_url( $activate_url ); ?>">
+								<?php esc_html_e( 'Activate MailOptin Now!', 'subscribe2' ); ?>
 							</a>
 						<?php endif; ?>
 						<div class="mo-notice-learn-more">
 							<a target="_blank" href="https://mailoptin.io">Learn more</a>
 						</div>
 					</div>
-					<a href="<?php echo $dismiss_url; ?>">
+					<a href="<?php echo esc_url( $dismiss_url ); ?>">
 						<button type="button" class="notice-dismiss">
-							<span class="screen-reader-text"><?php _e( 'Dismiss this notice', 'subscribe2' ); ?>.</span>
+							<span class="screen-reader-text"><?php esc_html_e( 'Dismiss this notice', 'subscribe2' ); ?>.</span>
 						</button>
 					</a>
 				</div>

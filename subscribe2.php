@@ -11,7 +11,7 @@ Text Domain: subscribe2
 */
 
 /*
-Copyright (C) 2006-19 Matthew Robinson
+Copyright (C) 2006-20 Matthew Robinson
 Based on the Original Subscribe2 plugin by
 Copyright (C) 2005 Scott Merrill (skippy@skippy.net)
 
@@ -38,7 +38,7 @@ if ( version_compare( $GLOBALS['wp_version'], '3.3', '<' ) || ! function_exists(
 		// Translators: Subscribe2 needs WordPress 3.3 or above, exit if not on a compatible version
 		$exit_msg = sprintf( __( 'This version of Subscribe2 requires WordPress 3.3 or greater. Please update %1$s or use an older version of %2$s.', 'subscribe2' ), '<a href="http://codex.wordpress.org/Updating_WordPress">WordPress</a>', '<a href="https://semperplugins.com/subscribe2-html/">Subscribe2</a>' );
 	}
-	exit( $exit_msg );
+	exit( esc_html( $exit_msg ) );
 }
 
 // stop Subscribe2 being activated site wide on Multisite installs
@@ -49,7 +49,7 @@ if ( ! function_exists( 'is_plugin_active_for_network' ) ) {
 if ( is_plugin_active_for_network( plugin_basename( __FILE__ ) ) ) {
 	deactivate_plugins( plugin_basename( __FILE__ ) );
 	$exit_msg = __( 'Subscribe2 HTML cannot be activated as a network plugin. Please activate it on a site level', 'subscribe2' );
-	exit( $exit_msg );
+	exit( esc_html( $exit_msg ) );
 }
 
 // our version number. Don't touch this or any line below

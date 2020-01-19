@@ -7,6 +7,8 @@
 * Send Digest Preview emails from editing pages if Subscribe2 HTML is in Digest email mode
 * Fix typo error in default options file
 * Improve Help tab for Excluded categories - thanks to @iwaddo
+* Convert some self closing HTML tags to HTML5
+* Escape plugin output for better security
 
 = 10.31 =
 

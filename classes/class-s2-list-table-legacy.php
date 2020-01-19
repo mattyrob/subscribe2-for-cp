@@ -169,7 +169,7 @@ class S2_List_Table_Legacy extends WP_List_Table {
 				$class = "class='" . join( ' ', $class ) . "'";
 			}
 
-			echo "<th scope='col' $id $class $style>$column_display_name</th>";
+			echo "<th scope='col' $id $class $style>$column_display_name</th>"; // phpcs:ignore WordPress.Security.EscapeOutput
 		}
 	}
 
@@ -195,7 +195,7 @@ class S2_List_Table_Legacy extends WP_List_Table {
 	public function process_bulk_action() {
 		if ( in_array( $this->current_action(), array( 'delete', 'toggle' ), true ) ) {
 			if ( ! isset( $_REQUEST['subscriber'] ) ) {
-				echo '<div id="message" class="error"><p><strong>' . __( 'No users were selected.', 'subscribe2' ) . '</strong></p></div>';
+				echo '<div id="message" class="error"><p><strong>' . esc_html__( 'No users were selected.', 'subscribe2' ) . '</strong></p></div>';
 				return;
 			}
 		}
@@ -226,7 +226,7 @@ class S2_List_Table_Legacy extends WP_List_Table {
 				}
 			}
 			$final_message = implode( '<br /><br />', array_filter( $message ) );
-			echo '<div id="message" class="updated fade"><p><strong>' . $final_message . '</strong></p></div>';
+			echo '<div id="message" class="updated fade"><p><strong>' . esc_html( $final_message ) . '</strong></p></div>';
 		}
 		if ( 'toggle' === $this->current_action() ) {
 			global $mysubscribe2, $current_user, $subscribers;
@@ -239,7 +239,7 @@ class S2_List_Table_Legacy extends WP_List_Table {
 					unset( $subscribers[ $key ] );
 				}
 			}
-			echo '<div id="message" class="updated fade"><p><strong>' . __( 'Status changed!', 'subscribe2' ) . '</strong></p></div>';
+			echo '<div id="message" class="updated fade"><p><strong>' . esc_html__( 'Status changed!', 'subscribe2' ) . '</strong></p></div>';
 		}
 	}
 
@@ -362,7 +362,7 @@ class S2_List_Table_Legacy extends WP_List_Table {
 
 		$this->_pagination = "<div class='tablenav-pages{$page_class}'>$output</div>";
 
-		echo $this->_pagination;
+		echo $this->_pagination; // phpcs:ignore WordPress.Security.EscapeOutput
 	}
 
 	public function prepare_items() {

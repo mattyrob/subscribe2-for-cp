@@ -542,9 +542,9 @@ class S2_Core {
 		// prepare mail body texts
 		$plain_excerpt_body = str_replace( '{POST}', $excerpt, $mailtext );
 		$plain_body         = str_replace( '{POST}', $plaintext, $mailtext );
-		$html_body          = str_replace( "\r\n", "<br />\r\n", $mailtext );
+		$html_body          = str_replace( "\r\n", "<br>\r\n", $mailtext );
 		$html_body          = str_replace( '{POST}', $content, $html_body );
-		$html_excerpt_body  = str_replace( "\r\n", "<br />\r\n", $mailtext );
+		$html_excerpt_body  = str_replace( "\r\n", "<br>\r\n", $mailtext );
 		$html_excerpt_body  = str_replace( '{POST}', $html_excerpt, $html_excerpt_body );
 
 		if ( '' !== $preview ) {
@@ -1249,12 +1249,12 @@ class S2_Core {
 		}
 		if ( 'wpreg' === $this->subscribe2_options['autosub'] ) {
 			echo '<p><label>';
-			echo __( 'Check here to Subscribe to email notifications for new posts', 'subscribe2' ) . ':<br />' . "\r\n";
+			echo esc_html__( 'Check here to Subscribe to email notifications for new posts', 'subscribe2' ) . ':<br>' . "\r\n";
 			echo '<input type="checkbox" name="reg_subscribe"' . checked( $this->subscribe2_options['wpregdef'], 'yes', false ) . ' />';
 			echo '</label></p>' . "\r\n";
 		} elseif ( 'yes' === $this->subscribe2_options['autosub'] ) {
 			echo '<p><center>' . "\r\n";
-			echo __( 'By registering with this blog you are also agreeing to receive email notifications for new posts but you can unsubscribe at anytime', 'subscribe2' ) . '.<br />' . "\r\n";
+			echo esc_html__( 'By registering with this blog you are also agreeing to receive email notifications for new posts but you can unsubscribe at anytime', 'subscribe2' ) . '.<br>' . "\r\n";
 			echo '</center></p>' . "\r\n";
 		}
 	}
@@ -1287,7 +1287,7 @@ class S2_Core {
 		if ( 'before' === $this->subscribe2_options['comment_subs'] ) {
 			return $comment_meta_form . $submit_field;
 		} else {
-			return $submit_field . '<br />' . $comment_meta_form;
+			return $submit_field . '<br>' . $comment_meta_form;
 		}
 	}
 
@@ -2005,7 +2005,7 @@ class S2_Core {
 				header( "Content-Disposition: attachment; filename=subscribe2_users_$date.csv" );
 				header( 'Pragma: no-cache' );
 				header( 'Expires: 0' );
-				echo $this->prepare_export( $_POST['exportcsv'] );
+				echo esc_html( $this->prepare_export( $_POST['exportcsv'] ) );
 				exit( 0 );
 			}
 		} else {

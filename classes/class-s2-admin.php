@@ -413,8 +413,8 @@ class S2_Admin extends S2_Core {
 	public function s2_override_meta() {
 		global $post_ID;
 		$s2mail = get_post_meta( $post_ID, '_s2mail', true );
-		echo '<input type="hidden" name="s2meta_nonce" id="s2meta_nonce" value="' . wp_create_nonce( wp_hash( plugin_basename( __FILE__ ) ) ) . '" />';
-		echo __( 'Check here to disable sending of an email notification for this post/page', 'subscribe2' );
+		echo '<input type="hidden" name="s2meta_nonce" id="s2meta_nonce" value="' . esc_attr( wp_create_nonce( wp_hash( plugin_basename( __FILE__ ) ) ) ) . '" />';
+		echo esc_html__( 'Check here to disable sending of an email notification for this post/page', 'subscribe2' );
 		echo '&nbsp;&nbsp;<input type="checkbox" name="s2_meta_field" value="no"';
 		if ( 'no' === $s2mail || ( '1' === $this->subscribe2_options['s2meta_default'] && '' === $s2mail ) ) {
 			echo ' checked="checked"';
@@ -451,8 +451,8 @@ class S2_Admin extends S2_Core {
 	 * Meta preview box code
 	 */
 	public function s2_preview_meta() {
-		echo '<p>' . __( 'Send preview email of this post to currently logged in user:', 'subscribe2' ) . '</p>' . "\r\n";
-		echo '<input class="button" name="s2_preview" type="submit" value="' . __( 'Send Preview', 'subscribe2' ) . '" />' . "\r\n";
+		echo '<p>' . esc_html__( 'Send preview email of this post to currently logged in user:', 'subscribe2' ) . '</p>' . "\r\n";
+		echo '<input class="button" name="s2_preview" type="submit" value="' . esc_attr( __( 'Send Preview', 'subscribe2' ) ) . '" />' . "\r\n";
 	}
 
 	/**
@@ -464,7 +464,11 @@ class S2_Admin extends S2_Core {
 				return;
 			}
 			global $post, $current_user;
-			$this->publish( $post, $current_user->user_email );
+			if ( 'never' !== $this->subscribe2_options['email_freq'] ) {
+				$this->subscribe2_cron( $current_user->user_email );
+			} else {
+				$this->publish( $post, $current_user->user_email );
+			}
 		}
 	}
 
@@ -472,8 +476,8 @@ class S2_Admin extends S2_Core {
 	 * Meta resend box code
 	 */
 	public function s2_resend_meta() {
-		echo '<p>' . __( 'Resend the notification email of this post to current subscribers:', 'subscribe2' ) . '</p>' . "\r\n";
-		echo '<input class="button" name="s2_resend" type="submit" value="' . __( 'Resend Notification', 'subscribe2' ) . '" />' . "\r\n";
+		echo '<p>' . esc_html__( 'Resend the notification email of this post to current subscribers:', 'subscribe2' ) . '</p>' . "\r\n";
+		echo '<input class="button" name="s2_resend" type="submit" value="' . esc_attr( __( 'Resend Notification', 'subscribe2' ) ) . '" />' . "\r\n";
 	}
 
 	/**
@@ -605,7 +609,7 @@ class S2_Admin extends S2_Core {
 		$j    = 0;
 		echo '<table style="width: 100%; border-collapse: separate; border-spacing: 2px; *border-collapse: expression(\'separate\', cellSpacing = \'2px\');" class="editform">' . "\r\n";
 		echo '<tr><td style="text-align: left;" colspan="2">' . "\r\n";
-		echo '<label><input type="checkbox" name="checkall" value="checkall_format" /> ' . __( 'Select / Unselect All', 'subscribe2' ) . '</label>' . "\r\n";
+		echo '<label><input type="checkbox" name="checkall" value="checkall_format" /> ' . esc_html__( 'Select / Unselect All', 'subscribe2' ) . '</label>' . "\r\n";
 		echo '</td></tr>' . "\r\n";
 		echo '<tr style="vertical-align: top;"><td style="width: 50%; text-align: left">' . "\r\n";
 		foreach ( $formats[0] as $format ) {
@@ -615,17 +619,17 @@ class S2_Admin extends S2_Core {
 			}
 
 			if ( 0 === $j ) {
-				echo '<label><input class="checkall_format" type="checkbox" name="format[]" value="' . $format . '"';
+				echo '<label><input class="checkall_format" type="checkbox" name="format[]" value="' . esc_attr( $format ) . '"';
 				if ( in_array( $format, $selected, true ) ) {
 						echo ' checked="checked"';
 				}
-				echo ' /> ' . ucwords( $format ) . '</label><br />' . "\r\n";
+				echo ' /> ' . esc_html( ucwords( $format ) ) . '</label><br>' . "\r\n";
 			} else {
-				echo '<label><input class="checkall_format" type="checkbox" name="format[]" value="' . $format . '"';
+				echo '<label><input class="checkall_format" type="checkbox" name="format[]" value="' . esc_attr( $format ) . '"';
 				if ( in_array( $format, $selected, true ) ) {
 							echo ' checked="checked"';
 				}
-				echo ' /> ' . ucwords( $format ) . '</label><br />' . "\r\n";
+				echo ' /> ' . esc_html( ucwords( $format ) ) . '</label><br>' . "\r\n";
 			}
 			$i++;
 		}
@@ -701,11 +705,11 @@ class S2_Admin extends S2_Core {
 				continue;
 			}
 
-			echo '<option value="' . $whom . '"';
+			echo '<option value="' . esc_attr( $whom ) . '"';
 			if ( $whom === $selected ) {
 				echo ' selected="selected" ';
 			}
-			echo '>' . $display . ' (' . ( $count[ $whom ] ) . ')</option>' . "\r\n";
+			echo '>' . esc_html( $display ) . ' (' . esc_html( $count[ $whom ] ) . ')</option>' . "\r\n";
 		}
 
 		if ( 'public' !== $current_tab && $count['registered'] > 0 && 'never' === $this->subscribe2_options['email_freq'] ) {
@@ -713,17 +717,17 @@ class S2_Admin extends S2_Core {
 				if ( in_array( (string) $cat->term_id, $exclude, true ) ) {
 					continue;
 				}
-				echo '<option value="' . $cat->term_id . '"';
+				echo '<option value="' . esc_attr( $cat->term_id ) . '"';
 				if ( $cat->term_id === $selected ) {
 					echo ' selected="selected" ';
 				}
-				echo '> &nbsp;&nbsp;' . $cat->name . '&nbsp;(' . $count[ $cat->name ] . ') </option>' . "\r\n";
+				echo '> &nbsp;&nbsp;' . esc_html( $cat->name ) . '&nbsp;(' . esc_html( $count[ $cat->name ] ) . ') </option>' . "\r\n";
 			}
 		}
 
 		echo '</select>';
 		if ( false !== $submit ) {
-			echo '&nbsp;<input type="submit" class="button-secondary" value="' . $submit . '" />' . "\r\n";
+			echo '&nbsp;<input type="submit" class="button-secondary" value="' . esc_attr( $submit ) . '" />' . "\r\n";
 		}
 	}
 
@@ -763,15 +767,27 @@ class S2_Admin extends S2_Core {
 			$admins   = array_merge( $author, $admins );
 		}
 
-		echo '<select name="sender">' . "\r\n";
+		$option = '<select name="sender">' . "\r\n";
 		foreach ( $admins as $admin ) {
-			echo '<option value="' . $admin->ID . '"';
+			$option .= '<option value="' . $admin->ID . '"';
 			if ( $admin->ID === $this->subscribe2_options['sender'] ) {
-				echo ' selected="selected"';
+				$option .= ' selected="selected"';
 			}
-			echo '>' . $admin->display_name . '</option>' . "\r\n";
+			$option .= '>' . $admin->display_name . '</option>' . "\r\n";
 		}
-		echo '</select>' . "\r\n";
+		$option .= '</select>' . "\r\n";
+
+		$allowed_tags = array(
+			'select' => array(
+				'name' => true,
+			),
+			'option' => array(
+				'value'    => true,
+				'selected' => true,
+			),
+		);
+
+		echo wp_kses( $option, $allowed_tags );
 	}
 
 	/**
@@ -782,7 +798,7 @@ class S2_Admin extends S2_Core {
 		global $wpdb;
 		$cron_file = ABSPATH . 'wp-cron.php';
 		if ( ! is_readable( $cron_file ) ) {
-			echo '<strong><em style="color: red">' . __( 'The WordPress cron functions may be disabled on this server. Digest notifications may not work.', 'subscribe2' ) . '</em></strong><br />' . "\r\n";
+			echo '<strong><em style="color: red">' . esc_html__( 'The WordPress cron functions may be disabled on this server. Digest notifications may not work.', 'subscribe2' ) . '</em></strong><br>' . "\r\n";
 		}
 		$scheduled_time = wp_next_scheduled( 's2_digest_cron' );
 		$offset         = get_option( 'gmt_offset' ) * 60 * 60;
@@ -807,43 +823,43 @@ class S2_Admin extends S2_Core {
 			$schedule_sorted[ $key ] = $schedule[ $key ];
 		}
 		foreach ( $schedule_sorted as $key => $value ) {
-			echo '<label><input type="radio" name="email_freq" value="' . $key . '"' . checked( $this->subscribe2_options['email_freq'], $key, false ) . ' />';
-			echo ' ' . $value['display'] . '</label><br />' . "\r\n";
+			echo '<label><input type="radio" name="email_freq" value="' . esc_attr( $key ) . '"' . checked( $this->subscribe2_options['email_freq'], $key, false ) . ' />';
+			echo ' ' . esc_html( $value['display'] ) . '</label><br>' . "\r\n";
 		}
 		if ( $scheduled_time ) {
 			$date_format = get_option( 'date_format' );
 			$time_format = get_option( 'time_format' );
-			echo '<p>' . __( 'Current UTC time is', 'subscribe2' ) . ': ' . "\r\n";
-			echo '<strong>' . date_i18n( $date_format . ' @ ' . $time_format, false, 'gmt' ) . '</strong></p>' . "\r\n";
-			echo '<p>' . __( 'Current blog time is', 'subscribe2' ) . ': ' . "\r\n";
-			echo '<strong>' . date_i18n( $date_format . ' @ ' . $time_format ) . '</strong></p>' . "\r\n";
-			echo '<p>' . __( 'Next email notification will be sent when your blog time is after', 'subscribe2' ) . ': ' . "\r\n";
-			echo '<input type="hidden" id="jscrondate" value="' . date_i18n( $date_format, $scheduled_time + $offset ) . '" />';
-			echo '<input type="hidden" id="jscrontime" value="' . date_i18n( $time_format, $scheduled_time + $offset ) . '" />';
-			echo '<span id="s2cron_1"><span id="s2crondate" style="background-color: #FFFBCC">' . date_i18n( $date_format, $scheduled_time + $offset ) . '</span>';
-			echo ' @ <span id="s2crontime" style="background-color: #FFFBCC">' . date_i18n( $time_format, $scheduled_time + $offset ) . '</span> ';
-			echo '<a href="#" onclick="s2Show(\'cron\'); return false;">' . __( 'Edit', 'subscribe2' ) . '</a></span>' . "\r\n";
+			echo '<p>' . esc_html__( 'Current UTC time is', 'subscribe2' ) . ': ' . "\r\n";
+			echo '<strong>' . esc_html( date_i18n( $date_format . ' @ ' . $time_format, false, 'gmt' ) ) . '</strong></p>' . "\r\n";
+			echo '<p>' . esc_html__( 'Current blog time is', 'subscribe2' ) . ': ' . "\r\n";
+			echo '<strong>' . esc_html( date_i18n( $date_format . ' @ ' . $time_format ) ) . '</strong></p>' . "\r\n";
+			echo '<p>' . esc_html__( 'Next email notification will be sent when your blog time is after', 'subscribe2' ) . ': ' . "\r\n";
+			echo '<input type="hidden" id="jscrondate" value="' . esc_attr( date_i18n( $date_format, $scheduled_time + $offset ) ) . '" />';
+			echo '<input type="hidden" id="jscrontime" value="' . esc_attr( date_i18n( $time_format, $scheduled_time + $offset ) ) . '" />';
+			echo '<span id="s2cron_1"><span id="s2crondate" style="background-color: #FFFBCC">' . esc_html( date_i18n( $date_format, $scheduled_time + $offset ) ) . '</span>';
+			echo ' @ <span id="s2crontime" style="background-color: #FFFBCC">' . esc_html( date_i18n( $time_format, $scheduled_time + $offset ) ) . '</span> ';
+			echo '<a href="#" onclick="s2Show(\'cron\'); return false;">' . esc_html__( 'Edit', 'subscribe2' ) . '</a></span>' . "\r\n";
 			echo '<span id="s2cron_2">' . "\r\n";
-			echo '<input id="s2datepicker" name="crondate" value="' . date_i18n( $date_format, $scheduled_time + $offset ) . '">' . "\r\n";
+			echo '<input id="s2datepicker" name="crondate" value="' . esc_attr( date_i18n( $date_format, $scheduled_time + $offset ) ) . '">' . "\r\n";
 			$hours        = array( '12:00 am', '1:00 am', '2:00 am', '3:00 am', '4:00 am', '5:00 am', '6:00 am', '7:00 am', '8:00 am', '9:00 am', '10:00 am', '11:00 am', '12:00 pm', '1:00 pm', '2:00 pm', '3:00 pm', '4:00 pm', '5:00 pm', '6:00 pm', '7:00 pm', '8:00 pm', '9:00 pm', '10:00 pm', '11:00 pm' );
 			$current_hour = intval( date_i18n( 'G', $scheduled_time + $offset ) );
 			echo '<select name="crontime">' . "\r\n";
 			foreach ( $hours as $key => $value ) {
-				echo '<option value="' . $key . '"';
+				echo '<option value="' . esc_attr( $key ) . '"';
 				if ( ! empty( $scheduled_time ) && $key === $current_hour ) {
 					echo ' selected="selected"';
 				}
-				echo '>' . $value . '</option>' . "\r\n";
+				echo '>' . esc_html( $value ) . '</option>' . "\r\n";
 			}
 			echo '</select>' . "\r\n";
-			echo '<a href="#" onclick="s2CronUpdate(\'cron\'); return false;">' . __( 'Update', 'subscribe2' ) . '</a>' . "\r\n";
-			echo '<a href="#" onclick="s2CronRevert(\'cron\'); return false;">' . __( 'Revert', 'subscribe2' ) . '</a></span>' . "\r\n";
+			echo '<a href="#" onclick="s2CronUpdate(\'cron\'); return false;">' . esc_html__( 'Update', 'subscribe2' ) . '</a>' . "\r\n";
+			echo '<a href="#" onclick="s2CronRevert(\'cron\'); return false;">' . esc_html__( 'Revert', 'subscribe2' ) . '</a></span>' . "\r\n";
 			if ( ! empty( $this->subscribe2_options['last_s2cron'] ) ) {
-				echo '<p>' . __( 'Attempt to resend the last Digest Notification email', 'subscribe2' ) . ': ';
-				echo '<input type="submit" class="button-secondary" name="resend" value="' . __( 'Resend Digest', 'subscribe2' ) . '" /></p>' . "\r\n";
+				echo '<p>' . esc_html__( 'Attempt to resend the last Digest Notification email', 'subscribe2' ) . ': ';
+				echo '<input type="submit" class="button-secondary" name="resend" value="' . esc_attr( __( 'Resend Digest', 'subscribe2' ) ) . '" /></p>' . "\r\n";
 			}
 		} else {
-			echo '<br />';
+			echo '<br>';
 		}
 	}
 
@@ -856,7 +872,8 @@ class S2_Admin extends S2_Core {
 			return;
 		}
 
-		$option = '';
+		$option  = '<select name="s2page">' . "\r\n";
+		$option .= '<option value="0">' . __( 'Select a page', 'subscribe2' ) . '</option>' . "\r\n";
 		foreach ( $pages as $page ) {
 			$option .= '<option value="' . $page->ID . '"';
 			if ( $page->ID === $s2page ) {
@@ -871,8 +888,19 @@ class S2_Admin extends S2_Core {
 			}
 			$option .= $page->post_title . '</option>' . "\r\n";
 		}
+		$option .= '</select>' . "\r\n";
 
-		echo $option;
+		$allowed_tags = array(
+			'select' => array(
+				'name' => true,
+			),
+			'option' => array(
+				'value'    => true,
+				'selected' => true,
+			),
+		);
+
+		echo wp_kses( $option, $allowed_tags );
 	}
 
 	/**
@@ -1116,11 +1144,11 @@ class S2_Admin extends S2_Core {
 	 * Show form for one-click subscription on user profile page
 	 */
 	public function one_click_profile_form( $user ) {
-		echo '<h3>' . __( 'Email subscription', 'subscribe2' ) . '</h3>' . "\r\n";
+		echo '<h3>' . esc_html__( 'Email subscription', 'subscribe2' ) . '</h3>' . "\r\n";
 		echo '<table class="form-table">' . "\r\n";
-		echo '<tr><th scope="row">' . __( 'Subscribe / Unsubscribe', 'subscribe2' ) . '</th>' . "\r\n";
-		echo '<td><label><input type="checkbox" name="sub2-one-click-subscribe" value="1" ' . checked( ! get_user_meta( $user->ID, $this->get_usermeta_keyname( 's2_subscribed' ), true ), false, false ) . ' /> ' . __( 'Receive notifications', 'subscribe2' ) . '</label><br />' . "\r\n";
-		echo '<span class="description">' . __( 'Check if you want to receive email notification when new posts are published', 'subscribe2' ) . '</span>' . "\r\n";
+		echo '<tr><th scope="row">' . esc_html__( 'Subscribe / Unsubscribe', 'subscribe2' ) . '</th>' . "\r\n";
+		echo '<td><label><input type="checkbox" name="sub2-one-click-subscribe" value="1" ' . checked( ! get_user_meta( $user->ID, $this->get_usermeta_keyname( 's2_subscribed' ), true ), false, false ) . ' /> ' . esc_html__( 'Receive notifications', 'subscribe2' ) . '</label><br>' . "\r\n";
+		echo '<span class="description">' . esc_html__( 'Check if you want to receive email notification when new posts are published', 'subscribe2' ) . '</span>' . "\r\n";
 		echo '</td></tr></table>' . "\r\n";
 	}
 
