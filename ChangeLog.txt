@@ -4,6 +4,9 @@
 * Introduce 's2_plaintext' filter to allow plaintext to be filtered before tags are stripped to correct for layout needs
 * Show join date for Registered Subscribers with data from WordPress table
 * Fix email templates to preserve line spacing on new installs and resets
+* Send Digest Preview emails from editing pages if Subscribe2 HTML is in Digest email mode
+* Fix typo error in default options file
+* Improve Help tab for Excluded categories - thanks to @iwaddo
 
 = 10.31 =
 

@@ -135,7 +135,7 @@ class S2_Admin extends S2_Core {
 				'id'      => 's2-settings-help4',
 				'title'   => __( 'Registered Users', 'subscribe2' ),
 				'content' => '<p>' . __( 'This section allows settings that apply to Registered Subscribers to be configured.', 'subscribe2' ) .
-				'</p><p>' . __( 'Categories can be made compulsory so emails are always sent for posts in these categories. They can also be excludes so that emails are not generated. Excluded categories take precedence over Compulsory categories.', 'subscribe2' ) .
+				'</p><p>' . __( 'Categories can be made compulsory so emails are always sent to Public and Registered Subscribers for posts in these categories. They can also be excluded so that emails are not generated for Subscribers. Registered Subscribers can be allowed to bypass category exclusions. Excluded categories take precedence over Compulsory categories.', 'subscribe2' ) .
 				'</p><p>' . __( 'A set of default settings for new users can also be specified using the Auto Subscribe section. Settings specified here will be applied to any newly created user accounts while Subscribe2 is activated.', 'subscribe2' ) . '</p>',
 			)
 		);

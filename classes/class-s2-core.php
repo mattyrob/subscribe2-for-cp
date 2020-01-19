@@ -1479,8 +1479,13 @@ class S2_Core {
 				$posts = $wpdb->get_results( $sql ); // phpcs:ignore WordPress.DB.PreparedSQL
 			}
 		} else {
-			// we are sending a preview
-			$posts = get_posts( 'numberposts=1' );
+			// we are sending a preview, use global if possible otherwise get last post
+			global $post;
+			if ( empty( $post ) ) {
+				$posts = get_posts( 'numberposts=1' );
+			} else {
+				$posts = array( $post );
+			}
 		}
 
 		// Collect sticky posts if desired
