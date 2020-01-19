@@ -1,14 +1,14 @@
-# Copyright (C) 2019 Subscribe2
+# Copyright (C) 2020 Subscribe2
 # This file is distributed under the same license as the Subscribe2 package.
 msgid ""
 msgstr ""
-"Project-Id-Version: Subscribe2 10.29\n"
+"Project-Id-Version: Subscribe2 10.31\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/subscribe2\n"
-"POT-Creation-Date: 2019-05-18 12:23:21+00:00\n"
+"POT-Creation-Date: 2020-01-19 10:51:07+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"PO-Revision-Date: 2019-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: 2020-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: en\n"
@@ -155,16 +155,16 @@ msgid ""
 "unlimited)"
 msgstr ""
 
-#: admin/settings.php:203 classes/class-s2-admin.php:819
-#: classes/class-s2-list-table-legacy.php:43 classes/class-s2-list-table.php:43
+#: admin/settings.php:203 classes/class-s2-admin.php:825
+#: classes/class-s2-list-table-legacy.php:43 classes/class-s2-list-table.php:36
 msgid "Edit"
 msgstr ""
 
-#: admin/settings.php:206 classes/class-s2-admin.php:833
+#: admin/settings.php:206 classes/class-s2-admin.php:839
 msgid "Update"
 msgstr ""
 
-#: admin/settings.php:207 classes/class-s2-admin.php:834
+#: admin/settings.php:207 classes/class-s2-admin.php:840
 msgid "Revert"
 msgstr ""
 
@@ -640,12 +640,12 @@ msgid "Subscribers"
 msgstr ""
 
 #: admin/subscribers.php:201 classes/class-s2-admin.php:69
-#: classes/class-s2-admin.php:640
+#: classes/class-s2-admin.php:646
 msgid "Public Subscribers"
 msgstr ""
 
 #: admin/subscribers.php:202 classes/class-s2-admin.php:76
-#: classes/class-s2-admin.php:644
+#: classes/class-s2-admin.php:650
 msgid "Registered Subscribers"
 msgstr ""
 
@@ -743,6 +743,26 @@ msgstr ""
 
 #: admin/your-subscriptions.php:40
 msgid "Update Preferences"
+msgstr ""
+
+#: classes/class-mo-admin-notice.php:61
+#. Translators: Mail Optin admin notice
+msgid ""
+"Free optin form plugin that will %1$sincrease your email list "
+"subscribers%2$s and keep them engaged with %1$sautomated and schedule "
+"newsletters%2$s."
+msgstr ""
+
+#: classes/class-mo-admin-notice.php:72
+msgid "Install MailOptin Now for Free!"
+msgstr ""
+
+#: classes/class-mo-admin-notice.php:77
+msgid "Activate MailOptin Now!"
+msgstr ""
+
+#: classes/class-mo-admin-notice.php:86
+msgid "Dismiss this notice"
 msgstr ""
 
 #. Author of the plugin/theme
@@ -892,9 +912,11 @@ msgstr ""
 
 #: classes/class-s2-admin.php:138
 msgid ""
-"Categories can be made compulsory so emails are always sent for posts in "
-"these categories. They can also be excludes so that emails are not "
-"generated. Excluded categories take precedence over Compulsory categories."
+"Categories can be made compulsory so emails are always sent to Public and "
+"Registered Subscribers for posts in these categories. They can also be "
+"excluded so that emails are not generated for Subscribers. Registered "
+"Subscribers can be allowed to bypass category exclusions. Excluded "
+"categories take precedence over Compulsory categories."
 msgstr ""
 
 #: classes/class-s2-admin.php:139
@@ -1012,7 +1034,7 @@ msgstr ""
 msgid "Donate"
 msgstr ""
 
-#: classes/class-s2-admin.php:371
+#: classes/class-s2-admin.php:370
 msgid "Subscribe2 Notification Override"
 msgstr ""
 
@@ -1020,7 +1042,7 @@ msgstr ""
 msgid "Subscribe2 Preview"
 msgstr ""
 
-#: classes/class-s2-admin.php:396 gutenberg/gutenberg-translations.php:21
+#: classes/class-s2-admin.php:397 gutenberg/gutenberg-translations.php:21
 msgid "Subscribe2 Resend"
 msgstr ""
 
@@ -1036,94 +1058,94 @@ msgstr ""
 msgid "Send Preview"
 msgstr ""
 
-#: classes/class-s2-admin.php:472 gutenberg/gutenberg-translations.php:22
+#: classes/class-s2-admin.php:475 gutenberg/gutenberg-translations.php:22
 msgid "Resend the notification email of this post to current subscribers:"
 msgstr ""
 
-#: classes/class-s2-admin.php:473 gutenberg/gutenberg-translations.php:23
+#: classes/class-s2-admin.php:476 gutenberg/gutenberg-translations.php:23
 msgid "Resend Notification"
 msgstr ""
 
-#: classes/class-s2-admin.php:578
+#: classes/class-s2-admin.php:584
 msgid "Registered User"
 msgstr ""
 
-#: classes/class-s2-admin.php:583
+#: classes/class-s2-admin.php:589
 msgid "Confirmed Public Subscriber"
 msgstr ""
 
-#: classes/class-s2-admin.php:585
+#: classes/class-s2-admin.php:591
 msgid "Unconfirmed Public Subscriber"
 msgstr ""
 
-#: classes/class-s2-admin.php:602 classes/class-s2-forms.php:306
+#: classes/class-s2-admin.php:608 classes/class-s2-forms.php:306
 #: classes/class-s2-forms.php:366
 msgid "Select / Unselect All"
 msgstr ""
 
-#: classes/class-s2-admin.php:639
+#: classes/class-s2-admin.php:645
 msgid "All Users and Subscribers"
 msgstr ""
 
-#: classes/class-s2-admin.php:641
+#: classes/class-s2-admin.php:647
 msgid "Confirmed"
 msgstr ""
 
-#: classes/class-s2-admin.php:642
+#: classes/class-s2-admin.php:648
 msgid "Unconfirmed"
 msgstr ""
 
-#: classes/class-s2-admin.php:643
+#: classes/class-s2-admin.php:649
 msgid "All Registered Users"
 msgstr ""
 
-#: classes/class-s2-admin.php:751
+#: classes/class-s2-admin.php:757
 msgid "Post Author"
 msgstr ""
 
-#: classes/class-s2-admin.php:779
+#: classes/class-s2-admin.php:785
 msgid ""
 "The WordPress cron functions may be disabled on this server. Digest "
 "notifications may not work."
 msgstr ""
 
-#: classes/class-s2-admin.php:788
+#: classes/class-s2-admin.php:794
 msgid "For each Post"
 msgstr ""
 
-#: classes/class-s2-admin.php:810
+#: classes/class-s2-admin.php:816
 msgid "Current UTC time is"
 msgstr ""
 
-#: classes/class-s2-admin.php:812
+#: classes/class-s2-admin.php:818
 msgid "Current blog time is"
 msgstr ""
 
-#: classes/class-s2-admin.php:814
+#: classes/class-s2-admin.php:820
 msgid "Next email notification will be sent when your blog time is after"
 msgstr ""
 
-#: classes/class-s2-admin.php:836
+#: classes/class-s2-admin.php:842
 msgid "Attempt to resend the last Digest Notification email"
 msgstr ""
 
-#: classes/class-s2-admin.php:837
+#: classes/class-s2-admin.php:843
 msgid "Resend Digest"
 msgstr ""
 
-#: classes/class-s2-admin.php:1113
+#: classes/class-s2-admin.php:1119
 msgid "Email subscription"
 msgstr ""
 
-#: classes/class-s2-admin.php:1115
+#: classes/class-s2-admin.php:1121
 msgid "Subscribe / Unsubscribe"
 msgstr ""
 
-#: classes/class-s2-admin.php:1116
+#: classes/class-s2-admin.php:1122
 msgid "Receive notifications"
 msgstr ""
 
-#: classes/class-s2-admin.php:1117
+#: classes/class-s2-admin.php:1123
 msgid "Check if you want to receive email notification when new posts are published"
 msgstr ""
 
@@ -1172,61 +1194,61 @@ msgstr ""
 msgid "That email address is not subscribed."
 msgstr ""
 
-#: classes/class-s2-core.php:546
+#: classes/class-s2-core.php:554
 msgid "Plain Text Excerpt Preview"
 msgstr ""
 
-#: classes/class-s2-core.php:548
+#: classes/class-s2-core.php:556
 msgid "Plain Text Full Preview"
 msgstr ""
 
-#: classes/class-s2-core.php:550
+#: classes/class-s2-core.php:558
 msgid "HTML Excerpt Preview"
 msgstr ""
 
-#: classes/class-s2-core.php:552
+#: classes/class-s2-core.php:560
 msgid "HTML Full Preview"
 msgstr ""
 
-#: classes/class-s2-core.php:1236
+#: classes/class-s2-core.php:1252
 msgid "Check here to Subscribe to email notifications for new posts"
 msgstr ""
 
-#: classes/class-s2-core.php:1241
+#: classes/class-s2-core.php:1257
 msgid ""
 "By registering with this blog you are also agreeing to receive email "
 "notifications for new posts but you can unsubscribe at anytime"
 msgstr ""
 
-#: classes/class-s2-core.php:1269
+#: classes/class-s2-core.php:1285
 msgid "Check here to Subscribe to notifications for new posts"
 msgstr ""
 
-#: classes/class-s2-core.php:1388
+#: classes/class-s2-core.php:1404
 msgid "Weekly"
 msgstr ""
 
-#: classes/class-s2-core.php:1601 classes/class-s2-core.php:1602
+#: classes/class-s2-core.php:1622 classes/class-s2-core.php:1623
 msgid "Author"
 msgstr ""
 
-#: classes/class-s2-core.php:1608
+#: classes/class-s2-core.php:1629
 msgid "Posted on"
 msgstr ""
 
-#: classes/class-s2-core.php:1635 classes/class-s2-core.php:1636
+#: classes/class-s2-core.php:1656 classes/class-s2-core.php:1657
 msgid "Posted in"
 msgstr ""
 
-#: classes/class-s2-core.php:1649 classes/class-s2-core.php:1650
+#: classes/class-s2-core.php:1670 classes/class-s2-core.php:1671
 msgid "Tagged as"
 msgstr ""
 
-#: classes/class-s2-core.php:1721
+#: classes/class-s2-core.php:1742
 msgid "Digest Email"
 msgstr ""
 
-#: classes/class-s2-core.php:1734
+#: classes/class-s2-core.php:1755
 msgid "Digest Preview"
 msgstr ""
 
@@ -1489,50 +1511,50 @@ msgid "[Un]Subscribe to Posts"
 msgstr ""
 
 #: classes/class-s2-list-table-legacy.php:131
-#: classes/class-s2-list-table.php:131
+#: classes/class-s2-list-table.php:112
 msgid "Select All"
 msgstr ""
 
 #: classes/class-s2-list-table-legacy.php:183
 #: classes/class-s2-list-table-legacy.php:188
-#: classes/class-s2-list-table.php:186 classes/class-s2-list-table.php:191
+#: classes/class-s2-list-table.php:167 classes/class-s2-list-table.php:172
 msgid "Delete"
 msgstr ""
 
 #: classes/class-s2-list-table-legacy.php:189
-#: classes/class-s2-list-table.php:192
+#: classes/class-s2-list-table.php:173
 msgid "Toggle"
 msgstr ""
 
 #: classes/class-s2-list-table-legacy.php:198
-#: classes/class-s2-list-table.php:201
+#: classes/class-s2-list-table.php:182
 msgid "No users were selected."
 msgstr ""
 
 #: classes/class-s2-list-table-legacy.php:211
-#: classes/class-s2-list-table.php:214
+#: classes/class-s2-list-table.php:195
 msgid "Address(es) deleted!"
 msgstr ""
 
 #: classes/class-s2-list-table-legacy.php:215
-#: classes/class-s2-list-table.php:218
+#: classes/class-s2-list-table.php:199
 msgid "Delete failed! You cannot delete some or all of these users."
 msgstr ""
 
 #: classes/class-s2-list-table-legacy.php:218
-#: classes/class-s2-list-table.php:221
+#: classes/class-s2-list-table.php:202
 msgid ""
 "Registered user(s) deleted! Any posts made by these users were assigned to "
 "you."
 msgstr ""
 
 #: classes/class-s2-list-table-legacy.php:242
-#: classes/class-s2-list-table.php:245
+#: classes/class-s2-list-table.php:226
 msgid "Status changed!"
 msgstr ""
 
 #: classes/class-s2-list-table-legacy.php:259
-#: classes/class-s2-list-table.php:266
+#: classes/class-s2-list-table.php:247
 #. Translators: Pagination
 msgid "%s item"
 msgid_plural "%s items"
@@ -1559,43 +1581,24 @@ msgstr ""
 msgid "Go to the last page"
 msgstr ""
 
-#: classes/class-s2-list-table.php:327
+#: classes/class-s2-list-table.php:308
 msgid "First page"
 msgstr ""
 
-#: classes/class-s2-list-table.php:338
+#: classes/class-s2-list-table.php:319
 msgid "Previous page"
 msgstr ""
 
-#: classes/class-s2-list-table.php:345 classes/class-s2-list-table.php:349
+#: classes/class-s2-list-table.php:326 classes/class-s2-list-table.php:330
 msgid "Current Page"
 msgstr ""
 
-#: classes/class-s2-list-table.php:365
+#: classes/class-s2-list-table.php:346
 msgid "Next page"
 msgstr ""
 
-#: classes/class-s2-list-table.php:376
+#: classes/class-s2-list-table.php:357
 msgid "Last page"
-msgstr ""
-
-#: classes/mo-notice.php:60
-msgid ""
-"Free optin form plugin that will %1$sincrease your email list "
-"subscribers%2$s and keep them engaged with %1$sautomated and schedule "
-"newsletters%2$s."
-msgstr ""
-
-#: classes/mo-notice.php:69
-msgid "Install MailOptin Now for Free!"
-msgstr ""
-
-#: classes/mo-notice.php:74
-msgid "Activate MailOptin Now!"
-msgstr ""
-
-#: classes/mo-notice.php:83
-msgid "Dismiss this notice"
 msgstr ""
 
 #: gutenberg/gutenberg-translations.php:5
@@ -1690,13 +1693,13 @@ msgstr ""
 #: include/options.php:148
 msgid ""
 "{BLOGNAME} has received a request to {ACTION} for this email address. To "
-"complete your request please click on the link below:\\n"
-"\\n"
-"{LINK}\\n"
-"\\n"
-"If you did not request this, please feel free to disregard this notice!\\n"
-"\\n"
-"Thank you,\\n"
+"complete your request please click on the link below:\n"
+"\n"
+"{LINK}\n"
+"\n"
+"If you did not request this, please feel free to disregard this notice!\n"
+"\n"
+"Thank you,\n"
 "{MYNAME}."
 msgstr ""
 
@@ -1707,16 +1710,16 @@ msgstr ""
 #: include/options.php:156
 msgid ""
 "This email address was subscribed for notifications at {BLOGNAME} "
-"({BLOGLINK}) but the subscription remains incomplete.\\n"
-"\\n"
-"If you wish to complete your subscription please click on the link below:\\n"
-"\\n"
-"{LINK}\\n"
-"\\n"
+"({BLOGLINK}) but the subscription remains incomplete.\n"
+"\n"
+"If you wish to complete your subscription please click on the link below:\n"
+"\n"
+"{LINK}\n"
+"\n"
 "If you do not wish to complete your subscription please ignore this email "
-"and your address will be removed from our database.\\n"
-"\\n"
-"Regards,\\n"
+"and your address will be removed from our database.\n"
+"\n"
+"Regards,\n"
 "{MYNAME}"
 msgstr ""
 
@@ -1750,25 +1753,24 @@ msgstr ""
 msgid "Notifies an email list when new entries are posted."
 msgstr ""
 
-#: classes/class-s2-admin.php:557
+#: classes/class-s2-admin.php:563
 msgctxt "Comma Separated Column Header names for CSV Export"
 msgid "User Email,User Type,User Name,Confirm Date,IP"
 msgstr ""
 
 #: classes/class-s2-list-table-legacy.php:75
-#: classes/class-s2-list-table-legacy.php:80 classes/class-s2-list-table.php:75
-#: classes/class-s2-list-table.php:80
+#: classes/class-s2-list-table-legacy.php:80 classes/class-s2-list-table.php:68
 msgctxt "column name"
 msgid "Email"
 msgstr ""
 
-#: classes/class-s2-list-table-legacy.php:81 classes/class-s2-list-table.php:81
+#: classes/class-s2-list-table-legacy.php:81 classes/class-s2-list-table.php:69
 msgctxt "column name"
 msgid "Date"
 msgstr ""
 
 #: classes/class-s2-list-table-legacy.php:333
-#: classes/class-s2-list-table.php:357
+#: classes/class-s2-list-table.php:338
 #. Translators: Pagination
 msgctxt "paging"
 msgid "%1$s of %2$s"
