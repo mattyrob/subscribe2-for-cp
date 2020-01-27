@@ -228,6 +228,14 @@ switch ( $current_tab ) {
 		echo '<label><input type="radio" name="pages" value="no"' . checked( $this->subscribe2_options['pages'], 'no', false ) . ' /> ';
 		echo esc_html__( 'No', 'subscribe2' ) . '</label><br><br>' . "\r\n";
 
+		$s2_post_types = apply_filters( 's2_post_types', array() );
+		if ( ! empty( $s2_post_types ) ) {
+			if ( ! empty( $s2_post_types ) ) {
+				echo esc_html__( 'Subscribe2 will send email notifications for the following custom post types', 'subscribe2' ) . ': ';
+				echo '<strong>' . esc_html( implode( ', ', $s2_post_types ) ) . '</strong><br><br>' . "\r\n";
+			}
+		}
+
 		echo esc_html__( 'Send Emails for Password Protected Posts', 'subscribe2' ) . ': ';
 		echo '<label><input type="radio" name="password" value="yes"' . checked( $this->subscribe2_options['password'], 'yes', false ) . ' /> ';
 		echo esc_html__( 'Yes', 'subscribe2' ) . '</label>&nbsp;&nbsp;';
