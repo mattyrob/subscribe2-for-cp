@@ -10,6 +10,7 @@
 * Convert some self closing HTML tags to HTML5
 * Escape plugin output for better security
 * Don't capitalise Custom Post Type names registered via the API when displayed back to admins
+* Fix for MailOptin admin notice
 
 = 10.31 =
 

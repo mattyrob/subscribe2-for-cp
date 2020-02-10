@@ -56,8 +56,8 @@ if ( ! class_exists( 'MO_Admin_Notice' ) ) {
 					<div class="mo-notice-first-half">
 						<p>
 							<?php
-							printf(
-								wp_kses_post(
+							wp_kses_post(
+								printf(
 									// Translators: Mail Optin admin notice
 									__( 'Free optin form plugin that will %1$sincrease your email list subscribers%2$s and keep them engaged with %1$sautomated and schedule newsletters%2$s.', 'subscribe2' ),
 									'<span class="mo-stylize"><strong>',
