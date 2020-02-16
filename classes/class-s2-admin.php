@@ -150,19 +150,9 @@ class S2_Admin extends S2_Core {
 		);
 		$screen->add_help_tab(
 			array(
-				'id'      => 's2-settings-help6',
-				'title'   => __( 'ReCaptcha', 'subscribe2' ),
-				'content' => '<p>' . __( 'This section holds site and secret keys for using Google ReCaptcha.', 'subscribe2' ) .
-				'</p><p>' . __( 'V2 ReCaptcha takes precedence over Invisible ReCaptcha. To use Invisible ReCaptcha, leave the V2 ReCaptcha key fields empty.', 'subscribe2' ) .
-				'</p><p>' . __( 'Both key files needs populating for V2 ReCaptcha or Invisible ReCaptcha, failure to complete both fields will result in ReCaptcha not working.', 'subscribe2' ) . '</p>',
-			)
-		);
-		$screen->add_help_tab(
-			array(
 				'id'      => 's2-settings-help7',
 				'title'   => __( 'Miscellaneous', 'subscribe2' ),
 				'content' => '<p>' . __( 'This section contains a place to bar specified domains from becoming Public Subscribers and links to help and support pages.', 'subscribe2' ) .
-				'</p><p>' . __( 'In the paid Subscribe2 HTML version there is also a place here to enter a license code so that updates can be accessed automatically.', 'subscribe2' ) .
 				'</p>',
 			)
 		);
@@ -316,12 +306,7 @@ class S2_Admin extends S2_Core {
 	 * Add buttons for Rich Text Editor
 	 */
 	public function mce_plugin( $arr ) {
-		if ( version_compare( $this->wp_release, '3.9', '<' ) ) {
-			$path = S2URL . 'tinymce/editor-plugin3' . $this->script_debug . '.js';
-		} else {
-			$path = S2URL . 'tinymce/editor-plugin4' . $this->script_debug . '.js';
-		}
-		$arr['subscribe2'] = $path;
+		$arr['subscribe2'] = S2URL . 'tinymce/editor-plugin4' . $this->script_debug . '.js';
 		return $arr;
 	}
 
@@ -1186,5 +1171,14 @@ class S2_Admin extends S2_Core {
 		if ( 'resend' === $resend ) {
 			$this->subscribe2_cron( '', 'resend' );
 		}
+	}
+
+	/**
+	 * Uninstall hook
+	 */
+	public function s2_uninstall() {
+		require_once S2PATH . 'classes/class-s2-uninstall.php';
+		$s2_uninstall = new S2_Uninstall();
+		$s2_uninstall->uninstall();
 	}
 }

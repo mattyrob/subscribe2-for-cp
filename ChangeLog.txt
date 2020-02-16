@@ -1,5 +1,6 @@
 = 10.32 =
 
+* Bump minimum required WordPress to 4.4
 * Apply fix for poor list layout in plaintext emails when using Block Editor - thank to @eightize
 * Introduce 's2_plaintext' filter to allow plaintext to be filtered before tags are stripped to correct for layout needs
 * Show join date for Registered Subscribers with data from WordPress table
