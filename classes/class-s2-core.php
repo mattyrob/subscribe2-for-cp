@@ -1997,9 +1997,6 @@ class S2_Core {
 			// register uninstall functions
 			register_uninstall_hook( S2PLUGIN, array( 'S2_Admin', 's2_uninstall' ) );
 
-			// MailOptin admin notices
-			require_once S2PATH . 'classes/class-mo-admin-notice.php';
-
 			// capture CSV export
 			if ( isset( $_POST['s2_admin'] ) && isset( $_POST['csv'] ) ) {
 				$date = gmdate( 'Y-m-d' );
