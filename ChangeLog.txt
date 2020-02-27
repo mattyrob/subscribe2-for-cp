@@ -12,6 +12,7 @@
 * Escape plugin output for better security
 * Don't capitalise Custom Post Type names registered via the API when displayed back to admins
 * Remove MailOptin from this fork
+* Fix for JavaScript IP updater setting not saving when unchecked
 
 = 10.31 =
 

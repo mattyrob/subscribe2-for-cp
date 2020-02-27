@@ -35,7 +35,7 @@ if ( version_compare( $GLOBALS['wp_version'], '4.4', '<' ) || ! function_exists(
 	if ( ! function_exists( 'add_action' ) ) {
 		$exit_msg = __( "I'm just a plugin, please don't call me directly", 'subscribe2' );
 	} else {
-		// Translators: Subscribe2 needs WordPress 3.3 or above, exit if not on a compatible version
+		// Translators: Subscribe2 needs WordPress 4.4 or above, exit if not on a compatible version
 		$exit_msg = sprintf( __( 'This version of Subscribe2 requires WordPress 4.4 or greater. Please update %1$s or use an older version of %2$s.', 'subscribe2' ), '<a href="http://codex.wordpress.org/Updating_WordPress">WordPress</a>', '<a href="https://subscribe2.wordpress.com/subscribe2-html/">Subscribe2</a>' );
 	}
 	exit( esc_html( $exit_msg ) );

@@ -47,7 +47,7 @@ if ( isset( $_POST['s2_admin'] ) ) {
 				// check box entries
 				( isset( $_POST[ $key ] ) && '1' === $_POST[ $key ] ) ? $this->subscribe2_options[ $key ] = '1' : $this->subscribe2_options[ $key ] = '0';
 			} elseif ( 'appearance_tab' === $key ) {
-				$options = array( 'show_meta', 'show_button', 'ajax', 'widget', 'counterwidget', 's2meta_default' );
+				$options = array( 'show_meta', 'show_button', 'ajax', 'widget', 'counterwidget', 's2meta_default', 'js_ip_updater' );
 				foreach ( $options as $option ) {
 					if ( ! isset( $_POST[ $option ] ) ) {
 						$this->subscribe2_options[ $option ] = '0';
