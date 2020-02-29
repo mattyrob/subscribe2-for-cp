@@ -528,7 +528,7 @@ class S2_Frontend extends S2_Core {
 	}
 
 	/**
-	 * Reformat WordPress escaped link to IPify library
+	 * Reformat escaped link to IPify library
 	 */
 	public function tag_replace_ampersand( $tag ) {
 		if ( strstr( $tag, 'ipify' ) !== false ) {

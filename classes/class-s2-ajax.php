@@ -28,7 +28,7 @@ class S2_Ajax {
 	 * Add jQuery code and CSS to front pages for ajax form
 	 */
 	public function add_ajax() {
-		// enqueue the jQuery script we need and let WordPress handle the dependencies
+		// enqueue the jQuery script we need and handle the dependencies
 		wp_enqueue_script( 'jquery-ui-dialog' );
 		$css = apply_filters( 's2_jqueryui_css', 'https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/ui-darkness/jquery-ui.css' );
 		if ( is_ssl() ) {

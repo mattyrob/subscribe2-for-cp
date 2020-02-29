@@ -198,7 +198,7 @@ class S2_Core {
 					if ( 'www.' === substr( $sitename, 0, 4 ) ) {
 						$sitename = substr( $sitename, 4 );
 					}
-					$this->myemail = 'wordpress@' . $sitename;
+					$this->myemail = 'classicpress@' . $sitename;
 				}
 			}
 		}
@@ -643,7 +643,7 @@ class S2_Core {
 		// ACTION = 1 to subscribe, 0 to unsubscribe
 		// HASH = wp_hash of email address
 		// ID = user's ID in the subscribe2 table
-		// use home instead of siteurl incase index.php is not in core WordPress directory
+		// use home instead of siteurl incase index.php is not in core home directory
 		$link = apply_filters( 's2_confirm_link', get_option( 'home' ) ) . '/?s2=';
 
 		if ( 'add' === $action ) {
@@ -1223,7 +1223,7 @@ class S2_Core {
 	public function get_usermeta_keyname( $metaname ) {
 		global $wpdb;
 
-		// Is this WordPressMU or not?
+		// Is this Multisite or not?
 		if ( true === $this->s2_mu ) {
 			switch ( $metaname ) {
 				case 's2_subscribed':
@@ -1241,7 +1241,7 @@ class S2_Core {
 	}
 
 	/**
-	 * Adds information to the WordPress registration screen for new users
+	 * Adds information to the registration screen for new users
 	 */
 	public function register_form() {
 		if ( 'no' === $this->subscribe2_options['autosub'] ) {
@@ -1823,11 +1823,11 @@ class S2_Core {
 			$this->lockout > 86399;
 		}
 
-		// get the WordPress release number for in code version comparisons
+		// get the ClassicPress release number for in code version comparisons
 		$tmp              = explode( '-', $wp_version, 2 );
 		$this->wp_release = $tmp[0];
 
-		// Is this WordPressMU or not?
+		// Is this Multisite or not?
 		if ( isset( $wpmu_version ) || strpos( $wp_version, 'wordpress-mu' ) ) {
 			$this->s2_mu = true;
 		}

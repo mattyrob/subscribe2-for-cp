@@ -54,7 +54,7 @@ if ( ! isset( $mysubscribe2->subscribe2_options['tracking'] ) ) {
 
 if ( ! isset( $mysubscribe2->subscribe2_options['s2page'] ) ) {
 	$mysubscribe2->subscribe2_options['s2page'] = 0;
-} // option for default WordPress page for Subscribe2 to use
+} // option for default Page for Subscribe2 to use
 
 if ( ! isset( $mysubscribe2->subscribe2_options['stylesheet'] ) ) {
 	$mysubscribe2->subscribe2_options['stylesheet'] = 'yes';
@@ -66,7 +66,7 @@ if ( ! isset( $mysubscribe2->subscribe2_options['embed'] ) ) {
 
 if ( ! isset( $mysubscribe2->subscribe2_options['pages'] ) ) {
 	$mysubscribe2->subscribe2_options['pages'] = 'no';
-} // option for sending notifications for WordPress pages
+} // option for sending notifications for Pages
 
 if ( ! isset( $mysubscribe2->subscribe2_options['password'] ) ) {
 	$mysubscribe2->subscribe2_options['password'] = 'no';

@@ -1,6 +1,6 @@
 <?php
 class S2_Admin extends S2_Core {
-	/* ===== WordPress menu registration and scripts ===== */
+	/* ===== Menu registration and scripts ===== */
 	/**
 	 * Hook the menu
 	 */
@@ -74,7 +74,7 @@ class S2_Admin extends S2_Core {
 			array(
 				'id'      => 's2-subscribers-help3',
 				'title'   => __( 'Registered Subscribers', 'subscribe2' ),
-				'content' => '<p>' . __( 'Registered Subscribers are subscribers who have registered in WordPress and have a username and password.', 'subscribe2' ) .
+				'content' => '<p>' . __( 'Registered Subscribers are subscribers who have registered in ClassicPress and have a username and password.', 'subscribe2' ) .
 				'</p><p>' . __( 'Registered Subscribers have greater personal control over their subscription. They can change the format of the email and also select which categories and authors they want to receive notifications about.', 'subscribe2' ) .
 				'</p><p>' . __( 'On this page registered subscribers can be viewed and searched. User accounts can be deleted from here with any posts created by those users being assigned to the currently logged in user. Bulk changes can be applied to all user settings changing their subscription email format and categories.', 'subscribe2' ) . '</p>',
 			)
@@ -478,7 +478,7 @@ class S2_Admin extends S2_Core {
 		}
 	}
 
-	/* ===== WordPress menu helper functions ===== */
+	/* ===== Menu helper functions ===== */
 	/**
 	 * Collects the signup date for all public subscribers
 	 */
@@ -783,7 +783,7 @@ class S2_Admin extends S2_Core {
 		global $wpdb;
 		$cron_file = ABSPATH . 'wp-cron.php';
 		if ( ! is_readable( $cron_file ) ) {
-			echo '<strong><em style="color: red">' . esc_html__( 'The WordPress cron functions may be disabled on this server. Digest notifications may not work.', 'subscribe2' ) . '</em></strong><br>' . "\r\n";
+			echo '<strong><em style="color: red">' . esc_html__( 'The ClassicPress cron functions may be disabled on this server. Digest notifications may not work.', 'subscribe2' ) . '</em></strong><br>' . "\r\n";
 		}
 		$scheduled_time = wp_next_scheduled( 's2_digest_cron' );
 		$offset         = get_option( 'gmt_offset' ) * 60 * 60;
@@ -1016,7 +1016,7 @@ class S2_Admin extends S2_Core {
 		}
 	}
 
-	/* ===== functions to handle addition and removal of WordPress categories ===== */
+	/* ===== functions to handle addition and removal of categories ===== */
 	/**
 	 * Autosubscribe registered users to newly created categories
 	 * if registered user has selected this option

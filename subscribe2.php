@@ -1,10 +1,10 @@
 <?php
 /*
-Plugin Name: Subscribe2
+Plugin Name: Subscribe2 for ClassicPress
 Plugin URI: https://subscribe2.wordpress.com/subscribe2-html/
 Description: Notifies an email list when new entries are posted.
 Version: 10.32
-Author: Subscribe2
+Author: Matthew Robinson
 Author URI: https://subscribe2.wordpress.com/
 Licence: GPLv3
 Text Domain: subscribe2
@@ -31,12 +31,12 @@ You should have received a copy of the GNU General Public License
 along with Subscribe2. If not, see <http://www.gnu.org/licenses/>.
 */
 
-if ( version_compare( $GLOBALS['wp_version'], '4.4', '<' ) || ! function_exists( 'add_action' ) ) {
+if ( ! function_exists( 'classicpress_version' ) || ! function_exists( 'add_action' ) ) {
 	if ( ! function_exists( 'add_action' ) ) {
 		$exit_msg = __( "I'm just a plugin, please don't call me directly", 'subscribe2' );
 	} else {
-		// Translators: Subscribe2 needs WordPress 4.4 or above, exit if not on a compatible version
-		$exit_msg = sprintf( __( 'This version of Subscribe2 requires WordPress 4.4 or greater. Please update %1$s or use an older version of %2$s.', 'subscribe2' ), '<a href="http://codex.wordpress.org/Updating_WordPress">WordPress</a>', '<a href="https://subscribe2.wordpress.com/subscribe2-html/">Subscribe2</a>' );
+		// Translators: Subscribe2 requires ClassicPress, exit if not on a compatible platform
+		$exit_msg = sprintf( __( 'This version of Subscribe2 requires Classicpress available at: %1$s', 'subscribe2' ), 'https://www.classicpress.net' );
 	}
 	exit( esc_html( $exit_msg ) );
 }

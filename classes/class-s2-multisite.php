@@ -85,7 +85,7 @@ class S2_Multisite {
 	}
 
 	/**
-	 * Obtain a list of current WordPress multiuser blogs
+	 * Obtain a list of current multiuser blogs
 	 * Note this may affect performance but there is no alternative
 	 */
 	public function get_mu_blog_list() {

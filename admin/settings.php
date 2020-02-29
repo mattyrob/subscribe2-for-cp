@@ -122,10 +122,10 @@ if ( isset( $_POST['s2_admin'] ) ) {
 	}
 }
 
-// send error message if no WordPress page exists
+// send error message if no Pages exist
 $page_id = $wpdb->get_var( "SELECT ID FROM `{$wpdb->prefix}posts` WHERE post_type='page' AND post_status='publish' LIMIT 1" );
 if ( empty( $page_id ) ) {
-	echo '<div id="page_message" class="error"><p class="s2_error"><strong>' . esc_html__( 'You must create a WordPress page for this plugin to work correctly.', 'subscribe2' ) . '</strong></p></div>';
+	echo '<div id="page_message" class="error"><p class="s2_error"><strong>' . esc_html__( 'You must create a Page for this plugin to work correctly.', 'subscribe2' ) . '</strong></p></div>';
 }
 
 // display error message for GDPR
@@ -451,11 +451,11 @@ switch ( $current_tab ) {
 		echo '<input type="hidden" name="appearance_tab" value="options" />' . "\r\n";
 		echo '<p>' . "\r\n";
 
-		// WordPress page ID where subscribe2 token is used
+		// Page ID where subscribe2 token is used
 		echo esc_html__( 'Set default Subscribe2 page as', 'subscribe2' ) . ': ';
 		$this->pages_dropdown( $this->subscribe2_options['s2page'] );
 
-		// show link to WordPress page in meta
+		// show link to Page in meta
 		echo '<br><br><label><input type="checkbox" name="show_meta" value="1"' . checked( $this->subscribe2_options['show_meta'], '1', false ) . ' /> ';
 		echo esc_html__( 'Show a link to your subscription page in "meta"?', 'subscribe2' ) . '</label><br><br>' . "\r\n";
 
@@ -496,8 +496,6 @@ switch ( $current_tab ) {
 		echo "\r\n" . '<br><textarea style="width: 98%;" rows="4" cols="60" name="barred">' . esc_textarea( $this->subscribe2_options['barred'] ) . '</textarea>';
 		echo '</p>';
 		echo '<h3>' . esc_html__( 'Links', 'subscribe2' ) . '</h3>' . "\r\n";
-		echo '<a href="http://wordpress.org/plugins/subscribe2/">' . esc_html__( 'Plugin Site', 'subscribe2' ) . '</a><br>';
-		echo '<a href="http://wordpress.org/support/plugin/subscribe2">' . esc_html__( 'Plugin Forum', 'subscribe2' ) . '</a><br>';
 		echo '<a href="http://subscribe2.wordpress.com/">' . esc_html__( 'Plugin Blog', 'subscribe2' ) . '</a><br>';
 		echo '<a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&amp;hosted_button_id=2387904">' . esc_html__( 'Make a donation via PayPal', 'subscribe2' ) . '</a>';
 		echo '</div>' . "\r\n";

@@ -112,7 +112,7 @@ class S2_Forms {
 			echo '</div>' . "\r\n";
 		}
 
-		// list of subscribed blogs on WordPress mu
+		// list of subscribed blogs on mu sites
 		if ( $mysubscribe2->s2_mu && ! isset( $_GET['email'] ) ) {
 			global $blog_id, $s2class_multisite;
 			$s2blog_id    = $blog_id;

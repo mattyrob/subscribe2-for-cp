@@ -1,6 +1,6 @@
 <?php
 /**
- * List Table class used in WordPress 4.3.x and above
+ * List Table class
  */
 class S2_List_Table extends WP_List_Table {
 	private $date_format = '';

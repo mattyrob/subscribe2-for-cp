@@ -7,7 +7,7 @@ class S2_Uninstall {
 			return;
 		}
 
-		// Is this WordPressMU or not?
+		// Is this Multisite or not?
 		if ( isset( $wpmu_version ) || strpos( $wp_version, 'wordpress-mu' ) ) {
 			$s2_mu = true;
 		}
