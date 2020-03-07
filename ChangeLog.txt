@@ -13,6 +13,8 @@
 * Don't capitalise Custom Post Type names registered via the API when displayed back to admins
 * Remove MailOptin from this fork
 * Fix for JavaScript IP updater setting not saving when unchecked
+* Remove Gutenberg Code
+* Refactor code to be exclusive for ClassicPress
 
 = 10.31 =
 
