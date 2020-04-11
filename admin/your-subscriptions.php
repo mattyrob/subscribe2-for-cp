@@ -37,7 +37,7 @@ echo '<p>';
 do_action( 's2_subscription_form', $userid );
 
 // submit
-echo '<p class="submit"><input type="submit" class="button-primary" name="submit" value="' . esc_attr( __( 'Update Preferences', 'subscribe2' ) ) . ' &raquo;" /></p>';
+echo '<p class="submit"><input type="submit" class="button-primary" name="submit" value="' . esc_attr__( 'Update Preferences', 'subscribe2' ) . ' &raquo;" /></p>';
 echo '</form>' . "\r\n";
 
 echo '</div>' . "\r\n";

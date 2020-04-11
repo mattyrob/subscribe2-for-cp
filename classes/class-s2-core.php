@@ -938,10 +938,12 @@ class S2_Core {
 		}
 
 		// collect all subscribers for compulsory categories
-		$compulsory = explode( ',', $this->subscribe2_options['compulsory'] );
-		foreach ( explode( ',', $r['cats'] ) as $cat ) {
-			if ( in_array( $cat, $compulsory, true ) ) {
-				$r['cats'] = '';
+		if ( '' !== $this->subscribe2_options['compulsory'] ) {
+			$compulsory = explode( ',', $this->subscribe2_options['compulsory'] );
+			foreach ( explode( ',', $r['cats'] ) as $cat ) {
+				if ( in_array( $cat, $compulsory, true ) ) {
+					$r['cats'] = '';
+				}
 			}
 		}
 
@@ -970,19 +972,37 @@ class S2_Core {
 		}
 
 		if ( $this->s2_mu ) {
-			$result = $wpdb->get_col(
-				$wpdb->prepare(
-					"SELECT a.user_id FROM $wpdb->usermeta AS a INNER JOIN $wpdb->usermeta AS e ON a.user_id = e.user_id " . $join . "WHERE a.meta_key='{$wpdb->prefix}capabilities' AND e.meta_key=%s AND e.meta_value <> ''" . $and, // phpcs:ignore WordPress.DB.PreparedSQL, WordPress.DB.PreparedSQLPlaceholders
-					$this->get_usermeta_keyname( 's2_subscribed' )
-				)
-			);
+			if ( '' === $this->subscribe2_options['compulsory'] ) {
+				$result = $wpdb->get_col(
+					$wpdb->prepare(
+						"SELECT a.user_id FROM $wpdb->usermeta AS a INNER JOIN $wpdb->usermeta AS e ON a.user_id = e.user_id " . $join . "WHERE a.meta_key='{$wpdb->prefix}capabilities' AND e.meta_key=%s AND e.meta_value <> ''" . $and, // phpcs:ignore WordPress.DB.PreparedSQL, WordPress.DB.PreparedSQLPlaceholders
+						$this->get_usermeta_keyname( 's2_subscribed' )
+					)
+				);
+			} else {
+				$result = $wpdb->get_col(
+					$wpdb->prepare(
+						"SELECT a.user_id FROM $wpdb->usermeta AS a INNER JOIN $wpdb->usermeta AS e ON a.user_id = e.user_id " . $join . "WHERE a.meta_key='{$wpdb->prefix}capabilities' AND e.meta_key=%s" . $and, // phpcs:ignore WordPress.DB.PreparedSQL, WordPress.DB.PreparedSQLPlaceholders
+						$this->get_usermeta_keyname( 's2_subscribed' )
+					)
+				);
+			}
 		} else {
-			$result = $wpdb->get_col(
-				$wpdb->prepare(
-					"SELECT a.user_id FROM $wpdb->usermeta AS a " . $join . "WHERE a.meta_key=%s AND a.meta_value <> ''" . $and, // phpcs:ignore WordPress.DB.PreparedSQL, WordPress.DB.PreparedSQLPlaceholders
-					$this->get_usermeta_keyname( 's2_subscribed' )
-				)
-			);
+			if ( '' === $this->subscribe2_options['compulsory'] ) {
+				$result = $wpdb->get_col(
+					$wpdb->prepare(
+						"SELECT a.user_id FROM $wpdb->usermeta AS a " . $join . "WHERE a.meta_key=%s AND a.meta_value <> ''" . $and, // phpcs:ignore WordPress.DB.PreparedSQL, WordPress.DB.PreparedSQLPlaceholders
+						$this->get_usermeta_keyname( 's2_subscribed' )
+					)
+				);
+			} else {
+				$result = $wpdb->get_col(
+					$wpdb->prepare(
+						"SELECT a.user_id FROM $wpdb->usermeta AS a " . $join . 'WHERE a.meta_key=%s' . $and, // phpcs:ignore WordPress.DB.PreparedSQL, WordPress.DB.PreparedSQLPlaceholders
+						$this->get_usermeta_keyname( 's2_subscribed' )
+					)
+				);
+			}
 		}
 
 		if ( empty( $result ) || false === $result ) {
@@ -1034,7 +1054,11 @@ class S2_Core {
 		if ( true === apply_filters( 's2_validate_email_with_dns', true ) ) {
 			$domain = explode( '@', $email, 2 );
 			if ( function_exists( 'idn_to_ascii' ) ) {
-				$check_domain = idn_to_ascii( $domain[1], IDNA_NONTRANSITIONAL_TO_ASCII, INTL_IDNA_VARIANT_UTS46 );
+				if ( defined( 'IDNA_NONTRANSITIONAL_TO_ASCII' ) && defined( 'INTL_IDNA_VARIANT_UTS46' ) ) {
+					$check_domain = idn_to_ascii( $domain[1], IDNA_NONTRANSITIONAL_TO_ASCII, INTL_IDNA_VARIANT_UTS46 );
+				} else {
+					$check_domain = idn_to_ascii( $domain[1] );
+				}
 			} else {
 				$check_domain = $domain[1];
 			}
@@ -1263,7 +1287,6 @@ class S2_Core {
 	 * Process function to add action if user selects to subscribe to posts during registration
 	 */
 	public function register_post( $user_ID = 0 ) {
-		global $_POST;
 		if ( 0 === $user_ID ) {
 			return;
 		}
@@ -1944,6 +1967,7 @@ class S2_Core {
 			add_action( 'save_post', array( &$this, 's2_meta_handler' ) );
 			add_action( 'save_post', array( &$this, 's2_preview_handler' ) );
 			add_action( 'save_post', array( &$this, 's2_resend_handler' ) );
+			add_action( 'admin_notices', array( &$this, 's2_meta_notices' ) );
 			add_action( 'create_category', array( &$this, 'new_category' ) );
 			add_action( 'delete_category', array( &$this, 'delete_category' ) );
 
@@ -2001,7 +2025,7 @@ class S2_Core {
 			// load strings later on frontend for polylang plugin compatibility
 			add_action( 'wp', array( &$this, 'load_strings' ) );
 
-			if ( isset( $_GET['s2'] ) ) {
+			if ( isset( $_REQUEST['s2'] ) ) {
 				// someone is confirming a request
 				add_filter( 'request', array( &$this, 'query_filter' ) );
 				add_filter( 'the_title', array( &$this, 'title_filter' ) );

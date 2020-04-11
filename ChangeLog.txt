@@ -13,6 +13,9 @@
 * Don't capitalise Custom Post Type names registered via the API when displayed back to admins
 * Remove MailOptin from this fork
 * Fix for JavaScript IP updater setting not saving when unchecked
+* Indicate in filter drop downs if a category has been made compulsory in Settings
+* Fix for issue where some users were not sent posts in Compulsory categories
+* Added feedback messages following Preview and Resend requests in Classic Editor
 * Remove Gutenberg Code
 * Refactor code to be exclusive for ClassicPress
 

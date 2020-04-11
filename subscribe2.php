@@ -2,7 +2,7 @@
 /*
 Plugin Name: Subscribe2 for ClassicPress
 Plugin URI: https://subscribe2.wordpress.com/subscribe2-html/
-Description: Notifies an email list when new entries are posted.
+Description: Comprehensive email subscription managment for post email notifications and all specifically for ClasicPress.
 Version: 10.32
 Author: Matthew Robinson
 Author URI: https://subscribe2.wordpress.com/

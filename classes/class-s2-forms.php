@@ -86,7 +86,7 @@ class S2_Forms {
 			} else {
 				echo '<h2>' . esc_html__( 'Subscribed Categories', 'subscribe2' ) . '</h2>' . "\r\n";
 			}
-			('' === $mysubscribe2->subscribe2_options['compulsory']) ? $compulsory = array() : $compulsory = explode( ',', $mysubscribe2->subscribe2_options['compulsory'] );
+			( '' === $mysubscribe2->subscribe2_options['compulsory'] ) ? $compulsory = array() : $compulsory = explode( ',', $mysubscribe2->subscribe2_options['compulsory'] );
 			$this->display_category_form( explode( ',', get_user_meta( $userid, $mysubscribe2->get_usermeta_keyname( 's2_subscribed' ), true ) ), $mysubscribe2->subscribe2_options['reg_override'], $compulsory );
 		} else {
 			// we're doing daily digests, so just show
@@ -241,6 +241,7 @@ class S2_Forms {
 				update_user_meta( $userid, $mysubscribe2->get_usermeta_keyname( 's2_subscribed' ), '' );
 			} elseif ( 'digest' === $cats ) {
 				$all_cats = $mysubscribe2->all_cats( false, 'ID' );
+				$catids   = '';
 				foreach ( $all_cats as $cat ) {
 					( '' === $catids ) ? $catids = "$cat->term_id" : $catids .= ",$cat->term_id";
 					update_user_meta( $userid, $mysubscribe2->get_usermeta_keyname( 's2_cat' ) . $cat->term_id, $cat->term_id );

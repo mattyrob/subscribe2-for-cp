@@ -454,7 +454,15 @@ class S2_Admin extends S2_Core {
 			} else {
 				$this->publish( $post, $current_user->user_email );
 			}
+			add_filter( 'redirect_post_location', array( $this, 's2_preview_redirect' ) );
 		}
+	}
+
+	/**
+	 * Add query arg on Preview request
+	 */
+	public function s2_preview_redirect( $location ) {
+		return add_query_arg( 's2', 'preview', $location );
 	}
 
 	/**
@@ -475,10 +483,34 @@ class S2_Admin extends S2_Core {
 			}
 			global $post;
 			$this->publish( $post );
+			add_filter( 'redirect_post_location', array( $this, 's2_resend_redirect' ) );
 		}
 	}
 
-	/* ===== Menu helper functions ===== */
+	/**
+	 * Add query arg on Resend request
+	 */
+	public function s2_resend_redirect( $location ) {
+		return add_query_arg( 's2', 'resend', $location );
+	}
+
+	/**
+	 * Admin notice after resend called
+	 */
+	public function s2_meta_notices() {
+		if ( isset( $_GET['s2'] ) && 'resend' === $_GET['s2'] ) {
+			$class   = 'notice notice-success is-dismissible';
+			$message = __( 'Attempt made to resend email notification.', 'subscribe2' );
+			echo '<div class="' . esc_attr( $class ) . '"><p>' . esc_html( $message ) . '</p></div>';
+		}
+		if ( isset( $_GET['s2'] ) && 'preview' === $_GET['s2'] ) {
+			$class   = 'notice notice-success is-dismissible';
+			$message = __( 'Attempt made to send email preview.', 'subscribe2' );
+			echo '<div class="' . esc_attr( $class ) . '"><p>' . esc_html( $message ) . '</p></div>';
+		}
+	}
+
+	/* ===== WordPress menu helper functions ===== */
 	/**
 	 * Collects the signup date for all public subscribers
 	 */
@@ -657,9 +689,17 @@ class S2_Admin extends S2_Core {
 			$count['all_users'] = $wpdb->get_var( "SELECT COUNT(ID) FROM $wpdb->users" );
 		}
 		if ( $this->s2_mu ) {
-			$count['registered'] = $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(b.meta_key) FROM $wpdb->usermeta AS a INNER JOIN $wpdb->usermeta AS b ON a.user_id = b.user_id WHERE a.meta_key='" . $wpdb->prefix . "capabilities' AND b.meta_key=%s AND b.meta_value <> ''", $this->get_usermeta_keyname( 's2_subscribed' ) ) );
+			if ( '' === $this->subscribe2_options['compulsory'] ) {
+				$count['registered'] = $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(b.meta_key) FROM $wpdb->usermeta AS a INNER JOIN $wpdb->usermeta AS b ON a.user_id = b.user_id WHERE a.meta_key='" . $wpdb->prefix . "capabilities' AND b.meta_key=%s AND b.meta_value <> ''", $this->get_usermeta_keyname( 's2_subscribed' ) ) );
+			} else {
+				$count['registered'] = $count['all_users'];
+			}
 		} else {
-			$count['registered'] = $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(meta_key) FROM $wpdb->usermeta WHERE meta_key=%s AND meta_value <> ''", $this->get_usermeta_keyname( 's2_subscribed' ) ) );
+			if ( '' === $this->subscribe2_options['compulsory'] ) {
+				$count['registered'] = $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(meta_key) FROM $wpdb->usermeta WHERE meta_key=%s AND meta_value <> ''", $this->get_usermeta_keyname( 's2_subscribed' ) ) );
+			} else {
+				$count['registered'] = $count['all_users'];
+			}
 		}
 		$count['all'] = ( $count['confirmed'] + $count['unconfirmed'] + $count['all_users'] );
 		// get subscribers to individual categories but only if we are using per-post notifications
@@ -684,6 +724,10 @@ class S2_Admin extends S2_Core {
 			}
 		}
 
+		if ( '' !== $this->subscribe2_options['compulsory'] ) {
+			$compulsory_cats = explode( ',', $this->subscribe2_options['compulsory'] );
+		}
+
 		echo '<select name="what">' . "\r\n";
 		foreach ( $who as $whom => $display ) {
 			if ( in_array( $whom, $exclude, true ) ) {
@@ -702,11 +746,17 @@ class S2_Admin extends S2_Core {
 				if ( in_array( (string) $cat->term_id, $exclude, true ) ) {
 					continue;
 				}
+				if ( isset( $compulsory_cats ) && in_array( (string) $cat->term_id, $compulsory_cats, true ) ) {
+					$compulsory = ' ' . __( '[Compulsory]', 'subscribe2' );
+				} else {
+					$compulsory = '';
+				}
+
 				echo '<option value="' . esc_attr( $cat->term_id ) . '"';
 				if ( $cat->term_id === $selected ) {
 					echo ' selected="selected" ';
 				}
-				echo '> &nbsp;&nbsp;' . esc_html( $cat->name ) . '&nbsp;(' . esc_html( $count[ $cat->name ] ) . ') </option>' . "\r\n";
+				echo '> &nbsp;&nbsp;' . esc_html( $cat->name . $compulsory . '&nbsp;(' . $count[ $cat->name ] ) . ') </option>' . "\r\n";
 			}
 		}
 
