@@ -84,5 +84,5 @@ global $s2_update_checker;
 $s2_update_checker = new Puc_v4p5_Plugin_UpdateChecker(
 	'https://raw.githubusercontent.com/mattyrob/subscribe2-upate/master/update.json',
 	__FILE__,
-	'subscribe2'
+	'subscribe2-for-cp'
 );
