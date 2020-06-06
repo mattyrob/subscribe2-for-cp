@@ -76,17 +76,19 @@ if ( isset( $_POST['s2_admin'] ) && 'mail' === $_POST['s2_admin'] ) {
 		}
 	}
 
+	// perform some error checking
 	if ( empty( $body ) ) {
+		$success       = false;
 		$error_message = __( 'Your email was empty', 'subscribe2' );
-		$success       = false;
 	} elseif ( isset( $upload_error ) ) {
-		$error_message = $upload_error;
 		$success       = false;
+		$error_message = $upload_error;
 	} else {
 		$success       = $this->mail( $recipients, $subject, $body, 'html', $attachments );
 		$error_message = __( 'Check your settings and check with your hosting provider', 'subscribe2' );
 	}
 
+	// report user message
 	if ( $success ) {
 		if ( isset( $_POST['preview'] ) ) {
 			$message = '<p class="s2_message">' . __( 'Preview message sent!', 'subscribe2' ) . '</p>';

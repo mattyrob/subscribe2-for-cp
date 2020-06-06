@@ -1273,12 +1273,12 @@ class S2_Core {
 		}
 		if ( 'wpreg' === $this->subscribe2_options['autosub'] ) {
 			echo '<p><label>';
-			echo esc_html__( 'Check here to Subscribe to email notifications for new posts', 'subscribe2' ) . ':<br>' . "\r\n";
-			echo '<input type="checkbox" name="reg_subscribe"' . checked( $this->subscribe2_options['wpregdef'], 'yes', false ) . ' />';
+			echo '<input type="checkbox" name="reg_subscribe"' . checked( $this->subscribe2_options['wpregdef'], 'yes', false ) . ' /> ';
+			echo esc_html__( 'Check here to Subscribe to email notifications for new posts', 'subscribe2' ) . "\r\n";
 			echo '</label></p>' . "\r\n";
 		} elseif ( 'yes' === $this->subscribe2_options['autosub'] ) {
 			echo '<p><center>' . "\r\n";
-			echo esc_html__( 'By registering with this blog you are also agreeing to receive email notifications for new posts but you can unsubscribe at anytime', 'subscribe2' ) . '.<br>' . "\r\n";
+			echo esc_html__( 'By registering with this blog you are also agreeing to receive email notifications for new posts but you can unsubscribe at anytime', 'subscribe2' ) . "\r\n";
 			echo '</center></p>' . "\r\n";
 		}
 	}
@@ -1411,19 +1411,25 @@ class S2_Core {
 
 	/* ===== wp-cron functions ===== */
 	/**
+	 * Return array of currently registered intervals
+	 */
+	public function check_scheds( $scheds ) {
+		$current_intervals = array();
+		foreach ( $scheds as $sched ) {
+			$current_intervals[] = $sched['interval'];
+		}
+		return $current_intervals;
+	}
+
+	/**
 	 * Add a weekly event to cron
 	 */
 	public function add_weekly_sched( $scheds ) {
-		$exists = false;
-		foreach ( $scheds as $sched ) {
-			if ( array_search( 604800, $sched, true ) ) {
-				$exists = true;
-			}
-		}
+		$current_intervals = $this->check_scheds( $scheds );
 
-		if ( ! $exists ) {
+		if ( ! in_array( 604800, $current_intervals, true ) ) {
 			$scheds['weekly'] = array(
-				'interval' => 604800,
+				'interval' => WEEK_IN_SECONDS,
 				'display'  => __( 'Weekly', 'subscribe2' ),
 			);
 		}

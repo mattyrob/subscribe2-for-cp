@@ -901,17 +901,22 @@ class S2_Admin extends S2_Core {
 	/**
 	 * Create and display a dropdown list of pages
 	 */
-	public function pages_dropdown( $s2page ) {
+	public function pages_dropdown( $s2page, $widget = false ) {
 		$pages = get_pages();
 		if ( empty( $pages ) ) {
 			return;
 		}
 
-		$option  = '<select name="s2page">' . "\r\n";
-		$option .= '<option value="0">' . __( 'Select a page', 'subscribe2' ) . '</option>' . "\r\n";
+		if ( false === $widget ) {
+			$option  = '<select name="s2page">' . "\r\n";
+			$option .= '<option value="0">' . __( 'Select a page', 'subscribe2' ) . '</option>' . "\r\n";
+		} else {
+			$option = '';
+		}
+
 		foreach ( $pages as $page ) {
 			$option .= '<option value="' . $page->ID . '"';
-			if ( $page->ID === $s2page ) {
+			if ( $page->ID === (int) $s2page ) {
 				$option .= ' selected="selected"';
 			}
 			$option .= '>';
@@ -923,7 +928,10 @@ class S2_Admin extends S2_Core {
 			}
 			$option .= $page->post_title . '</option>' . "\r\n";
 		}
-		$option .= '</select>' . "\r\n";
+
+		if ( false === $widget ) {
+			$option .= '</select>' . "\r\n";
+		}
 
 		$allowed_tags = array(
 			'select' => array(

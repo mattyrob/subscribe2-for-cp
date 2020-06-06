@@ -171,19 +171,23 @@ if ( isset( $_REQUEST['what'] ) ) {
 }
 
 if ( ! empty( $_POST['s'] ) ) {
+	$result      = array();
+	$search_term = trim( $_POST['s'] );
+
 	if ( 'registered' === $current_tab ) {
 		foreach ( $subscribers as $subscriber ) {
-			if ( is_numeric( stripos( $subscriber['user_email'], $_POST['s'] ) ) ) {
+			if ( is_numeric( stripos( $subscriber['user_email'], $search_term ) ) ) {
 				$result[] = $subscriber;
 			}
 		}
 	} else {
 		foreach ( $subscribers as $subscriber ) {
-			if ( is_numeric( stripos( $subscriber, $_POST['s'] ) ) ) {
+			if ( is_numeric( stripos( $subscriber, $search_term ) ) ) {
 				$result[] = $subscriber;
 			}
 		}
 	}
+
 	$subscribers = $result;
 }
 

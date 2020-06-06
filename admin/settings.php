@@ -496,7 +496,8 @@ switch ( $current_tab ) {
 		echo "\r\n" . '<br><textarea style="width: 98%;" rows="4" cols="60" name="barred">' . esc_textarea( $this->subscribe2_options['barred'] ) . '</textarea>';
 		echo '</p>';
 		echo '<h3>' . esc_html__( 'Links', 'subscribe2' ) . '</h3>' . "\r\n";
-		echo '<a href="http://subscribe2.wordpress.com/">' . esc_html__( 'Plugin Blog', 'subscribe2' ) . '</a><br>';
+		echo '<a href="https://subscribe2.wordpress.com/subscribe2-html/">' . esc_html__( 'Plugin Site', 'subscribe2' ) . '</a><br>';
+		echo '<a href="https://subscribe2.wordpress.com/latest-news/">' . esc_html__( 'Plugin Latest News', 'subscribe2' ) . '</a><br>';
 		echo '<a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&amp;hosted_button_id=2387904">' . esc_html__( 'Make a donation via PayPal', 'subscribe2' ) . '</a>';
 		echo '</div>' . "\r\n";
 		break;

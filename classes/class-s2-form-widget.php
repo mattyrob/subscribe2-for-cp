@@ -171,7 +171,7 @@ class S2_Form_Widget extends WP_Widget {
 			echo ' selected="selected"';
 		}
 		echo '>' . esc_html__( 'Use Referring Page', 'subscribe2' ) . '</option>' . "\r\n";
-		$mysubscribe2->pages_dropdown( $postto );
+		$mysubscribe2->pages_dropdown( $postto, true );
 		echo '</select></label></p>' . "\r\n";
 		echo '<p><label for="' . esc_attr( $this->get_field_id( 'js' ) ) . '">' . esc_html__( 'Disable JavaScript', 'subscribe2' ) . ':' . "\r\n";
 		echo '<input id="' . esc_attr( $this->get_field_id( 'js' ) ) . '" name ="' . esc_attr( $this->get_field_name( 'js' ) ) . '" value="true" type="checkbox"' . checked( 'true', $js, false ) . '/>';
