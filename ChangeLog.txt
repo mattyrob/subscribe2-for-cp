@@ -1,3 +1,13 @@
+= 11.0.1 =
+
+* Update code via GitHub repository directly
+
+= 11.0 =
+
+* Add update checking code
+* Bug fixes and minor enhancements
+* Update in line with fixes and layout changes to Subscribe2 HTML
+
 = 10.32 =
 
 * Bump minimum required WordPress to 4.4
