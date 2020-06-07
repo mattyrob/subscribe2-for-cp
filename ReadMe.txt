@@ -65,4 +65,6 @@ This token will automatically be replaced by dynamic subscription information an
 
 == Changelog ==
 
+* Fix instantiation of update code
+
 See complete changelog installed in the same folder as this readme.

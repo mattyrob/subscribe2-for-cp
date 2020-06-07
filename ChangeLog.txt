@@ -1,3 +1,7 @@
+= 11.0.2 =
+
+* Fix instantiation of update code
+
 = 11.0.1 =
 
 * Update code via GitHub repository directly
