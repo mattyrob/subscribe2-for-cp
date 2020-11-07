@@ -54,7 +54,7 @@ if ( ! isset( $mysubscribe2->subscribe2_options['tracking'] ) ) {
 
 if ( ! isset( $mysubscribe2->subscribe2_options['s2page'] ) ) {
 	$mysubscribe2->subscribe2_options['s2page'] = 0;
-} // option for default Page for Subscribe2 to use
+} // option for default ClassicPress page for Subscribe2 to use
 
 if ( ! isset( $mysubscribe2->subscribe2_options['stylesheet'] ) ) {
 	$mysubscribe2->subscribe2_options['stylesheet'] = 'yes';
