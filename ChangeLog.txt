@@ -1,3 +1,11 @@
+= 11.1 =
+
+* Update jQuery UI CSS library for pop up form to latest version
+* Move translation template file to /languages sub-folder
+* Simplify translation code to locate mo files in /languages folder, admin translation supported from WordPress 4.7
+* Update i18n text domain name for this fork
+* Fixed duplicated responses in Pop Up (Ajax) subscriber form
+
 = 11.0.2 =
 
 * Fix instantiation of update code

@@ -33,7 +33,7 @@ class S2_List_Table extends WP_List_Table {
 		global $current_tab;
 		if ( 'registered' === $current_tab ) {
 			$actions = array(
-				'edit' => sprintf( '<a href="?page=%s&amp;id=%d">%s</a>', 's2', rawurlencode( $item['id'] ), __( 'Edit', 'subscribe2' ) ),
+				'edit' => sprintf( '<a href="?page=%s&amp;id=%d">%s</a>', 's2', rawurlencode( $item['id'] ), __( 'Edit', 'subscribe2-for-cp' ) ),
 			);
 			return sprintf( '%1$s %2$s', $item['email'], $this->row_actions( $actions ) );
 		} else {
@@ -65,8 +65,8 @@ class S2_List_Table extends WP_List_Table {
 		global $current_tab;
 		$columns = array(
 			'cb'    => '<input type="checkbox" />',
-			'email' => _x( 'Email', 'column name', 'subscribe2' ),
-			'date'  => _x( 'Date', 'column name', 'subscribe2' ),
+			'email' => _x( 'Email', 'column name', 'subscribe2-for-cp' ),
+			'date'  => _x( 'Date', 'column name', 'subscribe2-for-cp' ),
 		);
 		return $columns;
 	}
@@ -109,7 +109,7 @@ class S2_List_Table extends WP_List_Table {
 
 		if ( ! empty( $columns['cb'] ) ) {
 			static $cb_counter = 1;
-			$columns['cb']     = '<label class="screen-reader-text" for="cb-select-all-' . $cb_counter . '">' . __( 'Select All', 'subscribe2' ) . '</label>'
+			$columns['cb']     = '<label class="screen-reader-text" for="cb-select-all-' . $cb_counter . '">' . __( 'Select All', 'subscribe2-for-cp' ) . '</label>'
 				. '<input id="cb-select-all-' . $cb_counter . '" type="checkbox" />';
 			$cb_counter++;
 		}
@@ -164,13 +164,13 @@ class S2_List_Table extends WP_List_Table {
 				return array();
 			} else {
 				return array(
-					'delete' => __( 'Delete', 'subscribe2' ),
+					'delete' => __( 'Delete', 'subscribe2-for-cp' ),
 				);
 			}
 		} else {
 			$actions = array(
-				'delete' => __( 'Delete', 'subscribe2' ),
-				'toggle' => __( 'Toggle', 'subscribe2' ),
+				'delete' => __( 'Delete', 'subscribe2-for-cp' ),
+				'toggle' => __( 'Toggle', 'subscribe2-for-cp' ),
 			);
 			return $actions;
 		}
@@ -179,7 +179,7 @@ class S2_List_Table extends WP_List_Table {
 	public function process_bulk_action() {
 		if ( in_array( $this->current_action(), array( 'delete', 'toggle' ), true ) ) {
 			if ( ! isset( $_REQUEST['subscriber'] ) ) {
-				echo '<div id="message" class="error"><p><strong>' . esc_html__( 'No users were selected.', 'subscribe2' ) . '</strong></p></div>';
+				echo '<div id="message" class="error"><p><strong>' . esc_html__( 'No users were selected.', 'subscribe2-for-cp' ) . '</strong></p></div>';
 				return;
 			}
 		}
@@ -192,14 +192,14 @@ class S2_List_Table extends WP_List_Table {
 					$mysubscribe2->delete( $address );
 					$key = array_search( $address, $subscribers, true );
 					unset( $subscribers[ $key ] );
-					$message['public_deleted'] = __( 'Address(es) deleted!', 'subscribe2' );
+					$message['public_deleted'] = __( 'Address(es) deleted!', 'subscribe2-for-cp' );
 				} else {
 					$user = get_user_by( 'email', $address );
 					if ( ! current_user_can( 'delete_user', $user->ID ) || $user->ID === $current_user->ID ) {
-						$message['reg_delete_error'] = __( 'Delete failed! You cannot delete some or all of these users.', 'subscribe2' );
+						$message['reg_delete_error'] = __( 'Delete failed! You cannot delete some or all of these users.', 'subscribe2-for-cp' );
 						continue;
 					} else {
-						$message['reg_deleted'] = __( 'Registered user(s) deleted! Any posts made by these users were assigned to you.', 'subscribe2' );
+						$message['reg_deleted'] = __( 'Registered user(s) deleted! Any posts made by these users were assigned to you.', 'subscribe2-for-cp' );
 						foreach ( $subscribers as $key => $data ) {
 							if ( in_array( $address, $data, true ) ) {
 								unset( $subscribers[ $key ] );
@@ -223,7 +223,7 @@ class S2_List_Table extends WP_List_Table {
 					unset( $subscribers[ $key ] );
 				}
 			}
-			echo '<div id="message" class="updated fade"><p><strong>' . esc_html__( 'Status changed!', 'subscribe2' ) . '</strong></p></div>';
+			echo '<div id="message" class="updated fade"><p><strong>' . esc_html__( 'Status changed!', 'subscribe2-for-cp' ) . '</strong></p></div>';
 		}
 	}
 
@@ -244,7 +244,7 @@ class S2_List_Table extends WP_List_Table {
 		}
 
 		// Translators: Pagination
-		$output = '<span class="displaying-num">' . sprintf( _n( '%s item', '%s items', $total_items, 'subscribe2' ), number_format_i18n( $total_items ) ) . '</span>';
+		$output = '<span class="displaying-num">' . sprintf( _n( '%s item', '%s items', $total_items, 'subscribe2-for-cp' ), number_format_i18n( $total_items ) ) . '</span>';
 
 		if ( isset( $_POST['what'] ) ) {
 			$current = 1;
@@ -305,7 +305,7 @@ class S2_List_Table extends WP_List_Table {
 			$page_links[] = sprintf(
 				"<a class='first-page' href='%s'><span class='screen-reader-text'>%s</span><span aria-hidden='true'>%s</span></a>",
 				esc_url( remove_query_arg( 'paged', $current_url ) ),
-				__( 'First page', 'subscribe2' ),
+				__( 'First page', 'subscribe2-for-cp' ),
 				'&laquo;'
 			);
 		}
@@ -316,18 +316,18 @@ class S2_List_Table extends WP_List_Table {
 			$page_links[] = sprintf(
 				"<a class='prev-page' href='%s'><span class='screen-reader-text'>%s</span><span aria-hidden='true'>%s</span></a>",
 				esc_url( add_query_arg( 'paged', max( 1, $current - 1 ), $current_url ) ),
-				__( 'Previous page', 'subscribe2' ),
+				__( 'Previous page', 'subscribe2-for-cp' ),
 				'&lsaquo;'
 			);
 		}
 
 		if ( 'bottom' === $which ) {
 			$html_current_page  = $current;
-			$total_pages_before = '<span class="screen-reader-text">' . __( 'Current Page', 'subscribe2' ) . '</span><span id="table-paging" class="paging-input">';
+			$total_pages_before = '<span class="screen-reader-text">' . __( 'Current Page', 'subscribe2-for-cp' ) . '</span><span id="table-paging" class="paging-input">';
 		} else {
 			$html_current_page = sprintf(
 				"%s<input class='current-page' id='current-page-selector' type='text' name='paged' value='%s' size='%d' aria-describedby='table-paging' />",
-				'<label for="current-page-selector" class="screen-reader-text">' . __( 'Current Page', 'subscribe2' ) . '</label>',
+				'<label for="current-page-selector" class="screen-reader-text">' . __( 'Current Page', 'subscribe2-for-cp' ) . '</label>',
 				$current,
 				strlen( $total_pages )
 			);
@@ -335,7 +335,7 @@ class S2_List_Table extends WP_List_Table {
 
 		$html_total_pages = sprintf( "<span class='total-pages'>%s</span>", number_format_i18n( $total_pages ) );
 		// Translators: Pagination
-		$page_links[] = $total_pages_before . sprintf( _x( '%1$s of %2$s', 'paging', 'subscribe2' ), $html_current_page, $html_total_pages ) . $total_pages_after;
+		$page_links[] = $total_pages_before . sprintf( _x( '%1$s of %2$s', 'paging', 'subscribe2-for-cp' ), $html_current_page, $html_total_pages ) . $total_pages_after;
 
 		if ( $disable_next ) {
 			$page_links[] = '<span class="tablenav-pages-navspan" aria-hidden="true">&rsaquo;</span>';
@@ -343,7 +343,7 @@ class S2_List_Table extends WP_List_Table {
 			$page_links[] = sprintf(
 				"<a class='next-page' href='%s'><span class='screen-reader-text'>%s</span><span aria-hidden='true'>%s</span></a>",
 				esc_url( add_query_arg( 'paged', min( $total_pages, $current + 1 ), $current_url ) ),
-				__( 'Next page', 'subscribe2' ),
+				__( 'Next page', 'subscribe2-for-cp' ),
 				'&rsaquo;'
 			);
 		}
@@ -354,7 +354,7 @@ class S2_List_Table extends WP_List_Table {
 			$page_links[] = sprintf(
 				"<a class='last-page' href='%s'><span class='screen-reader-text'>%s</span><span aria-hidden='true'>%s</span></a>",
 				esc_url( add_query_arg( 'paged', $total_pages, $current_url ) ),
-				__( 'Last page', 'subscribe2' ),
+				__( 'Last page', 'subscribe2-for-cp' ),
 				'&raquo;'
 			);
 		}

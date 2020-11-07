@@ -3,11 +3,12 @@
 Plugin Name: Subscribe2 for ClassicPress
 Plugin URI: https://subscribe2.wordpress.com/subscribe2-html/
 Description: Comprehensive email subscription managment for post email notifications and all specifically for ClassicPress.
-Version: 11.0.2
+Version: 11.1
 Author: Matthew Robinson
 Author URI: https://subscribe2.wordpress.com/
 Licence: GPLv3
-Text Domain: subscribe2
+Text Domain: subscribe2-for-cp
+Domain Path: /languages
 */
 
 /*
@@ -33,10 +34,10 @@ along with Subscribe2. If not, see <http://www.gnu.org/licenses/>.
 
 if ( ! function_exists( 'classicpress_version' ) || ! function_exists( 'add_action' ) ) {
 	if ( ! function_exists( 'add_action' ) ) {
-		$exit_msg = __( "I'm just a plugin, please don't call me directly", 'subscribe2' );
+		$exit_msg = __( "I'm just a plugin, please don't call me directly", 'subscribe2-for-cp' );
 	} else {
 		// Translators: Subscribe2 requires ClassicPress, exit if not on a compatible platform
-		$exit_msg = sprintf( __( 'This version of Subscribe2 requires Classicpress available at: %1$s', 'subscribe2' ), 'https://www.classicpress.net' );
+		$exit_msg = sprintf( __( 'This version of Subscribe2 requires Classicpress available at: %1$s', 'subscribe2-for-cp' ), 'https://www.classicpress.net' );
 	}
 	exit( esc_html( $exit_msg ) );
 }
@@ -48,13 +49,13 @@ if ( ! function_exists( 'is_plugin_active_for_network' ) ) {
 
 if ( is_plugin_active_for_network( plugin_basename( __FILE__ ) ) ) {
 	deactivate_plugins( plugin_basename( __FILE__ ) );
-	$exit_msg = __( 'Subscribe2 HTML cannot be activated as a network plugin. Please activate it on a site level', 'subscribe2' );
+	$exit_msg = __( 'Subscribe2 HTML cannot be activated as a network plugin. Please activate it on a site level', 'subscribe2-for-cp' );
 	exit( esc_html( $exit_msg ) );
 }
 
 // our version number. Don't touch this or any line below
 // unless you know exactly what you are doing
-define( 'S2VERSION', '11.0.2' );
+define( 'S2VERSION', '11.1' );
 define( 'S2PLUGIN', __FILE__ );
 define( 'S2PATH', trailingslashit( dirname( __FILE__ ) ) );
 define( 'S2DIR', trailingslashit( dirname( plugin_basename( __FILE__ ) ) ) );

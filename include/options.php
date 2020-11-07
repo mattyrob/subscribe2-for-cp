@@ -137,7 +137,7 @@ if ( ! isset( $mysubscribe2->subscribe2_options['exclude_formats'] ) ) {
 } // option for excluding post formats as supported by the current theme
 
 if ( ! isset( $mysubscribe2->subscribe2_options['mailtext'] ) ) {
-	$mysubscribe2->subscribe2_options['mailtext'] = __( "{BLOGNAME} has posted a new item, '{TITLE}'\n\n{POST}\n\nYou may view the latest post at\n{PERMALINK}\n\nYou received this e-mail because you asked to be notified when new updates are posted.\nBest regards,\n{MYNAME}\n{EMAIL}", 'subscribe2' );
+	$mysubscribe2->subscribe2_options['mailtext'] = __( "{BLOGNAME} has posted a new item, '{TITLE}'\n\n{POST}\n\nYou may view the latest post at\n{PERMALINK}\n\nYou received this e-mail because you asked to be notified when new updates are posted.\nBest regards,\n{MYNAME}\n{EMAIL}", 'subscribe2-for-cp' );
 } // Default notification email text
 
 if ( ! isset( $mysubscribe2->subscribe2_options['notification_subject'] ) ) {
@@ -145,19 +145,19 @@ if ( ! isset( $mysubscribe2->subscribe2_options['notification_subject'] ) ) {
 } // Default notification email subject
 
 if ( ! isset( $mysubscribe2->subscribe2_options['confirm_email'] ) ) {
-	$mysubscribe2->subscribe2_options['confirm_email'] = __( "{BLOGNAME} has received a request to {ACTION} for this email address. To complete your request please click on the link below:\n\n{LINK}\n\nIf you did not request this, please feel free to disregard this notice!\n\nThank you,\n{MYNAME}.", 'subscribe2' );
+	$mysubscribe2->subscribe2_options['confirm_email'] = __( "{BLOGNAME} has received a request to {ACTION} for this email address. To complete your request please click on the link below:\n\n{LINK}\n\nIf you did not request this, please feel free to disregard this notice!\n\nThank you,\n{MYNAME}.", 'subscribe2-for-cp' );
 } // Default confirmation email text
 
 if ( ! isset( $mysubscribe2->subscribe2_options['confirm_subject'] ) ) {
-	$mysubscribe2->subscribe2_options['confirm_subject'] = '[{BLOGNAME}] ' . __( 'Please confirm your request', 'subscribe2' );
+	$mysubscribe2->subscribe2_options['confirm_subject'] = '[{BLOGNAME}] ' . __( 'Please confirm your request', 'subscribe2-for-cp' );
 } // Default confirmation email subject
 
 if ( ! isset( $mysubscribe2->subscribe2_options['remind_email'] ) ) {
-	$mysubscribe2->subscribe2_options['remind_email'] = __( "This email address was subscribed for notifications at {BLOGNAME} ({BLOGLINK}) but the subscription remains incomplete.\n\nIf you wish to complete your subscription please click on the link below:\n\n{LINK}\n\nIf you do not wish to complete your subscription please ignore this email and your address will be removed from our database.\n\nRegards,\n{MYNAME}", 'subscribe2' );
+	$mysubscribe2->subscribe2_options['remind_email'] = __( "This email address was subscribed for notifications at {BLOGNAME} ({BLOGLINK}) but the subscription remains incomplete.\n\nIf you wish to complete your subscription please click on the link below:\n\n{LINK}\n\nIf you do not wish to complete your subscription please ignore this email and your address will be removed from our database.\n\nRegards,\n{MYNAME}", 'subscribe2-for-cp' );
 } // Default reminder email text
 
 if ( ! isset( $mysubscribe2->subscribe2_options['remind_subject'] ) ) {
-	$mysubscribe2->subscribe2_options['remind_subject'] = '[{BLOGNAME}] ' . __( 'Subscription Reminder', 'subscribe2' );
+	$mysubscribe2->subscribe2_options['remind_subject'] = '[{BLOGNAME}] ' . __( 'Subscription Reminder', 'subscribe2-for-cp' );
 } // Default reminder email subject
 
 if ( ! isset( $mysubscribe2->subscribe2_options['ajax'] ) ) {

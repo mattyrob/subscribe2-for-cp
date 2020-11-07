@@ -30,16 +30,16 @@ class S2_Ajax {
 	public function add_ajax() {
 		// enqueue the jQuery script we need and handle the dependencies
 		wp_enqueue_script( 'jquery-ui-dialog' );
-		$css = apply_filters( 's2_jqueryui_css', 'https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/ui-darkness/jquery-ui.css' );
+		$css = apply_filters( 's2_jqueryui_css', 'https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/ui-darkness/jquery-ui.css' );
 		if ( is_ssl() ) {
 			$css = str_replace( 'http:', 'https:', $css );
 		}
-		wp_register_style( 'jquery-ui-style', $css, array(), '1.11.4' );
+		wp_register_style( 'jquery-ui-style', $css, array(), '1.12.1' );
 		wp_enqueue_style( 'jquery-ui-style' );
 		wp_register_script( 's2-ajax', S2URL . 'include/s2-ajax' . $this->script_debug . '.js', array(), '1.3', true );
 		$translation_array = array(
 			'ajaxurl' => admin_url( 'admin-ajax.php' ),
-			'title'   => __( 'Subscribe to this blog', 'subscribe2' ),
+			'title'   => __( 'Subscribe to this blog', 'subscribe2-for-cp' ),
 			'nonce'   => wp_create_nonce( 's2_ajax_form_nonce' ),
 		);
 		wp_localize_script( 's2-ajax', 's2AjaxScriptStrings', $translation_array );
@@ -95,13 +95,13 @@ class S2_Ajax {
 	 */
 	public function s2_ajax_submit_handler() {
 		if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( $_POST['nonce'], 's2_ajax_form_nonce' ) ) {
-			echo '<p>' . esc_html__( 'There was an error validating your request. Please try again later.', 'subscribe2' ) . '</p>';
+			echo '<p>' . esc_html__( 'There was an error validating your request. Please try again later.', 'subscribe2-for-cp' ) . '</p>';
 			wp_die();
 		}
 		$data = $_POST['data'];
 		if ( ( isset( $data['firstname'] ) && '' !== $data['firstname'] ) || ( isset( $data['lastname'] ) && '' !== $data['lastname'] ) || ( isset( $data['uri'] ) && 'http://' !== $data['uri'] ) ) {
 			// looks like some invisible-to-user fields were changed; falsely report success
-			echo '<p>' . esc_html__( 'A confirmation message is on its way!', 'subscribe2' ) . '</p>';
+			echo '<p>' . esc_html__( 'A confirmation message is on its way!', 'subscribe2-for-cp' ) . '</p>';
 			wp_die();
 		}
 
@@ -109,45 +109,49 @@ class S2_Ajax {
 		$s2_frontend->email = $s2_frontend->sanitize_email( $data['email'] );
 		$s2_frontend->ip    = $data['ip'];
 		if ( false === $s2_frontend->validate_email( $s2_frontend->email ) ) {
-			echo '<p>' . esc_html__( 'Sorry, but that does not look like an email address to me.', 'subscribe2' ) . '</p>';
+			echo '<p>' . esc_html__( 'Sorry, but that does not look like an email address to me.', 'subscribe2-for-cp' ) . '</p>';
 		} elseif ( $s2_frontend->is_barred( $s2_frontend->email ) ) {
-			echo '<p>' . esc_html__( 'Sorry, email addresses at that domain are currently barred due to spam, please use an alternative email address.', 'subscribe2' ) . '</p>';
+			echo '<p>' . esc_html__( 'Sorry, email addresses at that domain are currently barred due to spam, please use an alternative email address.', 'subscribe2-for-cp' ) . '</p>';
 		} else {
 			if ( is_int( $s2_frontend->lockout ) && $s2_frontend->lockout > 0 ) {
 				$date = gmdate( 'H:i:s.u', $s2_frontend->lockout );
 				$ips  = $wpdb->get_col( $wpdb->prepare( "SELECT ip FROM $wpdb->subscribe2 WHERE date = CURDATE() AND time > SUBTIME(CURTIME(), %s)", $date ) );
 				if ( in_array( $s2_frontend->ip, $ips, true ) ) {
-					echo '<p>' . esc_html__( 'Slow down, you move too fast.', 'subscribe2' ) . '</p>';
+					echo '<p>' . esc_html__( 'Slow down, you move too fast.', 'subscribe2-for-cp' ) . '</p>';
+					wp_die();
 				}
 			}
+
 			$check = $wpdb->get_var( $wpdb->prepare( "SELECT user_email FROM $wpdb->users WHERE user_email = %s", $s2_frontend->email ) );
 			if ( null !== $check ) {
 				// Translators: Link to login page
-				printf( wp_kses_post( __( 'To manage your subscription options please <a href="%1$s">login.</a>', 'subscribe2' ) ), esc_url( get_option( 'siteurl' ) . '/wp-login.php' ) );
+				printf( wp_kses_post( __( 'To manage your subscription options please <a href="%1$s">login.</a>', 'subscribe2-for-cp' ) ), esc_url( get_option( 'siteurl' ) . '/wp-login.php' ) );
+				wp_die();
 			}
+
 			if ( 'subscribe' === $data['button'] ) {
 				if ( '1' !== $s2_frontend->is_public( $s2_frontend->email ) ) {
 					// the user is unknown or inactive
 					$s2_frontend->add( $s2_frontend->email );
 					$status = $s2_frontend->send_confirm( 'add' );
 					if ( $status ) {
-						echo '<p>' . esc_html__( 'A confirmation message is on its way!', 'subscribe2' ) . '</p>';
+						echo '<p>' . esc_html__( 'A confirmation message is on its way!', 'subscribe2-for-cp' ) . '</p>';
 					} else {
-						echo '<p>' . esc_html__( 'Sorry, there seems to be an error on the server. Please try again later.', 'subscribe2' ) . '</p>';
+						echo '<p>' . esc_html__( 'Sorry, there seems to be an error on the server. Please try again later.', 'subscribe2-for-cp' ) . '</p>';
 					}
 				} else {
 					// they're already subscribed
-					echo '<p>' . esc_html__( 'That email address is already subscribed.', 'subscribe2' ) . '</p>';
+					echo '<p>' . esc_html__( 'That email address is already subscribed.', 'subscribe2-for-cp' ) . '</p>';
 				}
 			} elseif ( 'unsubscribe' === $data['button'] ) {
 				if ( false === $s2_frontend->is_public( $s2_frontend->email ) ) {
-					echo '<p>' . esc_html__( 'That email address is not subscribed.', 'subscribe2' ) . '</p>';
+					echo '<p>' . esc_html__( 'That email address is not subscribed.', 'subscribe2-for-cp' ) . '</p>';
 				} else {
 					$status = $s2_frontend->send_confirm( 'del' );
 					if ( $status ) {
-						echo '<p>' . esc_html__( 'A confirmation message is on its way!', 'subscribe2' ) . '</p>';
+						echo '<p>' . esc_html__( 'A confirmation message is on its way!', 'subscribe2-for-cp' ) . '</p>';
 					} else {
-						echo '<p>' . esc_html__( 'Sorry, there seems to be an error on the server. Please try again later.', 'subscribe2' ) . '</p>';
+						echo '<p>' . esc_html__( 'Sorry, there seems to be an error on the server. Please try again later.', 'subscribe2-for-cp' ) . '</p>';
 					}
 				}
 			}

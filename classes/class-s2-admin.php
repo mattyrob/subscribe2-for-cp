@@ -5,28 +5,28 @@ class S2_Admin extends S2_Core {
 	 * Hook the menu
 	 */
 	public function admin_menu() {
-		add_menu_page( __( 'Subscribe2', 'subscribe2' ), __( 'Subscribe2', 'subscribe2' ), apply_filters( 's2_capability', 'read', 'user' ), 's2', null, S2URL . 'include/email-edit.png' );
+		add_menu_page( __( 'Subscribe2', 'subscribe2-for-cp' ), __( 'Subscribe2', 'subscribe2-for-cp' ), apply_filters( 's2_capability', 'read', 'user' ), 's2', null, S2URL . 'include/email-edit.png' );
 
-		$s2user = add_submenu_page( 's2', __( 'Your Subscriptions', 'subscribe2' ), __( 'Your Subscriptions', 'subscribe2' ), apply_filters( 's2_capability', 'read', 'user' ), 's2', array( &$this, 'user_menu' ) );
+		$s2user = add_submenu_page( 's2', __( 'Your Subscriptions', 'subscribe2-for-cp' ), __( 'Your Subscriptions', 'subscribe2-for-cp' ), apply_filters( 's2_capability', 'read', 'user' ), 's2', array( &$this, 'user_menu' ) );
 		add_action( "admin_print_scripts-$s2user", array( &$this, 'checkbox_form_js' ) );
 		add_action( "admin_print_styles-$s2user", array( &$this, 'user_admin_css' ) );
 		add_action( 'load-' . $s2user, array( &$this, 'user_help' ) );
 
-		$s2subscribers = add_submenu_page( 's2', __( 'Subscribers', 'subscribe2' ), __( 'Subscribers', 'subscribe2' ), apply_filters( 's2_capability', 'manage_options', 'manage' ), 's2_tools', array( &$this, 'subscribers_menu' ) );
+		$s2subscribers = add_submenu_page( 's2', __( 'Subscribers', 'subscribe2-for-cp' ), __( 'Subscribers', 'subscribe2-for-cp' ), apply_filters( 's2_capability', 'manage_options', 'manage' ), 's2_tools', array( &$this, 'subscribers_menu' ) );
 		add_action( "admin_print_scripts-$s2subscribers", array( &$this, 'checkbox_form_js' ) );
 		add_action( "admin_print_scripts-$s2subscribers", array( &$this, 'subscribers_form_js' ) );
 		add_action( "admin_print_scripts-$s2subscribers", array( &$this, 'subscribers_css' ) );
 		add_action( 'load-' . $s2subscribers, array( &$this, 'subscribers_help' ) );
 		add_action( 'load-' . $s2subscribers, array( &$this, 'subscribers_options' ) );
 
-		$s2settings = add_submenu_page( 's2', __( 'Settings', 'subscribe2' ), __( 'Settings', 'subscribe2' ), apply_filters( 's2_capability', 'manage_options', 'settings' ), 's2_settings', array( &$this, 'settings_menu' ) );
+		$s2settings = add_submenu_page( 's2', __( 'Settings', 'subscribe2-for-cp' ), __( 'Settings', 'subscribe2-for-cp' ), apply_filters( 's2_capability', 'manage_options', 'settings' ), 's2_settings', array( &$this, 'settings_menu' ) );
 		add_action( "admin_print_scripts-$s2settings", array( &$this, 'checkbox_form_js' ) );
 		add_action( "admin_print_scripts-$s2settings", array( &$this, 'option_form_js' ) );
 		add_action( "admin_print_scripts-$s2settings", array( &$this, 'dismiss_js' ) );
 		add_filter( 'plugin_row_meta', array( &$this, 'plugin_links' ), 10, 2 );
 		add_action( 'load-' . $s2settings, array( &$this, 'settings_help' ) );
 
-		$s2mail = add_submenu_page( 's2', __( 'Send Email', 'subscribe2' ), __( 'Send Email', 'subscribe2' ), apply_filters( 's2_capability', 'publish_posts', 'send' ), 's2_posts', array( &$this, 'write_menu' ) );
+		$s2mail = add_submenu_page( 's2', __( 'Send Email', 'subscribe2-for-cp' ), __( 'Send Email', 'subscribe2-for-cp' ), apply_filters( 's2_capability', 'publish_posts', 'send' ), 's2_posts', array( &$this, 'write_menu' ) );
 		add_action( 'load-' . $s2mail, array( &$this, 'mail_help' ) );
 	}
 
@@ -39,16 +39,16 @@ class S2_Admin extends S2_Core {
 			$screen->add_help_tab(
 				array(
 					'id'      => 's2-user-help1',
-					'title'   => __( 'Overview', 'subscribe2' ),
-					'content' => '<p>' . __( 'From this page you can opt in or out of receiving a periodical digest style email of blog posts.', 'subscribe2' ) . '</p>',
+					'title'   => __( 'Overview', 'subscribe2-for-cp' ),
+					'content' => '<p>' . __( 'From this page you can opt in or out of receiving a periodical digest style email of blog posts.', 'subscribe2-for-cp' ) . '</p>',
 				)
 			);
 		} else {
 			$screen->add_help_tab(
 				array(
 					'id'      => 's2-user-help1',
-					'title'   => __( 'Overview', 'subscribe2' ),
-					'content' => '<p>' . __( 'From this page you can control your subscription preferences. Choose the email format you wish to receive, which categories you would like to receive notification for and depending on the site settings which authors you would like to read.', 'subscribe2' ) . '</p>',
+					'title'   => __( 'Overview', 'subscribe2-for-cp' ),
+					'content' => '<p>' . __( 'From this page you can control your subscription preferences. Choose the email format you wish to receive, which categories you would like to receive notification for and depending on the site settings which authors you would like to read.', 'subscribe2-for-cp' ) . '</p>',
 				)
 			);
 		}
@@ -59,24 +59,24 @@ class S2_Admin extends S2_Core {
 		$screen->add_help_tab(
 			array(
 				'id'      => 's2-subscribers-help1',
-				'title'   => __( 'Overview', 'subscribe2' ),
-				'content' => '<p>' . __( 'From this page you can manage your subscribers.', 'subscribe2' ) . '</p>',
+				'title'   => __( 'Overview', 'subscribe2-for-cp' ),
+				'content' => '<p>' . __( 'From this page you can manage your subscribers.', 'subscribe2-for-cp' ) . '</p>',
 			)
 		);
 		$screen->add_help_tab(
 			array(
 				'id'      => 's2-subscribers-help2',
-				'title'   => __( 'Public Subscribers', 'subscribe2' ),
-				'content' => '<p>' . __( 'Public Subscribers are subscribers who have used the plugin form and only provided their email address.', 'subscribe2' ) . '</p><p>' . __( 'On this page public subscribers can be viewed, searched, deleted and also toggled between Confirmed and Unconfirmed status.', 'subscribe2' ) . '</p>',
+				'title'   => __( 'Public Subscribers', 'subscribe2-for-cp' ),
+				'content' => '<p>' . __( 'Public Subscribers are subscribers who have used the plugin form and only provided their email address.', 'subscribe2-for-cp' ) . '</p><p>' . __( 'On this page public subscribers can be viewed, searched, deleted and also toggled between Confirmed and Unconfirmed status.', 'subscribe2-for-cp' ) . '</p>',
 			)
 		);
 		$screen->add_help_tab(
 			array(
 				'id'      => 's2-subscribers-help3',
-				'title'   => __( 'Registered Subscribers', 'subscribe2' ),
-				'content' => '<p>' . __( 'Registered Subscribers are subscribers who have registered in ClassicPress and have a username and password.', 'subscribe2' ) .
-				'</p><p>' . __( 'Registered Subscribers have greater personal control over their subscription. They can change the format of the email and also select which categories and authors they want to receive notifications about.', 'subscribe2' ) .
-				'</p><p>' . __( 'On this page registered subscribers can be viewed and searched. User accounts can be deleted from here with any posts created by those users being assigned to the currently logged in user. Bulk changes can be applied to all user settings changing their subscription email format and categories.', 'subscribe2' ) . '</p>',
+				'title'   => __( 'Registered Subscribers', 'subscribe2-for-cp' ),
+				'content' => '<p>' . __( 'Registered Subscribers are subscribers who have registered in ClassicPress and have a username and password.', 'subscribe2-for-cp' ) .
+				'</p><p>' . __( 'Registered Subscribers have greater personal control over their subscription. They can change the format of the email and also select which categories and authors they want to receive notifications about.', 'subscribe2-for-cp' ) .
+				'</p><p>' . __( 'On this page registered subscribers can be viewed and searched. User accounts can be deleted from here with any posts created by those users being assigned to the currently logged in user. Bulk changes can be applied to all user settings changing their subscription email format and categories.', 'subscribe2-for-cp' ) . '</p>',
 			)
 		);
 	}
@@ -85,7 +85,7 @@ class S2_Admin extends S2_Core {
 		$option = 'per_page';
 
 		$args = array(
-			'label'   => __( 'Number of subscribers per page: ', 'subscribe2' ),
+			'label'   => __( 'Number of subscribers per page: ', 'subscribe2-for-cp' ),
 			'default' => 25,
 			'option'  => 'subscribers_per_page',
 		);
@@ -106,53 +106,53 @@ class S2_Admin extends S2_Core {
 		$screen->add_help_tab(
 			array(
 				'id'      => 's2-settings-help1',
-				'title'   => __( 'Overview', 'subscribe2' ),
-				'content' => '<p>' . __( 'From this page you can adjust the Settings for Subscribe2.', 'subscribe2' ) . '</p>',
+				'title'   => __( 'Overview', 'subscribe2-for-cp' ),
+				'content' => '<p>' . __( 'From this page you can adjust the Settings for Subscribe2.', 'subscribe2-for-cp' ) . '</p>',
 			)
 		);
 		$screen->add_help_tab(
 			array(
 				'id'      => 's2-settings-help2',
-				'title'   => __( 'Email Settings', 'subscribe2' ),
-				'content' => '<p>' . __( 'This section allows you to specify settings that apply to the emails generated by the site.', 'subscribe2' ) .
-				'</p><p>' . __( 'Emails can be sent to individual subscribers by setting the number of recipients per email to 1. A setting greater than one will group recipients together and make use of the BCC emails header. A setting of 0 sends a single email with all subscribers in one large BCC group. A setting of 1 looks less like spam email to filters but takes longer to process.', 'subscribe2' ) .
-				'</p><p>' . __( 'This section is also where the sender of the email on this page is chosen. You can choose Post Author or your Blogname but it is recommended to create a user account with an email address that really exists and shares the same domain name as your site (the bit after the @ should be the same as your sites web address) and then use this account.', 'subscribe2' ) .
-				'</p><p>' . __( 'This page also configures the frequency of emails. This can be at the time new posts are made (per post) or periodically with an excerpt of each post made (digest). Additionally the post types (pages, private, password protected) can also be configured here.', 'subscribe2' ) . '</p>',
+				'title'   => __( 'Email Settings', 'subscribe2-for-cp' ),
+				'content' => '<p>' . __( 'This section allows you to specify settings that apply to the emails generated by the site.', 'subscribe2-for-cp' ) .
+				'</p><p>' . __( 'Emails can be sent to individual subscribers by setting the number of recipients per email to 1. A setting greater than one will group recipients together and make use of the BCC emails header. A setting of 0 sends a single email with all subscribers in one large BCC group. A setting of 1 looks less like spam email to filters but takes longer to process.', 'subscribe2-for-cp' ) .
+				'</p><p>' . __( 'This section is also where the sender of the email on this page is chosen. You can choose Post Author or your Blogname but it is recommended to create a user account with an email address that really exists and shares the same domain name as your site (the bit after the @ should be the same as your sites web address) and then use this account.', 'subscribe2-for-cp' ) .
+				'</p><p>' . __( 'This page also configures the frequency of emails. This can be at the time new posts are made (per post) or periodically with an excerpt of each post made (digest). Additionally the post types (pages, private, password protected) can also be configured here.', 'subscribe2-for-cp' ) . '</p>',
 			)
 		);
 		$screen->add_help_tab(
 			array(
 				'id'      => 's2-settings-help3',
-				'title'   => __( 'Templates', 'subscribe2' ),
-				'content' => '<p>' . __( 'This section allows you to customise the content of your notification emails.', 'subscribe2' ) .
-				'</p><p>' . __( 'There are special {KEYWORDS} that are used by Subscribe2 to place content into the final email. The template also accepts regular text and HTML as desired in the final emails.', 'subscribe2' ) .
-				'</p><p>' . __( 'The {KEYWORDS} are listed on the right of the templates, note that some are for per post emails only and some are for digest emails only. Make sure the correct keywords are used based upon the Email Settings.', 'subscribe2' ) .
-				'</p><p>' . __( 'The Notification Email template is used for sending notifications of new posts. The Subscribe / Unsubscribe confirmation template is sent when a new subscription or unsubscription request is made. The Reminder template is used to send reminder emails; this is done automatically or can be done manually.', 'subscribe2' ) . '</p>',
+				'title'   => __( 'Templates', 'subscribe2-for-cp' ),
+				'content' => '<p>' . __( 'This section allows you to customise the content of your notification emails.', 'subscribe2-for-cp' ) .
+				'</p><p>' . __( 'There are special {KEYWORDS} that are used by Subscribe2 to place content into the final email. The template also accepts regular text and HTML as desired in the final emails.', 'subscribe2-for-cp' ) .
+				'</p><p>' . __( 'The {KEYWORDS} are listed on the right of the templates, note that some are for per post emails only and some are for digest emails only. Make sure the correct keywords are used based upon the Email Settings.', 'subscribe2-for-cp' ) .
+				'</p><p>' . __( 'The Notification Email template is used for sending notifications of new posts. The Subscribe / Unsubscribe confirmation template is sent when a new subscription or unsubscription request is made. The Reminder template is used to send reminder emails; this is done automatically or can be done manually.', 'subscribe2-for-cp' ) . '</p>',
 			)
 		);
 		$screen->add_help_tab(
 			array(
 				'id'      => 's2-settings-help4',
-				'title'   => __( 'Registered Users', 'subscribe2' ),
-				'content' => '<p>' . __( 'This section allows settings that apply to Registered Subscribers to be configured.', 'subscribe2' ) .
-				'</p><p>' . __( 'Categories can be made compulsory so emails are always sent to Public and Registered Subscribers for posts in these categories. They can also be excluded so that emails are not generated for Subscribers. Registered Subscribers can be allowed to bypass category exclusions. Excluded categories take precedence over Compulsory categories.', 'subscribe2' ) .
-				'</p><p>' . __( 'A set of default settings for new users can also be specified using the Auto Subscribe section. Settings specified here will be applied to any newly created user accounts while Subscribe2 is activated.', 'subscribe2' ) . '</p>',
+				'title'   => __( 'Registered Users', 'subscribe2-for-cp' ),
+				'content' => '<p>' . __( 'This section allows settings that apply to Registered Subscribers to be configured.', 'subscribe2-for-cp' ) .
+				'</p><p>' . __( 'Categories can be made compulsory so emails are always sent to Public and Registered Subscribers for posts in these categories. They can also be excluded so that emails are not generated for Subscribers. Registered Subscribers can be allowed to bypass category exclusions. Excluded categories take precedence over Compulsory categories.', 'subscribe2-for-cp' ) .
+				'</p><p>' . __( 'A set of default settings for new users can also be specified using the Auto Subscribe section. Settings specified here will be applied to any newly created user accounts while Subscribe2 is activated.', 'subscribe2-for-cp' ) . '</p>',
 			)
 		);
 		$screen->add_help_tab(
 			array(
 				'id'      => 's2-settings-help5',
-				'title'   => __( 'Appearance', 'subscribe2' ),
-				'content' => '<p>' . __( 'This section allows you to enable several aspect of the plugin such as Widgets and editor buttons.', 'subscribe2' ) .
-				'</p><p>' . __( 'AJAX mode can be enabled that is intended to work with the shortcode link parameter so that a dialog opens in the centre of the browser rather then using the regular form.', 'subscribe2' ) .
-				'</p><p>' . __( 'The email over ride check box can be set to be automatically checked for every new post and page from here to, this may be useful if you will only want to send very occasional notifications for specific posts. You can then uncheck this box just before you publish your content.', 'subscribe2' ) . '</p>',
+				'title'   => __( 'Appearance', 'subscribe2-for-cp' ),
+				'content' => '<p>' . __( 'This section allows you to enable several aspect of the plugin such as Widgets and editor buttons.', 'subscribe2-for-cp' ) .
+				'</p><p>' . __( 'AJAX mode can be enabled that is intended to work with the shortcode link parameter so that a dialog opens in the centre of the browser rather then using the regular form.', 'subscribe2-for-cp' ) .
+				'</p><p>' . __( 'The email over ride check box can be set to be automatically checked for every new post and page from here to, this may be useful if you will only want to send very occasional notifications for specific posts. You can then uncheck this box just before you publish your content.', 'subscribe2-for-cp' ) . '</p>',
 			)
 		);
 		$screen->add_help_tab(
 			array(
 				'id'      => 's2-settings-help7',
-				'title'   => __( 'Miscellaneous', 'subscribe2' ),
-				'content' => '<p>' . __( 'This section contains a place to bar specified domains from becoming Public Subscribers and links to help and support pages.', 'subscribe2' ) .
+				'title'   => __( 'Miscellaneous', 'subscribe2-for-cp' ),
+				'content' => '<p>' . __( 'This section contains a place to bar specified domains from becoming Public Subscribers and links to help and support pages.', 'subscribe2-for-cp' ) .
 				'</p>',
 			)
 		);
@@ -163,9 +163,9 @@ class S2_Admin extends S2_Core {
 		$screen->add_help_tab(
 			array(
 				'id'      => 's2-send-mail-help1',
-				'title'   => __( 'Overview', 'subscribe2' ),
-				'content' => '<p>' . __( 'From this page you can send emails to the recipients in the group selected in the drop down.', 'subscribe2' ) .
-				'</p><p>' . __( '<strong>Preview</strong> will send a preview of the email to the currently logged in user. <strong>Send</strong> will send the email to the recipient list.', 'subscribe2' ) . '</p>',
+				'title'   => __( 'Overview', 'subscribe2-for-cp' ),
+				'content' => '<p>' . __( 'From this page you can send emails to the recipients in the group selected in the drop down.', 'subscribe2-for-cp' ) .
+				'</p><p>' . __( '<strong>Preview</strong> will send a preview of the email to the currently logged in user. <strong>Send</strong> will send the email to the recipient list.', 'subscribe2-for-cp' ) . '</p>',
 			)
 		);
 	}
@@ -223,13 +223,13 @@ class S2_Admin extends S2_Core {
 	public function subscribers_form_js() {
 		wp_register_script( 's2_subscribers', S2URL . 'include/s2-subscribers' . $this->script_debug . '.js', array(), '1.5', true );
 		$translation_array = array(
-			'registered_confirm_single' => __( 'You are about to delete a registered user account, any posts made by this user will be assigned to you. Are you sure?', 'subscribe2' ),
-			'registered_confirm_plural' => __( 'You are about to delete registered user accounts, any posts made by these users will be assigned to you. Are you sure?', 'subscribe2' ),
-			'public_confirm_single'     => __( 'You are about to delete a public subscriber. Are you sure?', 'subscribe2' ),
-			'public_confirm_plural'     => __( 'You are about to delete public subscribers. Are you sure?', 'subscribe2' ),
-			'bulk_manage_all'           => __( 'You are about to make Bulk Management changes to all Registered Users. Are you sure?', 'subscribe2' ),
-			'bulk_manage_single'        => __( 'You are about to make Bulk Management changes to the selected Registered User. Are you sure?', 'subscribe2' ),
-			'bulk_manage_plural'        => __( 'You are about to make Bulk Management changes to the selected Registered Users. Are you sure?', 'subscribe2' ),
+			'registered_confirm_single' => __( 'You are about to delete a registered user account, any posts made by this user will be assigned to you. Are you sure?', 'subscribe2-for-cp' ),
+			'registered_confirm_plural' => __( 'You are about to delete registered user accounts, any posts made by these users will be assigned to you. Are you sure?', 'subscribe2-for-cp' ),
+			'public_confirm_single'     => __( 'You are about to delete a public subscriber. Are you sure?', 'subscribe2-for-cp' ),
+			'public_confirm_plural'     => __( 'You are about to delete public subscribers. Are you sure?', 'subscribe2-for-cp' ),
+			'bulk_manage_all'           => __( 'You are about to make Bulk Management changes to all Registered Users. Are you sure?', 'subscribe2-for-cp' ),
+			'bulk_manage_single'        => __( 'You are about to make Bulk Management changes to the selected Registered User. Are you sure?', 'subscribe2-for-cp' ),
+			'bulk_manage_plural'        => __( 'You are about to make Bulk Management changes to the selected Registered Users. Are you sure?', 'subscribe2-for-cp' ),
 		);
 		wp_localize_script( 's2_subscribers', 's2ScriptStrings', $translation_array );
 		wp_enqueue_script( 's2_subscribers' );
@@ -246,8 +246,8 @@ class S2_Admin extends S2_Core {
 	 */
 	public function plugin_links( $links, $file ) {
 		if ( S2DIR . 'subscribe2.php' === $file ) {
-			$links[] = '<a href="admin.php?page=s2_settings">' . __( 'Settings', 'subscribe2' ) . '</a>';
-			$links[] = '<a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&amp;hosted_button_id=2387904"><b>' . __( 'Donate', 'subscribe2' ) . '</b></a>';
+			$links[] = '<a href="admin.php?page=s2_settings">' . __( 'Settings', 'subscribe2-for-cp' ) . '</a>';
+			$links[] = '<a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&amp;hosted_button_id=2387904"><b>' . __( 'Donate', 'subscribe2-for-cp' ) . '</b></a>';
 		}
 		return $links;
 	}
@@ -352,7 +352,7 @@ class S2_Admin extends S2_Core {
 
 		add_meta_box(
 			'subscribe2',
-			__( 'Subscribe2 Notification Override', 'subscribe2' ),
+			__( 'Subscribe2 Notification Override', 'subscribe2-for-cp' ),
 			array( &$this, 's2_override_meta' ),
 			$post_type,
 			'advanced',
@@ -365,7 +365,7 @@ class S2_Admin extends S2_Core {
 
 		add_meta_box(
 			'subscribe2-preview',
-			__( 'Subscribe2 Preview', 'subscribe2' ),
+			__( 'Subscribe2 Preview', 'subscribe2-for-cp' ),
 			array( &$this, 's2_preview_meta' ),
 			$post_type,
 			'side',
@@ -379,7 +379,7 @@ class S2_Admin extends S2_Core {
 		if ( 'publish' === $post->post_status || ( 'private' === $post->post_status && 'yes' === $this->subscribe2_options['private'] ) ) {
 			add_meta_box(
 				'subscribe2-resend',
-				__( 'Subscribe2 Resend', 'subscribe2' ),
+				__( 'Subscribe2 Resend', 'subscribe2-for-cp' ),
 				array( &$this, 's2_resend_meta' ),
 				$post_type,
 				'side',
@@ -399,7 +399,7 @@ class S2_Admin extends S2_Core {
 		global $post_ID;
 		$s2mail = get_post_meta( $post_ID, '_s2mail', true );
 		echo '<input type="hidden" name="s2meta_nonce" id="s2meta_nonce" value="' . esc_attr( wp_create_nonce( wp_hash( plugin_basename( __FILE__ ) ) ) ) . '" />';
-		echo esc_html__( 'Check here to disable sending of an email notification for this post/page', 'subscribe2' );
+		echo esc_html__( 'Check here to disable sending of an email notification for this post/page', 'subscribe2-for-cp' );
 		echo '&nbsp;&nbsp;<input type="checkbox" name="s2_meta_field" value="no"';
 		if ( 'no' === $s2mail || ( '1' === $this->subscribe2_options['s2meta_default'] && '' === $s2mail ) ) {
 			echo ' checked="checked"';
@@ -436,8 +436,8 @@ class S2_Admin extends S2_Core {
 	 * Meta preview box code
 	 */
 	public function s2_preview_meta() {
-		echo '<p>' . esc_html__( 'Send preview email of this post to currently logged in user:', 'subscribe2' ) . '</p>' . "\r\n";
-		echo '<input class="button" name="s2_preview" type="submit" value="' . esc_attr( __( 'Send Preview', 'subscribe2' ) ) . '" />' . "\r\n";
+		echo '<p>' . esc_html__( 'Send preview email of this post to currently logged in user:', 'subscribe2-for-cp' ) . '</p>' . "\r\n";
+		echo '<input class="button" name="s2_preview" type="submit" value="' . esc_attr( __( 'Send Preview', 'subscribe2-for-cp' ) ) . '" />' . "\r\n";
 	}
 
 	/**
@@ -469,8 +469,8 @@ class S2_Admin extends S2_Core {
 	 * Meta resend box code
 	 */
 	public function s2_resend_meta() {
-		echo '<p>' . esc_html__( 'Resend the notification email of this post to current subscribers:', 'subscribe2' ) . '</p>' . "\r\n";
-		echo '<input class="button" name="s2_resend" type="submit" value="' . esc_attr( __( 'Resend Notification', 'subscribe2' ) ) . '" />' . "\r\n";
+		echo '<p>' . esc_html__( 'Resend the notification email of this post to current subscribers:', 'subscribe2-for-cp' ) . '</p>' . "\r\n";
+		echo '<input class="button" name="s2_resend" type="submit" value="' . esc_attr( __( 'Resend Notification', 'subscribe2-for-cp' ) ) . '" />' . "\r\n";
 	}
 
 	/**
@@ -500,12 +500,12 @@ class S2_Admin extends S2_Core {
 	public function s2_meta_notices() {
 		if ( isset( $_GET['s2'] ) && 'resend' === $_GET['s2'] ) {
 			$class   = 'notice notice-success is-dismissible';
-			$message = __( 'Attempt made to resend email notification.', 'subscribe2' );
+			$message = __( 'Attempt made to resend email notification.', 'subscribe2-for-cp' );
 			echo '<div class="' . esc_attr( $class ) . '"><p>' . esc_html( $message ) . '</p></div>';
 		}
 		if ( isset( $_GET['s2'] ) && 'preview' === $_GET['s2'] ) {
 			$class   = 'notice notice-success is-dismissible';
-			$message = __( 'Attempt made to send email preview.', 'subscribe2' );
+			$message = __( 'Attempt made to send email preview.', 'subscribe2-for-cp' );
 			echo '<div class="' . esc_attr( $class ) . '"><p>' . esc_html( $message ) . '</p></div>';
 		}
 	}
@@ -581,7 +581,7 @@ class S2_Admin extends S2_Core {
 		$subscribers = explode( ",\r\n", $subscribers );
 		natcasesort( $subscribers );
 
-		$exportcsv = _x( 'User Email,User Type,User Name,Confirm Date,IP', 'Comma Separated Column Header names for CSV Export', 'subscribe2' );
+		$exportcsv = _x( 'User Email,User Type,User Name,Confirm Date,IP', 'Comma Separated Column Header names for CSV Export', 'subscribe2-for-cp' );
 		$all_cats  = $this->all_cats( false, 'ID' );
 
 		foreach ( $all_cats as $cat ) {
@@ -602,14 +602,14 @@ class S2_Admin extends S2_Core {
 				}
 
 				$exportcsv .= $subscriber . ',';
-				$exportcsv .= __( 'Registered User', 'subscribe2' );
+				$exportcsv .= __( 'Registered User', 'subscribe2-for-cp' );
 				$exportcsv .= ',' . $user_info->display_name;
 				$exportcsv .= ',,' . $subscribed_cats . "\r\n";
 			} else {
 				if ( '1' === $this->is_public( $subscriber ) ) {
-					$exportcsv .= $subscriber . ',' . __( 'Confirmed Public Subscriber', 'subscribe2' ) . ',,' . $this->signup_date( $subscriber ) . ',' . $this->signup_ip( $subscriber ) . "\r\n";
+					$exportcsv .= $subscriber . ',' . __( 'Confirmed Public Subscriber', 'subscribe2-for-cp' ) . ',,' . $this->signup_date( $subscriber ) . ',' . $this->signup_ip( $subscriber ) . "\r\n";
 				} elseif ( '0' === $this->is_public( $subscriber ) ) {
-					$exportcsv .= $subscriber . ',' . __( 'Unconfirmed Public Subscriber', 'subscribe2' ) . ',,' . $this->signup_date( $subscriber ) . ',' . $this->signup_ip( $subscriber ) . "\r\n";
+					$exportcsv .= $subscriber . ',' . __( 'Unconfirmed Public Subscriber', 'subscribe2-for-cp' ) . ',,' . $this->signup_date( $subscriber ) . ',' . $this->signup_ip( $subscriber ) . "\r\n";
 				}
 			}
 		}
@@ -626,7 +626,7 @@ class S2_Admin extends S2_Core {
 		$j    = 0;
 		echo '<table style="width: 100%; border-collapse: separate; border-spacing: 2px; *border-collapse: expression(\'separate\', cellSpacing = \'2px\');" class="editform">' . "\r\n";
 		echo '<tr><td style="text-align: left;" colspan="2">' . "\r\n";
-		echo '<label><input type="checkbox" name="checkall" value="checkall_format" /> ' . esc_html__( 'Select / Unselect All', 'subscribe2' ) . '</label>' . "\r\n";
+		echo '<label><input type="checkbox" name="checkall" value="checkall_format" /> ' . esc_html__( 'Select / Unselect All', 'subscribe2-for-cp' ) . '</label>' . "\r\n";
 		echo '</td></tr>' . "\r\n";
 		echo '<tr style="vertical-align: top;"><td style="width: 50%; text-align: left">' . "\r\n";
 		foreach ( $formats[0] as $format ) {
@@ -663,12 +663,12 @@ class S2_Admin extends S2_Core {
 		global $wpdb, $current_tab;
 
 		$who = array(
-			'all'         => __( 'All Users and Subscribers', 'subscribe2' ),
-			'public'      => __( 'Public Subscribers', 'subscribe2' ),
-			'confirmed'   => ' &nbsp;&nbsp;' . __( 'Confirmed', 'subscribe2' ),
-			'unconfirmed' => ' &nbsp;&nbsp;' . __( 'Unconfirmed', 'subscribe2' ),
-			'all_users'   => __( 'All Registered Users', 'subscribe2' ),
-			'registered'  => __( 'Registered Subscribers', 'subscribe2' ),
+			'all'         => __( 'All Users and Subscribers', 'subscribe2-for-cp' ),
+			'public'      => __( 'Public Subscribers', 'subscribe2-for-cp' ),
+			'confirmed'   => ' &nbsp;&nbsp;' . __( 'Confirmed', 'subscribe2-for-cp' ),
+			'unconfirmed' => ' &nbsp;&nbsp;' . __( 'Unconfirmed', 'subscribe2-for-cp' ),
+			'all_users'   => __( 'All Registered Users', 'subscribe2-for-cp' ),
+			'registered'  => __( 'Registered Subscribers', 'subscribe2-for-cp' ),
 		);
 
 		$all_cats = $this->all_cats( false );
@@ -747,7 +747,7 @@ class S2_Admin extends S2_Core {
 					continue;
 				}
 				if ( isset( $compulsory_cats ) && in_array( (string) $cat->term_id, $compulsory_cats, true ) ) {
-					$compulsory = ' ' . __( '[Compulsory]', 'subscribe2' );
+					$compulsory = ' ' . __( '[Compulsory]', 'subscribe2-for-cp' );
 				} else {
 					$compulsory = '';
 				}
@@ -793,7 +793,7 @@ class S2_Admin extends S2_Core {
 		if ( $inc_author ) {
 			$author[] = (object) array(
 				'ID'           => 'author',
-				'display_name' => __( 'Post Author', 'subscribe2' ),
+				'display_name' => __( 'Post Author', 'subscribe2-for-cp' ),
 			);
 			$author[] = (object) array(
 				'ID'           => 'blogname',
@@ -833,7 +833,7 @@ class S2_Admin extends S2_Core {
 		global $wpdb;
 		$cron_file = ABSPATH . 'wp-cron.php';
 		if ( ! is_readable( $cron_file ) ) {
-			echo '<strong><em style="color: red">' . esc_html__( 'The ClassicPress cron functions may be disabled on this server. Digest notifications may not work.', 'subscribe2' ) . '</em></strong><br>' . "\r\n";
+			echo '<strong><em style="color: red">' . esc_html__( 'The ClassicPress cron functions may be disabled on this server. Digest notifications may not work.', 'subscribe2-for-cp' ) . '</em></strong><br>' . "\r\n";
 		}
 		$scheduled_time = wp_next_scheduled( 's2_digest_cron' );
 		$offset         = get_option( 'gmt_offset' ) * 60 * 60;
@@ -842,7 +842,7 @@ class S2_Admin extends S2_Core {
 			array(
 				'never' => array(
 					'interval' => 0,
-					'display'  => __( 'For each Post', 'subscribe2' ),
+					'display'  => __( 'For each Post', 'subscribe2-for-cp' ),
 				),
 			),
 			$schedule
@@ -864,16 +864,16 @@ class S2_Admin extends S2_Core {
 		if ( $scheduled_time ) {
 			$date_format = get_option( 'date_format' );
 			$time_format = get_option( 'time_format' );
-			echo '<p>' . esc_html__( 'Current UTC time is', 'subscribe2' ) . ': ' . "\r\n";
+			echo '<p>' . esc_html__( 'Current UTC time is', 'subscribe2-for-cp' ) . ': ' . "\r\n";
 			echo '<strong>' . esc_html( date_i18n( $date_format . ' @ ' . $time_format, false, 'gmt' ) ) . '</strong></p>' . "\r\n";
-			echo '<p>' . esc_html__( 'Current blog time is', 'subscribe2' ) . ': ' . "\r\n";
+			echo '<p>' . esc_html__( 'Current blog time is', 'subscribe2-for-cp' ) . ': ' . "\r\n";
 			echo '<strong>' . esc_html( date_i18n( $date_format . ' @ ' . $time_format ) ) . '</strong></p>' . "\r\n";
-			echo '<p>' . esc_html__( 'Next email notification will be sent when your blog time is after', 'subscribe2' ) . ': ' . "\r\n";
+			echo '<p>' . esc_html__( 'Next email notification will be sent when your blog time is after', 'subscribe2-for-cp' ) . ': ' . "\r\n";
 			echo '<input type="hidden" id="jscrondate" value="' . esc_attr( date_i18n( $date_format, $scheduled_time + $offset ) ) . '" />';
 			echo '<input type="hidden" id="jscrontime" value="' . esc_attr( date_i18n( $time_format, $scheduled_time + $offset ) ) . '" />';
 			echo '<span id="s2cron_1"><span id="s2crondate" style="background-color: #FFFBCC">' . esc_html( date_i18n( $date_format, $scheduled_time + $offset ) ) . '</span>';
 			echo ' @ <span id="s2crontime" style="background-color: #FFFBCC">' . esc_html( date_i18n( $time_format, $scheduled_time + $offset ) ) . '</span> ';
-			echo '<a href="#" onclick="s2Show(\'cron\'); return false;">' . esc_html__( 'Edit', 'subscribe2' ) . '</a></span>' . "\r\n";
+			echo '<a href="#" onclick="s2Show(\'cron\'); return false;">' . esc_html__( 'Edit', 'subscribe2-for-cp' ) . '</a></span>' . "\r\n";
 			echo '<span id="s2cron_2">' . "\r\n";
 			echo '<input id="s2datepicker" name="crondate" value="' . esc_attr( date_i18n( $date_format, $scheduled_time + $offset ) ) . '">' . "\r\n";
 			$hours        = array( '12:00 am', '1:00 am', '2:00 am', '3:00 am', '4:00 am', '5:00 am', '6:00 am', '7:00 am', '8:00 am', '9:00 am', '10:00 am', '11:00 am', '12:00 pm', '1:00 pm', '2:00 pm', '3:00 pm', '4:00 pm', '5:00 pm', '6:00 pm', '7:00 pm', '8:00 pm', '9:00 pm', '10:00 pm', '11:00 pm' );
@@ -887,11 +887,11 @@ class S2_Admin extends S2_Core {
 				echo '>' . esc_html( $value ) . '</option>' . "\r\n";
 			}
 			echo '</select>' . "\r\n";
-			echo '<a href="#" onclick="s2CronUpdate(\'cron\'); return false;">' . esc_html__( 'Update', 'subscribe2' ) . '</a>' . "\r\n";
-			echo '<a href="#" onclick="s2CronRevert(\'cron\'); return false;">' . esc_html__( 'Revert', 'subscribe2' ) . '</a></span>' . "\r\n";
+			echo '<a href="#" onclick="s2CronUpdate(\'cron\'); return false;">' . esc_html__( 'Update', 'subscribe2-for-cp' ) . '</a>' . "\r\n";
+			echo '<a href="#" onclick="s2CronRevert(\'cron\'); return false;">' . esc_html__( 'Revert', 'subscribe2-for-cp' ) . '</a></span>' . "\r\n";
 			if ( ! empty( $this->subscribe2_options['last_s2cron'] ) ) {
-				echo '<p>' . esc_html__( 'Attempt to resend the last Digest Notification email', 'subscribe2' ) . ': ';
-				echo '<input type="submit" class="button-secondary" name="resend" value="' . esc_attr( __( 'Resend Digest', 'subscribe2' ) ) . '" /></p>' . "\r\n";
+				echo '<p>' . esc_html__( 'Attempt to resend the last Digest Notification email', 'subscribe2-for-cp' ) . ': ';
+				echo '<input type="submit" class="button-secondary" name="resend" value="' . esc_attr( __( 'Resend Digest', 'subscribe2-for-cp' ) ) . '" /></p>' . "\r\n";
 			}
 		} else {
 			echo '<br>';
@@ -909,7 +909,7 @@ class S2_Admin extends S2_Core {
 
 		if ( false === $widget ) {
 			$option  = '<select name="s2page">' . "\r\n";
-			$option .= '<option value="0">' . __( 'Select a page', 'subscribe2' ) . '</option>' . "\r\n";
+			$option .= '<option value="0">' . __( 'Select a page', 'subscribe2-for-cp' ) . '</option>' . "\r\n";
 		} else {
 			$option = '';
 		}
@@ -1187,11 +1187,11 @@ class S2_Admin extends S2_Core {
 	 * Show form for one-click subscription on user profile page
 	 */
 	public function one_click_profile_form( $user ) {
-		echo '<h3>' . esc_html__( 'Email subscription', 'subscribe2' ) . '</h3>' . "\r\n";
+		echo '<h3>' . esc_html__( 'Email subscription', 'subscribe2-for-cp' ) . '</h3>' . "\r\n";
 		echo '<table class="form-table">' . "\r\n";
-		echo '<tr><th scope="row">' . esc_html__( 'Subscribe / Unsubscribe', 'subscribe2' ) . '</th>' . "\r\n";
-		echo '<td><label><input type="checkbox" name="sub2-one-click-subscribe" value="1" ' . checked( ! get_user_meta( $user->ID, $this->get_usermeta_keyname( 's2_subscribed' ), true ), false, false ) . ' /> ' . esc_html__( 'Receive notifications', 'subscribe2' ) . '</label><br>' . "\r\n";
-		echo '<span class="description">' . esc_html__( 'Check if you want to receive email notification when new posts are published', 'subscribe2' ) . '</span>' . "\r\n";
+		echo '<tr><th scope="row">' . esc_html__( 'Subscribe / Unsubscribe', 'subscribe2-for-cp' ) . '</th>' . "\r\n";
+		echo '<td><label><input type="checkbox" name="sub2-one-click-subscribe" value="1" ' . checked( ! get_user_meta( $user->ID, $this->get_usermeta_keyname( 's2_subscribed' ), true ), false, false ) . ' /> ' . esc_html__( 'Receive notifications', 'subscribe2-for-cp' ) . '</label><br>' . "\r\n";
+		echo '<span class="description">' . esc_html__( 'Check if you want to receive email notification when new posts are published', 'subscribe2-for-cp' ) . '</span>' . "\r\n";
 		echo '</td></tr></table>' . "\r\n";
 	}
 

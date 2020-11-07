@@ -8,7 +8,7 @@ global $current_user;
 // was anything POSTed?
 if ( isset( $_POST['s2_admin'] ) && 'mail' === $_POST['s2_admin'] ) {
 	if ( false === wp_verify_nonce( $_REQUEST['_wpnonce'], 'subscribe2-write_subscribers' . S2VERSION ) ) {
-		die( '<p>' . esc_html__( 'Security error! Your request cannot be completed.', 'subscribe2' ) . '</p>' );
+		die( '<p>' . esc_html__( 'Security error! Your request cannot be completed.', 'subscribe2-for-cp' ) . '</p>' );
 	}
 
 	$subject = html_entity_decode( stripslashes( wp_kses( $this->substitute( $_POST['subject'] ), '' ) ), ENT_QUOTES );
@@ -79,32 +79,32 @@ if ( isset( $_POST['s2_admin'] ) && 'mail' === $_POST['s2_admin'] ) {
 	// perform some error checking
 	if ( empty( $body ) ) {
 		$success       = false;
-		$error_message = __( 'Your email was empty', 'subscribe2' );
+		$error_message = __( 'Your email was empty', 'subscribe2-for-cp' );
 	} elseif ( isset( $upload_error ) ) {
 		$success       = false;
 		$error_message = $upload_error;
 	} else {
 		$success       = $this->mail( $recipients, $subject, $body, 'html', $attachments );
-		$error_message = __( 'Check your settings and check with your hosting provider', 'subscribe2' );
+		$error_message = __( 'Check your settings and check with your hosting provider', 'subscribe2-for-cp' );
 	}
 
 	// report user message
 	if ( $success ) {
 		if ( isset( $_POST['preview'] ) ) {
-			$message = '<p class="s2_message">' . __( 'Preview message sent!', 'subscribe2' ) . '</p>';
+			$message = '<p class="s2_message">' . __( 'Preview message sent!', 'subscribe2-for-cp' ) . '</p>';
 		} elseif ( isset( $_POST['send'] ) ) {
-			$message = '<p class="s2_message">' . __( 'Message sent!', 'subscribe2' ) . '</p>';
+			$message = '<p class="s2_message">' . __( 'Message sent!', 'subscribe2-for-cp' ) . '</p>';
 		}
 	} else {
 		global $phpmailer;
-		$message = '<p class="s2_error">' . __( 'Message failed!', 'subscribe2' ) . '</p>' . $error_message . $phpmailer->ErrorInfo;
+		$message = '<p class="s2_error">' . __( 'Message failed!', 'subscribe2-for-cp' ) . '</p>' . $error_message . $phpmailer->ErrorInfo;
 	}
 	echo '<div id="message" class="updated"><strong><p>' . wp_kses_post( $message ) . '</p></strong></div>' . "\r\n";
 }
 
 // show our form
 echo '<div class="wrap">';
-echo '<h1>' . esc_html__( 'Send an email to subscribers', 'subscribe2' ) . '</h1>' . "\r\n";
+echo '<h1>' . esc_html__( 'Send an email to subscribers', 'subscribe2-for-cp' ) . '</h1>' . "\r\n";
 echo '<form method="post" enctype="multipart/form-data">' . "\r\n";
 
 wp_nonce_field( 'subscribe2-write_subscribers' . S2VERSION );
@@ -112,20 +112,20 @@ wp_nonce_field( 'subscribe2-write_subscribers' . S2VERSION );
 if ( isset( $_POST['subject'] ) ) {
 	$subject = stripslashes( esc_html( $_POST['subject'] ) );
 } else {
-	$subject = __( 'A message from', 'subscribe2' ) . ' ' . html_entity_decode( get_option( 'blogname' ), ENT_QUOTES );
+	$subject = __( 'A message from', 'subscribe2-for-cp' ) . ' ' . html_entity_decode( get_option( 'blogname' ), ENT_QUOTES );
 }
 if ( ! isset( $_POST['content'] ) ) {
 	$body = '';
 }
-echo '<p>' . esc_html__( 'Subject', 'subscribe2' ) . ': <input type="text" size="69" name="subject" value="' . esc_attr( $subject ) . '" /> <br><br>';
+echo '<p>' . esc_html__( 'Subject', 'subscribe2-for-cp' ) . ': <input type="text" size="69" name="subject" value="' . esc_attr( $subject ) . '" /> <br><br>';
 echo '<textarea rows="12" cols="75" name="content">' . esc_textarea( $body ) . '</textarea>';
 echo "<br><div id=\"upload_files\"><input type=\"file\" name=\"file[]\"></div>\r\n";
-echo '<input type="button" class="button-secondary" name="addmore" value="' . esc_attr( __( 'Add More Files', 'subscribe2' ) ) . "\" onClick=\"add_file_upload();\" />\r\n";
+echo '<input type="button" class="button-secondary" name="addmore" value="' . esc_attr( __( 'Add More Files', 'subscribe2-for-cp' ) ) . "\" onClick=\"add_file_upload();\" />\r\n";
 echo "<br><br>\r\n";
-echo esc_html__( 'Recipients:', 'subscribe2' ) . ' ';
+echo esc_html__( 'Recipients:', 'subscribe2-for-cp' ) . ' ';
 $this->display_subscriber_dropdown( apply_filters( 's2_subscriber_dropdown_default', 'registered' ), false );
 echo '<input type="hidden" name="s2_admin" value="mail" />';
-echo '<p class="submit"><input type="submit" class="button-secondary" name="preview" value="' . esc_attr( __( 'Preview', 'subscribe2' ) ) . '" />&nbsp;<input type="submit" class="button-primary" name="send" value="' . esc_attr( __( 'Send', 'subscribe2' ) ) . '" /></p>';
+echo '<p class="submit"><input type="submit" class="button-secondary" name="preview" value="' . esc_attr( __( 'Preview', 'subscribe2-for-cp' ) ) . '" />&nbsp;<input type="submit" class="button-primary" name="send" value="' . esc_attr( __( 'Send', 'subscribe2-for-cp' ) ) . '" /></p>';
 echo '</form></div>' . "\r\n";
 echo '<div style="clear: both;"><p>&nbsp;</p></div>';
 ?>

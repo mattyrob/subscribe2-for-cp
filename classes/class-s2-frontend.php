@@ -5,11 +5,11 @@ class S2_Frontend extends S2_Core {
 	 */
 	public function load_strings() {
 		// Translators: Link to login page
-		$this->please_log_in = '<p class="s2_message">' . sprintf( __( 'To manage your subscription options please <a href="%1$s">login</a>.', 'subscribe2' ), get_option( 'siteurl' ) . '/wp-login.php' ) . '</p>';
+		$this->please_log_in = '<p class="s2_message">' . sprintf( __( 'To manage your subscription options please <a href="%1$s">login</a>.', 'subscribe2-for-cp' ), get_option( 'siteurl' ) . '/wp-login.php' ) . '</p>';
 
 		$profile = apply_filters( 's2_profile_link', get_option( 'siteurl' ) . '/wp-admin/admin.php?page=s2' );
 		// Translators: Link to Profile page
-		$this->profile = '<p class="s2_message">' . sprintf( __( 'You may manage your subscription options from your <a href="%1$s">profile</a>.', 'subscribe2' ), $profile ) . '</p>';
+		$this->profile = '<p class="s2_message">' . sprintf( __( 'You may manage your subscription options from your <a href="%1$s">profile</a>.', 'subscribe2-for-cp' ), $profile ) . '</p>';
 		if ( true === $this->s2_mu ) {
 			global $blog_id;
 			$user_ID = get_current_user_id();
@@ -17,32 +17,32 @@ class S2_Frontend extends S2_Core {
 				// if we are on multisite and the user is not a member of this blog change the link
 				$mu_profile = apply_filters( 's2_mu_profile_link', get_option( 'siteurl' ) . '/wp-admin/?s2mu_subscribe=' . $blog_id );
 				// Translators: Link to Profile page
-				$this->profile = '<p class="s2_message">' . sprintf( __( '<a href="%1$s">Subscribe</a> to email notifications when this blog posts new content.', 'subscribe2' ), $mu_profile ) . '</p>';
+				$this->profile = '<p class="s2_message">' . sprintf( __( '<a href="%1$s">Subscribe</a> to email notifications when this blog posts new content.', 'subscribe2-for-cp' ), $mu_profile ) . '</p>';
 			}
 		}
 
-		$this->confirmation_sent = '<p class="s2_message">' . __( 'A confirmation message is on its way!', 'subscribe2' ) . '</p>';
+		$this->confirmation_sent = '<p class="s2_message">' . __( 'A confirmation message is on its way!', 'subscribe2-for-cp' ) . '</p>';
 
-		$this->already_subscribed = '<p class="s2_error">' . __( 'That email address is already subscribed.', 'subscribe2' ) . '</p>';
+		$this->already_subscribed = '<p class="s2_error">' . __( 'That email address is already subscribed.', 'subscribe2-for-cp' ) . '</p>';
 
-		$this->not_subscribed = '<p class="s2_error">' . __( 'That email address is not subscribed.', 'subscribe2' ) . '</p>';
+		$this->not_subscribed = '<p class="s2_error">' . __( 'That email address is not subscribed.', 'subscribe2-for-cp' ) . '</p>';
 
-		$this->not_an_email = '<p class="s2_error">' . __( 'Sorry, but that does not look like an email address to me.', 'subscribe2' ) . '</p>';
+		$this->not_an_email = '<p class="s2_error">' . __( 'Sorry, but that does not look like an email address to me.', 'subscribe2-for-cp' ) . '</p>';
 
-		$this->barred_domain = '<p class="s2_error">' . __( 'Sorry, email addresses at that domain are currently barred due to spam, please use an alternative email address.', 'subscribe2' ) . '</p>';
+		$this->barred_domain = '<p class="s2_error">' . __( 'Sorry, email addresses at that domain are currently barred due to spam, please use an alternative email address.', 'subscribe2-for-cp' ) . '</p>';
 
-		$this->error = '<p class="s2_error">' . __( 'Sorry, there seems to be an error on the server. Please try again later.', 'subscribe2' ) . '</p>';
+		$this->error = '<p class="s2_error">' . __( 'Sorry, there seems to be an error on the server. Please try again later.', 'subscribe2-for-cp' ) . '</p>';
 
 		// confirmation messages
-		$this->no_such_email = '<p class="s2_error">' . __( 'No such email address is registered.', 'subscribe2' ) . '</p>';
+		$this->no_such_email = '<p class="s2_error">' . __( 'No such email address is registered.', 'subscribe2-for-cp' ) . '</p>';
 
-		$this->added = '<p class="s2_message">' . __( 'You have successfully subscribed!', 'subscribe2' ) . '</p>';
+		$this->added = '<p class="s2_message">' . __( 'You have successfully subscribed!', 'subscribe2-for-cp' ) . '</p>';
 
-		$this->deleted = '<p class="s2_message">' . __( 'You have successfully unsubscribed.', 'subscribe2' ) . '</p>';
+		$this->deleted = '<p class="s2_message">' . __( 'You have successfully unsubscribed.', 'subscribe2-for-cp' ) . '</p>';
 
-		$this->subscribe = __( 'subscribe', 'subscribe2' ); //ACTION replacement in subscribing confirmation email
+		$this->subscribe = __( 'subscribe', 'subscribe2-for-cp' ); //ACTION replacement in subscribing confirmation email
 
-		$this->unsubscribe = __( 'unsubscribe', 'subscribe2' ); //ACTION replacement in unsubscribing in confirmation email
+		$this->unsubscribe = __( 'unsubscribe', 'subscribe2-for-cp' ); //ACTION replacement in unsubscribing in confirmation email
 	}
 
 	/* ===== template and filter functions ===== */
@@ -80,8 +80,8 @@ class S2_Frontend extends S2_Core {
 		}
 
 		// Apply filters to button text
-		$unsubscribe_button_value = apply_filters( 's2_unsubscribe_button', __( 'Unsubscribe', 'subscribe2' ) );
-		$subscribe_button_value   = apply_filters( 's2_subscribe_button', __( 'Subscribe', 'subscribe2' ) );
+		$unsubscribe_button_value = apply_filters( 's2_unsubscribe_button', __( 'Unsubscribe', 'subscribe2-for-cp' ) );
+		$subscribe_button_value   = apply_filters( 's2_subscribe_button', __( 'Subscribe', 'subscribe2-for-cp' ) );
 
 		// if a button is hidden, show only other
 		$hide = strtolower( $args['hide'] );
@@ -121,7 +121,7 @@ class S2_Frontend extends S2_Core {
 		} elseif ( 'true' === strtolower( $args['nojs'] ) ) {
 			$value = '';
 		} else {
-			$value = __( 'Enter email address...', 'subscribe2' );
+			$value = __( 'Enter email address...', 'subscribe2-for-cp' );
 		}
 
 		// if wrap is true add paragraph html tags
@@ -152,9 +152,9 @@ class S2_Frontend extends S2_Core {
 
 		// build default form
 		if ( 'true' === strtolower( $args['nojs'] ) ) {
-			$this->form = '<form name="' . $form_name . '" method="post"' . $action . '><input type="hidden" name="ip" value="' . esc_attr( $_SERVER['REMOTE_ADDR'] ) . '" />' . $antispam_text . '<p><label for="s2email">' . __( 'Your email:', 'subscribe2' ) . '</label><br><input type="email" name="email" id="s2email" value="' . $value . '" size="' . $args['size'] . '" />' . $wrap_text . $this->input_form_action . '</p></form>';
+			$this->form = '<form name="' . $form_name . '" method="post"' . $action . '><input type="hidden" name="ip" value="' . esc_attr( $_SERVER['REMOTE_ADDR'] ) . '" />' . $antispam_text . '<p><label for="s2email">' . __( 'Your email:', 'subscribe2-for-cp' ) . '</label><br><input type="email" name="email" id="s2email" value="' . $value . '" size="' . $args['size'] . '" />' . $wrap_text . $this->input_form_action . '</p></form>';
 		} else {
-			$this->form = '<form name="' . $form_name . '" method="post"' . $action . '><input type="hidden" name="ip" value="' . esc_attr( $_SERVER['REMOTE_ADDR'] ) . '" />' . $antispam_text . '<p><label for="s2email">' . __( 'Your email:', 'subscribe2' ) . '</label><br><input type="email" name="email" id="s2email" value="' . $value . '" size="' . $args['size'] . '" onfocus="if (this.value === \'' . $value . '\') {this.value = \'\';}" onblur="if (this.value === \'\') {this.value = \'' . $value . '\';}" />' . $wrap_text . $this->input_form_action . '</p></form>' . "\r\n";
+			$this->form = '<form name="' . $form_name . '" method="post"' . $action . '><input type="hidden" name="ip" value="' . esc_attr( $_SERVER['REMOTE_ADDR'] ) . '" />' . $antispam_text . '<p><label for="s2email">' . __( 'Your email:', 'subscribe2-for-cp' ) . '</label><br><input type="email" name="email" id="s2email" value="' . $value . '" size="' . $args['size'] . '" onfocus="if (this.value === \'' . $value . '\') {this.value = \'\';}" onblur="if (this.value === \'\') {this.value = \'' . $value . '\';}" />' . $wrap_text . $this->input_form_action . '</p></form>' . "\r\n";
 		}
 		$this->s2form = apply_filters( 's2_form', $this->form, $args );
 
@@ -185,7 +185,7 @@ class S2_Frontend extends S2_Core {
 					$date = gmdate( 'H:i:s.u', $this->lockout );
 					$ips  = $wpdb->get_col( $wpdb->prepare( "SELECT ip FROM $wpdb->subscribe2 WHERE date = CURDATE() AND time > SUBTIME(CURTIME(), %s)", $date ) );
 					if ( in_array( $this->ip, $ips, true ) ) {
-						return __( 'Slow down, you move too fast.', 'subscribe2' );
+						return __( 'Slow down, you move too fast.', 'subscribe2-for-cp' );
 					}
 				}
 				// does the supplied email belong to a registered user?
@@ -293,9 +293,9 @@ class S2_Frontend extends S2_Core {
 			$code   = $_GET['s2'];
 			$action = intval( substr( $code, 0, 1 ) );
 			if ( 1 === $action ) {
-				return __( 'Subscription Confirmation', 'subscribe2' );
+				return __( 'Subscription Confirmation', 'subscribe2-for-cp' );
 			} else {
-				return __( 'Unsubscription Confirmation', 'subscribe2' );
+				return __( 'Unsubscription Confirmation', 'subscribe2-for-cp' );
 			}
 		} else {
 			return $title;
@@ -368,11 +368,11 @@ class S2_Frontend extends S2_Core {
 
 		( '' === get_option( 'blogname' ) ) ? $subject = '' : $subject = '[' . stripslashes( html_entity_decode( get_option( 'blogname' ), ENT_QUOTES ) ) . '] ';
 		if ( 'subscribe' === $action ) {
-			$subject .= __( 'New Subscription', 'subscribe2' );
-			$message  = $this->email . ' ' . __( 'subscribed to email notifications!', 'subscribe2' );
+			$subject .= __( 'New Subscription', 'subscribe2-for-cp' );
+			$message  = $this->email . ' ' . __( 'subscribed to email notifications!', 'subscribe2-for-cp' );
 		} elseif ( 'unsubscribe' === $action ) {
-			$subject .= __( 'New Unsubscription', 'subscribe2' );
-			$message  = $this->email . ' ' . __( 'unsubscribed from email notifications!', 'subscribe2' );
+			$subject .= __( 'New Unsubscription', 'subscribe2-for-cp' );
+			$message  = $this->email . ' ' . __( 'unsubscribed from email notifications!', 'subscribe2-for-cp' );
 		}
 
 		$subject = html_entity_decode( $subject, ENT_QUOTES );
@@ -401,7 +401,7 @@ class S2_Frontend extends S2_Core {
 	 */
 	public function add_minimeta() {
 		if ( 0 !== $this->subscribe2_options['s2page'] ) {
-			echo '<li><a href="' . esc_url( get_permalink( $this->subscribe2_options['s2page'] ) ) . '">' . esc_html__( '[Un]Subscribe to Posts', 'subscribe2' ) . '</a></li>' . "\r\n";
+			echo '<li><a href="' . esc_url( get_permalink( $this->subscribe2_options['s2page'] ) ) . '">' . esc_html__( '[Un]Subscribe to Posts', 'subscribe2-for-cp' ) . '</a></li>' . "\r\n";
 		}
 	}
 

@@ -2,9 +2,9 @@
 # This file is distributed under the same license as the Subscribe2 for ClassicPress package.
 msgid ""
 msgstr ""
-"Project-Id-Version: Subscribe2 for ClassicPress 11.0.1\n"
+"Project-Id-Version: Subscribe2 for ClassicPress 11.1\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/subscribe2\n"
-"POT-Creation-Date: 2020-06-07 11:14:16+00:00\n"
+"POT-Creation-Date: 2020-11-07 16:13:49+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -1123,8 +1123,8 @@ msgstr ""
 msgid "There was an error validating your request. Please try again later."
 msgstr ""
 
-#: classes/class-s2-ajax.php:104 classes/class-s2-ajax.php:134
-#: classes/class-s2-ajax.php:148 classes/class-s2-frontend.php:24
+#: classes/class-s2-ajax.php:104 classes/class-s2-ajax.php:138
+#: classes/class-s2-ajax.php:152 classes/class-s2-frontend.php:24
 msgid "A confirmation message is on its way!"
 msgstr ""
 
@@ -1142,79 +1142,79 @@ msgstr ""
 msgid "Slow down, you move too fast."
 msgstr ""
 
-#: classes/class-s2-ajax.php:126
+#: classes/class-s2-ajax.php:128
 #. Translators: Link to login page
 msgid "To manage your subscription options please <a href=\"%1$s\">login.</a>"
 msgstr ""
 
-#: classes/class-s2-ajax.php:136 classes/class-s2-ajax.php:150
+#: classes/class-s2-ajax.php:140 classes/class-s2-ajax.php:154
 #: classes/class-s2-frontend.php:34
 msgid "Sorry, there seems to be an error on the server. Please try again later."
 msgstr ""
 
-#: classes/class-s2-ajax.php:140 classes/class-s2-frontend.php:26
+#: classes/class-s2-ajax.php:144 classes/class-s2-frontend.php:26
 msgid "That email address is already subscribed."
 msgstr ""
 
-#: classes/class-s2-ajax.php:144 classes/class-s2-frontend.php:28
+#: classes/class-s2-ajax.php:148 classes/class-s2-frontend.php:28
 msgid "That email address is not subscribed."
 msgstr ""
 
-#: classes/class-s2-core.php:554
+#: classes/class-s2-core.php:537
 msgid "Plain Text Excerpt Preview"
 msgstr ""
 
-#: classes/class-s2-core.php:556
+#: classes/class-s2-core.php:539
 msgid "Plain Text Full Preview"
 msgstr ""
 
-#: classes/class-s2-core.php:558
+#: classes/class-s2-core.php:541
 msgid "HTML Excerpt Preview"
 msgstr ""
 
-#: classes/class-s2-core.php:560
+#: classes/class-s2-core.php:543
 msgid "HTML Full Preview"
 msgstr ""
 
-#: classes/class-s2-core.php:1277
+#: classes/class-s2-core.php:1260
 msgid "Check here to Subscribe to email notifications for new posts"
 msgstr ""
 
-#: classes/class-s2-core.php:1281
+#: classes/class-s2-core.php:1264
 msgid ""
 "By registering with this blog you are also agreeing to receive email "
 "notifications for new posts but you can unsubscribe at anytime"
 msgstr ""
 
-#: classes/class-s2-core.php:1308
+#: classes/class-s2-core.php:1291
 msgid "Check here to Subscribe to notifications for new posts"
 msgstr ""
 
-#: classes/class-s2-core.php:1433
+#: classes/class-s2-core.php:1416
 msgid "Weekly"
 msgstr ""
 
-#: classes/class-s2-core.php:1651 classes/class-s2-core.php:1652
+#: classes/class-s2-core.php:1634 classes/class-s2-core.php:1635
 msgid "Author"
 msgstr ""
 
-#: classes/class-s2-core.php:1658
+#: classes/class-s2-core.php:1641
 msgid "Posted on"
 msgstr ""
 
-#: classes/class-s2-core.php:1685 classes/class-s2-core.php:1686
+#: classes/class-s2-core.php:1668 classes/class-s2-core.php:1669
 msgid "Posted in"
 msgstr ""
 
-#: classes/class-s2-core.php:1699 classes/class-s2-core.php:1700
+#: classes/class-s2-core.php:1682 classes/class-s2-core.php:1683
 msgid "Tagged as"
 msgstr ""
 
-#: classes/class-s2-core.php:1771
+#: classes/class-s2-core.php:1754
 msgid "Digest Email"
 msgstr ""
 
-#: classes/class-s2-core.php:1784
+#: classes/class-s2-core.php:1767
 msgid "Digest Preview"
 msgstr ""
 
@@ -1595,17 +1595,17 @@ msgstr ""
 msgid "Subscription Reminder"
 msgstr ""
 
-#: subscribe2.php:36
+#: subscribe2.php:37
 msgid "I'm just a plugin, please don't call me directly"
 msgstr ""
 
-#: subscribe2.php:39
+#: subscribe2.php:40
 #. Translators: Subscribe2 requires ClassicPress, exit if not on a compatible
 #. platform
 msgid "This version of Subscribe2 requires Classicpress available at: %1$s"
 msgstr ""
 
-#: subscribe2.php:51
+#: subscribe2.php:52
 msgid ""
 "Subscribe2 HTML cannot be activated as a network plugin. Please activate it "
 "on a site level"

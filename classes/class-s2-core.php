@@ -5,24 +5,7 @@ class S2_Core {
 	 * Load translations
 	 */
 	public function load_translations() {
-		load_plugin_textdomain( 'subscribe2', false, S2DIR );
-		load_plugin_textdomain( 'subscribe2', false, S2DIR . 'languages/' );
-
-		if ( is_admin() && function_exists( 'get_user_locale' ) ) {
-			$locale = get_user_locale();
-		} else {
-			$locale = get_locale();
-		}
-
-		$mofile = WP_LANG_DIR . '/subscribe2-' . apply_filters( 'plugin_locale', $locale, 'subscribe2' ) . '.mo';
-		if ( file_exists( $mofile ) && is_readable( $mofile ) ) {
-			load_textdomain( 'subscribe2', $mofile );
-		}
-
-		$mofile = WP_LANG_DIR . '/plugins/subscribe2-' . apply_filters( 'plugin_locale', $locale, 'subscribe2' ) . '.mo';
-		if ( file_exists( $mofile ) && is_readable( $mofile ) ) {
-			load_textdomain( 'subscribe2', $mofile );
-		}
+		load_plugin_textdomain( 'subscribe2', false, S2DIR . 'languages' );
 	}
 
 	/* ===== mail handling ===== */
@@ -551,13 +534,13 @@ class S2_Core {
 			$this->preview_email = true;
 
 			$this->myemail = $preview;
-			$this->myname  = __( 'Plain Text Excerpt Preview', 'subscribe2' );
+			$this->myname  = __( 'Plain Text Excerpt Preview', 'subscribe2-for-cp' );
 			$this->mail( array( $preview ), $subject, $plain_excerpt_body );
-			$this->myname = __( 'Plain Text Full Preview', 'subscribe2' );
+			$this->myname = __( 'Plain Text Full Preview', 'subscribe2-for-cp' );
 			$this->mail( array( $preview ), $subject, $plain_body );
-			$this->myname = __( 'HTML Excerpt Preview', 'subscribe2' );
+			$this->myname = __( 'HTML Excerpt Preview', 'subscribe2-for-cp' );
 			$this->mail( array( $preview ), $subject, $html_excerpt_body, 'html' );
-			$this->myname = __( 'HTML Full Preview', 'subscribe2' );
+			$this->myname = __( 'HTML Full Preview', 'subscribe2-for-cp' );
 			$this->mail( array( $preview ), $subject, $html_body, 'html' );
 		} else {
 			// Registered Subscribers first
@@ -1274,11 +1257,11 @@ class S2_Core {
 		if ( 'wpreg' === $this->subscribe2_options['autosub'] ) {
 			echo '<p><label>';
 			echo '<input type="checkbox" name="reg_subscribe"' . checked( $this->subscribe2_options['wpregdef'], 'yes', false ) . ' /> ';
-			echo esc_html__( 'Check here to Subscribe to email notifications for new posts', 'subscribe2' ) . "\r\n";
+			echo esc_html__( 'Check here to Subscribe to email notifications for new posts', 'subscribe2-for-cp' ) . "\r\n";
 			echo '</label></p>' . "\r\n";
 		} elseif ( 'yes' === $this->subscribe2_options['autosub'] ) {
 			echo '<p><center>' . "\r\n";
-			echo esc_html__( 'By registering with this blog you are also agreeing to receive email notifications for new posts but you can unsubscribe at anytime', 'subscribe2' ) . "\r\n";
+			echo esc_html__( 'By registering with this blog you are also agreeing to receive email notifications for new posts but you can unsubscribe at anytime', 'subscribe2-for-cp' ) . "\r\n";
 			echo '</center></p>' . "\r\n";
 		}
 	}
@@ -1305,7 +1288,7 @@ class S2_Core {
 		if ( is_user_logged_in() ) {
 			$comment_meta_form = $this->profile;
 		} else {
-			$comment_meta_form = '<p style="width: auto;"><label><input type="checkbox" name="s2_comment_request" value="1" ' . checked( $this->subscribe2_options['comment_def'], 'yes', false ) . '/> ' . __( 'Check here to Subscribe to notifications for new posts', 'subscribe2' ) . '</label></p>';
+			$comment_meta_form = '<p style="width: auto;"><label><input type="checkbox" name="s2_comment_request" value="1" ' . checked( $this->subscribe2_options['comment_def'], 'yes', false ) . '/> ' . __( 'Check here to Subscribe to notifications for new posts', 'subscribe2-for-cp' ) . '</label></p>';
 		}
 		if ( 'before' === $this->subscribe2_options['comment_subs'] ) {
 			return $comment_meta_form . $submit_field;
@@ -1430,7 +1413,7 @@ class S2_Core {
 		if ( ! in_array( 604800, $current_intervals, true ) ) {
 			$scheds['weekly'] = array(
 				'interval' => WEEK_IN_SECONDS,
-				'display'  => __( 'Weekly', 'subscribe2' ),
+				'display'  => __( 'Weekly', 'subscribe2-for-cp' ),
 			);
 		}
 
@@ -1648,14 +1631,14 @@ class S2_Core {
 			if ( strstr( $mailtext, '{AUTHORNAME}' ) ) {
 				$author = get_userdata( $digest_post->post_author );
 				if ( '' !== $author->display_name ) {
-					$message_post     .= ' (' . __( 'Author', 'subscribe2' ) . ': ' . html_entity_decode( apply_filters( 'the_author', $author->display_name ), ENT_QUOTES ) . ')';
-					$message_posttime .= ' (' . __( 'Author', 'subscribe2' ) . ': ' . html_entity_decode( apply_filters( 'the_author', $author->display_name ), ENT_QUOTES ) . ')';
+					$message_post     .= ' (' . __( 'Author', 'subscribe2-for-cp' ) . ': ' . html_entity_decode( apply_filters( 'the_author', $author->display_name ), ENT_QUOTES ) . ')';
+					$message_posttime .= ' (' . __( 'Author', 'subscribe2-for-cp' ) . ': ' . html_entity_decode( apply_filters( 'the_author', $author->display_name ), ENT_QUOTES ) . ')';
 				}
 			}
 			$message_post     .= "\r\n";
 			$message_posttime .= "\r\n";
 
-			$message_posttime .= __( 'Posted on', 'subscribe2' ) . ': ' . mysql2date( $datetime, $digest_post->post_date ) . "\r\n";
+			$message_posttime .= __( 'Posted on', 'subscribe2-for-cp' ) . ': ' . mysql2date( $datetime, $digest_post->post_date ) . "\r\n";
 			if ( strstr( $mailtext, '{TINYLINK}' ) ) {
 				$tinylink = wp_safe_remote_get( 'http://tinyurl.com/api-create.php?url=' . rawurlencode( $this->get_tracking_link( get_permalink( $digest_post->ID ) ) ) );
 			} else {
@@ -1682,8 +1665,8 @@ class S2_Core {
 						)
 					)
 				);
-				$message_post     .= __( 'Posted in', 'subscribe2' ) . ': ' . $post_cat_names . "\r\n";
-				$message_posttime .= __( 'Posted in', 'subscribe2' ) . ': ' . $post_cat_names . "\r\n";
+				$message_post     .= __( 'Posted in', 'subscribe2-for-cp' ) . ': ' . $post_cat_names . "\r\n";
+				$message_posttime .= __( 'Posted in', 'subscribe2-for-cp' ) . ': ' . $post_cat_names . "\r\n";
 			}
 			if ( strstr( $mailtext, '{TAGS}' ) ) {
 				$post_tag_names = implode(
@@ -1696,8 +1679,8 @@ class S2_Core {
 					)
 				);
 				if ( '' !== $post_tag_names ) {
-					$message_post     .= __( 'Tagged as', 'subscribe2' ) . ': ' . $post_tag_names . "\r\n";
-					$message_posttime .= __( 'Tagged as', 'subscribe2' ) . ': ' . $post_tag_names . "\r\n";
+					$message_post     .= __( 'Tagged as', 'subscribe2-for-cp' ) . ': ' . $post_tag_names . "\r\n";
+					$message_posttime .= __( 'Tagged as', 'subscribe2-for-cp' ) . ': ' . $post_tag_names . "\r\n";
 				}
 			}
 			$message_post     .= "\r\n";
@@ -1768,7 +1751,7 @@ class S2_Core {
 
 		( '' === get_option( 'blogname' ) ) ? $subject = '' : $subject = '[' . stripslashes( html_entity_decode( get_option( 'blogname' ), ENT_QUOTES ) ) . '] ';
 
-		$subject .= $display . ' ' . __( 'Digest Email', 'subscribe2' );
+		$subject .= $display . ' ' . __( 'Digest Email', 'subscribe2-for-cp' );
 		$mailtext = str_replace( '{TABLELINKS}', $tablelinks, $mailtext );
 		$mailtext = str_replace( '{TABLE}', $table, $mailtext );
 		$mailtext = str_replace( '{POSTTIME}', $message_posttime, $mailtext );
@@ -1781,7 +1764,7 @@ class S2_Core {
 		// prepare recipients
 		if ( '' !== $preview ) {
 			$this->myemail = $preview;
-			$this->myname  = __( 'Digest Preview', 'subscribe2' );
+			$this->myname  = __( 'Digest Preview', 'subscribe2-for-cp' );
 			$this->mail( array( $preview ), $subject, $mailtext );
 		} else {
 			$public               = $this->get_public();

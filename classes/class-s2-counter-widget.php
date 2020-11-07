@@ -6,7 +6,7 @@ class S2_Counter_Widget extends WP_Widget {
 	public function __construct() {
 		$widget_options = array(
 			'classname'                   => 's2_counter',
-			'description'                 => esc_html__( 'Subscriber Counter widget for Subscribe2', 'subscribe2' ),
+			'description'                 => esc_html__( 'Subscriber Counter widget for Subscribe2', 'subscribe2-for-cp' ),
 			'customize_selective_refresh' => true,
 		);
 
@@ -14,7 +14,7 @@ class S2_Counter_Widget extends WP_Widget {
 			'width'  => 250,
 			'height' => 500,
 		);
-		parent::__construct( 's2_counter', esc_html__( 'Subscribe2 Counter', 'subscribe2' ), $widget_options, $control_options );
+		parent::__construct( 's2_counter', esc_html__( 'Subscribe2 Counter', 'subscribe2-for-cp' ), $widget_options, $control_options );
 	}
 
 	/**
@@ -92,27 +92,27 @@ class S2_Counter_Widget extends WP_Widget {
 		$s2w_height = htmlspecialchars( $instance['s2w_height'], ENT_QUOTES );
 		$s2w_font   = htmlspecialchars( $instance['s2w_font'], ENT_QUOTES );
 		echo '<div>' . "\r\n";
-		echo '<fieldset><legend><label for="' . esc_attr( $this->get_field_id( 'title' ) ) . '">' . esc_html__( 'Widget Title', 'subscribe2' ) . '</label></legend>' . "\r\n";
+		echo '<fieldset><legend><label for="' . esc_attr( $this->get_field_id( 'title' ) ) . '">' . esc_html__( 'Widget Title', 'subscribe2-for-cp' ) . '</label></legend>' . "\r\n";
 		echo '<input type="text" name="' . esc_attr( $this->get_field_name( 'title' ) ) . '" id="' . esc_attr( $this->get_field_id( 'title' ) ) . '" value="' . esc_attr( $s2w_title ) . '" />' . "\r\n";
 		echo '</fieldset>' . "\r\n";
 
 		echo '<fieldset>' . "\r\n";
-		echo '<legend>' . esc_html__( 'Color Scheme', 'subscribe2' ) . '</legend>' . "\r\n";
+		echo '<legend>' . esc_html__( 'Color Scheme', 'subscribe2-for-cp' ) . '</legend>' . "\r\n";
 		echo '<label>' . "\r\n";
-		echo '<input type="text" name="' . esc_attr( $this->get_field_name( 's2w_bg' ) ) . '" id="' . esc_attr( $this->get_field_id( 's2w_bg' ) ) . '" maxlength="6" value="' . esc_attr( $s2w_bg ) . '" class="colorpickerField" style="width:60px;" /> ' . esc_html__( 'Body', 'subscribe2' ) . '</label><br>' . "\r\n";
+		echo '<input type="text" name="' . esc_attr( $this->get_field_name( 's2w_bg' ) ) . '" id="' . esc_attr( $this->get_field_id( 's2w_bg' ) ) . '" maxlength="6" value="' . esc_attr( $s2w_bg ) . '" class="colorpickerField" style="width:60px;" /> ' . esc_html__( 'Body', 'subscribe2-for-cp' ) . '</label><br>' . "\r\n";
 		echo '<label>' . "\r\n";
-		echo '<input type="text" name="' . esc_attr( $this->get_field_name( 's2w_fg' ) ) . '" id="' . esc_attr( $this->get_field_id( 's2w_fg' ) ) . '" maxlength="6" value="' . esc_attr( $s2w_fg ) . '" class="colorpickerField" style="width:60px;" /> ' . esc_html__( 'Text', 'subscribe2' ) . '</label><br>' . "\r\n";
+		echo '<input type="text" name="' . esc_attr( $this->get_field_name( 's2w_fg' ) ) . '" id="' . esc_attr( $this->get_field_id( 's2w_fg' ) ) . '" maxlength="6" value="' . esc_attr( $s2w_fg ) . '" class="colorpickerField" style="width:60px;" /> ' . esc_html__( 'Text', 'subscribe2-for-cp' ) . '</label><br>' . "\r\n";
 		echo '<div class="s2_colorpicker" id ="' . esc_attr( $this->get_field_id( 's2_colorpicker' ) ) . '"></div>';
 		echo '</fieldset>';
 
 		echo '<fieldset>' . "\r\n";
-		echo '<legend>' . esc_html__( 'Width, Height and Font Size', 'subscribe2' ) . '</legend>' . "\r\n";
+		echo '<legend>' . esc_html__( 'Width, Height and Font Size', 'subscribe2-for-cp' ) . '</legend>' . "\r\n";
 		echo '<table style="border:0; padding:0; margin:0 0 12px 0; border-collapse:collapse;" align="center">' . "\r\n";
-		echo '<tr><td><label for="' . esc_attr( $this->get_field_id( 's2w_width' ) ) . '">' . esc_html__( 'Width', 'subscribe2' ) . '</label></td>' . "\r\n";
+		echo '<tr><td><label for="' . esc_attr( $this->get_field_id( 's2w_width' ) ) . '">' . esc_html__( 'Width', 'subscribe2-for-cp' ) . '</label></td>' . "\r\n";
 		echo '<td><input type="text" name="' . esc_attr( $this->get_field_name( 's2w_width' ) ) . '" id="' . esc_attr( $this->get_field_id( 's2w_width' ) ) . '" value="' . esc_attr( $s2w_width ) . '" /></td></tr>' . "\r\n";
-		echo '<tr><td><label for="' . esc_attr( $this->get_field_id( 's2w_height' ) ) . '">' . esc_html__( 'Height', 'subscribe2' ) . '</label></td>' . "\r\n";
+		echo '<tr><td><label for="' . esc_attr( $this->get_field_id( 's2w_height' ) ) . '">' . esc_html__( 'Height', 'subscribe2-for-cp' ) . '</label></td>' . "\r\n";
 		echo '<td><input type="text" name="' . esc_attr( $this->get_field_name( 's2w_height' ) ) . '" id="' . esc_attr( $this->get_field_id( 's2w_height' ) ) . '" value="' . esc_attr( $s2w_height ) . '" /></td></tr>' . "\r\n";
-		echo '<tr><td><label for="' . esc_attr( $this->get_field_id( 's2w_font' ) ) . '">' . esc_html__( 'Font', 'subscribe2' ) . '</label></td>' . "\r\n";
+		echo '<tr><td><label for="' . esc_attr( $this->get_field_id( 's2w_font' ) ) . '">' . esc_html__( 'Font', 'subscribe2-for-cp' ) . '</label></td>' . "\r\n";
 		echo '<td><input type="text" name="' . esc_attr( $this->get_field_name( 's2w_font' ) ) . '" id="' . esc_attr( $this->get_field_id( 's2w_font' ) ) . '" value="' . esc_attr( $s2w_font ) . '" /></td></tr>' . "\r\n";
 		echo '</table></fieldset></div>' . "\r\n";
 	}
