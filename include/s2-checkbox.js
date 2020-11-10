@@ -27,7 +27,7 @@ jQuery( document ).ready(
 					var checkedStatus = true;
 					jQuery( 'input[class="' + this.className + '"]' ).each(
 						function() {
-							if ( ( true === this.checked ) && ( true === checkedStatus ) ) {
+							if ( true === this.checked && true === checkedStatus ) {
 								checkedStatus = true;
 							} else {
 								checkedStatus = false;
@@ -43,7 +43,7 @@ jQuery( document ).ready(
 			jQuery( 'input[class^="checkall"]' ).each(
 				function() {
 					var checkedStatus = true;
-					if ( ( true === this.checked ) && ( true === checkedStatus ) ) {
+					if ( true === this.checked && true === checkedStatus ) {
 						checkedStatus = true;
 					} else {
 						checkedStatus = false;
