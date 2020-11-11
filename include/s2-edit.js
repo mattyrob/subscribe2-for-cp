@@ -7,9 +7,9 @@
 // hide our span before page loads
 jQuery( document ).ready(
 	function() {
-			jQuery( '#s2bcclimit_2' ).hide();
-			jQuery( '#s2entries_2' ).hide();
-			jQuery( '#s2cron_2' ).hide();
+		jQuery( '#s2bcclimit_2' ).hide();
+		jQuery( '#s2entries_2' ).hide();
+		jQuery( '#s2cron_2' ).hide();
 	}
 );
 
@@ -57,7 +57,7 @@ function s2CronRevert( id ) {
 	time = jQuery( '#js' + id + 'time' ).val();
 	jQuery( '[name=' + id + 'time] option' ).filter(
 		function() {
-				return this.text === time;
+			return this.text === time;
 		}
 	).prop( 'selected', true ).parent().focus();
 	jQuery( '#s2' + id + 'time' ).html( time );

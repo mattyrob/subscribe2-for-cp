@@ -5,51 +5,51 @@
 
 jQuery( document ).ready(
 	function() {
-			jQuery( document ).on(
-				'focus',
-				'.colorpickerField',
-				function() {
-					var picker,
+		jQuery( document ).on(
+			'focus',
+			'.colorpickerField',
+			function() {
+				var picker,
 					field = this.id.substr( 0, 20 );
 
-					if ( jQuery( this ).is( '.s2_initialised' ) || -1 !== this.id.search( '__i__' ) ) {
-						return; // exit early, already initialized or not activated
+				if ( jQuery( this ).is( '.s2_initialised' ) || -1 !== this.id.search( '__i__' ) ) {
+					return; // exit early, already initialized or not activated
+				}
+
+				jQuery( this ).addClass( 's2_initialised' );
+
+				jQuery( '.s2_colorpicker' ).each(
+					function() {
+						if ( -1 !== this.id.search( field ) ) {
+							picker = this.id;
+							return false; // stop looping
+						}
 					}
+				);
 
-					jQuery( this ).addClass( 's2_initialised' );
+				jQuery( this ).on(
+					'focusin',
+					function() {
+						jQuery( '.s2_colorpicker' ).slideUp();
+						jQuery.farbtastic( '#' + picker ).linkTo( this );
+						jQuery( '#' + picker ).slideDown();
+					}
+				);
 
-					jQuery( '.s2_colorpicker' ).each(
-						function() {
-							if ( -1 !== this.id.search( field ) ) {
-								picker = this.id;
-								return false; // stop looping
-							}
-						}
-					);
+				jQuery( this ).on(
+					'focusout',
+					function() {
+						jQuery( '#' + picker ).slideUp();
+					}
+				);
 
-					jQuery( this ).on(
-						'focusin',
-						function() {
-							jQuery( '.s2_colorpicker' ).slideUp();
-							jQuery.farbtastic( '#' + picker ).linkTo( this );
-							jQuery( '#' + picker ).slideDown();
-						}
-					);
-
-					jQuery( this ).on(
-						'focusout',
-						function() {
-							jQuery( '#' + picker ).slideUp();
-						}
-					);
-
-					jQuery( this ).trigger( 'focus' );
-				}
-			);
-			jQuery( '.colorpickerField' ).each(
-				function() {
-					jQuery.farbtastic( '#' + this.id ).linkTo( this );
-				}
-			);
+				jQuery( this ).trigger( 'focus' );
+			}
+		);
+		jQuery( '.colorpickerField' ).each(
+			function() {
+				jQuery.farbtastic( '#' + this.id ).linkTo( this );
+			}
+		);
 	}
 );

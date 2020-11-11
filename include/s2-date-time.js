@@ -3,10 +3,10 @@
 
 jQuery( document ).ready(
 	function() {
-			jQuery( '#s2datepicker' ).datepicker(
-				{
-					dateFormat: 'MM d, yy'
-				}
-			);
+		jQuery( '#s2datepicker' ).datepicker(
+			{
+				dateFormat: 'MM d, yy'
+			}
+		);
 	}
 );
