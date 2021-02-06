@@ -1,0 +1,32 @@
+name: PHP Compatibility
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  php-comatibility:
+    name: Check PHP compatibility
+    runs-on: ubuntu-latest
+    if: ${{ github.repository == 'subscribe2-for-cp/main' || github.event_name == 'pull_request' }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '7.4'
+          coverage: none
+          tools: cs2pr
+
+      - name: Log debug information
+        run: |
+          php --version
+          phpcs -i
+
+      - name: Run PHP compatibility tests
+        run: phpcs --standard=phpcompat.xml.dist -q --report=checkstyle | cs2pr
