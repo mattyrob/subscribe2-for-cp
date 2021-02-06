@@ -5,7 +5,7 @@
 	<!-- Use PHPCompatibility/PHPCompatibilityWP -->
 	<rule ref="PHPCompatibilityWP"/>
 
-	<!-- ClassicPress Core currently supports PHP 5.6+. -->
+	<!-- Core currently supports PHP 5.6+. -->
 	<config name="testVersion" value="5.6-"/>
 
 	<!-- Only scan PHP files. -->
@@ -29,8 +29,11 @@
 	<!-- Show sniff codes in all reports. -->
 	<arg value="ps"/>
 
-	<!-- For now, only the files in src are scanned. -->
-	<file>./</file>
+	<!-- Scan plugin files and folders. -->
+	<file>subscribe2.php</file>
+	<file>admin/</file>
+	<file>classes/</file>
+	<file>include/</file>
 
 	<!-- Code which doesn't go into production may have different requirements. -->
 	<exclude-pattern>/node_modules/*</exclude-pattern>
