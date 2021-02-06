@@ -37,6 +37,4 @@
 
 	<!-- Exclude external library for plugin updates. -->
 	<exclude-pattern>/plugin-update-checker/*</exclude-pattern>
-
-	</rule>
 </ruleset>
