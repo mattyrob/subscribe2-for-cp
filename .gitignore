@@ -1,6 +1,5 @@
 Gruntfile.js
-package.json
-package-lock.json
-.eslintrc.js
-.jshintrc
 node_modules/
+
+# Operating system specific files
+.DS_Store
