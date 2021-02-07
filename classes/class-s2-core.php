@@ -1036,12 +1036,8 @@ class S2_Core {
 
 		if ( true === apply_filters( 's2_validate_email_with_dns', true ) ) {
 			$domain = explode( '@', $email, 2 );
-			if ( function_exists( 'idn_to_ascii' ) ) {
-				if ( defined( 'IDNA_NONTRANSITIONAL_TO_ASCII' ) && defined( 'INTL_IDNA_VARIANT_UTS46' ) ) {
-					$check_domain = idn_to_ascii( $domain[1], IDNA_NONTRANSITIONAL_TO_ASCII, INTL_IDNA_VARIANT_UTS46 );
-				} else {
-					$check_domain = idn_to_ascii( $domain[1] );
-				}
+			if ( function_exists( 'idn_to_ascii' ) && defined( 'IDNA_NONTRANSITIONAL_TO_ASCII' ) && defined( 'INTL_IDNA_VARIANT_UTS46' ) ) {
+				$check_domain = idn_to_ascii( $domain[1], IDNA_NONTRANSITIONAL_TO_ASCII, INTL_IDNA_VARIANT_UTS46 );
 			} else {
 				$check_domain = $domain[1];
 			}
