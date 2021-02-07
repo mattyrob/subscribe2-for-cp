@@ -21,12 +21,19 @@
 		"grunt-terser": "latest",
 		"grunt-wp-i18n": "^1.0.3",
 		"matchdep": "latest",
-		"optipng": "^2.2.0"
+		"minimist": ">=1.2.3",
+		"optipng": "^2.2.0",
+		"terser": "latest"
 	},
 	"eslintConfig": {
 		"extends": "wordpress",
 		"parserOptions": {
 			"ecmaVersion": 6
+		}
+	},
+	"comments": {
+		"devDependencies": {
+			"minimist": "Included for security reasons as other dependencies rely on insecure versions"
 		}
 	}
 }
