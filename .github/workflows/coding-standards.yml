@@ -99,7 +99,6 @@ jobs:
           node --version
           php --version
           composer --version
-          phpcs -i
           grunt --version
 
       - name: Run JSHint
