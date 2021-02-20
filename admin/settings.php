@@ -69,7 +69,9 @@ if ( isset( $_POST['s2_admin'] ) ) {
 				$options = array( 'compulsory', 'exclude', 'format', 'reg_override' );
 				foreach ( $options as $option ) {
 					if ( ! isset( $_POST[ $option ] ) ) {
-						if ( 'format' === $option ) {
+						if ( 'reg_override' === $option ) {
+							$this->subscribe2_options['reg_override'] = '0';
+						} elseif ( 'format' === $option ) {
 							$this->subscribe2_options['exclude_formats'] = '';
 						} else {
 							$this->subscribe2_options[ $option ] = '';
