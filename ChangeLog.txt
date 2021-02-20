@@ -1,6 +1,7 @@
 = 11.2 =
 
 * Fixed bug in Select / Unselect All box in Settings page being falsely checked on page load
+* Display post formats in alphabetical order in Settings page for improved user experience
 
 = 11.1 =
 

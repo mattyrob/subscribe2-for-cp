@@ -624,6 +624,7 @@ class S2_Admin extends S2_Core {
 		$half = ( count( $formats[0] ) / 2 );
 		$i    = 0;
 		$j    = 0;
+		asort( $formats[0] );
 		echo '<table style="width: 100%; border-collapse: separate; border-spacing: 2px; *border-collapse: expression(\'separate\', cellSpacing = \'2px\');" class="editform">' . "\r\n";
 		echo '<tr><td style="text-align: left;" colspan="2">' . "\r\n";
 		echo '<label><input type="checkbox" name="checkall" value="checkall_format" /> ' . esc_html__( 'Select / Unselect All', 'subscribe2-for-cp' ) . '</label>' . "\r\n";
