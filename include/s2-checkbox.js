@@ -3,6 +3,22 @@
 // Version 1.2 - Update to work when DISABLED is specified for changes in version 8.5
 // Version 1.3 - Update for Subscribe2 9.0 to remove unecessary code now WordPress 3.3 is minimum requirement
 // Version 1.4 - eslinted
+// Version 1.5 - fixed bug in Select / Unselect All box in Settings page being falsely checked on page load
+
+var maybeSelectAll = function( object ) {
+	var checkedStatus = true;
+	jQuery( 'input[class="' + object.className + '"]' ).each(
+		function() {
+			if ( true === this.checked && true === checkedStatus ) {
+				checkedStatus = true;
+			} else {
+				return checkedStatus = false;
+			}
+		}
+	);
+	jQuery( 'input[value="' + object.className + '"]' )
+		.prop( 'checked', checkedStatus );
+};
 
 jQuery( document ).ready(
 	function() {
@@ -23,32 +39,14 @@ jQuery( document ).ready(
 		// function to check or uncheck 'checkall' box when individual boxes are toggled
 		jQuery( 'input[class^="checkall"]' ).click(
 			function() {
-				var checkedStatus = true;
-				jQuery( 'input[class="' + this.className + '"]' ).each(
-					function() {
-						if ( true === this.checked && true === checkedStatus ) {
-							checkedStatus = true;
-						} else {
-							checkedStatus = false;
-						}
-						jQuery( 'input[value="' + this.className + '"]' )
-							.prop( 'checked', checkedStatus );
-					}
-				);
+				maybeSelectAll( this );
 			}
 		);
 
 		// function to check or uncheck 'checkall' box when page is loaded
 		jQuery( 'input[class^="checkall"]' ).each(
 			function() {
-				var checkedStatus = true;
-				if ( true === this.checked && true === checkedStatus ) {
-					checkedStatus = true;
-				} else {
-					checkedStatus = false;
-				}
-				jQuery( 'input[value="' + this.className + '"]' )
-					.prop( 'checked', checkedStatus );
+				maybeSelectAll( this );
 			}
 		);
 	}
