@@ -1,5 +1,72 @@
 <?php
 class S2_Admin extends S2_Core {
+	/**
+	 * Constructor
+	 */
+	public function __construct() {
+		parent::__construct();
+		add_action( 'init', array( $this, 'admin_hooks' ) );
+	}
+
+	public function admin_hooks() {
+		//add menu, authoring and category admin actions
+		add_action( 'admin_menu', array( &$this, 'admin_menu' ) );
+		add_action( 'create_category', array( &$this, 'new_category' ) );
+		add_action( 'delete_category', array( &$this, 'delete_category' ) );
+
+		// Add filters for Ozh Admin Menu
+		if ( function_exists( 'wp_ozh_adminmenu' ) ) {
+			$menu_slugs = array( 's2', 's2_posts', 's2_tools', 's2_settings' );
+			foreach ( $menu_slugs as $menu_slug ) {
+				add_filter( "ozh_adminmenu_icon_{$menu_slug}", array( &$this, 'ozh_s2_icon' ) );
+			}
+		}
+
+		// add counterwidget css and js
+		if ( '1' === $this->subscribe2_options['counterwidget'] ) {
+			add_action( 'admin_init', array( &$this, 'widget_s2counter_css_and_js' ) );
+		}
+
+		// add admin actions for comment subscribers
+		if ( 'no' !== $this->subscribe2_options['comment_subs'] ) {
+			add_filter( 'jetpack_get_available_modules', array( &$this, 's2_hide_jetpack_comments' ) );
+			add_action( 'wp_set_comment_status', array( &$this, 'comment_status' ) );
+		}
+
+		// add one-click handlers
+		if ( 'yes' === $this->subscribe2_options['one_click_profile'] ) {
+			add_action( 'show_user_profile', array( &$this, 'one_click_profile_form' ) );
+			add_action( 'edit_user_profile', array( &$this, 'one_click_profile_form' ) );
+			add_action( 'personal_options_update', array( &$this, 'one_click_profile_form_save' ) );
+			add_action( 'edit_user_profile_update', array( &$this, 'one_click_profile_form_save' ) );
+		}
+
+		// digest email preview and resend actions
+		add_action( 's2_digest_preview', array( &$this, 'digest_preview' ) );
+		add_action( 's2_digest_resend', array( &$this, 'digest_resend' ) );
+
+		// add handler to dismiss sender error notice
+		add_action( 'wp_ajax_s2_dismiss_notice', array( &$this, 's2_dismiss_notice_handler' ) );
+
+		// subscriber page options handler
+		add_filter( 'set-screen-option', array( &$this, 'subscribers_set_screen_option' ), 10, 3 );
+
+		// register uninstall functions
+		register_uninstall_hook( S2PLUGIN, array( 'S2_Admin', 's2_uninstall' ) );
+
+		// capture CSV export
+		if ( isset( $_POST['s2_admin'] ) && isset( $_POST['csv'] ) ) {
+			$date = gmdate( 'Y-m-d' );
+			header( 'Content-Description: File Transfer' );
+			header( 'Content-type: application/octet-stream' );
+			header( "Content-Disposition: attachment; filename=subscribe2_users_$date.csv" );
+			header( 'Pragma: no-cache' );
+			header( 'Expires: 0' );
+			echo esc_html( $this->prepare_export( $_POST['exportcsv'] ) );
+			exit( 0 );
+		}
+	}
+
 	/* ===== Menu registration and scripts ===== */
 	/**
 	 * Hook the menu
@@ -334,10 +401,6 @@ class S2_Admin extends S2_Core {
 	 * Create meta box on write pages
 	 */
 	public function s2_meta_init( $post_type, $post ) {
-		if ( true === $this->block_editor ) {
-			return;
-		}
-
 		if ( 'yes' === $this->subscribe2_options['pages'] ) {
 			$s2_post_types = array( 'page', 'post' );
 		} else {
@@ -357,10 +420,6 @@ class S2_Admin extends S2_Core {
 			$post_type,
 			'advanced',
 			'default',
-			array(
-				'__block_editor_compatible_meta_box' => false,
-				'__back_compat_meta_box'             => true,
-			)
 		);
 
 		add_meta_box(
@@ -370,10 +429,6 @@ class S2_Admin extends S2_Core {
 			$post_type,
 			'side',
 			'default',
-			array(
-				'__block_editor_compatible_meta_box' => false,
-				'__back_compat_meta_box'             => true,
-			)
 		);
 
 		if ( 'publish' === $post->post_status || ( 'private' === $post->post_status && 'yes' === $this->subscribe2_options['private'] ) ) {
@@ -384,10 +439,6 @@ class S2_Admin extends S2_Core {
 				$post_type,
 				'side',
 				'default',
-				array(
-					'__block_editor_compatible_meta_box' => false,
-					'__back_compat_meta_box'             => true,
-				)
 			);
 		}
 	}
@@ -1202,10 +1253,8 @@ class S2_Admin extends S2_Core {
 	public function one_click_profile_form_save( $user_id ) {
 		if ( current_user_can( 'edit_user', $user_id ) ) {
 			if ( isset( $_POST['sub2-one-click-subscribe'] ) && 1 === (int) $_POST['sub2-one-click-subscribe'] ) {
-				// Subscribe
 				$this->one_click_handler( $user_id, 'subscribe' );
 			} else {
-				// Unsubscribe
 				$this->one_click_handler( $user_id, 'unsubscribe' );
 			}
 		}

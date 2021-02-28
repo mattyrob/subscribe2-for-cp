@@ -448,11 +448,6 @@ class S2_Core {
 		$plaintext = preg_replace( '/<strike[^>]*>(.*)<\/strike>/Ui', '', $plaintext );
 		$plaintext = preg_replace( '/<del[^>]*>(.*)<\/del>/Ui', '', $plaintext );
 
-		// Fix for how the Block Editor stores lists
-		if ( true === $this->block_editor ) {
-			$plaintext = str_replace( '</li><', "</li>\n<", $plaintext );
-		}
-
 		// Add filter here so $plaintext can be filtered to correct for layout needs
 		$plaintext   = apply_filters( 's2_plaintext', $plaintext );
 		$excerpttext = $plaintext;
@@ -1807,7 +1802,7 @@ class S2_Core {
 	/**
 	 * Subscribe2 constructor
 	 */
-	public function s2init() {
+	public function __construct() {
 		global $wpdb, $wp_version, $wpmu_version;
 		// load the options
 		$this->subscribe2_options = get_option( 'subscribe2_options' );
@@ -1842,6 +1837,12 @@ class S2_Core {
 		if ( function_exists( 'is_multisite' ) && is_multisite() ) {
 			$this->s2_mu = true;
 		}
+
+		add_action( 'plugins_loaded', array( $this, 's2hooks' ) );
+	}
+
+	public function s2hooks() {
+		global $wpdb, $post;
 
 		// add action to handle WPMU subscriptions and unsubscriptions
 		if ( true === $this->s2_mu ) {
@@ -1938,108 +1939,11 @@ class S2_Core {
 			global $mysubscribe2_ajax;
 			$mysubscribe2_ajax = new S2_Ajax();
 		}
-
-		// Check if Block Editor is in use
-		if ( function_exists( 'register_block_type' ) && ! class_exists( 'Classic_Editor' ) && false === has_filter( 'use_block_editor_for_post', '__return_false' ) ) {
-			$this->block_editor = true;
-		}
-
-		// Add actions specific to admin or frontend
-		if ( is_admin() ) {
-			//add menu, authoring and category admin actions
-			add_action( 'admin_menu', array( &$this, 'admin_menu' ) );
-			add_action( 'add_meta_boxes', array( &$this, 's2_meta_init' ), 10, 2 );
-			add_action( 'save_post', array( &$this, 's2_meta_handler' ) );
-			add_action( 'save_post', array( &$this, 's2_preview_handler' ) );
-			add_action( 'save_post', array( &$this, 's2_resend_handler' ) );
-			add_action( 'admin_notices', array( &$this, 's2_meta_notices' ) );
-			add_action( 'create_category', array( &$this, 'new_category' ) );
-			add_action( 'delete_category', array( &$this, 'delete_category' ) );
-
-			// Add filters for Ozh Admin Menu
-			if ( function_exists( 'wp_ozh_adminmenu' ) ) {
-				add_filter( 'ozh_adminmenu_icon_s2', array( &$this, 'ozh_s2_icon' ) );
-				add_filter( 'ozh_adminmenu_icon_s2_posts', array( &$this, 'ozh_s2_icon' ) );
-				add_filter( 'ozh_adminmenu_icon_s2_tools', array( &$this, 'ozh_s2_icon' ) );
-				add_filter( 'ozh_adminmenu_icon_s2_settings', array( &$this, 'ozh_s2_icon' ) );
-			}
-
-			// add write button
-			if ( '1' === $this->subscribe2_options['show_button'] && false === $this->block_editor ) {
-				add_action( 'admin_init', array( &$this, 'button_init' ) );
-			}
-
-			// add counterwidget css and js
-			if ( '1' === $this->subscribe2_options['counterwidget'] ) {
-				add_action( 'admin_init', array( &$this, 'widget_s2counter_css_and_js' ) );
-			}
-
-			// add one-click handlers
-			if ( 'yes' === $this->subscribe2_options['one_click_profile'] ) {
-				add_action( 'show_user_profile', array( &$this, 'one_click_profile_form' ) );
-				add_action( 'edit_user_profile', array( &$this, 'one_click_profile_form' ) );
-				add_action( 'personal_options_update', array( &$this, 'one_click_profile_form_save' ) );
-				add_action( 'edit_user_profile_update', array( &$this, 'one_click_profile_form_save' ) );
-			}
-
-			// digest email preview and resend actions
-			add_action( 's2_digest_preview', array( &$this, 'digest_preview' ) );
-			add_action( 's2_digest_resend', array( &$this, 'digest_resend' ) );
-
-			// add handler to dismiss sender error notice
-			add_action( 'wp_ajax_s2_dismiss_notice', array( &$this, 's2_dismiss_notice_handler' ) );
-
-			// subscriber page options handler
-			add_filter( 'set-screen-option', array( &$this, 'subscribers_set_screen_option' ), 10, 3 );
-
-			// register uninstall functions
-			register_uninstall_hook( S2PLUGIN, array( 'S2_Admin', 's2_uninstall' ) );
-
-			// capture CSV export
-			if ( isset( $_POST['s2_admin'] ) && isset( $_POST['csv'] ) ) {
-				$date = gmdate( 'Y-m-d' );
-				header( 'Content-Description: File Transfer' );
-				header( 'Content-type: application/octet-stream' );
-				header( "Content-Disposition: attachment; filename=subscribe2_users_$date.csv" );
-				header( 'Pragma: no-cache' );
-				header( 'Expires: 0' );
-				echo esc_html( $this->prepare_export( $_POST['exportcsv'] ) );
-				exit( 0 );
-			}
-		} else {
-			// load strings later on frontend for polylang plugin compatibility
-			add_action( 'wp', array( &$this, 'load_strings' ) );
-
-			if ( isset( $_REQUEST['s2'] ) ) {
-				// someone is confirming a request
-				add_filter( 'request', array( &$this, 'query_filter' ) );
-				add_filter( 'the_title', array( &$this, 'title_filter' ) );
-				add_filter( 'the_content', array( &$this, 'confirm' ) );
-			}
-
-			// add the frontend filters
-			add_shortcode( 'subscribe2', array( &$this, 'shortcode' ) );
-			add_filter( 'the_content', array( &$this, 'filter' ), 10 );
-
-			// add actions for other plugins
-			if ( '1' === $this->subscribe2_options['show_meta'] ) {
-				add_action( 'wp_meta', array( &$this, 'add_minimeta' ), 0 );
-			}
-
-			// add action for adding javascript IP updating code
-			if ( '1' === $this->subscribe2_options['js_ip_updater'] ) {
-				add_action( 'wp_enqueue_scripts', array( &$this, 'js_ip_script' ), 10 );
-				add_action( 'wp_footer', array( &$this, 'js_ip_library_script' ), 20 );
-			}
-		}
 	}
 
 	/* ===== define some variables ===== */
 	// options
 	public $subscribe2_options = array();
-
-	// check for block editor
-	public $block_editor = false;
 
 	// state variables used to affect processing
 	public $s2_mu    = false;

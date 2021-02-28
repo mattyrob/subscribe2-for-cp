@@ -1,6 +1,61 @@
 <?php
 class S2_Frontend extends S2_Core {
 	/**
+	 * Constructor
+	 */
+	public function __construct() {
+		parent::__construct();
+		add_action( 'init', array( $this, 'frontend_hooks' ) );
+	}
+
+	public function frontend_hooks() {
+		// load strings later on frontend for polylang plugin compatibility
+		add_action( 'wp', array( &$this, 'load_strings' ) );
+
+		if ( isset( $_REQUEST['s2'] ) ) {
+			// someone is confirming a request
+			add_filter( 'request', array( &$this, 'query_filter' ) );
+			add_filter( 'the_title', array( &$this, 'title_filter' ) );
+			add_filter( 'the_content', array( &$this, 'confirm' ) );
+		}
+
+		// add the frontend filters
+		add_shortcode( 'subscribe2', array( &$this, 'shortcode' ) );
+		add_filter( 'the_content', array( &$this, 'filter' ), 10 );
+
+		// add frontend actions for comment subscribers
+		if ( 'no' !== $this->subscribe2_options['comment_subs'] ) {
+			add_filter( 'comment_form_submit_field', array( &$this, 's2_comment_meta_form' ) );
+			add_action( 'comment_post', array( &$this, 's2_comment_meta' ), 1, 2 );
+		}
+
+		// add actions for other plugins
+		if ( '1' === $this->subscribe2_options['show_meta'] ) {
+			add_action( 'wp_meta', array( &$this, 'add_minimeta' ), 0 );
+		}
+
+		// add action for adding javascript IP updating code
+		if ( '1' === $this->subscribe2_options['js_ip_updater'] ) {
+			add_action( 'wp_enqueue_scripts', array( &$this, 'js_ip_script' ), 10 );
+			add_action( 'wp_enqueue_scripts', array( &$this, 'js_ip_library_script' ), 20 );
+			add_filter( 'script_loader_tag', array( &$this, 'tag_replace_ampersand' ) );
+		}
+
+		// Display Subscription form on frontend rather than link to Profile
+		if ( '1' === $this->subscribe2_options['frontend_form'] ) {
+			require_once S2PATH . 'classes/class-s2-frontend-form.php';
+			global $s2_frontend_form;
+			$s2_frontend_form = new S2_Frontend_Form();
+		}
+
+		// Instantiate ReCaptcha class if enabled
+		if ( 'off' !== $this->subscribe2_options['recaptcha'] ) {
+			require_once S2PATH . 'classes/class-s2-captcha.php';
+			$s2_captcha = new S2_Captcha( $this->subscribe2_options['recaptcha'] );
+		}
+	}
+
+	/**
 	 * Load all our strings
 	 */
 	public function load_strings() {

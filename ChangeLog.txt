@@ -5,6 +5,8 @@
 * Fix for List table page entry to ensure correct page number and data are displayed
 * Fix for non-updating setting in Settings page
 * Fixed bug in One Click button functionality on the User Profile page
+* Refactor plugin initialisation and hooking steps
+* Strip out some legacy code for Block Editor
 
 = 11.1 =
 

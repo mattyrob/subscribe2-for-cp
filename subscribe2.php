@@ -75,7 +75,6 @@ if ( is_admin() ) {
 	require_once S2PATH . 'classes/class-s2-frontend.php';
 	$mysubscribe2 = new S2_Frontend();
 }
-add_action( 'plugins_loaded', array( $mysubscribe2, 's2init' ) );
 
 /*
 Update Checking Classes
