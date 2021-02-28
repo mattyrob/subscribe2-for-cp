@@ -1200,16 +1200,14 @@ class S2_Admin extends S2_Core {
 	 * Handle submission from profile one-click subscription
 	 */
 	public function one_click_profile_form_save( $user_id ) {
-		if ( ! current_user_can( 'edit_user', $user_id ) ) {
-			return false;
-		}
-
-		if ( isset( $_POST['sub2-one-click-subscribe'] ) && 1 === $_POST['sub2-one-click-subscribe'] ) {
-			// Subscribe
-			$this->one_click_handler( $user_id, 'subscribe' );
-		} else {
-			// Unsubscribe
-			$this->one_click_handler( $user_id, 'unsubscribe' );
+		if ( current_user_can( 'edit_user', $user_id ) ) {
+			if ( isset( $_POST['sub2-one-click-subscribe'] ) && 1 === (int) $_POST['sub2-one-click-subscribe'] ) {
+				// Subscribe
+				$this->one_click_handler( $user_id, 'subscribe' );
+			} else {
+				// Unsubscribe
+				$this->one_click_handler( $user_id, 'unsubscribe' );
+			}
 		}
 	}
 

@@ -4,6 +4,7 @@
 * Display post formats in alphabetical order in Settings page for improved user experience
 * Fix for List table page entry to ensure correct page number and data are displayed
 * Fix for non-updating setting in Settings page
+* Fixed bug in One Click button functionality on the User Profile page
 
 = 11.1 =
 
