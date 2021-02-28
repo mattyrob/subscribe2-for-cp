@@ -419,7 +419,7 @@ class S2_Admin extends S2_Core {
 			array( &$this, 's2_override_meta' ),
 			$post_type,
 			'advanced',
-			'default',
+			'default'
 		);
 
 		add_meta_box(
@@ -428,7 +428,7 @@ class S2_Admin extends S2_Core {
 			array( &$this, 's2_preview_meta' ),
 			$post_type,
 			'side',
-			'default',
+			'default'
 		);
 
 		if ( 'publish' === $post->post_status || ( 'private' === $post->post_status && 'yes' === $this->subscribe2_options['private'] ) ) {
@@ -438,7 +438,7 @@ class S2_Admin extends S2_Core {
 				array( &$this, 's2_resend_meta' ),
 				$post_type,
 				'side',
-				'default',
+				'default'
 			);
 		}
 	}
