@@ -37,8 +37,7 @@ class S2_List_Table extends WP_List_Table {
 			);
 			return sprintf( '%1$s %2$s', $item['email'], $this->row_actions( $actions ) );
 		} else {
-			global $mysubscribe2;
-			if ( '0' === $mysubscribe2->is_public( $item['email'] ) ) {
+			if ( '0' === s2cp()->is_public( $item['email'] ) ) {
 				return sprintf( '<span style="color:#FF0000"><abbr title="%2$s">%1$s</abbr></span>', $item['email'], $item['ip'] );
 			} else {
 				return sprintf( '<abbr title="%2$s">%1$s</abbr>', $item['email'], $item['ip'] );
@@ -184,12 +183,12 @@ class S2_List_Table extends WP_List_Table {
 			}
 		}
 		if ( 'delete' === $this->current_action() ) {
-			global $mysubscribe2, $current_user, $subscribers;
+			global $current_user, $subscribers;
 			$message = array();
 			foreach ( $_REQUEST['subscriber'] as $address ) {
 				$address = trim( stripslashes( $address ) );
-				if ( false !== $mysubscribe2->is_public( $address ) ) {
-					$mysubscribe2->delete( $address );
+				if ( false !== s2cp()->is_public( $address ) ) {
+					s2cp()->delete( $address );
 					$key = array_search( $address, $subscribers, true );
 					unset( $subscribers[ $key ] );
 					$message['public_deleted'] = __( 'Address(es) deleted!', 'subscribe2-for-cp' );
@@ -213,11 +212,11 @@ class S2_List_Table extends WP_List_Table {
 			echo '<div id="message" class="updated fade"><p><strong>' . esc_html( $final_message ) . '</strong></p></div>';
 		}
 		if ( 'toggle' === $this->current_action() ) {
-			global $mysubscribe2, $current_user, $subscribers;
-			$mysubscribe2->ip = $current_user->user_login;
+			global $current_user, $subscribers;
+			s2cp()->ip = $current_user->user_login;
 			foreach ( $_REQUEST['subscriber'] as $address ) {
 				$address = trim( stripslashes( $address ) );
-				$mysubscribe2->toggle( $address );
+				s2cp()->toggle( $address );
 				if ( 'confirmed' === $_POST['what'] || 'unconfirmed' === $_POST['what'] ) {
 					$key = array_search( $address, $subscribers, true );
 					unset( $subscribers[ $key ] );
@@ -377,7 +376,7 @@ class S2_List_Table extends WP_List_Table {
 	}
 
 	public function prepare_items() {
-		global $mysubscribe2, $subscribers, $current_tab;
+		global $subscribers, $current_tab;
 
 		$user          = get_current_user_id();
 		$screen        = get_current_screen();
@@ -400,9 +399,9 @@ class S2_List_Table extends WP_List_Table {
 			foreach ( (array) $subscribers as $email ) {
 				$data[] = array(
 					'email' => $email,
-					'date'  => $mysubscribe2->signup_date( $email ),
-					'time'  => $mysubscribe2->signup_time( $email ),
-					'ip'    => $mysubscribe2->signup_ip( $email ),
+					'date'  => s2cp()->signup_date( $email ),
+					'time'  => s2cp()->signup_time( $email ),
+					'ip'    => s2cp()->signup_ip( $email ),
 				);
 			}
 		} else {

@@ -32,9 +32,8 @@ class S2_Counter_Widget extends WP_Widget {
 		if ( ! empty( $title ) ) {
 			echo wp_kses_post( $args['before_title'] ) . esc_html( $title ) . wp_kses_post( $args['after_title'] );
 		}
-		global $mysubscribe2;
-		$registered = $mysubscribe2->get_registered();
-		$confirmed  = $mysubscribe2->get_public();
+		$registered = s2cp()->get_registered();
+		$confirmed  = s2cp()->get_public();
 		$count      = ( count( $registered ) + count( $confirmed ) );
 		echo wp_kses_post( '<ul><div style="text-align:center; background-color:' . $s2w_bg . '; color:' . $s2w_fg . '; width:' . $s2w_width . 'px; height:' . $s2w_height . 'px; font:' . $s2w_font . 'pt Verdana, Arial, Helvetica, sans-serif; vertical-align:middle; padding:3px; border:1px solid #444;">' );
 		echo esc_html( $count );
@@ -116,4 +115,4 @@ class S2_Counter_Widget extends WP_Widget {
 		echo '<td><input type="text" name="' . esc_attr( $this->get_field_name( 's2w_font' ) ) . '" id="' . esc_attr( $this->get_field_id( 's2w_font' ) ) . '" value="' . esc_attr( $s2w_font ) . '" /></td></tr>' . "\r\n";
 		echo '</table></fieldset></div>' . "\r\n";
 	}
-}// end S2_Counter_widget class
+}

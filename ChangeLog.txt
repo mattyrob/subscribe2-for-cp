@@ -7,6 +7,9 @@
 * Fixed bug in One Click button functionality on the User Profile page
 * Refactor plugin initialisation and hooking steps
 * Strip out some legacy code for Block Editor
+* Strip out some unnecessary comments
+* Introduce global returning function
+* Update styling to Reset button in Settings page
 
 = 11.1 =
 

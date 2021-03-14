@@ -76,6 +76,12 @@ if ( is_admin() ) {
 	$mysubscribe2 = new S2_Frontend();
 }
 
+// global return function
+function s2cp() {
+	global $mysubscribe2;
+	return $mysubscribe2;
+}
+
 /*
 Update Checking Classes
 */

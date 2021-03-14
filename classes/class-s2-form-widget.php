@@ -136,7 +136,7 @@ class S2_Form_Widget extends WP_Widget {
 		$noantispam        = htmlspecialchars( $instance['noantispam'], ENT_QUOTES );
 		$nowrap            = htmlspecialchars( $instance['nowrap'], ENT_QUOTES );
 
-		global $wpdb, $mysubscribe2;
+		global $wpdb;
 		$sql = "SELECT ID, post_title FROM $wpdb->posts WHERE post_type='page' AND post_status='publish'";
 
 		echo '<div>' . "\r\n";
@@ -154,13 +154,13 @@ class S2_Form_Widget extends WP_Widget {
 		echo '<label for="' . esc_attr( $this->get_field_id( 'hidebutton' ) ) . 'complete"><input id="' . esc_attr( $this->get_field_id( 'hidebutton' ) ) . 'complete" name="' . esc_attr( $this->get_field_name( 'hidebutton' ) ) . '" type="radio" value="none"' . checked( 'none', $hidebutton, false ) . '/> ' . esc_html__( 'Show complete form', 'subscribe2-for-cp' ) . '</label>' . "\r\n";
 		echo '<br><label for="' . esc_attr( $this->get_field_id( 'hidebutton' ) ) . 'subscribe"><input id="' . esc_attr( $this->get_field_id( 'hidebutton' ) ) . 'subscribe" name="' . esc_attr( $this->get_field_name( 'hidebutton' ) ) . '" type="radio" value="subscribe"' . checked( 'subscribe', $hidebutton, false ) . '/> ' . esc_html__( 'Hide Subscribe button', 'subscribe2-for-cp' ) . '</label>' . "\r\n";
 		echo '<br><label for="' . esc_attr( $this->get_field_id( 'hidebutton' ) ) . 'unsubscribe"><input id="' . esc_attr( $this->get_field_id( 'hidebutton' ) ) . 'unsubscribe" name="' . esc_attr( $this->get_field_name( 'hidebutton' ) ) . '" type="radio" value="unsubscribe"' . checked( 'unsubscribe', $hidebutton, false ) . '/> ' . esc_html__( 'Hide Unsubscribe button', 'subscribe2-for-cp' ) . '</label>' . "\r\n";
-		if ( '1' === $mysubscribe2->subscribe2_options['ajax'] ) {
+		if ( '1' === s2cp()->subscribe2_options['ajax'] ) {
 			echo '<br><label for="' . esc_attr( $this->get_field_id( 'hidebutton' ) ) . 'ajax"><input id="' . esc_attr( $this->get_field_id( 'hidebutton' ) ) . 'ajax" name="' . esc_attr( $this->get_field_name( 'hidebutton' ) ) . '" type="radio" value="link"' . checked( 'link', $hidebutton, false ) . '/> ' . esc_html__( 'Show as link', 'subscribe2-for-cp' ) . '</label>' . "\r\n";
 		}
 		echo '</p>' . "\r\n";
 		echo '<p><label for="' . esc_attr( $this->get_field_id( 'postto' ) ) . '">' . esc_html__( 'Post form content to page', 'subscribe2-for-cp' ) . ':' . "\r\n";
 		echo '<select class="widefat" id="' . esc_attr( $this->get_field_id( 'postto' ) ) . '" name="' . esc_attr( $this->get_field_name( 'postto' ) ) . '">' . "\r\n";
-		echo '<option value="' . esc_attr( $mysubscribe2->subscribe2_options['s2page'] ) . '">' . esc_html__( 'Use Subscribe2 Default', 'subscribe2-for-cp' ) . '</option>' . "\r\n";
+		echo '<option value="' . esc_attr( s2cp()->subscribe2_options['s2page'] ) . '">' . esc_html__( 'Use Subscribe2 Default', 'subscribe2-for-cp' ) . '</option>' . "\r\n";
 		echo '<option value="home"';
 		if ( 'home' === $postto ) {
 			echo ' selected="selected"';
@@ -171,7 +171,7 @@ class S2_Form_Widget extends WP_Widget {
 			echo ' selected="selected"';
 		}
 		echo '>' . esc_html__( 'Use Referring Page', 'subscribe2-for-cp' ) . '</option>' . "\r\n";
-		$mysubscribe2->pages_dropdown( $postto, true );
+		s2cp()->pages_dropdown( $postto, true );
 		echo '</select></label></p>' . "\r\n";
 		echo '<p><label for="' . esc_attr( $this->get_field_id( 'js' ) ) . '">' . esc_html__( 'Disable JavaScript', 'subscribe2-for-cp' ) . ':' . "\r\n";
 		echo '<input id="' . esc_attr( $this->get_field_id( 'js' ) ) . '" name ="' . esc_attr( $this->get_field_name( 'js' ) ) . '" value="true" type="checkbox"' . checked( 'true', $js, false ) . '/>';
@@ -184,4 +184,4 @@ class S2_Form_Widget extends WP_Widget {
 		echo '</label></p>' . "\r\n";
 		echo '</div>' . "\r\n";
 	}
-} // End S2_Form_widget class
+}

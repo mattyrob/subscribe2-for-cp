@@ -513,7 +513,7 @@ if ( 'misc' === $current_tab ) {
 	echo '<h3>' . esc_html__( 'Reset to Default Settings', 'subscribe2-for-cp' ) . '</h3>' . "\r\n";
 	echo '<p>' . esc_html__( 'Use this to reset all options to their defaults. This WILL NOT modify your list of subscribers.', 'subscribe2-for-cp' ) . '</p>' . "\r\n";
 	echo '<p class="submit" style="text-align: center">';
-	echo '<input type="submit" id="deletepost" name="reset" value="' . esc_attr( __( 'RESET', 'subscribe2-for-cp' ) ) . '" /></p>';
+	echo '<input type="submit" class="button-secondary" style="color:red;" name="reset" value="' . esc_attr( __( 'RESET', 'subscribe2-for-cp' ) ) . '" /></p>';
 }
 echo '</form></div>' . "\r\n";
 
