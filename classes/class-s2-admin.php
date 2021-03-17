@@ -24,7 +24,7 @@ class S2_Admin extends S2_Core {
 
 		// add counterwidget css and js
 		if ( '1' === $this->subscribe2_options['counterwidget'] ) {
-			add_action( 'admin_init', array( &$this, 'widget_s2counter_css_and_js' ) );
+			add_action( 'admin_enqueue_scripts', array( &$this, 'widget_s2counter_css_and_js' ) );
 		}
 
 		// add admin actions for comment subscribers
@@ -386,12 +386,13 @@ class S2_Admin extends S2_Core {
 	/**
 	 * Function to add css and js files to admin header
 	 */
-	public function widget_s2counter_css_and_js() {
+	public function widget_s2counter_css_and_js( $hook ) {
 		// ensure we only add colorpicker js to widgets page
-		if ( false !== stripos( esc_url( $_SERVER['REQUEST_URI'] ), 'widgets.php' ) ) {
-			wp_enqueue_style( 'farbtastic' );
-			wp_enqueue_script( 'farbtastic' );
-			wp_register_script( 's2_colorpicker', S2URL . 'include/s2-colorpicker' . $this->script_debug . '.js', array( 'farbtastic' ), '1.3', true );
+		$pages = array( 'widgets.php' );
+		if ( in_array( $hook, $pages, true ) ) {
+			wp_enqueue_style( 'wp-color-picker' );
+			wp_enqueue_script( 'wp-color-picker' );
+			wp_register_script( 's2_colorpicker', S2URL . 'include/s2-colorpicker' . $this->script_debug . '.js', array( 'wp-color-picker' ), '1.4', true );
 			wp_enqueue_script( 's2_colorpicker' );
 		}
 	}

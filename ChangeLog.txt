@@ -1,3 +1,12 @@
+= 11.3 =
+
+* Updated Counter Widget color picker
+* Enable color picker in Customize screen
+
+= 11.2.1 =
+
+* Bump version with patch release to enable automatic updates
+
 = 11.2 =
 
 * Fixed bug in Select / Unselect All box in Settings page being falsely checked on page load

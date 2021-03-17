@@ -97,12 +97,12 @@ class S2_Counter_Widget extends WP_Widget {
 
 		echo '<fieldset>' . "\r\n";
 		echo '<legend>' . esc_html__( 'Color Scheme', 'subscribe2-for-cp' ) . '</legend>' . "\r\n";
-		echo '<label>' . "\r\n";
-		echo '<input type="text" name="' . esc_attr( $this->get_field_name( 's2w_bg' ) ) . '" id="' . esc_attr( $this->get_field_id( 's2w_bg' ) ) . '" maxlength="6" value="' . esc_attr( $s2w_bg ) . '" class="colorpickerField" style="width:60px;" /> ' . esc_html__( 'Body', 'subscribe2-for-cp' ) . '</label><br>' . "\r\n";
-		echo '<label>' . "\r\n";
-		echo '<input type="text" name="' . esc_attr( $this->get_field_name( 's2w_fg' ) ) . '" id="' . esc_attr( $this->get_field_id( 's2w_fg' ) ) . '" maxlength="6" value="' . esc_attr( $s2w_fg ) . '" class="colorpickerField" style="width:60px;" /> ' . esc_html__( 'Text', 'subscribe2-for-cp' ) . '</label><br>' . "\r\n";
-		echo '<div class="s2_colorpicker" id ="' . esc_attr( $this->get_field_id( 's2_colorpicker' ) ) . '"></div>';
-		echo '</fieldset>';
+		echo '<table style="border:0; padding:0; margin:0 0 12px 0; border-collapse:collapse;" align="center">' . "\r\n";
+		echo '<tr><td><label for="' . esc_attr( $this->get_field_id( 's2w_bg' ) ) . '">' . esc_html__( 'Body', 'subscribe2-for-cp' ) . '</label></td>' . "\r\n";
+		echo '<td><input type="text" name="' . esc_attr( $this->get_field_name( 's2w_bg' ) ) . '" id="' . esc_attr( $this->get_field_id( 's2w_bg' ) ) . '" maxlength="6" value="' . esc_attr( $s2w_bg ) . '" class="colorpickerField" style="width:60px;" /></td></tr>' . "\r\n";
+		echo '<tr><td><label for="' . esc_attr( $this->get_field_id( 's2w_fg' ) ) . '">' . esc_html__( 'Text', 'subscribe2-for-cp' ) . '</label></td>' . "\r\n";
+		echo '<td><input type="text" name="' . esc_attr( $this->get_field_name( 's2w_fg' ) ) . '" id="' . esc_attr( $this->get_field_id( 's2w_fg' ) ) . '" maxlength="6" value="' . esc_attr( $s2w_fg ) . '" class="colorpickerField" style="width:60px;" /></td></tr>' . "\r\n";
+		echo '</table></fieldset>';
 
 		echo '<fieldset>' . "\r\n";
 		echo '<legend>' . esc_html__( 'Width, Height and Font Size', 'subscribe2-for-cp' ) . '</legend>' . "\r\n";
