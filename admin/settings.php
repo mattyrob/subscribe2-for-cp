@@ -492,9 +492,9 @@ switch ( $current_tab ) {
 		echo '<div class="s2_admin" id="s2_barred_domains">' . "\r\n";
 		echo '<h3>' . esc_html__( 'Barred Domains', 'subscribe2-for-cp' ) . '</h3>' . "\r\n";
 		echo '<p>' . "\r\n";
-		echo esc_html__( 'Enter domains to bar for public subscriptions, wildcards (*) and exceptions (!) are allowed', 'subscribe2' ) . '<br>' . "\r\n";
-		echo esc_html__( 'Use a new line for each entry and omit the "@" symbol, for example !email.com, hotmail.com, yahoo.*', 'subscribe2' ) . '<br>' . "\r\n";
-		echo '<label><span class="screen-reader-text">' . esc_html__( 'Barred Domains', 'subscribe2' ) . '</span><textarea style="width: 98%;" rows="4" cols="60" name="barred">' . esc_textarea( s2cp()->subscribe2_options['barred'] ) . '</textarea></label>';
+		echo esc_html__( 'Enter domains to bar for public subscriptions, wildcards (*) and exceptions (!) are allowed', 'subscribe2-for-cp' ) . '<br>' . "\r\n";
+		echo esc_html__( 'Use a new line for each entry and omit the "@" symbol, for example !email.com, hotmail.com, yahoo.*', 'subscribe2-for-cp' ) . '<br>' . "\r\n";
+		echo '<label><span class="screen-reader-text">' . esc_html__( 'Barred Domains', 'subscribe2-for-cp' ) . '</span><textarea style="width: 98%;" rows="4" cols="60" name="barred">' . esc_textarea( s2cp()->subscribe2_options['barred'] ) . '</textarea></label>';
 		echo '</p>';
 		echo '<h3>' . esc_html__( 'Links', 'subscribe2-for-cp' ) . '</h3>' . "\r\n";
 		echo '<a href="https://subscribe2.wordpress.com/subscribe2-html/">' . esc_html__( 'Plugin Site', 'subscribe2-for-cp' ) . '</a><br>';

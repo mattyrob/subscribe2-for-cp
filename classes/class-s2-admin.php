@@ -685,7 +685,7 @@ class S2_Admin extends S2_Core {
 			$colspan = 1;
 		}
 		echo '<tr><td style="text-align: left;" colspan="' . esc_attr( $colspan ) . '">' . "\r\n";
-		echo '<label><input type="checkbox" name="checkall" value="checkall_format" /> ' . esc_html__( 'Select / Unselect All', 'subscribe2' ) . '</label>' . "\r\n";
+		echo '<label><input type="checkbox" name="checkall" value="checkall_format" /> ' . esc_html__( 'Select / Unselect All', 'subscribe2-for-cp' ) . '</label>' . "\r\n";
 		echo '</td></tr>' . "\r\n";
 		echo '<tr style="vertical-align: top;"><td style="width: 50%; text-align: left">' . "\r\n";
 		foreach ( $formats[0] as $format ) {

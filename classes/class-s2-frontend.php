@@ -208,9 +208,9 @@ class S2_Frontend extends S2_Core {
 
 		// build default form
 		if ( 'true' === strtolower( $args['nojs'] ) ) {
-			$this->form = '<form name="' . $form_name . '" method="post"' . $action . '><input type="hidden" name="ip" value="' . esc_attr( $remote_ip ) . '" />' . $antispam_text . '<p><label for="s2email">' . __( 'Your email:', 'subscribe2' ) . '</label><br><input type="email" name="email" id="s2email" value="' . $value . '" size="' . $args['size'] . '" />' . $wrap_text . $this->input_form_action . '</p></form>';
+			$this->form = '<form name="' . $form_name . '" method="post"' . $action . '><input type="hidden" name="ip" value="' . esc_attr( $remote_ip ) . '" />' . $antispam_text . '<p><label for="s2email">' . __( 'Your email:', 'subscribe2-for-cp' ) . '</label><br><input type="email" name="email" id="s2email" value="' . $value . '" size="' . $args['size'] . '" />' . $wrap_text . $this->input_form_action . '</p></form>';
 		} else {
-			$this->form = '<form name="' . $form_name . '" method="post"' . $action . '><input type="hidden" name="ip" value="' . esc_attr( $remote_ip ) . '" />' . $antispam_text . '<p><label for="s2email">' . __( 'Your email:', 'subscribe2' ) . '</label><br><input type="email" name="email" id="s2email" value="' . $value . '" size="' . $args['size'] . '" onfocus="if (this.value === \'' . $value . '\') {this.value = \'\';}" onblur="if (this.value === \'\') {this.value = \'' . $value . '\';}" />' . $wrap_text . $this->input_form_action . '</p></form>' . "\r\n";
+			$this->form = '<form name="' . $form_name . '" method="post"' . $action . '><input type="hidden" name="ip" value="' . esc_attr( $remote_ip ) . '" />' . $antispam_text . '<p><label for="s2email">' . __( 'Your email:', 'subscribe2-for-cp' ) . '</label><br><input type="email" name="email" id="s2email" value="' . $value . '" size="' . $args['size'] . '" onfocus="if (this.value === \'' . $value . '\') {this.value = \'\';}" onblur="if (this.value === \'\') {this.value = \'' . $value . '\';}" />' . $wrap_text . $this->input_form_action . '</p></form>' . "\r\n";
 		}
 		$this->s2form = apply_filters( 's2_form', $this->form, $args );
 
