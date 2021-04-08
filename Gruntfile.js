@@ -123,10 +123,13 @@ module.exports = function( grunt ) {
 				options: {
 					force: true
 				},
-				build: [
+				minified: [
 					SOURCE_DIR + './include/*.min.js',
 					SOURCE_DIR + './include/*.min.css',
 					SOURCE_DIR + './tinymce/*.min.js'
+				],
+				zip: [
+					SOURCE_DIR + 'subscribe2.zip'
 				]
 			},
 			prompt: {
@@ -169,10 +172,10 @@ module.exports = function( grunt ) {
 				version: {
 					options: {
 						patterns: [ {
-							match: /^define\( 'S2VERSION', '(\d+\.\d+)' \);$/gm,
+							match: /^define\(\s'[\w]*',\s'(\d+\.\d+[\.]?[\d]*)'\s\);$/m,
 							replacement: function() {
 								var file    = grunt.file.read( SOURCE_DIR + 'subscribe2.php' );
-								var regex   = /^Version: (\d+\.+\d+)$/m;
+								var regex   = /^[\w]*:\s(\d+\.\d+[\.]?[\d]*)$/m;
 								var matches = file.match( regex );
 								return 'define( \'S2VERSION\', \'' + matches[1] + '\' );';
 							}
@@ -335,7 +338,7 @@ module.exports = function( grunt ) {
 	grunt.registerTask(
 		'build',
 		[
-			'clean:build',
+			'clean:minified',
 			'addtextdomain:s2cp',
 			'csscomb',
 			'terser',
