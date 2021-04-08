@@ -269,6 +269,24 @@ module.exports = function( grunt ) {
 						'subscribe2.php': 'subscribe2.php'
 					}
 				}
+			},
+			zip: {
+				'release': {
+					cwd: SOURCE_DIR,
+					dest: 'subscribe2.zip',
+					src: [
+						'subscribe2.php',
+						'ChangeLog.txt',
+						'license.txt',
+						'ReadMe.txt',
+						'admin/*',
+						'classes/*',
+						'include/*',
+						'languages/*',
+						'plugin-update-checker/*',
+						'tinymce/*'
+					]
+				}
 			}
 		}
 	);
@@ -346,7 +364,7 @@ module.exports = function( grunt ) {
 		'Preparing Major release...',
 		function() {
 			grunt.option( 'bump', 'major' );
-			grunt.task.run( 'test', 'bump', 'build', 'diff' );
+			grunt.task.run( 'test', 'bump', 'build', 'zip' );
 		}
 	);
 
@@ -355,7 +373,7 @@ module.exports = function( grunt ) {
 		'Preparing Minor release...',
 		function() {
 			grunt.option( 'bump', 'minor' );
-			grunt.task.run( 'test', 'bump', 'build', 'diff' );
+			grunt.task.run( 'test', 'bump', 'build', 'zip' );
 		}
 	);
 
@@ -364,7 +382,7 @@ module.exports = function( grunt ) {
 		'Preparing Patch release...',
 		function() {
 			grunt.option( 'bump', 'patch' );
-			grunt.task.run( 'test', 'bump', 'build', 'diff' );
+			grunt.task.run( 'test', 'bump', 'build', 'zip' );
 		}
 	);
 };

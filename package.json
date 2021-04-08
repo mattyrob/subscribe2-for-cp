@@ -20,6 +20,7 @@
 		"grunt-replace": "latest",
 		"grunt-terser": "latest",
 		"grunt-wp-i18n": "^1.0.3",
+		"grunt-zip": "^0.18.2",
 		"matchdep": "latest",
 		"minimist": ">=1.2.3",
 		"optipng": "^2.2.0",
