@@ -51,6 +51,7 @@ class S2_Frontend extends S2_Core {
 		// Instantiate ReCaptcha class if enabled
 		if ( 'off' !== $this->subscribe2_options['recaptcha'] ) {
 			require_once S2PATH . 'classes/class-s2-captcha.php';
+			global $s2_captcha;
 			$s2_captcha = new S2_Captcha( $this->subscribe2_options['recaptcha'] );
 		}
 	}
@@ -62,7 +63,7 @@ class S2_Frontend extends S2_Core {
 		// Translators: Link to login page
 		$this->please_log_in = '<p class="s2_message">' . sprintf( __( 'To manage your subscription options please <a href="%1$s">login</a>.', 'subscribe2-for-cp' ), get_option( 'siteurl' ) . '/wp-login.php' ) . '</p>';
 
-		$profile = apply_filters( 's2_profile_link', get_option( 'siteurl' ) . '/wp-admin/admin.php?page=s2' );
+		$profile = (string) apply_filters( 's2_profile_link', get_option( 'siteurl' ) . '/wp-admin/admin.php?page=s2' );
 		// Translators: Link to Profile page
 		$this->profile = '<p class="s2_message">' . sprintf( __( 'You may manage your subscription options from your <a href="%1$s">profile</a>.', 'subscribe2-for-cp' ), $profile ) . '</p>';
 		if ( true === $this->s2_mu ) {
@@ -135,8 +136,8 @@ class S2_Frontend extends S2_Core {
 		}
 
 		// Apply filters to button text
-		$unsubscribe_button_value = apply_filters( 's2_unsubscribe_button', __( 'Unsubscribe', 'subscribe2-for-cp' ) );
-		$subscribe_button_value   = apply_filters( 's2_subscribe_button', __( 'Subscribe', 'subscribe2-for-cp' ) );
+		$unsubscribe_button_value = (string) apply_filters( 's2_unsubscribe_button', __( 'Unsubscribe', 'subscribe2-for-cp' ) );
+		$subscribe_button_value   = (string) apply_filters( 's2_subscribe_button', __( 'Subscribe', 'subscribe2-for-cp' ) );
 
 		// if a button is hidden, show only other
 		$hide = strtolower( $args['hide'] );
@@ -207,9 +208,9 @@ class S2_Frontend extends S2_Core {
 
 		// build default form
 		if ( 'true' === strtolower( $args['nojs'] ) ) {
-			$this->form = '<form name="' . $form_name . '" method="post"' . $action . '><input type="hidden" name="ip" value="' . esc_attr( $_SERVER['REMOTE_ADDR'] ) . '" />' . $antispam_text . '<p><label for="s2email">' . __( 'Your email:', 'subscribe2-for-cp' ) . '</label><br><input type="email" name="email" id="s2email" value="' . $value . '" size="' . $args['size'] . '" />' . $wrap_text . $this->input_form_action . '</p></form>';
+			$this->form = '<form name="' . $form_name . '" method="post"' . $action . '><input type="hidden" name="ip" value="' . esc_attr( $remote_ip ) . '" />' . $antispam_text . '<p><label for="s2email">' . __( 'Your email:', 'subscribe2' ) . '</label><br><input type="email" name="email" id="s2email" value="' . $value . '" size="' . $args['size'] . '" />' . $wrap_text . $this->input_form_action . '</p></form>';
 		} else {
-			$this->form = '<form name="' . $form_name . '" method="post"' . $action . '><input type="hidden" name="ip" value="' . esc_attr( $_SERVER['REMOTE_ADDR'] ) . '" />' . $antispam_text . '<p><label for="s2email">' . __( 'Your email:', 'subscribe2-for-cp' ) . '</label><br><input type="email" name="email" id="s2email" value="' . $value . '" size="' . $args['size'] . '" onfocus="if (this.value === \'' . $value . '\') {this.value = \'\';}" onblur="if (this.value === \'\') {this.value = \'' . $value . '\';}" />' . $wrap_text . $this->input_form_action . '</p></form>' . "\r\n";
+			$this->form = '<form name="' . $form_name . '" method="post"' . $action . '><input type="hidden" name="ip" value="' . esc_attr( $remote_ip ) . '" />' . $antispam_text . '<p><label for="s2email">' . __( 'Your email:', 'subscribe2' ) . '</label><br><input type="email" name="email" id="s2email" value="' . $value . '" size="' . $args['size'] . '" onfocus="if (this.value === \'' . $value . '\') {this.value = \'\';}" onblur="if (this.value === \'\') {this.value = \'' . $value . '\';}" />' . $wrap_text . $this->input_form_action . '</p></form>' . "\r\n";
 		}
 		$this->s2form = apply_filters( 's2_form', $this->form, $args );
 
@@ -224,9 +225,9 @@ class S2_Frontend extends S2_Core {
 				// looks like some invisible-to-user fields were changed; falsely report success
 				return $this->confirmation_sent;
 			}
-			$validation = apply_filters( 's2_form_submission', true );
+			$validation = (bool) apply_filters( 's2_form_submission', true );
 			if ( true !== $validation ) {
-				return apply_filters( 's2_form_failed_validation', $this->s2form );
+				return (string) apply_filters( 's2_form_failed_validation', $this->s2form );
 			}
 			global $wpdb;
 			$this->email = $this->sanitize_email( $_POST['email'] );
@@ -361,8 +362,6 @@ class S2_Frontend extends S2_Core {
 	 * Confirm request from the link emailed to the user and email the admin
 	 */
 	public function confirm( $content = '' ) {
-		global $wpdb;
-
 		if ( 1 === $this->filtered && '' !== $this->message ) {
 			return $this->message;
 		} elseif ( 1 === $this->filtered ) {
@@ -381,9 +380,6 @@ class S2_Frontend extends S2_Core {
 		} else {
 			return $this->no_such_email;
 		}
-
-		// get current status of email so messages are only sent once per emailed link
-		$current = $this->is_public( $this->email );
 
 		if ( '1' === $action ) {
 			// make this subscription active
@@ -439,6 +435,8 @@ class S2_Frontend extends S2_Core {
 		);
 
 		$wp_user_query = get_users( $role );
+		$recipients    = array();
+
 		foreach ( $wp_user_query as $user ) {
 			$recipients[] = $user->user_email;
 		}
@@ -447,7 +445,7 @@ class S2_Frontend extends S2_Core {
 		$headers    = $this->headers();
 		// send individual emails so we don't reveal admin emails to each other
 		foreach ( $recipients as $recipient ) {
-			$status = wp_mail( $recipient, $subject, $message, $headers );
+			wp_mail( $recipient, $subject, $message, $headers );
 		}
 	}
 
@@ -468,7 +466,7 @@ class S2_Frontend extends S2_Core {
 			return false;
 		}
 
-		list( $user, $domain ) = explode( '@', $email, 2 );
+		list( , $domain ) = explode( '@', $email, 2 );
 
 		$domain = '@' . $domain;
 

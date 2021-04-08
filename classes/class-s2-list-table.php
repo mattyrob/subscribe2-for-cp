@@ -7,8 +7,6 @@ class S2_List_Table extends WP_List_Table {
 	private $time_format = '';
 
 	public function __construct() {
-		global $status, $page;
-
 		parent::__construct(
 			array(
 				'singular' => 'subscriber',
@@ -21,7 +19,6 @@ class S2_List_Table extends WP_List_Table {
 	}
 
 	public function column_default( $item, $column_name ) {
-		global $current_tab;
 		switch ( $column_name ) {
 			case 'email':
 			case 'date':
@@ -57,11 +54,11 @@ class S2_List_Table extends WP_List_Table {
 	}
 
 	public function column_cb( $item ) {
-		return sprintf( '<input type="checkbox" name="%1$s[]" value="%2$s" />', $this->_args['singular'], $item['email'] );
+		$column = '<label><span class="screen-reader-text">' . __( 'Checkbox for:', 'subscribe2-for-cp' ) . ' %1$s</span><input type="checkbox" name="%2$s[]" value="%3$s" /></label>';
+		return sprintf( $column, $item['email'], $this->_args['singular'], $item['email'] );
 	}
 
 	public function get_columns() {
-		global $current_tab;
 		$columns = array(
 			'cb'    => '<input type="checkbox" />',
 			'email' => _x( 'Email', 'column name', 'subscribe2-for-cp' ),
@@ -71,7 +68,6 @@ class S2_List_Table extends WP_List_Table {
 	}
 
 	public function get_sortable_columns() {
-		global $current_tab;
 		$sortable_columns = array(
 			'email' => array( 'email', true ),
 			'date'  => array( 'date', false ),
@@ -176,14 +172,15 @@ class S2_List_Table extends WP_List_Table {
 	}
 
 	public function process_bulk_action() {
+		global $current_user, $subscribers;
 		if ( in_array( $this->current_action(), array( 'delete', 'toggle' ), true ) ) {
 			if ( ! isset( $_REQUEST['subscriber'] ) ) {
 				echo '<div id="message" class="error"><p><strong>' . esc_html__( 'No users were selected.', 'subscribe2-for-cp' ) . '</strong></p></div>';
 				return;
 			}
 		}
+
 		if ( 'delete' === $this->current_action() ) {
-			global $current_user, $subscribers;
 			$message = array();
 			foreach ( $_REQUEST['subscriber'] as $address ) {
 				$address = trim( stripslashes( $address ) );
@@ -212,7 +209,6 @@ class S2_List_Table extends WP_List_Table {
 			echo '<div id="message" class="updated fade"><p><strong>' . esc_html( $final_message ) . '</strong></p></div>';
 		}
 		if ( 'toggle' === $this->current_action() ) {
-			global $current_user, $subscribers;
 			s2cp()->ip = $current_user->user_login;
 			foreach ( $_REQUEST['subscriber'] as $address ) {
 				$address = trim( stripslashes( $address ) );
@@ -246,7 +242,11 @@ class S2_List_Table extends WP_List_Table {
 		$output = '<span class="displaying-num">' . sprintf( _n( '%s item', '%s items', $total_items, 'subscribe2-for-cp' ), number_format_i18n( $total_items ) ) . '</span>';
 
 		if ( isset( $_POST['what'] ) ) {
-			$current = 1;
+			if ( isset( $_POST['paged'] ) ) {
+				$current = intval( $_POST['paged'] );
+			} else {
+				$current = 1;
+			}
 		} else {
 			$current = intval( $this->get_pagenum() );
 		}
@@ -302,7 +302,7 @@ class S2_List_Table extends WP_List_Table {
 			$page_links[] = '<span class="tablenav-pages-navspan" aria-hidden="true">&laquo;</span>';
 		} else {
 			$page_links[] = sprintf(
-				"<a class='first-page' href='%s'><span class='screen-reader-text'>%s</span><span aria-hidden='true'>%s</span></a>",
+				"<a class='first-page button' href='%s'><span class='screen-reader-text'>%s</span><span aria-hidden='true'>%s</span></a>",
 				esc_url( remove_query_arg( 'paged', $current_url ) ),
 				__( 'First page', 'subscribe2-for-cp' ),
 				'&laquo;'
@@ -313,7 +313,7 @@ class S2_List_Table extends WP_List_Table {
 			$page_links[] = '<span class="tablenav-pages-navspan" aria-hidden="true">&lsaquo;</span>';
 		} else {
 			$page_links[] = sprintf(
-				"<a class='prev-page' href='%s'><span class='screen-reader-text'>%s</span><span aria-hidden='true'>%s</span></a>",
+				"<a class='prev-page button' href='%s'><span class='screen-reader-text'>%s</span><span aria-hidden='true'>%s</span></a>",
 				esc_url( add_query_arg( 'paged', max( 1, $current - 1 ), $current_url ) ),
 				__( 'Previous page', 'subscribe2-for-cp' ),
 				'&lsaquo;'
@@ -340,7 +340,7 @@ class S2_List_Table extends WP_List_Table {
 			$page_links[] = '<span class="tablenav-pages-navspan" aria-hidden="true">&rsaquo;</span>';
 		} else {
 			$page_links[] = sprintf(
-				"<a class='next-page' href='%s'><span class='screen-reader-text'>%s</span><span aria-hidden='true'>%s</span></a>",
+				"<a class='next-page button' href='%s'><span class='screen-reader-text'>%s</span><span aria-hidden='true'>%s</span></a>",
 				esc_url( add_query_arg( 'paged', min( $total_pages, $current + 1 ), $current_url ) ),
 				__( 'Next page', 'subscribe2-for-cp' ),
 				'&rsaquo;'
@@ -351,7 +351,7 @@ class S2_List_Table extends WP_List_Table {
 			$page_links[] = '<span class="tablenav-pages-navspan" aria-hidden="true">&raquo;</span>';
 		} else {
 			$page_links[] = sprintf(
-				"<a class='last-page' href='%s'><span class='screen-reader-text'>%s</span><span aria-hidden='true'>%s</span></a>",
+				"<a class='last-page button' href='%s'><span class='screen-reader-text'>%s</span><span aria-hidden='true'>%s</span></a>",
 				esc_url( add_query_arg( 'paged', $total_pages, $current_url ) ),
 				__( 'Last page', 'subscribe2-for-cp' ),
 				'&raquo;'
@@ -423,12 +423,16 @@ class S2_List_Table extends WP_List_Table {
 		usort( $data, 'usort_reorder' );
 
 		if ( isset( $_POST['what'] ) ) {
-			$current_page = 1;
+			if ( isset( $_POST['paged'] ) ) {
+				$current_page = intval( $_POST['paged'] );
+			} else {
+				$current_page = 1;
+			}
 		} else {
 			$current_page = $this->get_pagenum();
 		}
 		$total_items = count( $data );
-		$data        = array_slice( $data, ( ( $current_page - 1 ) * $per_page ), $per_page );
+		$data        = array_slice( $data, ( $current_page - 1 ) * $per_page, $per_page );
 		$this->items = $data;
 
 		$this->set_pagination_args(

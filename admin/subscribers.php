@@ -34,28 +34,28 @@ if ( isset( $_POST['s2_admin'] ) ) {
 		$email_error   = '';
 		$message       = '';
 		foreach ( preg_split( '/[\s,]+/', $_POST['addresses'] ) as $email ) {
-			$clean_email = $this->sanitize_email( $email );
-			if ( false === $this->validate_email( $clean_email ) ) {
+			$clean_email = s2cp()->sanitize_email( $email );
+			if ( false === s2cp()->validate_email( $clean_email ) ) {
 				( '' === $email_error ) ? $email_error = "$email" : $email_error .= ", $email";
 					continue;
 			} else {
 				if ( isset( $_POST['subscribe'] ) ) {
-					if ( false !== $this->is_public( $clean_email ) ) {
+					if ( false !== s2cp()->is_public( $clean_email ) ) {
 						( '' === $pub_sub_error ) ? $pub_sub_error = "$clean_email" : $pub_sub_error .= ", $clean_email";
 						continue;
 					}
-					if ( $this->is_registered( $clean_email ) ) {
+					if ( s2cp()->is_registered( $clean_email ) ) {
 						( '' === $reg_sub_error ) ? $reg_sub_error = "$clean_email" : $reg_sub_error .= ", $clean_email";
 						continue;
 					}
-					$this->add( $clean_email, true );
+					s2cp()->add( $clean_email, true );
 					$message = __( 'Address(es) subscribed!', 'subscribe2-for-cp' );
 				} elseif ( isset( $_POST['unsubscribe'] ) ) {
-					if ( false === $this->is_public( $clean_email ) || $this->is_registered( $clean_email ) ) {
+					if ( false === s2cp()->is_public( $clean_email ) || s2cp()->is_registered( $clean_email ) ) {
 						( '' === $unsub_error ) ? $unsub_error = "$clean_email" : $unsub_error .= ", $clean_email";
 						continue;
 					}
-					$this->delete( $clean_email );
+					s2cp()->delete( $clean_email );
 					$message = __( 'Address(es) unsubscribed!', 'subscribe2-for-cp' );
 				}
 			}
@@ -77,34 +77,34 @@ if ( isset( $_POST['s2_admin'] ) ) {
 		}
 		$_POST['what'] = 'confirmed';
 	} elseif ( isset( $_POST['remind'] ) ) {
-		$this->remind( $_POST['reminderemails'] );
+		s2cp()->remind( $_POST['reminderemails'] );
 		echo '<div id="message" class="updated fade"><p><strong>' . esc_html__( 'Reminder Email(s) Sent!', 'subscribe2-for-cp' ) . '</strong></p></div>';
 	} elseif ( isset( $_POST['sub_categories'] ) && 'subscribe' === $_POST['manage'] ) {
 		if ( isset( $_REQUEST['subscriber'] ) ) {
-			$this->subscribe_registered_users( implode( ",\r\n", $_REQUEST['subscriber'] ), $_POST['category'] );
+			s2cp()->subscribe_registered_users( implode( ",\r\n", $_REQUEST['subscriber'] ), $_POST['category'] );
 		} else {
-			$this->subscribe_registered_users( $_POST['exportcsv'], $_POST['category'] );
+			s2cp()->subscribe_registered_users( $_POST['exportcsv'], $_POST['category'] );
 		}
 		echo '<div id="message" class="updated fade"><p><strong>' . esc_html__( 'Registered Users Subscribed!', 'subscribe2-for-cp' ) . '</strong></p></div>';
 	} elseif ( isset( $_POST['sub_categories'] ) && 'unsubscribe' === $_POST['manage'] ) {
 		if ( isset( $_REQUEST['subscriber'] ) ) {
-			$this->unsubscribe_registered_users( implode( ",\r\n", $_REQUEST['subscriber'] ), $_POST['category'] );
+			s2cp()->unsubscribe_registered_users( implode( ",\r\n", $_REQUEST['subscriber'] ), $_POST['category'] );
 		} else {
-			$this->unsubscribe_registered_users( $_POST['exportcsv'], $_POST['category'] );
+			s2cp()->unsubscribe_registered_users( $_POST['exportcsv'], $_POST['category'] );
 		}
 		echo '<div id="message" class="updated fade"><p><strong>' . esc_html__( 'Registered Users Unsubscribed!', 'subscribe2-for-cp' ) . '</strong></p></div>';
 	} elseif ( isset( $_POST['sub_format'] ) ) {
 		if ( isset( $_REQUEST['subscriber'] ) ) {
-			$this->format_change( implode( ",\r\n", $_REQUEST['subscriber'] ), $_POST['format'] );
+			s2cp()->format_change( implode( ",\r\n", $_REQUEST['subscriber'] ), $_POST['format'] );
 		} else {
-			$this->format_change( $_POST['exportcsv'], $_POST['format'] );
+			s2cp()->format_change( $_POST['exportcsv'], $_POST['format'] );
 		}
 		echo '<div id="message" class="updated fade"><p><strong>' . esc_html__( 'Format updated for Selected Registered Users!', 'subscribe2-for-cp' ) . '</strong></p></div>';
 	} elseif ( isset( $_POST['sub_digest'] ) ) {
 		if ( isset( $_REQUEST['subscriber'] ) ) {
-			$this->digest_change( implode( ",\r\n", $_REQUEST['subscriber'] ), $_POST['sub_category'] );
+			s2cp()->digest_change( implode( ",\r\n", $_REQUEST['subscriber'] ), $_POST['sub_category'] );
 		} else {
-			$this->digest_change( $_POST['exportcsv'], $_POST['sub_category'] );
+			s2cp()->digest_change( $_POST['exportcsv'], $_POST['sub_category'] );
 		}
 		echo '<div id="message" class="updated fade"><p><strong>' . esc_html__( 'Digest Subscription updated for Selected Registered Users!', 'subscribe2-for-cp' ) . '</strong></p></div>';
 	}
@@ -112,8 +112,8 @@ if ( isset( $_POST['s2_admin'] ) ) {
 
 if ( 'registered' === $current_tab ) {
 	// Get Registered Subscribers
-	$registered = $this->get_registered( 'return=emailid' );
-	$all_users  = $this->get_all_registered( 'emailid' );
+	$registered = s2cp()->get_registered( 'return=emailid' );
+	$all_users  = s2cp()->get_all_registered( 'emailid' );
 
 	// safety check for our arrays
 	if ( '' === $registered ) {
@@ -124,8 +124,8 @@ if ( 'registered' === $current_tab ) {
 	}
 } else {
 	//Get Public Subscribers
-	$confirmed   = $this->get_public();
-	$unconfirmed = $this->get_public( 0 );
+	$confirmed   = s2cp()->get_public();
+	$unconfirmed = s2cp()->get_public( 0 );
 	// safety check for our arrays
 	if ( '' === $confirmed ) {
 		$confirmed = array();
@@ -152,7 +152,7 @@ if ( isset( $_REQUEST['what'] ) ) {
 		}
 	} elseif ( is_numeric( $_REQUEST['what'] ) ) {
 		$what        = intval( $_REQUEST['what'] );
-		$subscribers = $this->get_registered( "cats=$what&return=emailid" );
+		$subscribers = s2cp()->get_registered( "cats=$what&return=emailid" );
 	} elseif ( 'registered' === $_REQUEST['what'] ) {
 		$what        = 'registered';
 		$subscribers = $registered;
@@ -214,9 +214,8 @@ switch ( $current_tab ) {
 		echo '<input type="hidden" id="s2_location" name="s2_location" value="public" />' . "\r\n";
 		echo '<div class="s2_admin" id="s2_add_subscribers">' . "\r\n";
 		echo '<h2>' . esc_html__( 'Add/Remove Subscribers', 'subscribe2-for-cp' ) . '</h2>' . "\r\n";
-		echo '<p>' . esc_html__( 'Enter addresses, one per line or comma-separated', 'subscribe2-for-cp' ) . '<br>' . "\r\n";
-		echo '<textarea rows="2" cols="80" name="addresses"></textarea></p>' . "\r\n";
-		echo '<input type="hidden" name="s2_admin" />' . "\r\n";
+		echo '<p><label>' . esc_html__( 'Enter addresses, one per line or comma-separated', 'subscribe2-for-cp' ) . '<br>' . "\r\n";
+		echo '<textarea rows="2" cols="80" name="addresses"></textarea></label></p>' . "\r\n";
 		echo '<p class="submit" style="border-top: none;"><input type="submit" class="button-primary" name="subscribe" value="' . esc_attr( __( 'Subscribe', 'subscribe2-for-cp' ) ) . '" />';
 		echo '&nbsp;<input type="submit" class="button-primary" name="unsubscribe" value="' . esc_attr( __( 'Unsubscribe', 'subscribe2-for-cp' ) ) . '" /></p>' . "\r\n";
 		echo '</div>' . "\r\n";
@@ -225,7 +224,7 @@ switch ( $current_tab ) {
 		echo '<div class="s2_admin" id="s2_current_subscribers">' . "\r\n";
 		echo '<h2>' . esc_html__( 'Current Subscribers', 'subscribe2-for-cp' ) . '</h2>' . "\r\n";
 		echo '<br>';
-		$cats    = $this->all_cats();
+		$cats    = s2cp()->all_cats();
 		$cat_ids = array();
 		foreach ( $cats as $category ) {
 			$cat_ids[] = $category->term_id;
@@ -250,9 +249,9 @@ switch ( $current_tab ) {
 }
 
 // show the selected subscribers
-echo '<table style="width: 100%; border-collapse: separate; border-spacing: 0px; *border-collapse: expression("separate", cellSpacing = "0px");"><tr>';
+echo '<table style="width: 100%; border-collapse: separate; border-spacing: 0px;"><tr>';
 echo '<td style="width: 50%; text-align: left;">';
-$this->display_subscriber_dropdown( $what, __( 'Filter', 'subscribe2-for-cp' ), $exclude );
+s2cp()->display_subscriber_dropdown( $what, __( 'Filter', 'subscribe2-for-cp' ), $exclude );
 echo '</td>' . "\r\n";
 if ( $reminderform ) {
 	echo '<td style="width: 25%; text-align: right;"><input type="hidden" name="reminderemails" value="' . esc_attr( $reminderemails ) . '" />' . "\r\n";
@@ -285,7 +284,7 @@ echo '</div>' . "\r\n";
 if ( 'registered' === $current_tab ) {
 	echo '<div class="s2_admin" id="s2_bulk_manage">' . "\r\n";
 	echo '<h2>' . esc_html__( 'Bulk Management', 'subscribe2-for-cp' ) . '</h2>' . "\r\n";
-	if ( 'never' === $this->subscribe2_options['email_freq'] ) {
+	if ( 'never' === s2cp()->subscribe2_options['email_freq'] ) {
 		$categories = array();
 		if ( isset( $_POST['category'] ) ) {
 			$categories = $_POST['category'];
@@ -303,7 +302,7 @@ if ( 'registered' === $current_tab ) {
 		echo '<br>' . esc_html__( 'Action to perform', 'subscribe2-for-cp' ) . ':' . "\r\n";
 		echo '<label><input type="radio" name="manage" value="subscribe"' . checked( $manage, 'subscribe', false ) . ' /> ' . esc_html__( 'Subscribe', 'subscribe2-for-cp' ) . '</label>&nbsp;&nbsp;' . "\r\n";
 		echo '<label><input type="radio" name="manage" value="unsubscribe"' . checked( $manage, 'unsubscribe', false ) . ' /> ' . esc_html__( 'Unsubscribe', 'subscribe2-for-cp' ) . '</label><br><br>' . "\r\n";
-		if ( '1' === $this->subscribe2_options['reg_override'] ) {
+		if ( '1' === s2cp()->subscribe2_options['reg_override'] ) {
 			$s2_forms->display_category_form( $categories, 1 );
 		} else {
 			$s2_forms->display_category_form( $categories, 0 );

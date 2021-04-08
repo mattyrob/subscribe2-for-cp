@@ -13,7 +13,7 @@ class S2_Forms {
 	 */
 	public function get_userid() {
 		if ( isset( $_GET['id'] ) ) {
-			if ( ! current_user_can( apply_filters( 's2_capability', 'manage_options', 'manage' ) ) ) {
+			if ( ! current_user_can( (string) apply_filters( 's2_capability', 'manage_options', 'manage' ) ) ) {
 				die( '<p>' . esc_html__( 'Permission error! Your request cannot be completed.', 'subscribe2-for-cp' ) . '</p>' );
 			}
 			if ( is_multisite() ) {
@@ -113,7 +113,7 @@ class S2_Forms {
 
 		// list of subscribed blogs on Multisite installs
 		if ( s2cp()->s2_mu && ! isset( $_GET['email'] ) ) {
-			global $blog_id, $s2class_multisite;
+			global $s2class_multisite;
 			$s2blog_id    = $blog_id;
 			$current_user = wp_get_current_user();
 			$blogs        = $s2class_multisite->get_mu_blog_list();
@@ -206,8 +206,6 @@ class S2_Forms {
 	 * Process input from the form that allows Regsitered users to amend their subscription
 	 */
 	public function s2_your_subscription_submit() {
-		global $user_ID;
-
 		$userid = $this->get_userid();
 
 		if ( isset( $_POST['submit'] ) ) {
@@ -290,8 +288,6 @@ class S2_Forms {
 	 * Optionally pre-select those categories specified
 	 */
 	public function display_category_form( $selected = array(), $override = 1, $compulsory = array(), $name = 'category' ) {
-		global $wpdb;
-
 		if ( 0 === $override ) {
 			$all_cats = s2cp()->all_cats( true );
 		} else {
@@ -301,9 +297,14 @@ class S2_Forms {
 		$half = ( count( $all_cats ) / 2 );
 		$i    = 0;
 		$j    = 0;
-		echo '<table style="width: 100%; border-collapse: separate; border-spacing: 2px; *border-collapse: expression(\'separate\', cellSpacing = \'2px\');" class="editform">' . "\r\n";
-		echo '<tr><td style="text-align: left;" colspan="2">' . "\r\n";
-		echo '<label><input type="checkbox" name="checkall" value="checkall_' . esc_attr( $name ) . '" /> ' . esc_html__( 'Select / Unselect All', 'subscribe2-for-cp' ) . '</label>' . "\r\n";
+		echo '<table style="width: 100%; border-collapse: separate; border-spacing: 2px;" class="editform">' . "\r\n";
+		if ( count( $all_cats ) >= 2 ) {
+			$colspan = 2;
+		} else {
+			$colspan = 1;
+		}
+		echo '<tr><td style="text-align: left;" colspan="' . esc_attr( $colspan ) . '">' . "\r\n";
+		echo '<label><input type="checkbox" name="checkall" value="checkall_' . esc_attr( $name ) . '" /> ' . esc_html__( 'Select / Unselect All', 'subscribe2' ) . '</label>' . "\r\n";
 		echo '</td></tr>' . "\r\n";
 		echo '<tr style="vertical-align: top;"><td style="width: 50%; text-align: left;">' . "\r\n";
 		foreach ( $all_cats as $cat ) {
@@ -329,7 +330,7 @@ class S2_Forms {
 				if ( in_array( (string) $cat->term_id, $compulsory, true ) && 'category' === $name ) {
 					echo ' DISABLED';
 				}
-				echo ' /> <abbr title="' . esc_attr( $cat->slug ) . '">' . esc_html( $cat_name ) . '</abbr></label><br>' . "\r\n";
+				echo ' /> <abbr title="' . esc_attr( $cat->slug ) . '">' . esc_html( $cat_name ) . '</abbr></label>' . "\r\n";
 			} else {
 				echo '<label><input class="checkall_' . esc_attr( $name ) . '" type="checkbox" name="' . esc_attr( $name ) . '[]" value="' . esc_attr( $cat->term_id ) . '"';
 				if ( in_array( (string) $cat->term_id, $selected, true ) || in_array( (string) $cat->term_id, $compulsory, true ) ) {
@@ -338,7 +339,7 @@ class S2_Forms {
 				if ( in_array( (string) $cat->term_id, $compulsory, true ) && 'category' === $name ) {
 					echo ' DISABLED';
 				}
-				echo ' /> <abbr title="' . esc_attr( $cat->slug ) . '">' . esc_html( $cat_name ) . '</abbr></label><br>' . "\r\n";
+				echo ' /> <abbr title="' . esc_attr( $cat->slug ) . '">' . esc_html( $cat_name ) . '</abbr></label>' . "\r\n";
 			}
 			$i++;
 		}
@@ -361,11 +362,16 @@ class S2_Forms {
 		$half = ( count( $all_authors ) / 2 );
 		$i    = 0;
 		$j    = 0;
-		echo '<table style="width: 100%; border-collapse: separate; border-spacing: 2px; *border-collapse: expression(\'separate\', cellSpacing = \'2px\');" class="editform">' . "\r\n";
-		echo '<tr><td style="text-align: left;" colspan="2">' . "\r\n";
-		echo '<label><input type="checkbox" name="checkall" value="checkall_author" /> ' . esc_html__( 'Select / Unselect All', 'subscribe2-for-cp' ) . '</label>' . "\r\n";
+		echo '<table style="width: 100%; border-collapse: separate; border-spacing: 2px;" class="editform">' . "\r\n";
+		if ( count( $all_authors ) >= 2 ) {
+			$colspan = 2;
+		} else {
+			$colspan = 1;
+		}
+		echo '<tr><td style="text-align: left;" colspan="' . esc_attr( $colspan ) . '">' . "\r\n";
+		echo '<label><input type="checkbox" name="checkall" value="checkall_author" /> ' . esc_html__( 'Select / Unselect All', 'subscribe2' ) . '</label>' . "\r\n";
 		echo '</td></tr>' . "\r\n";
-		echo '<tr style="vertical-align: top;"><td style="width: 50%; test-align: left;">' . "\r\n";
+		echo '<tr style="vertical-align: top;"><td style="width: 50%; text-align: left;">' . "\r\n";
 		foreach ( $all_authors as $author ) {
 			if ( $i >= $half && 0 === $j ) {
 				echo '</td><td style="width: 50%; text-align: left;">' . "\r\n";
@@ -376,14 +382,13 @@ class S2_Forms {
 				if ( in_array( $author->ID, $selected, true ) ) {
 						echo ' checked="checked"';
 				}
-				echo ' /> ' . esc_html( $author->display_name ) . '</label><br>' . "\r\n";
+				echo ' /> ' . esc_html( $author->display_name ) . '</label>' . "\r\n";
 			} else {
 				echo '<label><input class="checkall_author" type="checkbox" name="author[]" value="' . esc_attr( $author->ID ) . '"';
 				if ( in_array( $author->ID, $selected, true ) ) {
 					echo ' checked="checked"';
 				}
-				echo ' /> ' . esc_html( $author->display_name ) . '</label><br>' . "\r\n";
-				$i++;
+				echo ' /> ' . esc_html( $author->display_name ) . '</label>' . "\r\n";
 			}
 		}
 		echo '</td></tr>' . "\r\n";
@@ -418,7 +423,7 @@ class S2_Forms {
 
 			$this->all_authors = array_merge( $administrators, $editors, $authors );
 		}
-		return apply_filters( 's2_authors', $this->all_authors );
+		return (array) apply_filters( 's2_authors', $this->all_authors );
 	}
 
 	/**

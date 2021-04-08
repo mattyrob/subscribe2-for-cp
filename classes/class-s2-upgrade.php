@@ -201,6 +201,7 @@ class S2_Upgrade {
 			foreach ( $old_options as $option ) {
 				$value        = get_option( $option );
 				$option_array = substr( $option, 3 );
+
 				s2cp()->subscribe2_options[ $option_array ] = $value;
 				delete_option( $option );
 			}

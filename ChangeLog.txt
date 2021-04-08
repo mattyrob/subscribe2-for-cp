@@ -2,6 +2,8 @@
 
 * Updated Counter Widget color picker
 * Enable color picker in Customize screen
+* Accessibility Improvements
+* Minor bug fixes and enhancements
 
 = 11.2.1 =
 

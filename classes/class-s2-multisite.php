@@ -91,16 +91,14 @@ class S2_Multisite {
 		global $wpdb;
 		$blogs = $wpdb->get_results( $wpdb->prepare( "SELECT blog_id, domain, path FROM $wpdb->blogs WHERE site_id = %d AND archived = '0' AND mature = '0' AND spam = '0' AND deleted = '0' ORDER BY registered DESC", $wpdb->siteid ), ARRAY_A );
 
+		$blog_list = array();
+
 		foreach ( $blogs as $details ) {
 			//reindex the array so the key is the same as the blog_id
 			$blog_list[ $details['blog_id'] ] = $details;
 		}
 
-		if ( ! is_array( $blog_list ) ) {
-			return array();
-		}
-
-		return apply_filters( 's2_mu_blog_list', $blog_list );
+		return (array) apply_filters( 's2_mu_blog_list', $blog_list );
 	}
 
 	/**

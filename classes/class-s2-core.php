@@ -45,9 +45,9 @@ class S2_Core {
 		$string = str_replace( '{COUNT}', $this->post_count, $string );
 
 		if ( ! empty( $digest_post_ids ) ) {
-			return apply_filters( 's2_custom_keywords', $string, $digest_post_ids );
+			return (string) apply_filters( 's2_custom_keywords', $string, $digest_post_ids );
 		} else {
-			return apply_filters( 's2_custom_keywords', $string );
+			return (string) apply_filters( 's2_custom_keywords', $string );
 		}
 	}
 
@@ -61,23 +61,23 @@ class S2_Core {
 
 		// Replace any escaped html symbols in subject then apply filter
 		$subject = wp_strip_all_tags( html_entity_decode( $subject, ENT_QUOTES ) );
-		$subject = apply_filters( 's2_email_subject', $subject );
+		$subject = (string) apply_filters( 's2_email_subject', $subject );
 
 		if ( 'html' === $type ) {
 			$headers = $this->headers( 'html' );
 			remove_all_filters( 'wp_mail_content_type' );
 			add_filter( 'wp_mail_content_type', array( $this, 'html_email' ) );
 			if ( 'yes' === $this->subscribe2_options['stylesheet'] ) {
-				$mailtext = apply_filters( 's2_html_email', '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd"><html><head><title>' . $subject . '</title><link rel="stylesheet" href="' . get_stylesheet_directory_uri() . apply_filters( 's2_stylesheet_name', '/style.css' ) . '" type="text/css" media="screen" /><meta http-equiv="Content-Type" content="text/html; charset=utf-8"></head><body>' . $message . '</body></html>', $subject, $message ); // phpcs:ignore WordPress.WP.EnqueuedResources
+				$mailtext = (string) apply_filters( 's2_html_email', '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd"><html><head><title>' . $subject . '</title><link rel="stylesheet" href="' . get_stylesheet_directory_uri() . (string) apply_filters( 's2_stylesheet_name', '/style.css' ) . '" type="text/css" media="screen" /><meta http-equiv="Content-Type" content="text/html; charset=utf-8"></head><body>' . $message . '</body></html>', $subject, $message ); // phpcs:ignore WordPress.WP.EnqueuedResources
 			} else {
-				$mailtext = apply_filters( 's2_html_email', '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd"><html><head><title>' . $subject . '</title></head><body>' . $message . '</body></html>', $subject, $message );
+				$mailtext = (string) apply_filters( 's2_html_email', '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd"><html><head><title>' . $subject . '</title></head><body>' . $message . '</body></html>', $subject, $message );
 			}
 		} else {
 			$headers = $this->headers( 'text' );
 			remove_all_filters( 'wp_mail_content_type' );
 			add_filter( 'wp_mail_content_type', array( $this, 'plain_email' ) );
 			$message  = wp_strip_all_tags( html_entity_decode( $message, ENT_NOQUOTES ) );
-			$mailtext = apply_filters( 's2_plain_email', $message );
+			$mailtext = (string) apply_filters( 's2_plain_email', $message );
 		}
 
 		// Construct BCC headers for sending or send individual emails
@@ -187,6 +187,9 @@ class S2_Core {
 		}
 
 		$char_set = get_option( 'blog_charset' );
+		$header   = array();
+		$headers  = array();
+
 		if ( function_exists( 'mb_encode_mimeheader' ) ) {
 			$header['From']     = mb_encode_mimeheader( $this->myname, $char_set, 'Q' ) . ' <' . $this->myemail . '>';
 			$header['Reply-To'] = mb_encode_mimeheader( $this->myname, $char_set, 'Q' ) . ' <' . $this->myemail . '>';
@@ -204,7 +207,7 @@ class S2_Core {
 		}
 
 		// apply header filter to allow on-the-fly amendments
-		$header = apply_filters( 's2_email_headers', $header );
+		$header = (array) apply_filters( 's2_email_headers', $header );
 		// collapse the headers using $key as the header name
 		foreach ( $header as $key => $value ) {
 			$headers[ $key ] = $key . ': ' . $value;
@@ -263,7 +266,7 @@ class S2_Core {
 			return $post;
 		}
 
-		if ( $this->s2_mu && ! apply_filters( 's2_allow_site_switching', $this->site_switching ) ) {
+		if ( $this->s2_mu && ! (bool) apply_filters( 's2_allow_site_switching', $this->site_switching ) ) {
 			global $switched;
 			if ( $switched ) {
 				return;
@@ -289,7 +292,7 @@ class S2_Core {
 			} else {
 				$s2_post_types = array( 'post' );
 			}
-			$s2_post_types = apply_filters( 's2_post_types', $s2_post_types );
+			$s2_post_types = (array) apply_filters( 's2_post_types', $s2_post_types );
 			if ( ! in_array( $post->post_type, $s2_post_types, true ) ) {
 				return $post;
 			}
@@ -306,7 +309,7 @@ class S2_Core {
 				return $post;
 			}
 
-			$s2_taxonomies = apply_filters( 's2_taxonomies', array( 'category' ) );
+			$s2_taxonomies = (array) apply_filters( 's2_taxonomies', array( 'category' ) );
 			$post_cats     = wp_get_object_terms(
 				$post->ID,
 				$s2_taxonomies,
@@ -375,7 +378,7 @@ class S2_Core {
 			}
 		} else {
 			// make sure we prime the taxonomy variable for preview posts
-			$s2_taxonomies = apply_filters( 's2_taxonomies', array( 'category' ) );
+			$s2_taxonomies = (array) apply_filters( 's2_taxonomies', array( 'category' ) );
 		}
 
 		// get_the_time() uses the current locale of the admin user which may differ from the site locale
@@ -397,7 +400,7 @@ class S2_Core {
 		}
 
 		$author           = get_userdata( $post->post_author );
-		$this->authorname = html_entity_decode( apply_filters( 'the_author', $author->display_name ), ENT_QUOTES );
+		$this->authorname = html_entity_decode( (string) apply_filters( 'the_author', $author->display_name ), ENT_QUOTES );
 
 		// do we send as admin or post author?
 		if ( 'author' === $this->subscribe2_options['sender'] ) {
@@ -438,7 +441,7 @@ class S2_Core {
 		// Get email subject
 		$subject = html_entity_decode( stripslashes( wp_kses( $this->substitute( $this->subscribe2_options['notification_subject'] ), '' ) ) );
 		// Get the message template
-		$mailtext = apply_filters( 's2_email_template', $this->subscribe2_options['mailtext'] );
+		$mailtext = (string) apply_filters( 's2_email_template', $this->subscribe2_options['mailtext'] );
 		$mailtext = stripslashes( $this->substitute( $mailtext ) );
 
 		$plaintext = $post->post_content;
@@ -449,7 +452,7 @@ class S2_Core {
 		$plaintext = preg_replace( '/<del[^>]*>(.*)<\/del>/Ui', '', $plaintext );
 
 		// Add filter here so $plaintext can be filtered to correct for layout needs
-		$plaintext   = apply_filters( 's2_plaintext', $plaintext );
+		$plaintext   = (string) apply_filters( 's2_plaintext', $plaintext );
 		$excerpttext = $plaintext;
 
 		if ( strstr( $mailtext, '{REFERENCELINKS}' ) ) {
@@ -485,14 +488,14 @@ class S2_Core {
 			}
 		}
 
-		$content = apply_filters( 'the_content', $content );
+		$content = (string) apply_filters( 'the_content', $content );
 		$content = str_replace( ']]>', ']]&gt', $content );
 
 		$excerpt = trim( $post->post_excerpt );
 		if ( '' === $excerpt ) {
 			// no excerpt, is there a <!--more--> ?
 			if ( false !== strpos( $excerpttext, '<!--more-->' ) ) {
-				list( $excerpt, $more ) = explode( '<!--more-->', $excerpttext, 2 );
+				list( $excerpt, ) = explode( '<!--more-->', $excerpttext, 2 );
 				// strip tags and trailing whitespace
 				$excerpt = trim( wp_strip_all_tags( $excerpt ) );
 			} else {
@@ -504,7 +507,7 @@ class S2_Core {
 		if ( '' === $html_excerpt ) {
 			// no excerpt, is there a <!--more--> ?
 			if ( false !== strpos( $content, '<!--more-->' ) ) {
-				list( $html_excerpt, $more ) = explode( '<!--more-->', $content, 2 );
+				list( $html_excerpt, ) = explode( '<!--more-->', $content, 2 );
 				// balance HTML tags and then strip leading and trailing whitespace
 				$html_excerpt = trim( balanceTags( $html_excerpt, true ) );
 			} else {
@@ -541,26 +544,26 @@ class S2_Core {
 			// Registered Subscribers first
 			// first we send plaintext summary emails
 			$recipients = $this->get_registered( "cats=$post_cats_string&format=excerpt&author=$post->post_author" );
-			$recipients = apply_filters( 's2_send_plain_excerpt_subscribers', $recipients, $post->ID );
+			$recipients = (array) apply_filters( 's2_send_plain_excerpt_subscribers', $recipients, $post->ID );
 			$this->mail( $recipients, $subject, $plain_excerpt_body );
 
 			// next we send plaintext full content emails
 			$recipients = $this->get_registered( "cats=$post_cats_string&format=post&author=$post->post_author" );
-			$recipients = apply_filters( 's2_send_plain_fullcontent_subscribers', $recipients, $post->ID );
+			$recipients = (array) apply_filters( 's2_send_plain_fullcontent_subscribers', $recipients, $post->ID );
 			$this->mail( $recipients, $subject, $plain_body );
 
 			// next we send html excerpt content emails
 			$recipients = $this->get_registered( "cats=$post_cats_string&format=html_excerpt&author=$post->post_author" );
-			$recipients = apply_filters( 's2_send_html_excerpt_subscribers', $recipients, $post->ID );
+			$recipients = (array) apply_filters( 's2_send_html_excerpt_subscribers', $recipients, $post->ID );
 			$this->mail( $recipients, $subject, $html_excerpt_body, 'html' );
 
 			// next we send html full content emails
 			$recipients = $this->get_registered( "cats=$post_cats_string&format=html&author=$post->post_author" );
-			$recipients = apply_filters( 's2_send_html_fullcontent_subscribers', $recipients, $post->ID );
+			$recipients = (array) apply_filters( 's2_send_html_fullcontent_subscribers', $recipients, $post->ID );
 			$this->mail( $recipients, $subject, $html_body, 'html' );
 
 			// and finally we send to Public Subscribers
-			$recipients = apply_filters( 's2_send_public_subscribers', $public, $post->ID );
+			$recipients = (array) apply_filters( 's2_send_public_subscribers', $public, $post->ID );
 			$this->mail( $recipients, $subject, $plain_excerpt_body, 'text' );
 		}
 	}
@@ -569,7 +572,7 @@ class S2_Core {
 	 * Function to create excerpts for emailing
 	 */
 	public function create_excerpt( $text, $html = false ) {
-		$excerpt_on_words = apply_filters( 's2_excerpt_on_words', true );
+		$excerpt_on_words = (bool) apply_filters( 's2_excerpt_on_words', true );
 
 		if ( false === $html ) {
 			$excerpt = trim( wp_strip_all_tags( strip_shortcodes( $text ) ) );
@@ -622,7 +625,7 @@ class S2_Core {
 		// HASH = wp_hash of email address
 		// ID = user's ID in the subscribe2 table
 		// use home instead of siteurl incase index.php is not in core home directory
-		$link = apply_filters( 's2_confirm_link', get_option( 'home' ) ) . '/?s2=';
+		$link = (string) apply_filters( 's2_confirm_link', get_option( 'home' ) ) . '/?s2=';
 
 		if ( 'add' === $action ) {
 			$link .= '1';
@@ -639,7 +642,7 @@ class S2_Core {
 			$body    = $this->substitute( stripslashes( $this->subscribe2_options['remind_email'] ) );
 			$subject = $this->substitute( stripslashes( $this->subscribe2_options['remind_subject'] ) );
 		} else {
-			$body = apply_filters( 's2_confirm_email', stripslashes( $this->subscribe2_options['confirm_email'] ) );
+			$body = (string) apply_filters( 's2_confirm_email', stripslashes( $this->subscribe2_options['confirm_email'] ), $action );
 			$body = $this->substitute( $body );
 			if ( 'add' === $action ) {
 				$body    = str_replace( '{ACTION}', $this->subscribe, $body );
@@ -655,7 +658,7 @@ class S2_Core {
 
 		if ( true === $is_remind && function_exists( 'wpmq_mail' ) ) {
 			// could be sending lots of reminders so queue them if wpmq is enabled
-			$status = wp_mail( $this->email, $subject, $body, $mailheaders, '', 0 );
+			return wp_mail( $this->email, $subject, $body, $mailheaders, '', 0 );
 		} else {
 			return wp_mail( $this->email, $subject, $body, $mailheaders );
 		}
@@ -1000,8 +1003,7 @@ class S2_Core {
 		}
 
 		// apply filter to registered users to add or remove additional addresses, pass args too for additional control
-		$registered = apply_filters( 's2_registered_subscribers', $registered, $args );
-		return $registered;
+		return (array) apply_filters( 's2_registered_subscribers', $registered, $args );
 	}
 
 	/**
@@ -1015,7 +1017,7 @@ class S2_Core {
 
 		// ensure that domain is in lowercase as per internet email standards http://www.ietf.org/rfc/rfc5321.txt
 		list( $name, $domain ) = explode( '@', $email, 2 );
-		return apply_filters( 's2_sanitize_email', $name . '@' . strtolower( $domain ), $email );
+		return (string) apply_filters( 's2_sanitize_email', $name . '@' . strtolower( $domain ), $email );
 	}
 
 	/**
@@ -1029,7 +1031,7 @@ class S2_Core {
 			}
 		}
 
-		if ( true === apply_filters( 's2_validate_email_with_dns', true ) ) {
+		if ( true === (bool) apply_filters( 's2_validate_email_with_dns', true ) ) {
 			$domain = explode( '@', $email, 2 );
 			if ( function_exists( 'idn_to_ascii' ) && defined( 'IDNA_NONTRANSITIONAL_TO_ASCII' ) && defined( 'INTL_IDNA_VARIANT_UTS46' ) ) {
 				$check_domain = idn_to_ascii( $domain[1], IDNA_NONTRANSITIONAL_TO_ASCII, INTL_IDNA_VARIANT_UTS46 );
@@ -1051,8 +1053,6 @@ class S2_Core {
 	 * If the registering user had previously subscribed to notifications, this function will delete them from the public subscriber list first
 	 */
 	public function register( $user_ID = 0, $consent = false ) {
-		global $wpdb;
-
 		if ( 0 === $user_ID ) {
 			return $user_ID;
 		}
@@ -1110,7 +1110,7 @@ class S2_Core {
 	 * Get admin data from record 1 or first user with admin rights
 	 */
 	public function get_userdata( $admin_id ) {
-		global $wpdb, $userdata;
+		global $userdata;
 
 		if ( is_numeric( $admin_id ) ) {
 			$admin = get_userdata( $admin_id );
@@ -1118,7 +1118,7 @@ class S2_Core {
 			//ensure compatibility with < 4.16
 			$admin = get_userdata( '1' );
 		} else {
-			$admin = &$userdata;
+			$admin = $userdata;
 		}
 
 		if ( empty( $admin ) || 0 === $admin->ID ) {
@@ -1131,7 +1131,7 @@ class S2_Core {
 		}
 
 		return $admin;
-	} //end get_userdata()
+	}
 
 	/**
 	 * Subscribe/unsubscribe user from one-click submission
@@ -1165,7 +1165,7 @@ class S2_Core {
 			delete_user_meta( $user_ID, $this->get_usermeta_keyname( 's2_subscribed' ) );
 			update_user_meta( $user_ID, $this->get_usermeta_keyname( 's2_autosub' ), 'no' );
 		}
-	} //end one_click_handler()
+	}
 
 	/* ===== helper functions: forms and stuff ===== */
 	/**
@@ -1173,7 +1173,7 @@ class S2_Core {
 	 */
 	public function all_cats( $exclude = false, $orderby = 'slug' ) {
 		$all_cats      = array();
-		$s2_taxonomies = apply_filters( 's2_taxonomies', array( 'category' ) );
+		$s2_taxonomies = (array) apply_filters( 's2_taxonomies', array( 'category' ) );
 
 		foreach ( $s2_taxonomies as $taxonomy ) {
 			if ( taxonomy_exists( $taxonomy ) ) {
@@ -1424,7 +1424,7 @@ class S2_Core {
 		} else {
 			$s2_post_types = array( 'post' );
 		}
-		$s2_post_types = apply_filters( 's2_post_types', $s2_post_types );
+		$s2_post_types = (array) apply_filters( 's2_post_types', $s2_post_types );
 		if ( ! in_array( $post->post_type, $s2_post_types, true ) ) {
 			return;
 		}
@@ -1457,7 +1457,7 @@ class S2_Core {
 			} else {
 				$s2_post_types = array( 'post' );
 			}
-			$s2_post_types = apply_filters( 's2_post_types', $s2_post_types );
+			$s2_post_types = (array) apply_filters( 's2_post_types', $s2_post_types );
 			foreach ( $s2_post_types as $post_type ) {
 				if ( ! isset( $type ) ) {
 					$type = $wpdb->prepare( '%s', $post_type );
@@ -1525,29 +1525,28 @@ class S2_Core {
 		$all_post_cats    = array();
 		$ids              = array();
 		$digest_post_ids  = array();
-		$mailtext         = apply_filters( 's2_email_template', $this->subscribe2_options['mailtext'] );
+		$mailtext         = (string) apply_filters( 's2_email_template', $this->subscribe2_options['mailtext'] );
 		$table            = '';
 		$tablelinks       = '';
 		$message_post     = '';
 		$message_posttime = '';
 		$this->post_count = count( $posts );
-		$s2_taxonomies    = apply_filters( 's2_taxonomies', array( 'category' ) );
+		$s2_taxonomies    = (array) apply_filters( 's2_taxonomies', array( 'category' ) );
 
 		foreach ( $posts as $digest_post ) {
 			// keep an array of post ids and skip if we've already done it once
 			if ( in_array( $digest_post->ID, $ids, true ) ) {
 				continue;
 			}
-			$ids[]            = $digest_post->ID;
-			$post_cats        = wp_get_object_terms(
+			$ids[]         = $digest_post->ID;
+			$post_cats     = wp_get_object_terms(
 				$digest_post->ID,
 				$s2_taxonomies,
 				array(
 					'fields' => 'ids',
 				)
 			);
-			$post_cats_string = implode( ',', $post_cats );
-			$all_post_cats    = array_unique( array_merge( $all_post_cats, $post_cats ) );
+			$all_post_cats = array_unique( array_merge( $all_post_cats, $post_cats ) );
 
 			// make sure we exclude posts from live emails if so configured
 			$check = false;
@@ -1682,9 +1681,9 @@ class S2_Core {
 				$excerpt = apply_filters( 'the_content', $digest_post->post_content );
 				// no excerpt, is there a <!--more--> ?
 				if ( false !== strpos( $digest_post->post_content, '<!--more-->' ) ) {
-					list($excerpt, $more) = explode( '<!--more-->', $digest_post->post_content, 2 );
-					$excerpt              = wp_strip_all_tags( $excerpt );
-					$excerpt              = strip_shortcodes( $excerpt );
+					list( $excerpt, ) = explode( '<!--more-->', $digest_post->post_content, 2 );
+					$excerpt          = wp_strip_all_tags( $excerpt );
+					$excerpt          = strip_shortcodes( $excerpt );
 				} else {
 					$excerpt = $this->create_excerpt( $excerpt );
 				}
@@ -1762,7 +1761,7 @@ class S2_Core {
 			$all_post_cats_string = implode( ',', $all_post_cats );
 			$registered           = $this->get_registered( "cats=$all_post_cats_string" );
 			$recipients           = array_merge( (array) $public, (array) $registered );
-			$this->mail( $recipients, $subject, $mailtext, $digest_format );
+			$this->mail( $recipients, $subject, $mailtext );
 		}
 	}
 
@@ -1803,7 +1802,7 @@ class S2_Core {
 	 * Subscribe2 constructor
 	 */
 	public function __construct() {
-		global $wpdb, $wp_version, $wpmu_version;
+		global $wp_version, $wpmu_version;
 		// load the options
 		$this->subscribe2_options = get_option( 'subscribe2_options' );
 
@@ -1817,10 +1816,10 @@ class S2_Core {
 		if ( $this->word_wrap > 998 ) {
 			$this->word_wrap = 998;
 		}
-		$this->excerpt_length = apply_filters( 's2_excerpt_length', 55 );
-		$this->site_switching = apply_filters( 's2_allow_site_switching', false );
-		$this->clean_interval = apply_filters( 's2_clean_interval', 28 );
-		$this->lockout        = apply_filters( 's2_lockout', 0 );
+		$this->excerpt_length = (int) apply_filters( 's2_excerpt_length', 55 );
+		$this->site_switching = (bool) apply_filters( 's2_allow_site_switching', false );
+		$this->clean_interval = (int) apply_filters( 's2_clean_interval', 28 );
+		$this->lockout        = (int) apply_filters( 's2_lockout', 0 );
 		// lockout is for a maximum of 24 hours so cap the value
 		if ( $this->lockout > 86399 ) {
 			$this->lockout > 86399;
@@ -1842,7 +1841,7 @@ class S2_Core {
 	}
 
 	public function s2hooks() {
-		global $wpdb, $post;
+		global $wpdb, $s2_upgrade;
 
 		// add action to handle WPMU subscriptions and unsubscriptions
 		if ( true === $this->s2_mu ) {
@@ -1867,14 +1866,12 @@ class S2_Core {
 		// do we need to install anything?
 		if ( $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $wpdb->subscribe2 ) ) !== $wpdb->subscribe2 ) {
 			require_once S2PATH . 'classes/class-s2-upgrade.php';
-			global $s2_upgrade;
 			$s2_upgrade = new S2_Upgrade();
 			$s2_upgrade->install();
 		}
 
 		//do we need to upgrade anything?
 		if ( false === $this->subscribe2_options || is_array( $this->subscribe2_options ) && S2VERSION !== $this->subscribe2_options['version'] ) {
-			global $s2_upgrade;
 			if ( ! is_a( $s2_upgrade, 'S2_Upgrade' ) ) {
 				require_once S2PATH . 'classes/class-s2-upgrade.php';
 				$s2_upgrade = new S2_Upgrade();
@@ -1890,7 +1887,6 @@ class S2_Core {
 			add_action( 'add_user_to_blog', array( &$s2class_multisite, 'wpmu_add_user' ), 10 );
 			add_action( 'remove_user_from_blog', array( &$s2class_multisite, 'wpmu_remove_user' ), 10 );
 		} else {
-			add_action( 'register_form', array( &$this, 'register_form' ) );
 			add_action( 'user_register', array( &$this, 'register_post' ) );
 		}
 

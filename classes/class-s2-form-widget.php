@@ -136,9 +136,6 @@ class S2_Form_Widget extends WP_Widget {
 		$noantispam        = htmlspecialchars( $instance['noantispam'], ENT_QUOTES );
 		$nowrap            = htmlspecialchars( $instance['nowrap'], ENT_QUOTES );
 
-		global $wpdb;
-		$sql = "SELECT ID, post_title FROM $wpdb->posts WHERE post_type='page' AND post_status='publish'";
-
 		echo '<div>' . "\r\n";
 		echo '<p><label for="' . esc_attr( $this->get_field_id( 'title' ) ) . '">' . esc_html__( 'Title', 'subscribe2-for-cp' ) . ':' . "\r\n";
 		echo '<input class="widefat" id="' . esc_attr( $this->get_field_id( 'title' ) ) . '" name="' . esc_attr( $this->get_field_name( 'title' ) ) . '" type="text" value="' . esc_attr( $title ) . '" /></label></p>' . "\r\n";

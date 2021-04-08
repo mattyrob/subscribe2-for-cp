@@ -30,7 +30,7 @@ class S2_Ajax {
 	public function add_ajax() {
 		// enqueue the jQuery script we need and handle the dependencies
 		wp_enqueue_script( 'jquery-ui-dialog' );
-		$css = apply_filters( 's2_jqueryui_css', 'https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/ui-darkness/jquery-ui.css' );
+		$css = (string) apply_filters( 's2_jqueryui_css', 'https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/ui-darkness/jquery-ui.css' );
 		if ( is_ssl() ) {
 			$css = str_replace( 'http:', 'https:', $css );
 		}
@@ -54,11 +54,13 @@ class S2_Ajax {
 
 		$response = str_replace( ':', '&', $_POST['data'] );
 		$response = str_replace( '-', '=', $response );
+
+		$atts = array();
 		wp_parse_str( $response, $atts );
 
 		global $s2_frontend;
 		$content = $s2_frontend->shortcode( $atts );
-		$content = apply_filters( 's2_ajax_form', $content );
+		$content = (string) apply_filters( 's2_ajax_form', $content );
 
 		$allowed_tags = array(
 			'form'  => array(

@@ -11,33 +11,33 @@ if ( isset( $_POST['s2_admin'] ) && 'mail' === $_POST['s2_admin'] ) {
 		die( '<p>' . esc_html__( 'Security error! Your request cannot be completed.', 'subscribe2-for-cp' ) . '</p>' );
 	}
 
-	$subject = html_entity_decode( stripslashes( wp_kses( $this->substitute( $_POST['subject'] ), '' ) ), ENT_QUOTES );
-	$body    = wpautop( $this->substitute( stripslashes( $_POST['content'] ) ), true );
+	$subject = html_entity_decode( stripslashes( wp_kses( s2cp()->substitute( $_POST['subject'] ), '' ) ), ENT_QUOTES );
+	$body    = wpautop( s2cp()->substitute( stripslashes( $_POST['content'] ) ), true );
 	if ( '' !== $current_user->display_name || '' !== $current_user->user_email ) {
-		$this->myname  = html_entity_decode( $current_user->display_name, ENT_QUOTES );
-		$this->myemail = $current_user->user_email;
+		s2cp()->myname  = html_entity_decode( $current_user->display_name, ENT_QUOTES );
+		s2cp()->myemail = $current_user->user_email;
 	}
 	if ( isset( $_POST['send'] ) ) {
 		if ( 'confirmed' === $_POST['what'] ) {
-			$recipients = $this->get_public();
+			$recipients = s2cp()->get_public();
 		} elseif ( 'unconfirmed' === $_POST['what'] ) {
-			$recipients = $this->get_public( 0 );
+			$recipients = s2cp()->get_public( 0 );
 		} elseif ( 'public' === $_POST['what'] ) {
-			$confirmed   = $this->get_public();
-			$unconfirmed = $this->get_public( 0 );
+			$confirmed   = s2cp()->get_public();
+			$unconfirmed = s2cp()->get_public( 0 );
 			$recipients  = array_merge( (array) $confirmed, (array) $unconfirmed );
 		} elseif ( is_numeric( $_POST['what'] ) ) {
 			$category   = intval( $_POST['what'] );
-			$recipients = $this->get_registered( "cats=$category" );
+			$recipients = s2cp()->get_registered( "cats=$category" );
 		} elseif ( 'all_users' === $_POST['what'] ) {
-			$recipients = $this->get_all_registered();
+			$recipients = s2cp()->get_all_registered();
 		} elseif ( 'all' === $_POST['what'] ) {
-			$confirmed   = $this->get_public();
-			$unconfirmed = $this->get_public( 0 );
-			$registered  = $this->get_all_registered();
+			$confirmed   = s2cp()->get_public();
+			$unconfirmed = s2cp()->get_public( 0 );
+			$registered  = s2cp()->get_all_registered();
 			$recipients  = array_merge( (array) $confirmed, (array) $unconfirmed, (array) $registered );
 		} else {
-			$recipients = $this->get_registered();
+			$recipients = s2cp()->get_registered();
 		}
 	} elseif ( isset( $_POST['preview'] ) ) {
 		global $user_email;
@@ -84,7 +84,7 @@ if ( isset( $_POST['s2_admin'] ) && 'mail' === $_POST['s2_admin'] ) {
 		$success       = false;
 		$error_message = $upload_error;
 	} else {
-		$success       = $this->mail( $recipients, $subject, $body, 'html', $attachments );
+		$success       = s2cp()->mail( $recipients, $subject, $body, 'html', $attachments );
 		$error_message = __( 'Check your settings and check with your hosting provider', 'subscribe2-for-cp' );
 	}
 
@@ -117,13 +117,13 @@ if ( isset( $_POST['subject'] ) ) {
 if ( ! isset( $_POST['content'] ) ) {
 	$body = '';
 }
-echo '<p>' . esc_html__( 'Subject', 'subscribe2-for-cp' ) . ': <input type="text" size="69" name="subject" value="' . esc_attr( $subject ) . '" /> <br><br>';
-echo '<textarea rows="12" cols="75" name="content">' . esc_textarea( $body ) . '</textarea>';
+echo '<p><label>' . esc_html__( 'Subject', 'subscribe2-for-cp' ) . ': <input type="text" size="69" name="subject" value="' . esc_attr( $subject ) . '" /></label> <br><br>';
+echo '<label><span class="screen-reader-text">' . esc_html__( 'Email body', 'subscribe2-for-cp' ) . '</span><textarea rows="12" cols="75" name="content">' . esc_textarea( $body ) . '</textarea></label>';
 echo "<br><div id=\"upload_files\"><input type=\"file\" name=\"file[]\"></div>\r\n";
 echo '<input type="button" class="button-secondary" name="addmore" value="' . esc_attr( __( 'Add More Files', 'subscribe2-for-cp' ) ) . "\" onClick=\"add_file_upload();\" />\r\n";
 echo "<br><br>\r\n";
 echo esc_html__( 'Recipients:', 'subscribe2-for-cp' ) . ' ';
-$this->display_subscriber_dropdown( apply_filters( 's2_subscriber_dropdown_default', 'registered' ), false );
+s2cp()->display_subscriber_dropdown( apply_filters( 's2_subscriber_dropdown_default', 'registered' ), false );
 echo '<input type="hidden" name="s2_admin" value="mail" />';
 echo '<p class="submit"><input type="submit" class="button-secondary" name="preview" value="' . esc_attr( __( 'Preview', 'subscribe2-for-cp' ) ) . '" />&nbsp;<input type="submit" class="button-primary" name="send" value="' . esc_attr( __( 'Send', 'subscribe2-for-cp' ) ) . '" /></p>';
 echo '</form></div>' . "\r\n";

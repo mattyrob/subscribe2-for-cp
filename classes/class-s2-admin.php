@@ -72,28 +72,28 @@ class S2_Admin extends S2_Core {
 	 * Hook the menu
 	 */
 	public function admin_menu() {
-		add_menu_page( __( 'Subscribe2', 'subscribe2-for-cp' ), __( 'Subscribe2', 'subscribe2-for-cp' ), apply_filters( 's2_capability', 'read', 'user' ), 's2', null, S2URL . 'include/email-edit.png' );
+		add_menu_page( __( 'Subscribe2', 'subscribe2-for-cp' ), __( 'Subscribe2', 'subscribe2-for-cp' ), (string) apply_filters( 's2_capability', 'read', 'user' ), 's2', null, S2URL . 'include/email-edit.png' );
 
-		$s2user = add_submenu_page( 's2', __( 'Your Subscriptions', 'subscribe2-for-cp' ), __( 'Your Subscriptions', 'subscribe2-for-cp' ), apply_filters( 's2_capability', 'read', 'user' ), 's2', array( &$this, 'user_menu' ) );
+		$s2user = add_submenu_page( 's2', __( 'Your Subscriptions', 'subscribe2-for-cp' ), __( 'Your Subscriptions', 'subscribe2-for-cp' ), (string) apply_filters( 's2_capability', 'read', 'user' ), 's2', array( &$this, 'user_menu' ) );
 		add_action( "admin_print_scripts-$s2user", array( &$this, 'checkbox_form_js' ) );
 		add_action( "admin_print_styles-$s2user", array( &$this, 'user_admin_css' ) );
 		add_action( 'load-' . $s2user, array( &$this, 'user_help' ) );
 
-		$s2subscribers = add_submenu_page( 's2', __( 'Subscribers', 'subscribe2-for-cp' ), __( 'Subscribers', 'subscribe2-for-cp' ), apply_filters( 's2_capability', 'manage_options', 'manage' ), 's2_tools', array( &$this, 'subscribers_menu' ) );
+		$s2subscribers = add_submenu_page( 's2', __( 'Subscribers', 'subscribe2-for-cp' ), __( 'Subscribers', 'subscribe2-for-cp' ), (string) apply_filters( 's2_capability', 'manage_options', 'manage' ), 's2_tools', array( &$this, 'subscribers_menu' ) );
 		add_action( "admin_print_scripts-$s2subscribers", array( &$this, 'checkbox_form_js' ) );
 		add_action( "admin_print_scripts-$s2subscribers", array( &$this, 'subscribers_form_js' ) );
 		add_action( "admin_print_scripts-$s2subscribers", array( &$this, 'subscribers_css' ) );
 		add_action( 'load-' . $s2subscribers, array( &$this, 'subscribers_help' ) );
 		add_action( 'load-' . $s2subscribers, array( &$this, 'subscribers_options' ) );
 
-		$s2settings = add_submenu_page( 's2', __( 'Settings', 'subscribe2-for-cp' ), __( 'Settings', 'subscribe2-for-cp' ), apply_filters( 's2_capability', 'manage_options', 'settings' ), 's2_settings', array( &$this, 'settings_menu' ) );
+		$s2settings = add_submenu_page( 's2', __( 'Settings', 'subscribe2-for-cp' ), __( 'Settings', 'subscribe2-for-cp' ), (string) apply_filters( 's2_capability', 'manage_options', 'settings' ), 's2_settings', array( &$this, 'settings_menu' ) );
 		add_action( "admin_print_scripts-$s2settings", array( &$this, 'checkbox_form_js' ) );
 		add_action( "admin_print_scripts-$s2settings", array( &$this, 'option_form_js' ) );
 		add_action( "admin_print_scripts-$s2settings", array( &$this, 'dismiss_js' ) );
 		add_filter( 'plugin_row_meta', array( &$this, 'plugin_links' ), 10, 2 );
 		add_action( 'load-' . $s2settings, array( &$this, 'settings_help' ) );
 
-		$s2mail = add_submenu_page( 's2', __( 'Send Email', 'subscribe2-for-cp' ), __( 'Send Email', 'subscribe2-for-cp' ), apply_filters( 's2_capability', 'publish_posts', 'send' ), 's2_posts', array( &$this, 'write_menu' ) );
+		$s2mail = add_submenu_page( 's2', __( 'Send Email', 'subscribe2-for-cp' ), __( 'Send Email', 'subscribe2-for-cp' ), (string) apply_filters( 's2_capability', 'publish_posts', 'send' ), 's2_posts', array( &$this, 'write_menu' ) );
 		add_action( 'load-' . $s2mail, array( &$this, 'mail_help' ) );
 	}
 
@@ -636,6 +636,7 @@ class S2_Admin extends S2_Core {
 		$exportcsv = _x( 'User Email,User Type,User Name,Confirm Date,IP', 'Comma Separated Column Header names for CSV Export', 'subscribe2-for-cp' );
 		$all_cats  = $this->all_cats( false, 'ID' );
 
+		$cat_ids = array();
 		foreach ( $all_cats as $cat ) {
 			$exportcsv .= ',' . html_entity_decode( $cat->cat_name, ENT_QUOTES );
 			$cat_ids[]  = $cat->term_id;
@@ -677,9 +678,14 @@ class S2_Admin extends S2_Core {
 		$i    = 0;
 		$j    = 0;
 		asort( $formats[0] );
-		echo '<table style="width: 100%; border-collapse: separate; border-spacing: 2px; *border-collapse: expression(\'separate\', cellSpacing = \'2px\');" class="editform">' . "\r\n";
-		echo '<tr><td style="text-align: left;" colspan="2">' . "\r\n";
-		echo '<label><input type="checkbox" name="checkall" value="checkall_format" /> ' . esc_html__( 'Select / Unselect All', 'subscribe2-for-cp' ) . '</label>' . "\r\n";
+		echo '<table style="width: 100%; border-collapse: separate; border-spacing: 2px;" class="editform">' . "\r\n";
+		if ( count( $formats[0] ) >= 2 ) {
+			$colspan = 2;
+		} else {
+			$colspan = 1;
+		}
+		echo '<tr><td style="text-align: left;" colspan="' . esc_attr( $colspan ) . '">' . "\r\n";
+		echo '<label><input type="checkbox" name="checkall" value="checkall_format" /> ' . esc_html__( 'Select / Unselect All', 'subscribe2' ) . '</label>' . "\r\n";
 		echo '</td></tr>' . "\r\n";
 		echo '<tr style="vertical-align: top;"><td style="width: 50%; text-align: left">' . "\r\n";
 		foreach ( $formats[0] as $format ) {
@@ -725,6 +731,7 @@ class S2_Admin extends S2_Core {
 		);
 
 		$all_cats = $this->all_cats( false );
+		$count    = array();
 
 		// count the number of subscribers
 		$count['confirmed']   = $wpdb->get_var( "SELECT COUNT(id) FROM $wpdb->subscribe2 WHERE active='1'" );
@@ -824,8 +831,6 @@ class S2_Admin extends S2_Core {
 	 * optionally include a choice for Post Author
 	 */
 	public function admin_dropdown( $inc_author = false ) {
-		global $wpdb;
-
 		$args = array(
 			'fields' => array(
 				'ID',
@@ -833,6 +838,9 @@ class S2_Admin extends S2_Core {
 			),
 			'role'   => 'administrator',
 		);
+
+		$admins = array();
+		$author = array();
 
 		$wp_user_query = get_users( $args );
 		if ( ! empty( $wp_user_query ) ) {
@@ -883,7 +891,6 @@ class S2_Admin extends S2_Core {
 	 * and give user details of timings when event is scheduled
 	 */
 	public function display_digest_choices() {
-		global $wpdb;
 		$cron_file = ABSPATH . 'wp-cron.php';
 		if ( ! is_readable( $cron_file ) ) {
 			echo '<strong><em style="color: red">' . esc_html__( 'The ClassicPress cron functions may be disabled on this server. Digest notifications may not work.', 'subscribe2-for-cp' ) . '</em></strong><br>' . "\r\n";
