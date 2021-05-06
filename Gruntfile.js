@@ -276,7 +276,7 @@ module.exports = function( grunt ) {
 			zip: {
 				'release': {
 					cwd: SOURCE_DIR,
-					dest: 'subscribe2.zip',
+					dest: 'subscribe2-for-cp.zip',
 					src: [
 						'subscribe2.php',
 						'ChangeLog.txt',

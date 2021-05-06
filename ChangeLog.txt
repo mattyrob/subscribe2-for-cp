@@ -1,3 +1,8 @@
+= 11.3.1 =
+
+* Fix build process to include file and folders recursively
+* Fix uninstall error
+
 = 11.3 =
 
 * Updated Counter Widget color picker
