@@ -1,4 +1,4 @@
-= 11.3.1 =
+= 11.4 =
 
 * Fix build process to include file and folders recursively
 * Fix uninstall error
