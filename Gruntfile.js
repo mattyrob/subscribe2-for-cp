@@ -172,10 +172,10 @@ module.exports = function( grunt ) {
 				version: {
 					options: {
 						patterns: [ {
-							match: /^define\(\s'[\w]*',\s'(\d+\.\d+[\.]?[\d]*)'\s\);$/m,
+							match: /^define\(\s'[\w]*',\s'(\d+\.\d+[.]?[\d]*)'\s\);$/m,
 							replacement: function() {
 								var file    = grunt.file.read( SOURCE_DIR + 'subscribe2.php' );
-								var regex   = /^[\w]*:\s(\d+\.\d+[\.]?[\d]*)$/m;
+								var regex   = /^[\w]*:\s(\d+\.\d+[.]?[\d]*)$/m;
 								var matches = file.match( regex );
 								return 'define( \'S2VERSION\', \'' + matches[1] + '\' );';
 							}
@@ -282,12 +282,12 @@ module.exports = function( grunt ) {
 						'ChangeLog.txt',
 						'license.txt',
 						'ReadMe.txt',
-						'admin/*',
-						'classes/*',
-						'include/*',
-						'languages/*',
-						'plugin-update-checker/*',
-						'tinymce/*'
+						'admin/**',
+						'classes/**',
+						'include/**',
+						'languages/**',
+						'plugin-update-checker/**',
+						'tinymce/**'
 					]
 				}
 			}
