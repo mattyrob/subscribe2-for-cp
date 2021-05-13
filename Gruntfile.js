@@ -129,7 +129,7 @@ module.exports = function( grunt ) {
 					SOURCE_DIR + './tinymce/*.min.js'
 				],
 				zip: [
-					SOURCE_DIR + 'subscribe2.zip'
+					SOURCE_DIR + 'subscribe2-for-cp.zip'
 				]
 			},
 			prompt: {
