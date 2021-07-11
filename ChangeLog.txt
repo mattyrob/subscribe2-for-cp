@@ -1,6 +1,7 @@
 = 11.5 =
 
 * Add 'required' attribute to form email address field to enable basic browser error handling of empty form submission
+* Reviewed and updated uninstall code
 
 = 11.4 =
 

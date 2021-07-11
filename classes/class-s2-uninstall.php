@@ -32,7 +32,7 @@ class S2_Uninstall {
 		global $wpdb;
 		// delete entry from wp_options table
 		delete_option( 'subscribe2_options' );
-		// delete legacy entry from wp-options table
+		// delete legacy entry from wp_options table
 		delete_option( 's2_future_posts' );
 		// remove and scheduled events
 		wp_clear_scheduled_hook( 's2_digest_cron' );
@@ -43,8 +43,11 @@ class S2_Uninstall {
 		$wpdb->query( "DELETE from $wpdb->usermeta WHERE meta_key LIKE '%s2_subscribed'" );
 		$wpdb->query( "DELETE from $wpdb->usermeta WHERE meta_key LIKE '%s2_format'" );
 		$wpdb->query( "DELETE from $wpdb->usermeta WHERE meta_key LIKE '%s2_autosub'" );
-		// delete any postmeta data that supressed notifications
-		$wpdb->query( "DELETE from $wpdb->postmeta WHERE meta_key = 's2mail'" );
+		$wpdb->query( "DELETE from $wpdb->usermeta WHERE meta_key LIKE '%s2_authors'" );
+		// delete any postmeta data
+		$wpdb->query( "DELETE from $wpdb->postmeta WHERE meta_key = '_s2mail'" );
+		$wpdb->query( "DELETE from $wpdb->postmeta WHERE meta_key = '_s2_digest_post_status'" );
+		$wpdb->query( "DELETE from $wpdb->postmeta WHERE meta_key = '_s2_block_post_status'" );
 
 		// drop the subscribe2 table
 		$wpdb->query( "DROP TABLE IF EXISTS {$wpdb->prefix}subscribe2" );
