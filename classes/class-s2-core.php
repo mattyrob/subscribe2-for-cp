@@ -249,7 +249,7 @@ class S2_Core {
 			}
 			if ( strpos( $tracking, '{TITLE}' ) ) {
 				$id       = url_to_postid( $link );
-				$title    = rawurlencode( htmlentities( get_the_title( $id ), 1 ) );
+				$title    = rawurlencode( htmlentities( get_the_title( $id ), 1 ), ENT_QUOTES );
 				$tracking = str_replace( '{TITLE}', $title, $tracking );
 			}
 			return $link . $delimiter . $tracking;
