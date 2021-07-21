@@ -2,9 +2,9 @@
 # This file is distributed under the same license as the Subscribe2 for ClassicPress package.
 msgid ""
 msgstr ""
-"Project-Id-Version: Subscribe2 for ClassicPress 11.4\n"
+"Project-Id-Version: Subscribe2 for ClassicPress 11.5\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/subscribe2\n"
-"POT-Creation-Date: 2021-05-06 08:49:28+00:00\n"
+"POT-Creation-Date: 2021-07-21 16:08:14+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -666,12 +666,12 @@ msgid "Enter addresses, one per line or comma-separated"
 msgstr ""
 
 #: admin/subscribers.php:219 admin/subscribers.php:303
-#: classes/class-s2-forms.php:194 classes/class-s2-frontend.php:140
+#: classes/class-s2-forms.php:194 classes/class-s2-frontend.php:133
 msgid "Subscribe"
 msgstr ""
 
 #: admin/subscribers.php:220 admin/subscribers.php:304
-#: classes/class-s2-forms.php:173 classes/class-s2-frontend.php:139
+#: classes/class-s2-forms.php:173 classes/class-s2-frontend.php:132
 msgid "Unsubscribe"
 msgstr ""
 
@@ -1136,21 +1136,21 @@ msgid "There was an error validating your request. Please try again later."
 msgstr ""
 
 #: classes/class-s2-ajax.php:106 classes/class-s2-ajax.php:140
-#: classes/class-s2-ajax.php:154 classes/class-s2-frontend.php:80
+#: classes/class-s2-ajax.php:154 classes/class-s2-frontend.php:73
 msgid "A confirmation message is on its way!"
 msgstr ""
 
-#: classes/class-s2-ajax.php:114 classes/class-s2-frontend.php:86
+#: classes/class-s2-ajax.php:114 classes/class-s2-frontend.php:79
 msgid "Sorry, but that does not look like an email address to me."
 msgstr ""
 
-#: classes/class-s2-ajax.php:116 classes/class-s2-frontend.php:88
+#: classes/class-s2-ajax.php:116 classes/class-s2-frontend.php:81
 msgid ""
 "Sorry, email addresses at that domain are currently barred due to spam, "
 "please use an alternative email address."
 msgstr ""
 
-#: classes/class-s2-ajax.php:122 classes/class-s2-frontend.php:244
+#: classes/class-s2-ajax.php:122 classes/class-s2-frontend.php:237
 msgid "Slow down, you move too fast."
 msgstr ""
 
@@ -1160,15 +1160,15 @@ msgid "To manage your subscription options please <a href=\"%1$s\">login.</a>"
 msgstr ""
 
 #: classes/class-s2-ajax.php:142 classes/class-s2-ajax.php:156
-#: classes/class-s2-frontend.php:90
+#: classes/class-s2-frontend.php:83
 msgid "Sorry, there seems to be an error on the server. Please try again later."
 msgstr ""
 
-#: classes/class-s2-ajax.php:146 classes/class-s2-frontend.php:82
+#: classes/class-s2-ajax.php:146 classes/class-s2-frontend.php:75
 msgid "That email address is already subscribed."
 msgstr ""
 
-#: classes/class-s2-ajax.php:150 classes/class-s2-frontend.php:84
+#: classes/class-s2-ajax.php:150 classes/class-s2-frontend.php:77
 msgid "That email address is not subscribed."
 msgstr ""
 
@@ -1418,78 +1418,78 @@ msgstr ""
 msgid "Subscription preferences updated."
 msgstr ""
 
-#: classes/class-s2-frontend.php:64
+#: classes/class-s2-frontend.php:57
 #. Translators: Link to login page
 msgid "To manage your subscription options please <a href=\"%1$s\">login</a>."
 msgstr ""
 
-#: classes/class-s2-frontend.php:68
+#: classes/class-s2-frontend.php:61
 #. Translators: Link to Profile page
 msgid ""
 "You may manage your subscription options from your <a "
 "href=\"%1$s\">profile</a>."
 msgstr ""
 
-#: classes/class-s2-frontend.php:76
+#: classes/class-s2-frontend.php:69
 #. Translators: Link to Profile page
 msgid ""
 "<a href=\"%1$s\">Subscribe</a> to email notifications when this blog posts "
 "new content."
 msgstr ""
 
-#: classes/class-s2-frontend.php:93
+#: classes/class-s2-frontend.php:86
 msgid "No such email address is registered."
 msgstr ""
 
-#: classes/class-s2-frontend.php:95
+#: classes/class-s2-frontend.php:88
 msgid "You have successfully subscribed!"
 msgstr ""
 
-#: classes/class-s2-frontend.php:97
+#: classes/class-s2-frontend.php:90
 msgid "You have successfully unsubscribed."
 msgstr ""
 
-#: classes/class-s2-frontend.php:99
+#: classes/class-s2-frontend.php:92
 msgid "subscribe"
 msgstr ""
 
-#: classes/class-s2-frontend.php:101
+#: classes/class-s2-frontend.php:94
 msgid "unsubscribe"
 msgstr ""
 
-#: classes/class-s2-frontend.php:180
+#: classes/class-s2-frontend.php:173
 msgid "Enter email address..."
 msgstr ""
 
-#: classes/class-s2-frontend.php:211 classes/class-s2-frontend.php:213
+#: classes/class-s2-frontend.php:204 classes/class-s2-frontend.php:206
 msgid "Your email:"
 msgstr ""
 
-#: classes/class-s2-frontend.php:352
+#: classes/class-s2-frontend.php:345
 msgid "Subscription Confirmation"
 msgstr ""
 
-#: classes/class-s2-frontend.php:354
+#: classes/class-s2-frontend.php:347
 msgid "Unsubscription Confirmation"
 msgstr ""
 
-#: classes/class-s2-frontend.php:422
+#: classes/class-s2-frontend.php:415
 msgid "New Subscription"
 msgstr ""
 
-#: classes/class-s2-frontend.php:423
+#: classes/class-s2-frontend.php:416
 msgid "subscribed to email notifications!"
 msgstr ""
 
-#: classes/class-s2-frontend.php:425
+#: classes/class-s2-frontend.php:418
 msgid "New Unsubscription"
 msgstr ""
 
-#: classes/class-s2-frontend.php:426
+#: classes/class-s2-frontend.php:419
 msgid "unsubscribed from email notifications!"
 msgstr ""
 
-#: classes/class-s2-frontend.php:457
+#: classes/class-s2-frontend.php:450
 msgid "[Un]Subscribe to Posts"
 msgstr ""
 

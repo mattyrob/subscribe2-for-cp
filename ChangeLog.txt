@@ -3,6 +3,7 @@
 * Add 'required' attribute to form email address field to enable basic browser error handling of empty form submission
 * Reviewed and updated uninstall code
 * Prepare for HTML encoding and decoding changes in PHP 8.1
+* Fix installation bug - thanks to @jamesburnettio
 
 = 11.4 =
 
