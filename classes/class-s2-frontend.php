@@ -47,13 +47,6 @@ class S2_Frontend extends S2_Core {
 			global $s2_frontend_form;
 			$s2_frontend_form = new S2_Frontend_Form();
 		}
-
-		// Instantiate ReCaptcha class if enabled
-		if ( 'off' !== $this->subscribe2_options['recaptcha'] ) {
-			require_once S2PATH . 'classes/class-s2-captcha.php';
-			global $s2_captcha;
-			$s2_captcha = new S2_Captcha( $this->subscribe2_options['recaptcha'] );
-		}
 	}
 
 	/**
