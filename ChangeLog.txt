@@ -1,3 +1,7 @@
+= 11.6 =
+
+* Suppress PHP Notice on Settings page
+
 = 11.5 =
 
 * Add 'required' attribute to form email address field to enable basic browser error handling of empty form submission

@@ -165,3 +165,8 @@ if ( ! isset( s2cp()->subscribe2_options['ajax'] ) ) {
 if ( ! isset( s2cp()->subscribe2_options['js_ip_updater'] ) ) {
 	s2cp()->subscribe2_options['js_ip_updater'] = '';
 } // Default setting for using javascript to update form ip address
+
+if ( ! isset( s2cp()->subscribe2_options['dismiss_sender_warning'] ) ) {
+	s2cp()->subscribe2_options['dismiss_sender_warning'] = '';
+} // Default for sender warning message dismissal
+
