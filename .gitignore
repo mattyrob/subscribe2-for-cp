@@ -4,3 +4,4 @@ node_modules/
 
 # Operating system specific files
 .DS_Store
+.nvmrc
