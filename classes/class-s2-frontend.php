@@ -40,13 +40,6 @@ class S2_Frontend extends S2_Core {
 			add_action( 'wp_enqueue_scripts', array( &$this, 'js_ip_library_script' ), 20 );
 			add_filter( 'script_loader_tag', array( &$this, 'tag_replace_ampersand' ) );
 		}
-
-		// Display Subscription form on frontend rather than link to Profile
-		if ( '1' === $this->subscribe2_options['frontend_form'] ) {
-			require_once S2PATH . 'classes/class-s2-frontend-form.php';
-			global $s2_frontend_form;
-			$s2_frontend_form = new S2_Frontend_Form();
-		}
 	}
 
 	/**
