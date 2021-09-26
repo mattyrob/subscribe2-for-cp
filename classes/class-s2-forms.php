@@ -294,24 +294,18 @@ class S2_Forms {
 			$all_cats = s2cp()->all_cats( false );
 		}
 
-		$half = ( count( $all_cats ) / 2 );
-		$i    = 0;
-		$j    = 0;
-		echo '<table style="width: 100%; border-collapse: separate; border-spacing: 2px;" class="editform">' . "\r\n";
+		$col = 1;
+		echo '<table style="width: 80%; border-collapse: separate; border-spacing: 2px;" class="editform">' . "\r\n";
+
 		if ( count( $all_cats ) >= 2 ) {
 			$colspan = 2;
 		} else {
 			$colspan = 1;
 		}
 		echo '<tr><td style="text-align: left;" colspan="' . esc_attr( $colspan ) . '">' . "\r\n";
-		echo '<label><input type="checkbox" name="checkall" value="checkall_' . esc_attr( $name ) . '" /> ' . esc_html__( 'Select / Unselect All', 'subscribe2-for-cp' ) . '</label>' . "\r\n";
+		echo '<label><input type="checkbox" name="checkall" value="checkall_' . esc_attr( $name ) . '" /> ' . esc_html__( 'Select / Unselect All', 'subscribe2' ) . '</label>' . "\r\n";
 		echo '</td></tr>' . "\r\n";
-		echo '<tr style="vertical-align: top;"><td style="width: 50%; text-align: left;">' . "\r\n";
 		foreach ( $all_cats as $cat ) {
-			if ( $i >= $half && 0 === $j ) {
-				echo '</td><td style="width: 50%; text-align: left;">' . "\r\n";
-				$j++;
-			}
 			$cat_name = '';
 			$parents  = array_reverse( get_ancestors( $cat->term_id, $cat->taxonomy ) );
 			if ( $parents ) {
@@ -322,34 +316,38 @@ class S2_Forms {
 			}
 			$cat_name .= $cat->name;
 
-			if ( 0 === $j ) {
-				echo '<label><input class="checkall_' . esc_attr( $name ) . '" type="checkbox" name="' . esc_attr( $name ) . '[]" value="' . esc_attr( $cat->term_id ) . '"';
+			if ( 1 === $col ) {
+				echo '<tr><td style="width: 50%"><label><input class="checkall_' . esc_attr( $name ) . '" type="checkbox" name="' . esc_attr( $name ) . '[]" value="' . esc_attr( $cat->term_id ) . '"';
 				if ( in_array( (string) $cat->term_id, $selected, true ) || in_array( (string) $cat->term_id, $compulsory, true ) ) {
 					echo ' checked="checked"';
 				}
 				if ( in_array( (string) $cat->term_id, $compulsory, true ) && 'category' === $name ) {
 					echo ' DISABLED';
 				}
-				echo ' /> <abbr title="' . esc_attr( $cat->slug ) . '">' . esc_html( $cat_name ) . '</abbr></label>' . "\r\n";
+				echo ' /> <abbr title="' . esc_attr( $cat->slug ) . '">' . esc_html( $cat_name ) . '</abbr></label></td>' . "\r\n";
+				$col++;
 			} else {
-				echo '<label><input class="checkall_' . esc_attr( $name ) . '" type="checkbox" name="' . esc_attr( $name ) . '[]" value="' . esc_attr( $cat->term_id ) . '"';
+				echo '<td style="width: 50%"><label><input class="checkall_' . esc_attr( $name ) . '" type="checkbox" name="' . esc_attr( $name ) . '[]" value="' . esc_attr( $cat->term_id ) . '"';
 				if ( in_array( (string) $cat->term_id, $selected, true ) || in_array( (string) $cat->term_id, $compulsory, true ) ) {
 					echo ' checked="checked"';
 				}
 				if ( in_array( (string) $cat->term_id, $compulsory, true ) && 'category' === $name ) {
 					echo ' DISABLED';
 				}
-				echo ' /> <abbr title="' . esc_attr( $cat->slug ) . '">' . esc_html( $cat_name ) . '</abbr></label>' . "\r\n";
+				echo ' /> <abbr title="' . esc_attr( $cat->slug ) . '">' . esc_html( $cat_name ) . '</abbr></label></td></tr>' . "\r\n";
+				$col = 1;
 			}
-			$i++;
 		}
 		if ( ! empty( $compulsory ) ) {
 			foreach ( $compulsory as $cat ) {
 				echo '<input type="hidden" name="' . esc_attr( $name ) . '[]" value="' . esc_attr( $cat ) . '">' . "\r\n";
 			}
 		}
-		echo '</td></tr>' . "\r\n";
-		echo '</table>' . "\r\n";
+		if ( 0 === count( $all_cats ) % 2 ) {
+			echo '</table>' . "\r\n";
+		} else {
+			echo '</tr><table>' . "\r\n";
+		}
 	}
 
 	/**

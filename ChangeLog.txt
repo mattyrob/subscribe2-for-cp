@@ -2,6 +2,7 @@
 
 * Suppress PHP Notice on Settings page
 * Suppress PHP notice on frontend
+* Improve layout of category table for multiple categories
 
 = 11.5 =
 
