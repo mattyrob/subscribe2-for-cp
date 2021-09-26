@@ -303,7 +303,7 @@ class S2_Forms {
 			$colspan = 1;
 		}
 		echo '<tr><td style="text-align: left;" colspan="' . esc_attr( $colspan ) . '">' . "\r\n";
-		echo '<label><input type="checkbox" name="checkall" value="checkall_' . esc_attr( $name ) . '" /> ' . esc_html__( 'Select / Unselect All', 'subscribe2' ) . '</label>' . "\r\n";
+		echo '<label><input type="checkbox" name="checkall" value="checkall_' . esc_attr( $name ) . '" /> ' . esc_html__( 'Select / Unselect All', 'subscribe2-for-cp' ) . '</label>' . "\r\n";
 		echo '</td></tr>' . "\r\n";
 		foreach ( $all_cats as $cat ) {
 			$cat_name = '';
