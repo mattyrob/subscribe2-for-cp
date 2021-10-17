@@ -33,6 +33,11 @@ class S2_Admin extends S2_Core {
 			add_action( 'wp_set_comment_status', array( &$this, 'comment_status' ) );
 		}
 
+		// add write button
+		if ( '1' === s2cp()->subscribe2_options['show_button'] ) {
+			add_action( 'admin_init', array( &$this, 'button_init' ) );
+		}
+
 		// add one-click handlers
 		if ( 'yes' === $this->subscribe2_options['one_click_profile'] ) {
 			add_action( 'show_user_profile', array( &$this, 'one_click_profile_form' ) );
