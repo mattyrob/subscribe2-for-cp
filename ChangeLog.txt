@@ -1,6 +1,7 @@
 = 11.7 =
 
 * Ensure Editor button is added if enabled
+* Ensure date picker is available immediately when Settings are change to digest mode
 
 = 11.6 =
 
