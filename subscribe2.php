@@ -7,6 +7,8 @@ Version: 11.6
 Author: Matthew Robinson
 Author URI: https://subscribe2.wordpress.com/
 Licence: GPLv3
+Requires at least: 4.4
+Requires PHP: 5.2.4
 Text Domain: subscribe2-for-cp
 Domain Path: /languages
 */

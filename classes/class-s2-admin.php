@@ -265,10 +265,12 @@ class S2_Admin extends S2_Core {
 	public function option_form_js() {
 		wp_register_script( 's2_edit', S2URL . 'include/s2-edit' . $this->script_debug . '.js', array( 'jquery' ), '1.3', true );
 		wp_enqueue_script( 's2_edit' );
-		wp_enqueue_script( 'jquery-ui-datepicker' );
-		wp_enqueue_style( 'jquery-style', 'https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css', array(), '1.12.1' );
-		wp_register_script( 's2_date_time', S2URL . 'include/s2-date-time' . $this->script_debug . '.js', array( 'jquery-ui-datepicker' ), '1.1', true );
-		wp_enqueue_script( 's2_date_time' );
+		if ( 'never' !== $this->subscribe2_options['email_freq'] || ( isset( $_POST['email_freq'] ) && 'never' !== $_POST['email_freq'] ) ) {
+			wp_enqueue_script( 'jquery-ui-datepicker' );
+			wp_enqueue_style( 'jquery-style', 'https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css', array(), '1.12.1' );
+			wp_register_script( 's2_date_time', S2URL . 'include/s2-date-time' . $this->script_debug . '.js', array( 'jquery-ui-datepicker' ), '1.1', true );
+			wp_enqueue_script( 's2_date_time' );
+		}
 	}
 
 	public function dismiss_js() {
