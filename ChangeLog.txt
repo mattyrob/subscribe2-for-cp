@@ -3,6 +3,7 @@
 * Ensure Editor button is added if enabled
 * Ensure date picker is available immediately when Settings are change to digest mode
 * Update plugin headers
+* Ensure plugin zip is created at first folder level - thanks to @jamesburnettio
 
 = 11.6 =
 
