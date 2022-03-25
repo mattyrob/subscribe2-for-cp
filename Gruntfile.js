@@ -275,8 +275,10 @@ module.exports = function( grunt ) {
 			},
 			zip: {
 				'release': {
-					cwd: SOURCE_DIR,
 					dest: 'subscribe2-for-cp.zip',
+					router: function ( filepath ) {
+						return 'subscribe2-for-cp/' + filepath;
+					},
 					src: [
 						'subscribe2.php',
 						'ChangeLog.txt',
