@@ -129,7 +129,7 @@ echo '<p class="submit"><input type="submit" class="button-secondary" name="prev
 echo '</form></div>' . "\r\n";
 echo '<div style="clear: both;"><p>&nbsp;</p></div>';
 ?>
-<script type="text/javascript">
+<script>
 //<![CDATA[
 function add_file_upload() {
 	var div = document.getElementById( 'upload_files' );
