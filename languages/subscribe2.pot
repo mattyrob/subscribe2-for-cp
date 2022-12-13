@@ -2,9 +2,9 @@
 # This file is distributed under the same license as the Subscribe2 for ClassicPress package.
 msgid ""
 msgstr ""
-"Project-Id-Version: Subscribe2 for ClassicPress 11.6\n"
+"Project-Id-Version: Subscribe2 for ClassicPress 11.7\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/subscribe2\n"
-"POT-Creation-Date: 2022-03-25 16:47:05+00:00\n"
+"POT-Creation-Date: 2022-12-13 18:11:33+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -1611,17 +1611,17 @@ msgstr ""
 msgid "Subscription Reminder"
 msgstr ""
 
-#: subscribe2.php:39
+#: subscribe2.php:40
 msgid "I'm just a plugin, please don't call me directly"
 msgstr ""
 
-#: subscribe2.php:42
+#: subscribe2.php:43
 #. Translators: Subscribe2 requires ClassicPress, exit if not on a compatible
 #. platform
 msgid "This version of Subscribe2 requires Classicpress available at: %1$s"
 msgstr ""
 
-#: subscribe2.php:54
+#: subscribe2.php:55
 msgid ""
 "Subscribe2 HTML cannot be activated as a network plugin. Please activate it "
 "on a site level"

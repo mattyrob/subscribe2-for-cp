@@ -3,18 +3,19 @@
 Plugin Name: Subscribe2 for ClassicPress
 Plugin URI: https://subscribe2.wordpress.com/subscribe2-html/
 Description: Comprehensive email subscription managment for post email notifications and all specifically for ClassicPress.
-Version: 11.6
+Version: 11.7
 Author: Matthew Robinson
 Author URI: https://subscribe2.wordpress.com/
 Licence: GPLv3
 Requires at least: 4.4
+Requires CP: 1.0
 Requires PHP: 5.2.4
 Text Domain: subscribe2-for-cp
 Domain Path: /languages
 */
 
 /*
-Copyright (C) 2006-21 Matthew Robinson
+Copyright (C) 2006-23 Matthew Robinson
 Based on the Original Subscribe2 plugin by
 Copyright (C) 2005 Scott Merrill (skippy@skippy.net)
 
@@ -57,7 +58,7 @@ if ( is_plugin_active_for_network( plugin_basename( __FILE__ ) ) ) {
 
 // our version number. Don't touch this or any line below
 // unless you know exactly what you are doing
-define( 'S2VERSION', '11.6' );
+define( 'S2VERSION', '11.7' );
 define( 'S2PLUGIN', __FILE__ );
 define( 'S2PATH', trailingslashit( dirname( __FILE__ ) ) );
 define( 'S2DIR', trailingslashit( dirname( plugin_basename( __FILE__ ) ) ) );
@@ -78,7 +79,9 @@ if ( is_admin() ) {
 	$mysubscribe2 = new S2_Frontend();
 }
 
-// global return function
+/**
+return the Subscribe2 for ClassicPress global object
+*/
 function s2cp() {
 	global $mysubscribe2;
 	return $mysubscribe2;

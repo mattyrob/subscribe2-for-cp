@@ -4,6 +4,7 @@
 * Ensure date picker is available immediately when Settings are change to digest mode
 * Update plugin headers
 * Ensure plugin zip is created at first folder level - thanks to @jamesburnettio
+* Update plugin header for ClassicPress plugin directory
 
 = 11.6 =
 
