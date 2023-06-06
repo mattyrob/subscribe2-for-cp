@@ -52,8 +52,10 @@ class S2_Ajax {
 	public function s2_ajax_form_handler() {
 		require_once ABSPATH . '/wp-includes/shortcodes.php';
 
+		// phpcs:disable WordPress.Security.NonceVerification
 		$response = str_replace( ':', '&', $_POST['data'] );
 		$response = str_replace( '-', '=', $response );
+		// phpcs:enable WordPress.Security.NonceVerification
 
 		$atts = array();
 		wp_parse_str( $response, $atts );

@@ -6,7 +6,7 @@ class S2_Multisite {
 	 */
 	public function wpmu_subscribe() {
 		// subscribe to new blog
-		if ( ! empty( $_GET['s2mu_subscribe'] ) ) {
+		if ( ! empty( $_GET['s2mu_subscribe'] ) && false !== wp_verify_nonce( $_GET['_s2mu_subscribe'], 's2mu_subscribe' ) ) {
 			$sub_id = intval( $_GET['s2mu_subscribe'] );
 			if ( $sub_id >= 0 ) {
 				switch_to_blog( $sub_id );
@@ -39,7 +39,7 @@ class S2_Multisite {
 					update_user_meta( $user_ID, s2cp()->get_usermeta_keyname( 's2_subscribed' ), $cats_string );
 				}
 			}
-		} elseif ( ! empty( $_GET['s2mu_unsubscribe'] ) ) {
+		} elseif ( ! empty( $_GET['s2mu_unsubscribe'] ) && false !== wp_verify_nonce( $_GET['_s2mu_unsubscribe'], 's2mu_unsubscribe' ) ) {
 			// unsubscribe from a blog
 			$unsub_id = intval( $_GET['s2mu_unsubscribe'] );
 			if ( $unsub_id >= 0 ) {

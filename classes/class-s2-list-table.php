@@ -29,8 +29,9 @@ class S2_List_Table extends WP_List_Table {
 	public function column_email( $item ) {
 		global $current_tab;
 		if ( 'registered' === $current_tab ) {
+			$url     = wp_nonce_url( sprintf( '?page=s2&amp;id=%d', rawurlencode( $item['id'] ) ), '_s2_edit_registered' );
 			$actions = array(
-				'edit' => sprintf( '<a href="?page=%s&amp;id=%d">%s</a>', 's2', rawurlencode( $item['id'] ), __( 'Edit', 'subscribe2-for-cp' ) ),
+				'edit' => sprintf( '<a href="%s">%s</a>', $url, __( 'Edit', 'subscribe2' ) ),
 			);
 			return sprintf( '%1$s %2$s', $item['email'], $this->row_actions( $actions ) );
 		} else {
@@ -54,13 +55,13 @@ class S2_List_Table extends WP_List_Table {
 	}
 
 	public function column_cb( $item ) {
-		$column = '<label><span class="screen-reader-text">' . __( 'Checkbox for:', 'subscribe2-for-cp' ) . ' %1$s</span><input type="checkbox" name="%2$s[]" value="%3$s" /></label>';
+		$column = '<label><span class="screen-reader-text">' . __( 'Checkbox for:', 'subscribe2-for-cp' ) . ' %1$s</span><input type="checkbox" name="%2$s[]" value="%3$s"></label>';
 		return sprintf( $column, $item['email'], $this->_args['singular'], $item['email'] );
 	}
 
 	public function get_columns() {
 		$columns = array(
-			'cb'    => '<input type="checkbox" />',
+			'cb'    => '<input type="checkbox">',
 			'email' => _x( 'Email', 'column name', 'subscribe2-for-cp' ),
 			'date'  => _x( 'Date', 'column name', 'subscribe2-for-cp' ),
 		);
@@ -78,8 +79,13 @@ class S2_List_Table extends WP_List_Table {
 	public function print_column_headers( $with_id = true ) {
 		list( $columns, $hidden, $sortable, $primary ) = $this->get_column_info();
 
+		// phpcs:ignore WordPress.Security.NonceVerification
 		$current_url = set_url_scheme( 'http://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'] );
 		$current_url = remove_query_arg( 'paged', $current_url );
+
+		if ( isset( $_GET['_wpnonce'] ) && false === wp_verify_nonce( $_GET['_wpnonce'], 's2_subscriber_tab' ) ) {
+			die( '<p>' . esc_html__( 'Security error! Your request cannot be completed.', 'subscribe2' ) . '</p>' );
+		}
 
 		if ( isset( $_REQUEST['what'] ) ) {
 			$current_url = add_query_arg(
@@ -105,7 +111,7 @@ class S2_List_Table extends WP_List_Table {
 		if ( ! empty( $columns['cb'] ) ) {
 			static $cb_counter = 1;
 			$columns['cb']     = '<label class="screen-reader-text" for="cb-select-all-' . $cb_counter . '">' . __( 'Select All', 'subscribe2-for-cp' ) . '</label>'
-				. '<input id="cb-select-all-' . $cb_counter . '" type="checkbox" />';
+				. '<input id="cb-select-all-' . $cb_counter . '" type="checkbox">';
 			$cb_counter++;
 		}
 
@@ -148,7 +154,7 @@ class S2_List_Table extends WP_List_Table {
 				$class = "class='" . join( ' ', $class ) . "'";
 			}
 
-			echo "<$tag $scope $id $class>$column_display_name</$tag>"; // phpcs:ignore WordPress.Security.EscapeOutput
+			echo wp_kses_post( "<$tag $scope $id $class>$column_display_name</$tag>" );
 		}
 	}
 
@@ -173,6 +179,11 @@ class S2_List_Table extends WP_List_Table {
 
 	public function process_bulk_action() {
 		global $current_user, $subscribers;
+
+		if ( isset( $_GET['_wpnonce'] ) && false === wp_verify_nonce( $_GET['_wpnonce'], 's2_subscriber_tab' ) ) {
+			die( '<p>' . esc_html__( 'Security error! Your request cannot be completed.', 'subscribe2' ) . '</p>' );
+		}
+
 		if ( in_array( $this->current_action(), array( 'delete', 'toggle' ), true ) ) {
 			if ( ! isset( $_REQUEST['subscriber'] ) ) {
 				echo '<div id="message" class="error"><p><strong>' . esc_html__( 'No users were selected.', 'subscribe2-for-cp' ) . '</strong></p></div>';
@@ -241,14 +252,16 @@ class S2_List_Table extends WP_List_Table {
 		// Translators: Pagination
 		$output = '<span class="displaying-num">' . sprintf( _n( '%s item', '%s items', $total_items, 'subscribe2-for-cp' ), number_format_i18n( $total_items ) ) . '</span>';
 
-		if ( isset( $_POST['what'] ) ) {
-			if ( isset( $_POST['paged'] ) ) {
-				$current = intval( $_POST['paged'] );
-			} else {
-				$current = 1;
+		$current = intval( $this->get_pagenum() );
+
+		if ( isset( $_POST['_wpnonce'] ) && false !== wp_verify_nonce( $_POST['_wpnonce'], 'bulk-' . $this->_args['plural'] ) ) {
+			if ( isset( $_POST['what'] ) ) {
+				if ( isset( $_POST['paged'] ) ) {
+					$current = intval( $_POST['paged'] );
+				} else {
+					$current = 1;
+				}
 			}
-		} else {
-			$current = intval( $this->get_pagenum() );
 		}
 
 		$current_url = set_url_scheme( 'http://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'] );
@@ -325,7 +338,7 @@ class S2_List_Table extends WP_List_Table {
 			$total_pages_before = '<span class="screen-reader-text">' . __( 'Current Page', 'subscribe2-for-cp' ) . '</span><span id="table-paging" class="paging-input">';
 		} else {
 			$html_current_page = sprintf(
-				"%s<input class='current-page' id='current-page-selector' type='text' name='paged' value='%s' size='%d' aria-describedby='table-paging' />",
+				"%s<input class='current-page' id='current-page-selector' type='text' name='paged' value='%s' size='%d' aria-describedby='table-paging'>",
 				'<label for="current-page-selector" class="screen-reader-text">' . __( 'Current Page', 'subscribe2-for-cp' ) . '</label>',
 				$current,
 				strlen( $total_pages )
@@ -415,22 +428,33 @@ class S2_List_Table extends WP_List_Table {
 		}
 
 		function usort_reorder( $a, $b ) {
-			$orderby = ( ! empty( $_REQUEST['orderby'] ) ) ? $_REQUEST['orderby'] : 'email';
-			$order   = ( ! empty( $_REQUEST['order'] ) ) ? $_REQUEST['order'] : 'asc';
-			$result  = strcasecmp( $a[ $orderby ], $b[ $orderby ] );
+			$orderby = 'email';
+			$order   = 'asc';
+
+			if ( isset( $_GET['_s2_order_nonce'] ) && false !== wp_verify_nonce( $_GET['_s2_order_nonce'], 's2_subscriber_order' ) ) {
+				$orderby = ( ! empty( $_REQUEST['orderby'] ) ) ? $_REQUEST['orderby'] : $orderby;
+				$order   = ( ! empty( $_REQUEST['order'] ) ) ? $_REQUEST['order'] : $order;
+			}
+
+			$result = strcasecmp( $a[ $orderby ], $b[ $orderby ] );
+
 			return ( 'asc' === $order ) ? $result : -$result;
 		}
+
 		usort( $data, 'usort_reorder' );
 
-		if ( isset( $_POST['what'] ) ) {
-			if ( isset( $_POST['paged'] ) ) {
-				$current_page = intval( $_POST['paged'] );
-			} else {
-				$current_page = 1;
+		$current_page = (int) $this->get_pagenum();
+
+		if ( isset( $_POST['_wpnonce'] ) && false !== wp_verify_nonce( $_POST['_wpnonce'], 'bulk-' . $this->_args['plural'] ) ) {
+			if ( isset( $_POST['what'] ) ) {
+				if ( isset( $_POST['paged'] ) ) {
+					$current_page = intval( $_POST['paged'] );
+				} else {
+					$current_page = 1;
+				}
 			}
-		} else {
-			$current_page = $this->get_pagenum();
 		}
+
 		$total_items = count( $data );
 		$data        = array_slice( $data, ( $current_page - 1 ) * $per_page, $per_page );
 		$this->items = $data;

@@ -1,3 +1,10 @@
+= 11.8 =
+
+* HTML code modernisation
+* Correct Premium link used in documentation
+* Security hardening
+* Add Premium URL header
+
 = 11.7 =
 
 * Ensure Editor button is added if enabled

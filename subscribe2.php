@@ -6,6 +6,7 @@ Description: Comprehensive email subscription managment for post email notificat
 Version: 11.7
 Author: Matthew Robinson
 Author URI: https://subscribe2.wordpress.com/
+Premium URI: https://checkout.freemius.com/mode/dialog/plugin/5502/plan/8921/
 Licence: GPLv3
 Requires at least: 4.4
 Requires CP: 1.0

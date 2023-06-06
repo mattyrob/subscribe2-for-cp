@@ -3,7 +3,7 @@ Contributors: MattyRob
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&amp;hosted_button_id=2387904
 Tags: posts, subscription, email, subscribe, notify, notification
 Requires at least: 1.0.0
-Tested up to: 1.2
+Tested up to: 1.5.3
 License: GPLv3
 
 Sends a list of subscribers an email notification when you publish new posts.
@@ -29,7 +29,7 @@ The format of the email can also be customised for per-post notifications, Subsc
 * HTML excerpt (Registered Users only).
 * HTML full post (Registered Users only).
 
-If you want to send full content HTML emails to Public Subscribers too then upgrade to [Subscribe2 HTML](http://semperplugins.com/plugins/subscribe2-html/).
+If you want to send full content HTML emails to Public Subscribers too then upgrade to [Subscribe2 HTML](https://checkout.freemius.com/mode/dialog/plugin/5502/plan/8921/).
 
 == Installation ==
 

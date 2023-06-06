@@ -5,9 +5,6 @@ if ( ! function_exists( 'add_action' ) ) {
 
 global $subscribers, $what, $current_tab;
 
-// detect or define which tab we are in
-$current_tab = isset( $_GET['tab'] ) ? esc_attr( $_GET['tab'] ) : 'public';
-
 // Access function to allow display for form elements
 require_once S2PATH . 'classes/class-s2-forms.php';
 $s2_forms = new s2_forms();
@@ -21,9 +18,16 @@ if ( ! class_exists( 'Subscribe2_List_Table' ) ) {
 	$s2_list_table = new S2_List_Table();
 }
 
+// detect or define which tab we are in
+if ( isset( $_GET['_wpnonce'] ) && false !== wp_verify_nonce( $_GET['_wpnonce'], 's2_subscriber_tab' ) ) {
+	$current_tab = isset( $_GET['tab'] ) ? esc_attr( $_GET['tab'] ) : 'public';
+} else {
+	$current_tab = 'public';
+}
+
 // was anything POSTed ?
 if ( isset( $_POST['s2_admin'] ) ) {
-	if ( false === wp_verify_nonce( $_REQUEST['_wpnonce'], 'bulk-' . $s2_list_table->_args['plural'] ) ) {
+	if ( false === wp_verify_nonce( $_POST['_wpnonce'], 'bulk-' . $s2_list_table->_args['plural'] ) ) {
 		die( '<p>' . esc_html__( 'Security error! Your request cannot be completed.', 'subscribe2-for-cp' ) . '</p>' );
 	}
 
@@ -79,20 +83,24 @@ if ( isset( $_POST['s2_admin'] ) ) {
 	} elseif ( isset( $_POST['remind'] ) ) {
 		s2cp()->remind( $_POST['reminderemails'] );
 		echo '<div id="message" class="updated fade"><p><strong>' . esc_html__( 'Reminder Email(s) Sent!', 'subscribe2-for-cp' ) . '</strong></p></div>';
-	} elseif ( isset( $_POST['sub_categories'] ) && 'subscribe' === $_POST['manage'] ) {
-		if ( isset( $_REQUEST['subscriber'] ) ) {
-			s2cp()->subscribe_registered_users( implode( ",\r\n", $_REQUEST['subscriber'] ), $_POST['category'] );
+	} elseif ( isset( $_POST['sub_categories'] ) ) {
+		if ( isset( $_POST['manage'] ) && 'subscribe' === $_POST['manage'] ) {
+			if ( isset( $_REQUEST['subscriber'] ) ) {
+				s2cp()->subscribe_registered_users( implode( ",\r\n", $_REQUEST['subscriber'] ), $_POST['category'] );
+			} else {
+				s2cp()->subscribe_registered_users( $_POST['exportcsv'], $_POST['category'] );
+			}
+			echo '<div id="message" class="updated fade"><p><strong>' . esc_html__( 'Registered Users Subscribed!', 'subscribe2-for-cp' ) . '</strong></p></div>';
+		} elseif ( isset( $_POST['manage'] ) && 'unsubscribe' === $_POST['manage'] ) {
+			if ( isset( $_REQUEST['subscriber'] ) ) {
+				s2cp()->unsubscribe_registered_users( implode( ",\r\n", $_REQUEST['subscriber'] ), $_POST['category'] );
+			} else {
+				s2cp()->unsubscribe_registered_users( $_POST['exportcsv'], $_POST['category'] );
+			}
+			echo '<div id="message" class="updated fade"><p><strong>' . esc_html__( 'Registered Users Unsubscribed!', 'subscribe2-for-cp' ) . '</strong></p></div>';
 		} else {
-			s2cp()->subscribe_registered_users( $_POST['exportcsv'], $_POST['category'] );
+			echo '<div id="message" class="error fade"><p><strong>' . esc_html__( 'Please select an action to perform!', 'subscribe2-for-cp' ) . '</strong></p></div>';
 		}
-		echo '<div id="message" class="updated fade"><p><strong>' . esc_html__( 'Registered Users Subscribed!', 'subscribe2-for-cp' ) . '</strong></p></div>';
-	} elseif ( isset( $_POST['sub_categories'] ) && 'unsubscribe' === $_POST['manage'] ) {
-		if ( isset( $_REQUEST['subscriber'] ) ) {
-			s2cp()->unsubscribe_registered_users( implode( ",\r\n", $_REQUEST['subscriber'] ), $_POST['category'] );
-		} else {
-			s2cp()->unsubscribe_registered_users( $_POST['exportcsv'], $_POST['category'] );
-		}
-		echo '<div id="message" class="updated fade"><p><strong>' . esc_html__( 'Registered Users Unsubscribed!', 'subscribe2-for-cp' ) . '</strong></p></div>';
 	} elseif ( isset( $_POST['sub_format'] ) ) {
 		if ( isset( $_REQUEST['subscriber'] ) ) {
 			s2cp()->format_change( implode( ",\r\n", $_REQUEST['subscriber'] ), $_POST['format'] );
@@ -203,21 +211,21 @@ $s2tabs = array(
 echo '<h2 class="nav-tab-wrapper">';
 foreach ( $s2tabs as $tab_key => $tab_caption ) {
 	$active = ( $current_tab === $tab_key ) ? 'nav-tab-active' : '';
-	echo '<a class="nav-tab ' . esc_attr( $active ) . '" href="' . esc_url( '?page=s2_tools&amp;tab=' . $tab_key ) . '">' . esc_html( $tab_caption ) . '</a>';
+	echo '<a class="nav-tab ' . esc_attr( $active ) . '" href="' . esc_url( wp_nonce_url( '?page=s2_tools&amp;tab=' . $tab_key, 's2_subscriber_tab' ) ) . '">' . esc_html( $tab_caption ) . '</a>';
 }
 echo '</h2>';
 echo '<form method="post">' . "\r\n";
 
-echo '<input type="hidden" name="s2_admin" />' . "\r\n";
+echo '<input type="hidden" name="s2_admin">' . "\r\n";
 switch ( $current_tab ) {
 	case 'public':
-		echo '<input type="hidden" id="s2_location" name="s2_location" value="public" />' . "\r\n";
+		echo '<input type="hidden" id="s2_location" name="s2_location" value="public">' . "\r\n";
 		echo '<div class="s2_admin" id="s2_add_subscribers">' . "\r\n";
 		echo '<h2>' . esc_html__( 'Add/Remove Subscribers', 'subscribe2-for-cp' ) . '</h2>' . "\r\n";
 		echo '<p><label>' . esc_html__( 'Enter addresses, one per line or comma-separated', 'subscribe2-for-cp' ) . '<br>' . "\r\n";
 		echo '<textarea rows="2" cols="80" name="addresses"></textarea></label></p>' . "\r\n";
-		echo '<p class="submit" style="border-top: none;"><input type="submit" class="button-primary" name="subscribe" value="' . esc_attr( __( 'Subscribe', 'subscribe2-for-cp' ) ) . '" />';
-		echo '&nbsp;<input type="submit" class="button-primary" name="unsubscribe" value="' . esc_attr( __( 'Unsubscribe', 'subscribe2-for-cp' ) ) . '" /></p>' . "\r\n";
+		echo '<p class="submit" style="border-top: none;"><input type="submit" class="button-primary" name="subscribe" value="' . esc_attr( __( 'Subscribe', 'subscribe2-for-cp' ) ) . '">';
+		echo '&nbsp;<input type="submit" class="button-primary" name="unsubscribe" value="' . esc_attr( __( 'Unsubscribe', 'subscribe2-for-cp' ) ) . '"></p>' . "\r\n";
 		echo '</div>' . "\r\n";
 
 		// subscriber lists
@@ -233,7 +241,7 @@ switch ( $current_tab ) {
 		break;
 
 	case 'registered':
-		echo '<input type="hidden" id="s2_location" name="s2_location" value="registered" />' . "\r\n";
+		echo '<input type="hidden" id="s2_location" name="s2_location" value="registered">' . "\r\n";
 		echo '<div class="s2_admin" id="s2_add_subscribers">' . "\r\n";
 		echo '<h2>' . esc_html__( 'Add/Remove Subscribers', 'subscribe2-for-cp' ) . '</h2>' . "\r\n";
 		echo '<p class="submit" style="border-top: none;"><a class="button-primary" href="' . esc_url( admin_url( 'user-new.php' ) ) . '">' . esc_html__( 'Add Registered User', 'subscribe2-for-cp' ) . '</a></p>' . "\r\n";
@@ -254,8 +262,8 @@ echo '<td style="width: 50%; text-align: left;">';
 s2cp()->display_subscriber_dropdown( $what, __( 'Filter', 'subscribe2-for-cp' ), $exclude );
 echo '</td>' . "\r\n";
 if ( $reminderform ) {
-	echo '<td style="width: 25%; text-align: right;"><input type="hidden" name="reminderemails" value="' . esc_attr( $reminderemails ) . '" />' . "\r\n";
-	echo '<input type="submit" class="button-secondary" name="remind" value="' . esc_attr( __( 'Send Reminder Email', 'subscribe2-for-cp' ) ) . '" /></td>' . "\r\n";
+	echo '<td style="width: 25%; text-align: right;"><input type="hidden" name="reminderemails" value="' . esc_attr( $reminderemails ) . '">' . "\r\n";
+	echo '<input type="submit" class="button-secondary" name="remind" value="' . esc_attr( __( 'Send Reminder Email', 'subscribe2-for-cp' ) ) . '"></td>' . "\r\n";
 } else {
 	echo '<td style="width: 25%;"></td>';
 }
@@ -268,8 +276,9 @@ if ( ! empty( $subscribers ) ) {
 			( '' === $exportcsv ) ? $exportcsv = $subscriber['user_email'] : $exportcsv .= ",\r\n" . $subscriber['user_email'];
 		}
 	}
-	echo '<td style="width: 25%; text-align: right;"><input type="hidden" name="exportcsv" value="' . esc_attr( $exportcsv ) . '" />' . "\r\n";
-	echo '<input type="submit" class="button-secondary" name="csv" value="' . esc_attr( __( 'Save Emails to CSV File', 'subscribe2-for-cp' ) ) . '" /></td>' . "\r\n";
+	echo '<td style="width: 25%; text-align: right;"><input type="hidden" name="exportcsv" value="' . esc_attr( $exportcsv ) . '">' . "\r\n";
+	wp_nonce_field( 's2_export_csv', '_s2_export_csv' );
+	echo '<input type="submit" class="button-secondary" name="csv" value="' . esc_attr( __( 'Save Emails to CSV File', 'subscribe2' ) ) . '"></td>' . "\r\n";
 } else {
 	echo '<td style="width: 25%;"></td>';
 }

@@ -10,7 +10,6 @@ jQuery( document ).on(
 		var data    = {
 			'action': 's2_dismiss_notice',
 			'nonce': s2DismissScriptStrings.nonce
-
 		};
 		jQuery.post( ajaxurl, data );
 	}

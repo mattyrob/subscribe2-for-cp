@@ -138,21 +138,21 @@ class S2_Form_Widget extends WP_Widget {
 
 		echo '<div>' . "\r\n";
 		echo '<p><label for="' . esc_attr( $this->get_field_id( 'title' ) ) . '">' . esc_html__( 'Title', 'subscribe2-for-cp' ) . ':' . "\r\n";
-		echo '<input class="widefat" id="' . esc_attr( $this->get_field_id( 'title' ) ) . '" name="' . esc_attr( $this->get_field_name( 'title' ) ) . '" type="text" value="' . esc_attr( $title ) . '" /></label></p>' . "\r\n";
+		echo '<input class="widefat" id="' . esc_attr( $this->get_field_id( 'title' ) ) . '" name="' . esc_attr( $this->get_field_name( 'title' ) ) . '" type="text" value="' . esc_attr( $title ) . '"></label></p>' . "\r\n";
 		echo '<p><label for="' . esc_attr( $this->get_field_id( 'div' ) ) . '">' . esc_html__( 'Div class name', 'subscribe2-for-cp' ) . ':' . "\r\n";
-		echo '<input class="widefat" id="' . esc_attr( $this->get_field_id( 'div' ) ) . '" name="' . esc_attr( $this->get_field_name( 'div' ) ) . '" type="text" value="' . esc_attr( $div ) . '" /></label></p>' . "\r\n";
+		echo '<input class="widefat" id="' . esc_attr( $this->get_field_id( 'div' ) ) . '" name="' . esc_attr( $this->get_field_name( 'div' ) ) . '" type="text" value="' . esc_attr( $div ) . '"></label></p>' . "\r\n";
 		echo '<p><label for="' . esc_attr( $this->get_field_id( 'widgetprecontent' ) ) . '">' . esc_html__( 'Pre-Content', 'subscribe2-for-cp' ) . ':' . "\r\n";
 		echo '<textarea class="widefat" id="' . esc_attr( $this->get_field_id( 'widgetprecontent' ) ) . '" name="' . esc_attr( $this->get_field_name( 'widgetprecontent' ) ) . '" rows="2" cols="25">' . esc_attr( $widgetprecontent ) . '</textarea></label></p>' . "\r\n";
 		echo '<p><label for="' . esc_attr( $this->get_field_id( 'widgetpostcontent' ) ) . '">' . esc_html__( 'Post-Content', 'subscribe2-for-cp' ) . ':' . "\r\n";
 		echo '<textarea class="widefat" id="' . esc_attr( $this->get_field_id( 'widgetpostcontent' ) ) . '" name="' . esc_attr( $this->get_field_name( 'widgetpostcontent' ) ) . '" rows="2" cols="25">' . esc_attr( $widgetpostcontent ) . '</textarea></label></p>' . "\r\n";
 		echo '<p><label for="' . esc_attr( $this->get_field_id( 'size' ) ) . '">' . esc_html__( 'Text Box Size', 'subscribe2-for-cp' ) . ':' . "\r\n";
-		echo '<input class="widefat" id="' . esc_attr( $this->get_field_id( 'size' ) ) . '" name="' . esc_attr( $this->get_field_name( 'size' ) ) . '" type="text" value="' . esc_attr( $size ) . '" /></label></p>' . "\r\n";
+		echo '<input class="widefat" id="' . esc_attr( $this->get_field_id( 'size' ) ) . '" name="' . esc_attr( $this->get_field_name( 'size' ) ) . '" type="text" value="' . esc_attr( $size ) . '"></label></p>' . "\r\n";
 		echo '<p>' . esc_html__( 'Display options', 'subscribe2-for-cp' ) . ':<br>' . "\r\n";
-		echo '<label for="' . esc_attr( $this->get_field_id( 'hidebutton' ) ) . 'complete"><input id="' . esc_attr( $this->get_field_id( 'hidebutton' ) ) . 'complete" name="' . esc_attr( $this->get_field_name( 'hidebutton' ) ) . '" type="radio" value="none"' . checked( 'none', $hidebutton, false ) . '/> ' . esc_html__( 'Show complete form', 'subscribe2-for-cp' ) . '</label>' . "\r\n";
-		echo '<br><label for="' . esc_attr( $this->get_field_id( 'hidebutton' ) ) . 'subscribe"><input id="' . esc_attr( $this->get_field_id( 'hidebutton' ) ) . 'subscribe" name="' . esc_attr( $this->get_field_name( 'hidebutton' ) ) . '" type="radio" value="subscribe"' . checked( 'subscribe', $hidebutton, false ) . '/> ' . esc_html__( 'Hide Subscribe button', 'subscribe2-for-cp' ) . '</label>' . "\r\n";
-		echo '<br><label for="' . esc_attr( $this->get_field_id( 'hidebutton' ) ) . 'unsubscribe"><input id="' . esc_attr( $this->get_field_id( 'hidebutton' ) ) . 'unsubscribe" name="' . esc_attr( $this->get_field_name( 'hidebutton' ) ) . '" type="radio" value="unsubscribe"' . checked( 'unsubscribe', $hidebutton, false ) . '/> ' . esc_html__( 'Hide Unsubscribe button', 'subscribe2-for-cp' ) . '</label>' . "\r\n";
+		echo '<label for="' . esc_attr( $this->get_field_id( 'hidebutton' ) ) . 'complete"><input id="' . esc_attr( $this->get_field_id( 'hidebutton' ) ) . 'complete" name="' . esc_attr( $this->get_field_name( 'hidebutton' ) ) . '" type="radio" value="none"' . checked( 'none', $hidebutton, false ) . '> ' . esc_html__( 'Show complete form', 'subscribe2-for-cp' ) . '</label>' . "\r\n";
+		echo '<br><label for="' . esc_attr( $this->get_field_id( 'hidebutton' ) ) . 'subscribe"><input id="' . esc_attr( $this->get_field_id( 'hidebutton' ) ) . 'subscribe" name="' . esc_attr( $this->get_field_name( 'hidebutton' ) ) . '" type="radio" value="subscribe"' . checked( 'subscribe', $hidebutton, false ) . '> ' . esc_html__( 'Hide Subscribe button', 'subscribe2-for-cp' ) . '</label>' . "\r\n";
+		echo '<br><label for="' . esc_attr( $this->get_field_id( 'hidebutton' ) ) . 'unsubscribe"><input id="' . esc_attr( $this->get_field_id( 'hidebutton' ) ) . 'unsubscribe" name="' . esc_attr( $this->get_field_name( 'hidebutton' ) ) . '" type="radio" value="unsubscribe"' . checked( 'unsubscribe', $hidebutton, false ) . '> ' . esc_html__( 'Hide Unsubscribe button', 'subscribe2-for-cp' ) . '</label>' . "\r\n";
 		if ( '1' === s2cp()->subscribe2_options['ajax'] ) {
-			echo '<br><label for="' . esc_attr( $this->get_field_id( 'hidebutton' ) ) . 'ajax"><input id="' . esc_attr( $this->get_field_id( 'hidebutton' ) ) . 'ajax" name="' . esc_attr( $this->get_field_name( 'hidebutton' ) ) . '" type="radio" value="link"' . checked( 'link', $hidebutton, false ) . '/> ' . esc_html__( 'Show as link', 'subscribe2-for-cp' ) . '</label>' . "\r\n";
+			echo '<br><label for="' . esc_attr( $this->get_field_id( 'hidebutton' ) ) . 'ajax"><input id="' . esc_attr( $this->get_field_id( 'hidebutton' ) ) . 'ajax" name="' . esc_attr( $this->get_field_name( 'hidebutton' ) ) . '" type="radio" value="link"' . checked( 'link', $hidebutton, false ) . '> ' . esc_html__( 'Show as link', 'subscribe2-for-cp' ) . '</label>' . "\r\n";
 		}
 		echo '</p>' . "\r\n";
 		echo '<p><label for="' . esc_attr( $this->get_field_id( 'postto' ) ) . '">' . esc_html__( 'Post form content to page', 'subscribe2-for-cp' ) . ':' . "\r\n";
@@ -171,13 +171,13 @@ class S2_Form_Widget extends WP_Widget {
 		s2cp()->pages_dropdown( $postto, true );
 		echo '</select></label></p>' . "\r\n";
 		echo '<p><label for="' . esc_attr( $this->get_field_id( 'js' ) ) . '">' . esc_html__( 'Disable JavaScript', 'subscribe2-for-cp' ) . ':' . "\r\n";
-		echo '<input id="' . esc_attr( $this->get_field_id( 'js' ) ) . '" name ="' . esc_attr( $this->get_field_name( 'js' ) ) . '" value="true" type="checkbox"' . checked( 'true', $js, false ) . '/>';
+		echo '<input id="' . esc_attr( $this->get_field_id( 'js' ) ) . '" name ="' . esc_attr( $this->get_field_name( 'js' ) ) . '" value="true" type="checkbox"' . checked( 'true', $js, false ) . '>';
 		echo '</label></p>' . "\r\n";
 		echo '<p><label for="' . esc_attr( $this->get_field_id( 'noantispam' ) ) . '">' . esc_html__( 'Disable Anti-spam measures', 'subscribe2-for-cp' ) . ':' . "\r\n";
-		echo '<input id="' . esc_attr( $this->get_field_id( 'noantispam' ) ) . '" name ="' . esc_attr( $this->get_field_name( 'noantispam' ) ) . '" value="true" type="checkbox"' . checked( 'true', $noantispam, false ) . '/>';
+		echo '<input id="' . esc_attr( $this->get_field_id( 'noantispam' ) ) . '" name ="' . esc_attr( $this->get_field_name( 'noantispam' ) ) . '" value="true" type="checkbox"' . checked( 'true', $noantispam, false ) . '>';
 		echo '</label></p>' . "\r\n";
 		echo '<p><label for="' . esc_attr( $this->get_field_id( 'nowrap' ) ) . '">' . esc_html__( 'Disable wrapping of form buttons', 'subscribe2-for-cp' ) . ':' . "\r\n";
-		echo '<input id="' . esc_attr( $this->get_field_id( 'nowrap' ) ) . '" name ="' . esc_attr( $this->get_field_name( 'nowrap' ) ) . '" value="true" type="checkbox"' . checked( 'true', $nowrap, false ) . '/>';
+		echo '<input id="' . esc_attr( $this->get_field_id( 'nowrap' ) ) . '" name ="' . esc_attr( $this->get_field_name( 'nowrap' ) ) . '" value="true" type="checkbox"' . checked( 'true', $nowrap, false ) . '>';
 		echo '</label></p>' . "\r\n";
 		echo '</div>' . "\r\n";
 	}

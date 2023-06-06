@@ -7,12 +7,12 @@
 ( function( jQuery ){
 	function initColorPicker( widget ) {
 		widget.find( '.colorpickerField' ).not( '[id*="__i__"]' ).wpColorPicker( {
-			change: function( e, ui ) {
-				jQuery( e.target ).val( ui.color.toString() );
-				jQuery( e.target ).trigger( 'change' );
+			change: function( event, ui ) {
+				jQuery( event.target ).val( ui.color.toString() );
+				jQuery( event.target ).trigger( 'change' );
 			},
-			clear: function( e ) {
-				jQuery( e.target ).trigger( 'change' );
+			clear: function( event ) {
+				jQuery( event.target ).trigger( 'change' );
 			}
 		} );
 	}

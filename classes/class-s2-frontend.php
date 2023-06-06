@@ -12,6 +12,8 @@ class S2_Frontend extends S2_Core {
 		// load strings later on frontend for polylang plugin compatibility
 		add_action( 'wp', array( &$this, 'load_strings' ) );
 
+		// Frontend check and hook functions
+		// phpcs:ignore WordPress.Security.NonceVerification
 		if ( isset( $_REQUEST['s2'] ) ) {
 			// someone is confirming a request
 			add_filter( 'request', array( &$this, 'query_filter' ) );
@@ -22,6 +24,10 @@ class S2_Frontend extends S2_Core {
 		// add the frontend filters
 		add_shortcode( 'subscribe2', array( &$this, 'shortcode' ) );
 		add_filter( 'the_content', array( &$this, 'filter' ), 10 );
+
+		// amended kses allowed tags so form displays
+		add_filter( 'wp_kses_allowed_html', array( $this, 'extend_allowed_tags' ), 10, 2 );
+		add_filter( 'safe_style_css', array( $this, 'extend_allowed_styles' ) );
 
 		// add frontend actions for comment subscribers
 		if ( 'no' !== $this->subscribe2_options['comment_subs'] ) {
@@ -128,12 +134,12 @@ class S2_Frontend extends S2_Core {
 		// if a button is hidden, show only other
 		$hide = strtolower( $args['hide'] );
 		if ( 'subscribe' === $hide ) {
-			$this->input_form_action = '<input type="submit" name="unsubscribe" value="' . esc_attr( $unsubscribe_button_value ) . '" />';
+			$this->input_form_action = '<input type="submit" name="unsubscribe" value="' . esc_attr( $unsubscribe_button_value ) . '">';
 		} elseif ( 'unsubscribe' === $hide ) {
-			$this->input_form_action = '<input type="submit" name="subscribe" value="' . esc_attr( $subscribe_button_value ) . '" />';
+			$this->input_form_action = '<input type="submit" name="subscribe" value="' . esc_attr( $subscribe_button_value ) . '">';
 		} else {
 			// both form input actions
-			$this->input_form_action = '<input type="submit" name="subscribe" value="' . esc_attr( $subscribe_button_value ) . '" />&nbsp;<input type="submit" name="unsubscribe" value="' . esc_attr( $unsubscribe_button_value ) . '" />';
+			$this->input_form_action = '<input type="submit" name="subscribe" value="' . esc_attr( $subscribe_button_value ) . '">&nbsp;<input type="submit" name="unsubscribe" value="' . esc_attr( $unsubscribe_button_value ) . '">';
 		}
 
 		// if ID is provided, get permalink
@@ -154,17 +160,21 @@ class S2_Frontend extends S2_Core {
 			$action = ' action="' . get_permalink( $this->subscribe2_options['s2page'] ) . '"';
 		}
 
-		// allow remote setting of email in form
+		$value = __( 'Enter email address...', 'subscribe2' );
+
+		if ( 'true' === strtolower( $args['nojs'] ) ) {
+			$value = '';
+		}
+
+		// allow remote setting of email in frontend form
+		// phpcs:disable WordPress.Security.NonceVerification
 		if ( isset( $_REQUEST['email'] ) ) {
 			$email = $this->sanitize_email( $_REQUEST['email'] );
+			if ( false !== $this->validate_email( $email ) ) {
+				$value = $email;
+			}
 		}
-		if ( isset( $_REQUEST['email'] ) && false !== $this->validate_email( $email ) ) {
-			$value = $email;
-		} elseif ( 'true' === strtolower( $args['nojs'] ) ) {
-			$value = '';
-		} else {
-			$value = __( 'Enter email address...', 'subscribe2-for-cp' );
-		}
+		// phpcs:enable WordPress.Security.NonceVerification
 
 		// if wrap is true add paragraph html tags
 		$wrap_text = '';
@@ -176,9 +186,9 @@ class S2_Frontend extends S2_Core {
 		$antispam_text = '';
 		if ( 'true' !== strtolower( $args['noantispam'] ) ) {
 			$antispam_text  = '<span style="display:none !important">';
-			$antispam_text .= '<label for="firstname">Leave This Blank:</label><input type="text" id="firstname" name="firstname" />';
-			$antispam_text .= '<label for="lastname">Leave This Blank Too:</label><input type="text" id="lastname" name="lastname" />';
-			$antispam_text .= '<label for="uri">Do Not Change This:</label><input type="text" id="uri" name="uri" value="http://" />';
+			$antispam_text .= '<label for="firstname">Leave This Blank:</label><input type="text" id="firstname" name="firstname">';
+			$antispam_text .= '<label for="lastname">Leave This Blank Too:</label><input type="text" id="lastname" name="lastname">';
+			$antispam_text .= '<label for="uri">Do Not Change This:</label><input type="text" id="uri" name="uri" value="http://">';
 			$antispam_text .= '</span>';
 		}
 
@@ -192,13 +202,15 @@ class S2_Frontend extends S2_Core {
 			$form_name = 's2form';
 		}
 
+		$s2_form_nonce = wp_nonce_field( 's2_form', '_wpnonce', true, false );
+
 		// build default form
 		if ( 'true' === strtolower( $args['nojs'] ) ) {
-			$this->form = '<form name="' . $form_name . '" method="post"' . $action . '><input type="hidden" name="ip" value="' . esc_attr( $remote_ip ) . '" />' . $antispam_text . '<p><label for="s2email">' . __( 'Your email:', 'subscribe2-for-cp' ) . '</label><br><input type="email" name="email" id="s2email" value="' . $value . '" size="' . $args['size'] . '" required />' . $wrap_text . $this->input_form_action . '</p></form>';
+			$this->form = '<form name="' . $form_name . '" method="post"' . $action . '>' . $s2_form_nonce . '<input type="hidden" name="ip" value="' . esc_attr( $remote_ip ) . '">' . $antispam_text . '<p><label for="s2email">' . __( 'Your email:', 'subscribe2' ) . '</label><br><input type="email" name="email" id="s2email" value="' . $value . '" size="' . $args['size'] . '" required>' . $wrap_text . $this->input_form_action . '</p></form>';
 		} else {
-			$this->form = '<form name="' . $form_name . '" method="post"' . $action . '><input type="hidden" name="ip" value="' . esc_attr( $remote_ip ) . '" />' . $antispam_text . '<p><label for="s2email">' . __( 'Your email:', 'subscribe2-for-cp' ) . '</label><br><input type="email" name="email" id="s2email" value="' . $value . '" size="' . $args['size'] . '" onfocus="if (this.value === \'' . $value . '\') {this.value = \'\';}" onblur="if (this.value === \'\') {this.value = \'' . $value . '\';}" required />' . $wrap_text . $this->input_form_action . '</p></form>' . "\r\n";
+			$this->form = '<form name="' . $form_name . '" method="post"' . $action . '>' . $s2_form_nonce . '<input type="hidden" name="ip" value="' . esc_attr( $remote_ip ) . '">' . $antispam_text . '<p><label for="s2email">' . __( 'Your email:', 'subscribe2' ) . '</label><br><input type="email" name="email" id="s2email" value="' . $value . '" size="' . $args['size'] . '" onfocus="if (this.value === \'' . $value . '\') {this.value = \'\';}" onblur="if (this.value === \'\') {this.value = \'' . $value . '\';}" required>' . $wrap_text . $this->input_form_action . '</p></form>' . "\r\n";
 		}
-		$this->s2form = apply_filters( 's2_form', $this->form, $args );
+		$this->s2form = (string) apply_filters( 's2_form', $this->form, $args );
 
 		global $user_ID;
 		if ( 0 !== $user_ID ) {
@@ -206,6 +218,10 @@ class S2_Frontend extends S2_Core {
 		}
 
 		if ( isset( $_POST['subscribe'] ) || isset( $_POST['unsubscribe'] ) ) {
+			if ( false === wp_verify_nonce( $_POST['_wpnonce'], 's2_form' ) ) {
+				return '<p class="s2_error">' . esc_html__( 'Security error! Your request cannot be completed.', 'subscribe2' ) . '</p>';
+			}
+
 			// anti spam sign up measure
 			if ( ( isset( $_POST['firstname'] ) && '' !== $_POST['firstname'] ) || ( isset( $_POST['lastname'] ) && '' !== $_POST['lastname'] ) || ( isset( $_POST['uri'] ) && 'http://' !== $_POST['uri'] ) ) {
 				// looks like some invisible-to-user fields were changed; falsely report success
@@ -276,6 +292,7 @@ class S2_Frontend extends S2_Core {
 				}
 			}
 		}
+
 		return $this->s2form;
 	}
 
@@ -332,6 +349,7 @@ class S2_Frontend extends S2_Core {
 	 */
 	public function title_filter( $title ) {
 		if ( in_the_loop() ) {
+			// phpcs:ignore WordPress.Security.NonceVerification
 			$code   = $_GET['s2'];
 			$action = intval( substr( $code, 0, 1 ) );
 			if ( 1 === $action ) {
@@ -354,6 +372,7 @@ class S2_Frontend extends S2_Core {
 			return $content;
 		}
 
+		// phpcs:disable WordPress.Security.NonceVerification
 		$code   = $_GET['s2'];
 		$action = substr( $code, 0, 1 );
 		$hash   = substr( $code, 1, 32 );
@@ -393,6 +412,7 @@ class S2_Frontend extends S2_Core {
 		if ( '' !== $this->message ) {
 			return $this->message;
 		}
+		// phpcs:enable WordPress.Security.NonceVerification
 	}
 
 	/**
@@ -575,6 +595,46 @@ class S2_Frontend extends S2_Core {
 		}
 
 		return $tag;
+	}
+
+		/**
+	 * Extend core html tags allow in wp_kses_post()
+	 */
+	public function extend_allowed_tags( $allowedtags, $context ) {
+		if ( 'post' === $context ) {
+			$form_tags = array(
+				'form'  => array(
+					'action' => true,
+					'method' => true,
+					'name'   => true,
+				),
+				'input' => array(
+					'id'       => true,
+					'name'     => true,
+					'onblur'   => true,
+					'onfocus'  => true,
+					'required' => true,
+					'size'     => true,
+					'type'     => true,
+					'value'    => true,
+				),
+				'label' => array(
+					'for' => true,
+				),
+			);
+
+			$allowedtags = array_merge( $allowedtags, $form_tags );
+		}
+
+		return $allowedtags;
+	}
+
+	/**
+	 * Extend allowed CSS in wp_kses_post()
+	 */
+	public function extend_allowed_styles( $styles ) {
+		$styles[] = 'display';
+		return $styles;
 	}
 
 	/* ===== define some variables ===== */

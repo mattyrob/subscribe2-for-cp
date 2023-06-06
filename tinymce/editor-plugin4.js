@@ -5,7 +5,7 @@
 		'tinymce.plugins.Subscribe2Plugin',
 		{
 			init: function( ed, url ) {
-				var i      = 0,
+				var i          = 0,
 					pb         = '<p><img src="' + url + '/../include/spacer.gif" class="mceSubscribe2 mceItemNoResize" /></p>',
 					cls        = 'mceSubscribe2',
 					shortcode  = '[subscribe2]',
@@ -105,4 +105,4 @@
 
 	// Register plugin
 	tinymce.PluginManager.add( 'subscribe2', tinymce.plugins.Subscribe2Plugin );
-}() );
+} )();

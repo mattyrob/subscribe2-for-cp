@@ -60,7 +60,7 @@ class S2_Admin extends S2_Core {
 		register_uninstall_hook( S2PLUGIN, array( 'S2_Admin', 's2_uninstall' ) );
 
 		// capture CSV export
-		if ( isset( $_POST['s2_admin'] ) && isset( $_POST['csv'] ) ) {
+		if ( isset( $_POST['s2_admin'] ) && isset( $_POST['csv'] ) && false !== wp_verify_nonce( $_POST['_s2_export_csv'], 's2_export_csv' ) ) {
 			$date = gmdate( 'Y-m-d' );
 			header( 'Content-Description: File Transfer' );
 			header( 'Content-type: application/octet-stream' );
@@ -265,7 +265,9 @@ class S2_Admin extends S2_Core {
 	public function option_form_js() {
 		wp_register_script( 's2_edit', S2URL . 'include/s2-edit' . $this->script_debug . '.js', array( 'jquery' ), '1.3', true );
 		wp_enqueue_script( 's2_edit' );
-		if ( 'never' !== $this->subscribe2_options['email_freq'] || ( isset( $_POST['email_freq'] ) && 'never' !== $_POST['email_freq'] ) ) {
+		if ( 'never' !== $this->subscribe2_options['email_freq'] ||
+			( isset( $_POST['email_freq'] ) && 'never' !== $_POST['email_freq'] && false !== wp_verify_nonce( $_REQUEST['_wpnonce'], 'subscribe2-options_subscribers' . S2VERSION ) )
+			) {
 			wp_enqueue_script( 'jquery-ui-datepicker' );
 			wp_enqueue_style( 'jquery-style', 'https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css', array(), '1.12.1' );
 			wp_register_script( 's2_date_time', S2URL . 'include/s2-date-time' . $this->script_debug . '.js', array( 'jquery-ui-datepicker' ), '1.1', true );
@@ -455,13 +457,13 @@ class S2_Admin extends S2_Core {
 	public function s2_override_meta() {
 		global $post_ID;
 		$s2mail = get_post_meta( $post_ID, '_s2mail', true );
-		echo '<input type="hidden" name="s2meta_nonce" id="s2meta_nonce" value="' . esc_attr( wp_create_nonce( wp_hash( plugin_basename( __FILE__ ) ) ) ) . '" />';
+		echo '<input type="hidden" name="s2meta_nonce" id="s2meta_nonce" value="' . esc_attr( wp_create_nonce( wp_hash( plugin_basename( __FILE__ ) ) ) ) . '">';
 		echo esc_html__( 'Check here to disable sending of an email notification for this post/page', 'subscribe2-for-cp' );
 		echo '&nbsp;&nbsp;<input type="checkbox" name="s2_meta_field" value="no"';
 		if ( 'no' === $s2mail || ( '1' === $this->subscribe2_options['s2meta_default'] && '' === $s2mail ) ) {
 			echo ' checked="checked"';
 		}
-		echo ' />';
+		echo '>';
 	}
 
 	/**
@@ -494,22 +496,19 @@ class S2_Admin extends S2_Core {
 	 */
 	public function s2_preview_meta() {
 		echo '<p>' . esc_html__( 'Send preview email of this post to currently logged in user:', 'subscribe2-for-cp' ) . '</p>' . "\r\n";
-		echo '<input class="button" name="s2_preview" type="submit" value="' . esc_attr( __( 'Send Preview', 'subscribe2-for-cp' ) ) . '" />' . "\r\n";
+		echo '<input class="button" name="s2_preview" type="submit" value="' . esc_attr( __( 'Send Preview', 'subscribe2-for-cp' ) ) . '">' . "\r\n";
 	}
 
 	/**
 	 * Meta preview box handler
 	 */
 	public function s2_preview_handler() {
-		if ( isset( $_POST['s2_preview'] ) ) {
-			if ( defined( 'DOING_CRON' ) && DOING_CRON ) {
-				return;
-			}
+		if ( isset( $_POST['s2_preview'] ) && false !== check_admin_referer( 'update-post_' . (int) $_POST['post_ID'] ) ) {
 			global $post, $current_user;
-			if ( 'never' !== $this->subscribe2_options['email_freq'] ) {
-				$this->subscribe2_cron( $current_user->user_email );
+			if ( 'never' !== s2cp()->subscribe2_options['email_freq'] ) {
+				s2cp()->subscribe2_cron( $current_user->user_email );
 			} else {
-				$this->publish( $post, $current_user->user_email );
+				s2cp()->publish( $post, $current_user->user_email );
 			}
 			add_filter( 'redirect_post_location', array( $this, 's2_preview_redirect' ) );
 		}
@@ -527,19 +526,16 @@ class S2_Admin extends S2_Core {
 	 */
 	public function s2_resend_meta() {
 		echo '<p>' . esc_html__( 'Resend the notification email of this post to current subscribers:', 'subscribe2-for-cp' ) . '</p>' . "\r\n";
-		echo '<input class="button" name="s2_resend" type="submit" value="' . esc_attr( __( 'Resend Notification', 'subscribe2-for-cp' ) ) . '" />' . "\r\n";
+		echo '<input class="button" name="s2_resend" type="submit" value="' . esc_attr( __( 'Resend Notification', 'subscribe2-for-cp' ) ) . '">' . "\r\n";
 	}
 
 	/**
 	 * Meta resend box handler
 	 */
 	public function s2_resend_handler() {
-		if ( isset( $_POST['s2_resend'] ) ) {
-			if ( defined( 'DOING_CRON' ) && DOING_CRON ) {
-				return;
-			}
+		if ( isset( $_POST['s2_resend'] ) && false !== check_admin_referer( 'update-post_' . (int) $_POST['post_ID'] ) ) {
 			global $post;
-			$this->publish( $post );
+			s2cp()->publish( $post );
 			add_filter( 'redirect_post_location', array( $this, 's2_resend_redirect' ) );
 		}
 	}
@@ -555,16 +551,18 @@ class S2_Admin extends S2_Core {
 	 * Admin notice after resend called
 	 */
 	public function s2_meta_notices() {
+		// phpcs:disable WordPress.Security.NonceVerification
 		if ( isset( $_GET['s2'] ) && 'resend' === $_GET['s2'] ) {
 			$class   = 'notice notice-success is-dismissible';
-			$message = __( 'Attempt made to resend email notification.', 'subscribe2-for-cp' );
+			$message = __( 'Attempt made to resend email notification.', 'subscribe2' );
 			echo '<div class="' . esc_attr( $class ) . '"><p>' . esc_html( $message ) . '</p></div>';
 		}
 		if ( isset( $_GET['s2'] ) && 'preview' === $_GET['s2'] ) {
 			$class   = 'notice notice-success is-dismissible';
-			$message = __( 'Attempt made to send email preview.', 'subscribe2-for-cp' );
+			$message = __( 'Attempt made to send email preview.', 'subscribe2' );
 			echo '<div class="' . esc_attr( $class ) . '"><p>' . esc_html( $message ) . '</p></div>';
 		}
+		// phpcs:enable WordPress.Security.NonceVerification
 	}
 
 	/* ===== WordPress menu helper functions ===== */
@@ -690,7 +688,7 @@ class S2_Admin extends S2_Core {
 			$colspan = 1;
 		}
 		echo '<tr><td style="text-align: left;" colspan="' . esc_attr( $colspan ) . '">' . "\r\n";
-		echo '<label><input type="checkbox" name="checkall" value="checkall_format" /> ' . esc_html__( 'Select / Unselect All', 'subscribe2-for-cp' ) . '</label>' . "\r\n";
+		echo '<label><input type="checkbox" name="checkall" value="checkall_format"> ' . esc_html__( 'Select / Unselect All', 'subscribe2-for-cp' ) . '</label>' . "\r\n";
 		echo '</td></tr>' . "\r\n";
 		echo '<tr style="vertical-align: top;"><td style="width: 50%; text-align: left">' . "\r\n";
 		foreach ( $formats[0] as $format ) {
@@ -704,13 +702,13 @@ class S2_Admin extends S2_Core {
 				if ( in_array( $format, $selected, true ) ) {
 						echo ' checked="checked"';
 				}
-				echo ' /> ' . esc_html( ucwords( $format ) ) . '</label><br>' . "\r\n";
+				echo '> ' . esc_html( ucwords( $format ) ) . '</label><br>' . "\r\n";
 			} else {
 				echo '<label><input class="checkall_format" type="checkbox" name="format[]" value="' . esc_attr( $format ) . '"';
 				if ( in_array( $format, $selected, true ) ) {
 							echo ' checked="checked"';
 				}
-				echo ' /> ' . esc_html( ucwords( $format ) ) . '</label><br>' . "\r\n";
+				echo '> ' . esc_html( ucwords( $format ) ) . '</label><br>' . "\r\n";
 			}
 			$i++;
 		}
@@ -827,7 +825,7 @@ class S2_Admin extends S2_Core {
 
 		echo '</select>';
 		if ( false !== $submit ) {
-			echo '&nbsp;<input type="submit" class="button-secondary" value="' . esc_attr( $submit ) . '" />' . "\r\n";
+			echo '&nbsp;<input type="submit" class="button-secondary" value="' . esc_attr( $submit ) . '">' . "\r\n";
 		}
 	}
 
@@ -923,7 +921,7 @@ class S2_Admin extends S2_Core {
 			$schedule_sorted[ $key ] = $schedule[ $key ];
 		}
 		foreach ( $schedule_sorted as $key => $value ) {
-			echo '<label><input type="radio" name="email_freq" value="' . esc_attr( $key ) . '"' . checked( $this->subscribe2_options['email_freq'], $key, false ) . ' />';
+			echo '<label><input type="radio" name="email_freq" value="' . esc_attr( $key ) . '"' . checked( $this->subscribe2_options['email_freq'], $key, false ) . '>';
 			echo ' ' . esc_html( $value['display'] ) . '</label><br>' . "\r\n";
 		}
 		if ( $scheduled_time ) {
@@ -934,8 +932,8 @@ class S2_Admin extends S2_Core {
 			echo '<p>' . esc_html__( 'Current blog time is', 'subscribe2-for-cp' ) . ': ' . "\r\n";
 			echo '<strong>' . esc_html( date_i18n( $date_format . ' @ ' . $time_format ) ) . '</strong></p>' . "\r\n";
 			echo '<p>' . esc_html__( 'Next email notification will be sent when your blog time is after', 'subscribe2-for-cp' ) . ': ' . "\r\n";
-			echo '<input type="hidden" id="jscrondate" value="' . esc_attr( date_i18n( $date_format, $scheduled_time + $offset ) ) . '" />';
-			echo '<input type="hidden" id="jscrontime" value="' . esc_attr( date_i18n( $time_format, $scheduled_time + $offset ) ) . '" />';
+			echo '<input type="hidden" id="jscrondate" value="' . esc_attr( date_i18n( $date_format, $scheduled_time + $offset ) ) . '">';
+			echo '<input type="hidden" id="jscrontime" value="' . esc_attr( date_i18n( $time_format, $scheduled_time + $offset ) ) . '">';
 			echo '<span id="s2cron_1"><span id="s2crondate" style="background-color: #FFFBCC">' . esc_html( date_i18n( $date_format, $scheduled_time + $offset ) ) . '</span>';
 			echo ' @ <span id="s2crontime" style="background-color: #FFFBCC">' . esc_html( date_i18n( $time_format, $scheduled_time + $offset ) ) . '</span> ';
 			echo '<a href="#" onclick="s2Show(\'cron\'); return false;">' . esc_html__( 'Edit', 'subscribe2-for-cp' ) . '</a></span>' . "\r\n";
@@ -956,7 +954,7 @@ class S2_Admin extends S2_Core {
 			echo '<a href="#" onclick="s2CronRevert(\'cron\'); return false;">' . esc_html__( 'Revert', 'subscribe2-for-cp' ) . '</a></span>' . "\r\n";
 			if ( ! empty( $this->subscribe2_options['last_s2cron'] ) ) {
 				echo '<p>' . esc_html__( 'Attempt to resend the last Digest Notification email', 'subscribe2-for-cp' ) . ': ';
-				echo '<input type="submit" class="button-secondary" name="resend" value="' . esc_attr( __( 'Resend Digest', 'subscribe2-for-cp' ) ) . '" /></p>' . "\r\n";
+				echo '<input type="submit" class="button-secondary" name="resend" value="' . esc_attr( __( 'Resend Digest', 'subscribe2-for-cp' ) ) . '"></p>' . "\r\n";
 			}
 		} else {
 			echo '<br>';
@@ -1255,7 +1253,7 @@ class S2_Admin extends S2_Core {
 		echo '<h3>' . esc_html__( 'Email subscription', 'subscribe2-for-cp' ) . '</h3>' . "\r\n";
 		echo '<table class="form-table">' . "\r\n";
 		echo '<tr><th scope="row">' . esc_html__( 'Subscribe / Unsubscribe', 'subscribe2-for-cp' ) . '</th>' . "\r\n";
-		echo '<td><label><input type="checkbox" name="sub2-one-click-subscribe" value="1" ' . checked( ! get_user_meta( $user->ID, $this->get_usermeta_keyname( 's2_subscribed' ), true ), false, false ) . ' /> ' . esc_html__( 'Receive notifications', 'subscribe2-for-cp' ) . '</label><br>' . "\r\n";
+		echo '<td><label><input type="checkbox" name="sub2-one-click-subscribe" value="1" ' . checked( ! get_user_meta( $user->ID, $this->get_usermeta_keyname( 's2_subscribed' ), true ), false, false ) . '> ' . esc_html__( 'Receive notifications', 'subscribe2-for-cp' ) . '</label><br>' . "\r\n";
 		echo '<span class="description">' . esc_html__( 'Check if you want to receive email notification when new posts are published', 'subscribe2-for-cp' ) . '</span>' . "\r\n";
 		echo '</td></tr></table>' . "\r\n";
 	}
@@ -1264,7 +1262,7 @@ class S2_Admin extends S2_Core {
 	 * Handle submission from profile one-click subscription
 	 */
 	public function one_click_profile_form_save( $user_id ) {
-		if ( current_user_can( 'edit_user', $user_id ) ) {
+		if ( current_user_can( 'edit_user', $user_id ) && false !== wp_verify_nonce( $_POST['_s2_one_click_profile'], 's2_one_click_profile' ) ) {
 			if ( isset( $_POST['sub2-one-click-subscribe'] ) && 1 === (int) $_POST['sub2-one-click-subscribe'] ) {
 				$this->one_click_handler( $user_id, 'subscribe' );
 			} else {

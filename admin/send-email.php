@@ -117,15 +117,15 @@ if ( isset( $_POST['subject'] ) ) {
 if ( ! isset( $_POST['content'] ) ) {
 	$body = '';
 }
-echo '<p><label>' . esc_html__( 'Subject', 'subscribe2-for-cp' ) . ': <input type="text" size="69" name="subject" value="' . esc_attr( $subject ) . '" /></label> <br><br>';
+echo '<p><label>' . esc_html__( 'Subject', 'subscribe2-for-cp' ) . ': <input type="text" size="69" name="subject" value="' . esc_attr( $subject ) . '"></label> <br><br>';
 echo '<label><span class="screen-reader-text">' . esc_html__( 'Email body', 'subscribe2-for-cp' ) . '</span><textarea rows="12" cols="75" name="content">' . esc_textarea( $body ) . '</textarea></label>';
 echo "<br><div id=\"upload_files\"><input type=\"file\" name=\"file[]\"></div>\r\n";
-echo '<input type="button" class="button-secondary" name="addmore" value="' . esc_attr( __( 'Add More Files', 'subscribe2-for-cp' ) ) . "\" onClick=\"add_file_upload();\" />\r\n";
+echo '<input type="button" class="button-secondary" name="addmore" value="' . esc_attr( __( 'Add More Files', 'subscribe2-for-cp' ) ) . "\" onClick=\"add_file_upload();\">\r\n";
 echo "<br><br>\r\n";
 echo esc_html__( 'Recipients:', 'subscribe2-for-cp' ) . ' ';
 s2cp()->display_subscriber_dropdown( apply_filters( 's2_subscriber_dropdown_default', 'registered' ), false );
-echo '<input type="hidden" name="s2_admin" value="mail" />';
-echo '<p class="submit"><input type="submit" class="button-secondary" name="preview" value="' . esc_attr( __( 'Preview', 'subscribe2-for-cp' ) ) . '" />&nbsp;<input type="submit" class="button-primary" name="send" value="' . esc_attr( __( 'Send', 'subscribe2-for-cp' ) ) . '" /></p>';
+echo '<input type="hidden" name="s2_admin" value="mail">';
+echo '<p class="submit"><input type="submit" class="button-secondary" name="preview" value="' . esc_attr( __( 'Preview', 'subscribe2-for-cp' ) ) . '">&nbsp;<input type="submit" class="button-primary" name="send" value="' . esc_attr( __( 'Send', 'subscribe2-for-cp' ) ) . '"></p>';
 echo '</form></div>' . "\r\n";
 echo '<div style="clear: both;"><p>&nbsp;</p></div>';
 ?>

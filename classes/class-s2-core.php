@@ -68,7 +68,7 @@ class S2_Core {
 			remove_all_filters( 'wp_mail_content_type' );
 			add_filter( 'wp_mail_content_type', array( $this, 'html_email' ) );
 			if ( 'yes' === $this->subscribe2_options['stylesheet'] ) {
-				$mailtext = (string) apply_filters( 's2_html_email', '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd"><html><head><title>' . $subject . '</title><link rel="stylesheet" href="' . get_stylesheet_directory_uri() . (string) apply_filters( 's2_stylesheet_name', '/style.css' ) . '" type="text/css" media="screen" /><meta http-equiv="Content-Type" content="text/html; charset=utf-8"></head><body>' . $message . '</body></html>', $subject, $message ); // phpcs:ignore WordPress.WP.EnqueuedResources
+				$mailtext = (string) apply_filters( 's2_html_email', '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd"><html><head><title>' . $subject . '</title><link rel="stylesheet" href="' . get_stylesheet_directory_uri() . (string) apply_filters( 's2_stylesheet_name', '/style.css' ) . '" type="text/css" media="screen"><meta http-equiv="Content-Type" content="text/html; charset=utf-8"></head><body>' . $message . '</body></html>', $subject, $message ); // phpcs:ignore WordPress.WP.EnqueuedResources
 			} else {
 				$mailtext = (string) apply_filters( 's2_html_email', '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd"><html><head><title>' . $subject . '</title></head><body>' . $message . '</body></html>', $subject, $message );
 			}
@@ -276,7 +276,10 @@ class S2_Core {
 		if ( '' === $preview ) {
 			// we aren't sending a Preview to the current user so carry out checks
 			$s2mail = get_post_meta( $post->ID, '_s2mail', true );
-			if ( ( isset( $_POST['s2_meta_field'] ) && 'no' === $_POST['s2_meta_field'] ) || 'no' === strtolower( trim( $s2mail ) ) ) {
+
+			if ( 'no' === strtolower( trim( $s2mail ) ) ||
+				( isset( $_POST['s2_meta_field'] ) && 'no' === $_POST['s2_meta_field'] && false !== wp_verify_nonce( $_POST['_s2meta_nonce'], 's2meta_nonce' ) )
+			) {
 				return $post;
 			}
 
@@ -1247,7 +1250,7 @@ class S2_Core {
 		}
 		if ( 'wpreg' === $this->subscribe2_options['autosub'] ) {
 			echo '<p><label>';
-			echo '<input type="checkbox" name="reg_subscribe"' . checked( $this->subscribe2_options['wpregdef'], 'yes', false ) . ' /> ';
+			echo '<input type="checkbox" name="reg_subscribe"' . checked( $this->subscribe2_options['wpregdef'], 'yes', false ) . '> ';
 			echo esc_html__( 'Check here to Subscribe to email notifications for new posts', 'subscribe2-for-cp' ) . "\r\n";
 			echo '</label></p>' . "\r\n";
 		} elseif ( 'yes' === $this->subscribe2_options['autosub'] ) {
@@ -1264,7 +1267,10 @@ class S2_Core {
 		if ( 0 === $user_ID ) {
 			return;
 		}
-		if ( 'yes' === $this->subscribe2_options['autosub'] || ( isset( $_POST['reg_subscribe'] ) && 'on' === $_POST['reg_subscribe'] && 'wpreg' === $this->subscribe2_options['autosub'] ) ) {
+
+		if ( 'yes' === $this->subscribe2_options['autosub'] ||
+			( isset( $_POST['reg_subscribe'] ) && 'on' === $_POST['reg_subscribe'] && 'wpreg' === $this->subscribe2_options['autosub'] && false !== wp_verify_nonce( $_POST['_s2_register'], 's2_register' ) )
+		) {
 			$this->register( $user_ID, true );
 		} else {
 			$this->register( $user_ID, false );
@@ -1279,7 +1285,7 @@ class S2_Core {
 		if ( is_user_logged_in() ) {
 			$comment_meta_form = $this->profile;
 		} else {
-			$comment_meta_form = '<p style="width: auto;"><label><input type="checkbox" name="s2_comment_request" value="1" ' . checked( $this->subscribe2_options['comment_def'], 'yes', false ) . '/> ' . __( 'Check here to Subscribe to notifications for new posts', 'subscribe2-for-cp' ) . '</label></p>';
+			$comment_meta_form = '<p style="width: auto;"><label><input type="checkbox" name="s2_comment_request" value="1" ' . checked( $this->subscribe2_options['comment_def'], 'yes', false ) . '> ' . __( 'Check here to Subscribe to notifications for new posts', 'subscribe2-for-cp' ) . '</label></p>';
 		}
 		if ( 'before' === $this->subscribe2_options['comment_subs'] ) {
 			return $comment_meta_form . $submit_field;
@@ -1293,6 +1299,7 @@ class S2_Core {
 	 */
 	public function s2_comment_meta( $comment_id, $approved = 0 ) {
 		// return if email is empty - can happen if setting to require name and email for comments is disabled
+		// phpcs:disable WordPress.Security.NonceVerification
 		if ( isset( $_POST['email'] ) && empty( $_POST['email'] ) ) {
 			return;
 		}
@@ -1318,6 +1325,7 @@ class S2_Core {
 					break;
 			}
 		}
+		// phpcs:enable WordPress.Security.NonceVerification
 	}
 
 	/**
@@ -1848,6 +1856,7 @@ class S2_Core {
 			require_once S2PATH . 'classes/class-s2-multisite.php';
 			global $s2class_multisite;
 			$s2class_multisite = new S2_Multisite();
+			// phpcs:ignore WordPress.Security.NonceVerification
 			if ( isset( $_GET['s2mu_subscribe'] ) || isset( $_GET['s2mu_unsubscribe'] ) ) {
 				add_action( 'init', array( &$s2class_multisite, 'wpmu_subscribe' ) );
 			}

@@ -191,8 +191,8 @@ echo '<form method="post">' . "\r\n";
 
 wp_nonce_field( 'subscribe2-options_subscribers' . S2VERSION );
 
-echo '<input type="hidden" name="s2_admin" value="options" />' . "\r\n";
-echo '<input type="hidden" id="jsbcclimit" value="' . esc_attr( s2cp()->subscribe2_options['bcclimit'] ) . '" />';
+echo '<input type="hidden" name="s2_admin" value="options">' . "\r\n";
+echo '<input type="hidden" id="jsbcclimit" value="' . esc_attr( s2cp()->subscribe2_options['bcclimit'] ) . '">';
 
 switch ( $current_tab ) {
 	case 'email':
@@ -203,30 +203,30 @@ switch ( $current_tab ) {
 		echo '<span id="s2bcclimit_1"><span id="s2bcclimit" style="background-color: #FFFBCC">' . esc_html( s2cp()->subscribe2_options['bcclimit'] ) . '</span> ';
 		echo '<a href="#" onclick="s2Show(\'bcclimit\'); return false;">' . esc_html__( 'Edit', 'subscribe2-for-cp' ) . '</a></span>' . "\r\n";
 		echo '<span id="s2bcclimit_2">' . "\r\n";
-		echo '<input type="text" name="bcclimit" value="' . esc_attr( s2cp()->subscribe2_options['bcclimit'] ) . '" size="3" />' . "\r\n";
+		echo '<input type="text" name="bcclimit" value="' . esc_attr( s2cp()->subscribe2_options['bcclimit'] ) . '" size="3">' . "\r\n";
 		echo '<a href="#" onclick="s2Update(\'bcclimit\'); return false;">' . esc_html__( 'Update', 'subscribe2-for-cp' ) . '</a>' . "\r\n";
 		echo '<a href="#" onclick="s2Revert(\'bcclimit\'); return false;">' . esc_html__( 'Revert', 'subscribe2-for-cp' ) . '</a></span>' . "\n";
 
 		echo '<br><br>' . esc_html__( 'Send Admins notifications for new', 'subscribe2-for-cp' ) . ': ';
-		echo '<label><input type="radio" name="admin_email" value="subs"' . checked( s2cp()->subscribe2_options['admin_email'], 'subs', false ) . ' />' . "\r\n";
+		echo '<label><input type="radio" name="admin_email" value="subs"' . checked( s2cp()->subscribe2_options['admin_email'], 'subs', false ) . '>' . "\r\n";
 		echo esc_html__( 'Subscriptions', 'subscribe2-for-cp' ) . '</label>&nbsp;&nbsp;';
-		echo '<label><input type="radio" name="admin_email" value="unsubs"' . checked( s2cp()->subscribe2_options['admin_email'], 'unsubs', false ) . ' />' . "\r\n";
+		echo '<label><input type="radio" name="admin_email" value="unsubs"' . checked( s2cp()->subscribe2_options['admin_email'], 'unsubs', false ) . '>' . "\r\n";
 		echo esc_html__( 'Unsubscriptions', 'subscribe2-for-cp' ) . '</label>&nbsp;&nbsp;';
-		echo '<label><input type="radio" name="admin_email" value="both"' . checked( s2cp()->subscribe2_options['admin_email'], 'both', false ) . ' />' . "\r\n";
+		echo '<label><input type="radio" name="admin_email" value="both"' . checked( s2cp()->subscribe2_options['admin_email'], 'both', false ) . '>' . "\r\n";
 		echo esc_html__( 'Both', 'subscribe2-for-cp' ) . '</label>&nbsp;&nbsp;';
-		echo '<label><input type="radio" name="admin_email" value="none"' . checked( s2cp()->subscribe2_options['admin_email'], 'none', false ) . ' />' . "\r\n";
+		echo '<label><input type="radio" name="admin_email" value="none"' . checked( s2cp()->subscribe2_options['admin_email'], 'none', false ) . '>' . "\r\n";
 		echo esc_html__( 'Neither', 'subscribe2-for-cp' ) . '</label><br><br>' . "\r\n";
 
 		echo esc_html__( 'Include theme CSS stylesheet in HTML notifications', 'subscribe2-for-cp' ) . ': ';
-		echo '<label><input type="radio" name="stylesheet" value="yes"' . checked( s2cp()->subscribe2_options['stylesheet'], 'yes', false ) . ' /> ';
+		echo '<label><input type="radio" name="stylesheet" value="yes"' . checked( s2cp()->subscribe2_options['stylesheet'], 'yes', false ) . '> ';
 		echo esc_html__( 'Yes', 'subscribe2-for-cp' ) . '</label>&nbsp;&nbsp;';
-		echo '<label><input type="radio" name="stylesheet" value="no"' . checked( s2cp()->subscribe2_options['stylesheet'], 'no', false ) . ' /> ';
+		echo '<label><input type="radio" name="stylesheet" value="no"' . checked( s2cp()->subscribe2_options['stylesheet'], 'no', false ) . '> ';
 		echo esc_html__( 'No', 'subscribe2-for-cp' ) . '</label><br><br>' . "\r\n";
 
 		echo esc_html__( 'Send Emails for Pages', 'subscribe2-for-cp' ) . ': ';
-		echo '<label><input type="radio" name="pages" value="yes"' . checked( s2cp()->subscribe2_options['pages'], 'yes', false ) . ' /> ';
+		echo '<label><input type="radio" name="pages" value="yes"' . checked( s2cp()->subscribe2_options['pages'], 'yes', false ) . '> ';
 		echo esc_html__( 'Yes', 'subscribe2-for-cp' ) . '</label>&nbsp;&nbsp;';
-		echo '<label><input type="radio" name="pages" value="no"' . checked( s2cp()->subscribe2_options['pages'], 'no', false ) . ' /> ';
+		echo '<label><input type="radio" name="pages" value="no"' . checked( s2cp()->subscribe2_options['pages'], 'no', false ) . '> ';
 		echo esc_html__( 'No', 'subscribe2-for-cp' ) . '</label><br><br>' . "\r\n";
 
 		$s2_post_types = apply_filters( 's2_post_types', array() );
@@ -238,20 +238,20 @@ switch ( $current_tab ) {
 		}
 
 		echo esc_html__( 'Send Emails for Password Protected Posts', 'subscribe2-for-cp' ) . ': ';
-		echo '<label><input type="radio" name="password" value="yes"' . checked( s2cp()->subscribe2_options['password'], 'yes', false ) . ' /> ';
+		echo '<label><input type="radio" name="password" value="yes"' . checked( s2cp()->subscribe2_options['password'], 'yes', false ) . '> ';
 		echo esc_html__( 'Yes', 'subscribe2-for-cp' ) . '</label>&nbsp;&nbsp;';
-		echo '<label><input type="radio" name="password" value="no"' . checked( s2cp()->subscribe2_options['password'], 'no', false ) . ' /> ';
+		echo '<label><input type="radio" name="password" value="no"' . checked( s2cp()->subscribe2_options['password'], 'no', false ) . '> ';
 		echo esc_html__( 'No', 'subscribe2-for-cp' ) . '</label><br><br>' . "\r\n";
 		echo esc_html__( 'Send Emails for Private Posts', 'subscribe2-for-cp' ) . ': ';
-		echo '<label><input type="radio" name="private" value="yes"' . checked( s2cp()->subscribe2_options['private'], 'yes', false ) . ' /> ';
+		echo '<label><input type="radio" name="private" value="yes"' . checked( s2cp()->subscribe2_options['private'], 'yes', false ) . '> ';
 		echo esc_html__( 'Yes', 'subscribe2-for-cp' ) . '</label>&nbsp;&nbsp;';
-		echo '<label><input type="radio" name="private" value="no"' . checked( s2cp()->subscribe2_options['private'], 'no', false ) . ' /> ';
+		echo '<label><input type="radio" name="private" value="no"' . checked( s2cp()->subscribe2_options['private'], 'no', false ) . '> ';
 		echo esc_html__( 'No', 'subscribe2-for-cp' ) . '</label><br><br>' . "\r\n";
 		if ( 'never' !== s2cp()->subscribe2_options['email_freq'] ) {
 			echo esc_html__( 'Include Sticky Posts at the top of all Digest Notifications', 'subscribe2-for-cp' ) . ': ';
-			echo '<label><input type="radio" name="stickies" value="yes"' . checked( s2cp()->subscribe2_options['stickies'], 'yes', false ) . ' /> ';
+			echo '<label><input type="radio" name="stickies" value="yes"' . checked( s2cp()->subscribe2_options['stickies'], 'yes', false ) . '> ';
 			echo esc_html__( 'Yes', 'subscribe2-for-cp' ) . '</label>&nbsp;&nbsp;';
-			echo '<label><input type="radio" name="stickies" value="no"' . checked( s2cp()->subscribe2_options['stickies'], 'no', false ) . ' /> ';
+			echo '<label><input type="radio" name="stickies" value="no"' . checked( s2cp()->subscribe2_options['stickies'], 'no', false ) . '> ';
 			echo esc_html__( 'No', 'subscribe2-for-cp' ) . '</label><br><br>' . "\r\n";
 		}
 		echo esc_html__( 'Send Email From', 'subscribe2-for-cp' ) . ': ';
@@ -264,13 +264,13 @@ switch ( $current_tab ) {
 		}
 		if ( 'never' !== s2cp()->subscribe2_options['email_freq'] ) {
 			echo '<p>' . esc_html__( 'For digest notifications, date order for posts is', 'subscribe2-for-cp' ) . ': ' . "\r\n";
-			echo '<label><input type="radio" name="cron_order" value="desc"' . checked( s2cp()->subscribe2_options['cron_order'], 'desc', false ) . ' /> ';
+			echo '<label><input type="radio" name="cron_order" value="desc"' . checked( s2cp()->subscribe2_options['cron_order'], 'desc', false ) . '> ';
 			echo esc_html__( 'Descending', 'subscribe2-for-cp' ) . '</label>&nbsp;&nbsp;';
-			echo '<label><input type="radio" name="cron_order" value="asc"' . checked( s2cp()->subscribe2_options['cron_order'], 'asc', false ) . ' /> ';
+			echo '<label><input type="radio" name="cron_order" value="asc"' . checked( s2cp()->subscribe2_options['cron_order'], 'asc', false ) . '> ';
 			echo esc_html__( 'Ascending', 'subscribe2-for-cp' ) . '</label></p>' . "\r\n";
 		}
 		echo '<label>' . esc_html__( 'Add Tracking Parameters to the Permalink', 'subscribe2-for-cp' ) . ': ';
-		echo '<input type="text" name="tracking" value="' . esc_attr( s2cp()->subscribe2_options['tracking'] ) . '" size="50" /> ';
+		echo '<input type="text" name="tracking" value="' . esc_attr( s2cp()->subscribe2_options['tracking'] ) . '" size="50"> ';
 		echo '</label><br>' . esc_html__( 'eg. utm_source=subscribe2&amp;utm_medium=email&amp;utm_campaign=postnotify&amp;utm_id={ID}&amp;utm_title={TITLE}', 'subscribe2-for-cp' ) . "\r\n";
 		echo '</p>' . "\r\n";
 		echo '</div>' . "\r\n";
@@ -284,11 +284,11 @@ switch ( $current_tab ) {
 		echo '<tr><td style="vertical-align: top; height: 350px; min-height: 350px;">';
 		echo '<h3>' . esc_html__( 'Notification email (must not be empty)', 'subscribe2-for-cp' ) . '</h3>' . "\r\n";
 		echo '<label>' . esc_html__( 'Notification Email Subject Line', 'subscribe2-for-cp' ) . ': ';
-		echo '<input type="text" name="notification_subject" value="' . esc_attr( s2cp()->subscribe2_options['notification_subject'] ) . '" size="45" /></label>';
+		echo '<input type="text" name="notification_subject" value="' . esc_attr( s2cp()->subscribe2_options['notification_subject'] ) . '" size="45"></label>';
 		echo '<br>' . "\r\n";
 		echo '<textarea rows="9" cols="60" name="mailtext" style="width:95%;">' . esc_textarea( stripslashes( s2cp()->subscribe2_options['mailtext'] ) ) . '</textarea>' . "\r\n";
 		echo '</td><td style="vertical-align: top;" rowspan="3">';
-		echo '<p class="submit"><input type="submit" class="button-secondary" name="preview" value="' . esc_html__( 'Send Email Preview', 'subscribe2-for-cp' ) . '" /></p>' . "\r\n";
+		echo '<p class="submit"><input type="submit" class="button-secondary" name="preview" value="' . esc_html__( 'Send Email Preview', 'subscribe2-for-cp' ) . '"></p>' . "\r\n";
 		echo '<h3>' . esc_html__( 'Message substitutions', 'subscribe2-for-cp' ) . '</h3>' . "\r\n";
 		echo '<dl>';
 		echo '<dt><b><em style="color: red">' . esc_html__( 'IF THE FOLLOWING KEYWORDS ARE ALSO IN YOUR POST THEY WILL BE SUBSTITUTED', 'subscribe2-for-cp' ) . '</em></b></dt><dd></dd>' . "\r\n";
@@ -323,12 +323,12 @@ switch ( $current_tab ) {
 		echo '</dl></td></tr><tr><td  style="vertical-align: top; height: 350px; min-height: 350px;">';
 		echo '<h3>' . esc_html__( 'Subscribe / Unsubscribe confirmation email', 'subscribe2-for-cp' ) . ':</h3>' . "\r\n";
 		echo '<label>' . esc_html__( 'Confirmation Email Subject Line', 'subscribe2-for-cp' ) . ': ';
-		echo '<input type="text" name="confirm_subject" value="' . esc_attr( s2cp()->subscribe2_options['confirm_subject'] ) . '" size="45" /></label><br>' . "\r\n";
+		echo '<input type="text" name="confirm_subject" value="' . esc_attr( s2cp()->subscribe2_options['confirm_subject'] ) . '" size="45"></label><br>' . "\r\n";
 		echo '<textarea rows="9" cols="60" name="confirm_email" style="width:95%;">' . esc_textarea( stripslashes( s2cp()->subscribe2_options['confirm_email'] ) ) . '</textarea>' . "\r\n";
 		echo '</td></tr><tr><td style="vertical-align: top; height: 350px; min-height: 350px;">';
 		echo '<h3>' . esc_html__( 'Reminder email to Unconfirmed Subscribers', 'subscribe2-for-cp' ) . ':</h3>' . "\r\n";
 		echo '<label>' . esc_html__( 'Reminder Email Subject Line', 'subscribe2-for-cp' ) . ': ';
-		echo '<input type="text" name="remind_subject" value="' . esc_attr( s2cp()->subscribe2_options['remind_subject'] ) . '" size="45" /></label><br>' . "\r\n";
+		echo '<input type="text" name="remind_subject" value="' . esc_attr( s2cp()->subscribe2_options['remind_subject'] ) . '" size="45"></label><br>' . "\r\n";
 		echo '<textarea rows="9" cols="60" name="remind_email" style="width:95%;">' . esc_textarea( stripslashes( s2cp()->subscribe2_options['remind_email'] ) ) . '</textarea><br><br>' . "\r\n";
 		echo '</td></tr></table>' . "\r\n";
 		echo '</div>' . "\r\n";
@@ -341,7 +341,7 @@ switch ( $current_tab ) {
 
 		// compulsory categories
 		echo '<div class="s2_admin" id="s2_compulsory_categories">' . "\r\n";
-		echo '<input type="hidden" name="registered_users_tab" value="options" />' . "\r\n";
+		echo '<input type="hidden" name="registered_users_tab" value="options">' . "\r\n";
 		echo '<h3>' . esc_html__( 'Compulsory Categories', 'subscribe2-for-cp' ) . '</h3>' . "\r\n";
 		echo '<p>' . "\r\n";
 		echo '<strong><em style="color: red">' . esc_html__( 'Compulsory categories will be checked by default for Registered Subscribers', 'subscribe2-for-cp' ) . '</em></strong><br>' . "\r\n";
@@ -356,7 +356,7 @@ switch ( $current_tab ) {
 		echo '<strong><em style="color: red">' . esc_html__( 'Posts assigned to any Excluded Category do not generate notifications and are not included in digest notifications', 'subscribe2-for-cp' ) . '</em></strong><br>' . "\r\n";
 		echo '</p>';
 		$s2_forms->display_category_form( explode( ',', s2cp()->subscribe2_options['exclude'] ), 1, array(), 'exclude' );
-		echo '<p style="text-align: center;"><label><input type="checkbox" name="reg_override" value="1"' . checked( s2cp()->subscribe2_options['reg_override'], '1', false ) . ' /> ';
+		echo '<p style="text-align: center;"><label><input type="checkbox" name="reg_override" value="1"' . checked( s2cp()->subscribe2_options['reg_override'], '1', false ) . '> ';
 		echo esc_html__( 'Allow registered users to subscribe to excluded categories?', 'subscribe2-for-cp' ) . '</label></p>' . "\r\n";
 		echo '</div>' . "\r\n";
 
@@ -379,69 +379,69 @@ switch ( $current_tab ) {
 		echo '<p>' . "\r\n";
 		echo esc_html__( 'Subscribe new users registering with your blog', 'subscribe2-for-cp' ) . ':<br>' . "\r\n";
 		if ( defined( 'S2GDPR' ) && ( ( true === S2GDPR && 'yes' === s2cp()->subscribe2_options['autosub'] ) || ( false === S2GDPR ) ) ) {
-			echo '<label><input type="radio" name="autosub" value="yes"' . checked( s2cp()->subscribe2_options['autosub'], 'yes', false ) . ' /> ';
+			echo '<label><input type="radio" name="autosub" value="yes"' . checked( s2cp()->subscribe2_options['autosub'], 'yes', false ) . '> ';
 			echo esc_html__( 'Automatically', 'subscribe2-for-cp' ) . '</label>&nbsp;&nbsp;';
 		}
-		echo '<label><input type="radio" name="autosub" value="wpreg"' . checked( s2cp()->subscribe2_options['autosub'], 'wpreg', false ) . ' /> ';
+		echo '<label><input type="radio" name="autosub" value="wpreg"' . checked( s2cp()->subscribe2_options['autosub'], 'wpreg', false ) . '> ';
 		echo esc_html__( 'Display option on Registration Form', 'subscribe2-for-cp' ) . '</label>&nbsp;&nbsp;';
-		echo '<label><input type="radio" name="autosub" value="no"' . checked( s2cp()->subscribe2_options['autosub'], 'no', false ) . ' /> ';
+		echo '<label><input type="radio" name="autosub" value="no"' . checked( s2cp()->subscribe2_options['autosub'], 'no', false ) . '> ';
 		echo esc_html__( 'No', 'subscribe2-for-cp' ) . '</label><br><br>' . "\r\n";
 		echo esc_html__( 'Auto-subscribe includes any excluded categories', 'subscribe2-for-cp' ) . ':<br>' . "\r\n";
-		echo '<label><input type="radio" name="newreg_override" value="yes"' . checked( s2cp()->subscribe2_options['newreg_override'], 'yes', false ) . ' /> ';
+		echo '<label><input type="radio" name="newreg_override" value="yes"' . checked( s2cp()->subscribe2_options['newreg_override'], 'yes', false ) . '> ';
 		echo esc_html__( 'Yes', 'subscribe2-for-cp' ) . '</label>&nbsp;&nbsp;';
-		echo '<label><input type="radio" name="newreg_override" value="no"' . checked( s2cp()->subscribe2_options['newreg_override'], 'no', false ) . ' /> ';
+		echo '<label><input type="radio" name="newreg_override" value="no"' . checked( s2cp()->subscribe2_options['newreg_override'], 'no', false ) . '> ';
 		echo esc_html__( 'No', 'subscribe2-for-cp' ) . '</label><br><br>' . "\r\n";
 		if ( defined( 'S2GDPR' ) && ( ( true === S2GDPR && 'yes' === s2cp()->subscribe2_options['wpregdef'] ) || ( false === S2GDPR ) ) ) {
 			echo esc_html__( 'Registration Form option is checked by default', 'subscribe2-for-cp' ) . ':<br>' . "\r\n";
-			echo '<label><input type="radio" name="wpregdef" value="yes"' . checked( s2cp()->subscribe2_options['wpregdef'], 'yes', false ) . ' /> ';
+			echo '<label><input type="radio" name="wpregdef" value="yes"' . checked( s2cp()->subscribe2_options['wpregdef'], 'yes', false ) . '> ';
 			echo esc_html__( 'Yes', 'subscribe2-for-cp' ) . '</label>&nbsp;&nbsp;';
-			echo '<label><input type="radio" name="wpregdef" value="no"' . checked( s2cp()->subscribe2_options['wpregdef'], 'no', false ) . ' /> ';
+			echo '<label><input type="radio" name="wpregdef" value="no"' . checked( s2cp()->subscribe2_options['wpregdef'], 'no', false ) . '> ';
 			echo esc_html__( 'No', 'subscribe2-for-cp' ) . '</label><br><br>' . "\r\n";
 		}
 		echo esc_html__( 'Auto-subscribe users to receive email as', 'subscribe2-for-cp' ) . ': <br>' . "\r\n";
-		echo '<label><input type="radio" name="autoformat" value="html"' . checked( s2cp()->subscribe2_options['autoformat'], 'html', false ) . ' /> ';
+		echo '<label><input type="radio" name="autoformat" value="html"' . checked( s2cp()->subscribe2_options['autoformat'], 'html', false ) . '> ';
 		echo esc_html__( 'HTML - Full', 'subscribe2-for-cp' ) . '</label>&nbsp;&nbsp;';
-		echo '<label><input type="radio" name="autoformat" value="html_excerpt"' . checked( s2cp()->subscribe2_options['autoformat'], 'html_excerpt', false ) . ' /> ';
+		echo '<label><input type="radio" name="autoformat" value="html_excerpt"' . checked( s2cp()->subscribe2_options['autoformat'], 'html_excerpt', false ) . '> ';
 		echo esc_html__( 'HTML - Excerpt', 'subscribe2-for-cp' ) . '</label>&nbsp;&nbsp;';
-		echo '<label><input type="radio" name="autoformat" value="post"' . checked( s2cp()->subscribe2_options['autoformat'], 'post', false ) . ' /> ';
+		echo '<label><input type="radio" name="autoformat" value="post"' . checked( s2cp()->subscribe2_options['autoformat'], 'post', false ) . '> ';
 		echo esc_html__( 'Plain Text - Full', 'subscribe2-for-cp' ) . '</label>&nbsp;&nbsp;';
-		echo '<label><input type="radio" name="autoformat" value="excerpt"' . checked( s2cp()->subscribe2_options['autoformat'], 'excerpt', false ) . ' /> ';
+		echo '<label><input type="radio" name="autoformat" value="excerpt"' . checked( s2cp()->subscribe2_options['autoformat'], 'excerpt', false ) . '> ';
 		echo esc_html__( 'Plain Text - Excerpt', 'subscribe2-for-cp' ) . '</label><br><br>';
 		echo esc_html__( 'Registered Users have the option to auto-subscribe to new categories', 'subscribe2-for-cp' ) . ': <br>' . "\r\n";
-		echo '<label><input type="radio" name="show_autosub" value="yes"' . checked( s2cp()->subscribe2_options['show_autosub'], 'yes', false ) . ' /> ';
+		echo '<label><input type="radio" name="show_autosub" value="yes"' . checked( s2cp()->subscribe2_options['show_autosub'], 'yes', false ) . '> ';
 		echo esc_html__( 'Yes', 'subscribe2-for-cp' ) . '</label>&nbsp;&nbsp;';
-		echo '<label><input type="radio" name="show_autosub" value="no"' . checked( s2cp()->subscribe2_options['show_autosub'], 'no', false ) . ' /> ';
+		echo '<label><input type="radio" name="show_autosub" value="no"' . checked( s2cp()->subscribe2_options['show_autosub'], 'no', false ) . '> ';
 		echo esc_html__( 'No', 'subscribe2-for-cp' ) . '</label>&nbsp;&nbsp;';
-		echo '<label><input type="radio" name="show_autosub" value="exclude"' . checked( s2cp()->subscribe2_options['show_autosub'], 'exclude', false ) . ' /> ';
+		echo '<label><input type="radio" name="show_autosub" value="exclude"' . checked( s2cp()->subscribe2_options['show_autosub'], 'exclude', false ) . '> ';
 		echo esc_html__( 'New categories are immediately excluded', 'subscribe2-for-cp' ) . '</label><br><br>';
 		if ( defined( 'S2GDPR' ) && ( ( true === S2GDPR && 'yes' === s2cp()->subscribe2_options['autosub_def'] ) || ( false === S2GDPR ) ) ) {
 			echo esc_html__( 'Option for Registered Users to auto-subscribe to new categories is checked by default', 'subscribe2-for-cp' ) . ': <br>' . "\r\n";
-			echo '<label><input type="radio" name="autosub_def" value="yes"' . checked( s2cp()->subscribe2_options['autosub_def'], 'yes', false ) . ' /> ';
+			echo '<label><input type="radio" name="autosub_def" value="yes"' . checked( s2cp()->subscribe2_options['autosub_def'], 'yes', false ) . '> ';
 			echo esc_html__( 'Yes', 'subscribe2-for-cp' ) . '</label>&nbsp;&nbsp;';
-			echo '<label><input type="radio" name="autosub_def" value="no"' . checked( s2cp()->subscribe2_options['autosub_def'], 'no', false ) . ' /> ';
+			echo '<label><input type="radio" name="autosub_def" value="no"' . checked( s2cp()->subscribe2_options['autosub_def'], 'no', false ) . '> ';
 			echo esc_html__( 'No', 'subscribe2-for-cp' ) . '</label><br><br>';
 		}
 		// Hide these options if using Jetpack Comments
 		if ( ! class_exists( 'Jetpack_Comments' ) ) {
 			echo esc_html__( 'Display checkbox to allow subscriptions from the comment form', 'subscribe2-for-cp' ) . ': <br>' . "\r\n";
-			echo '<label><input type="radio" name="comment_subs" value="before"' . checked( s2cp()->subscribe2_options['comment_subs'], 'before', false ) . ' /> ';
+			echo '<label><input type="radio" name="comment_subs" value="before"' . checked( s2cp()->subscribe2_options['comment_subs'], 'before', false ) . '> ';
 			echo esc_html__( 'Before the Comment Submit button', 'subscribe2-for-cp' ) . '</label>&nbsp;&nbsp;';
-			echo '<label><input type="radio" name="comment_subs" value="after"' . checked( s2cp()->subscribe2_options['comment_subs'], 'after', false ) . ' /> ';
+			echo '<label><input type="radio" name="comment_subs" value="after"' . checked( s2cp()->subscribe2_options['comment_subs'], 'after', false ) . '> ';
 			echo esc_html__( 'After the Comment Submit button', 'subscribe2-for-cp' ) . '</label>&nbsp;&nbsp;';
-			echo '<label><input type="radio" name="comment_subs" value="no"' . checked( s2cp()->subscribe2_options['comment_subs'], 'no', false ) . ' /> ';
+			echo '<label><input type="radio" name="comment_subs" value="no"' . checked( s2cp()->subscribe2_options['comment_subs'], 'no', false ) . '> ';
 			echo esc_html__( 'No', 'subscribe2-for-cp' ) . '</label><br><br>';
 			if ( defined( 'S2GDPR' ) && ( ( true === S2GDPR && 'yes' === s2cp()->subscribe2_options['comment_def'] ) || ( false === S2GDPR ) ) ) {
 				echo esc_html__( 'Comment form checkbox is checked by default', 'subscribe2-for-cp' ) . ': <br>' . "\r\n";
-				echo '<label><input type="radio" name="comment_def" value="yes"' . checked( s2cp()->subscribe2_options['comment_def'], 'yes', false ) . ' /> ';
+				echo '<label><input type="radio" name="comment_def" value="yes"' . checked( s2cp()->subscribe2_options['comment_def'], 'yes', false ) . '> ';
 				echo esc_html__( 'Yes', 'subscribe2-for-cp' ) . '</label>&nbsp;&nbsp;';
-				echo '<label><input type="radio" name="comment_def" value="no"' . checked( s2cp()->subscribe2_options['comment_def'], 'no', false ) . ' /> ';
+				echo '<label><input type="radio" name="comment_def" value="no"' . checked( s2cp()->subscribe2_options['comment_def'], 'no', false ) . '> ';
 				echo esc_html__( 'No', 'subscribe2-for-cp' ) . '</label><br><br>' . "\r\n";
 			}
 		}
 		echo esc_html__( 'Show one-click subscription on profile page', 'subscribe2-for-cp' ) . ':<br>' . "\r\n";
-		echo '<label><input type="radio" name="one_click_profile" value="yes"' . checked( s2cp()->subscribe2_options['one_click_profile'], 'yes', false ) . ' /> ';
+		echo '<label><input type="radio" name="one_click_profile" value="yes"' . checked( s2cp()->subscribe2_options['one_click_profile'], 'yes', false ) . '> ';
 		echo esc_html__( 'Yes', 'subscribe2-for-cp' ) . '</label>&nbsp;&nbsp;';
-		echo '<label><input type="radio" name="one_click_profile" value="no"' . checked( s2cp()->subscribe2_options['one_click_profile'], 'no', false ) . ' /> ';
+		echo '<label><input type="radio" name="one_click_profile" value="no"' . checked( s2cp()->subscribe2_options['one_click_profile'], 'no', false ) . '> ';
 		echo esc_html__( 'No', 'subscribe2-for-cp' ) . '</label>' . "\r\n";
 		echo '</p></div>' . "\r\n";
 		break;
@@ -457,31 +457,31 @@ switch ( $current_tab ) {
 		s2cp()->pages_dropdown( s2cp()->subscribe2_options['s2page'] );
 
 		// show link to Page in meta
-		echo '<br><br><label><input type="checkbox" name="show_meta" value="1"' . checked( s2cp()->subscribe2_options['show_meta'], '1', false ) . ' /> ';
+		echo '<br><br><label><input type="checkbox" name="show_meta" value="1"' . checked( s2cp()->subscribe2_options['show_meta'], '1', false ) . '> ';
 		echo esc_html__( 'Show a link to your subscription page in "meta"?', 'subscribe2-for-cp' ) . '</label><br><br>' . "\r\n";
 
 		// show QuickTag button
-		echo '<label><input type="checkbox" name="show_button" value="1"' . checked( s2cp()->subscribe2_options['show_button'], '1', false ) . ' /> ';
+		echo '<label><input type="checkbox" name="show_button" value="1"' . checked( s2cp()->subscribe2_options['show_button'], '1', false ) . '> ';
 		echo esc_html__( 'Show the Subscribe2 button on the Write toolbar?', 'subscribe2-for-cp' ) . '</label><br><br>' . "\r\n";
 
 		// enable popup style form
-		echo '<label><input type="checkbox" name="ajax" value="1"' . checked( s2cp()->subscribe2_options['ajax'], '1', false ) . ' /> ';
+		echo '<label><input type="checkbox" name="ajax" value="1"' . checked( s2cp()->subscribe2_options['ajax'], '1', false ) . '> ';
 		echo esc_html__( 'Enable popup style subscription form?', 'subscribe2-for-cp' ) . '</label><br><br>' . "\r\n";
 
 		// show Widget
-		echo '<label><input type="checkbox" name="widget" value="1"' . checked( s2cp()->subscribe2_options['widget'], '1', false ) . ' /> ';
+		echo '<label><input type="checkbox" name="widget" value="1"' . checked( s2cp()->subscribe2_options['widget'], '1', false ) . '> ';
 		echo esc_html__( 'Enable Subscribe2 Widget?', 'subscribe2-for-cp' ) . '</label><br><br>' . "\r\n";
 
 		// show Counter Widget
-		echo '<label><input type="checkbox" name="counterwidget" value="1"' . checked( s2cp()->subscribe2_options['counterwidget'], '1', false ) . ' /> ';
+		echo '<label><input type="checkbox" name="counterwidget" value="1"' . checked( s2cp()->subscribe2_options['counterwidget'], '1', false ) . '> ';
 		echo esc_html__( 'Enable Subscribe2 Counter Widget?', 'subscribe2-for-cp' ) . '</label><br><br>' . "\r\n";
 
 		// s2_meta checked by default
-		echo '<label><input type="checkbox" name="s2meta_default" value="1"' . checked( s2cp()->subscribe2_options['s2meta_default'], '1', false ) . ' /> ';
+		echo '<label><input type="checkbox" name="s2meta_default" value="1"' . checked( s2cp()->subscribe2_options['s2meta_default'], '1', false ) . '> ';
 		echo esc_html__( 'Disable email notifications is checked by default on authoring pages?', 'subscribe2-for-cp' ) . '</label><br><br>' . "\r\n";
 
 		// Subscription form for Registered Users on Frontend
-		echo '<label><input type="checkbox" name="js_ip_updater" value="1"' . checked( s2cp()->subscribe2_options['js_ip_updater'], '1', false ) . ' /> ';
+		echo '<label><input type="checkbox" name="js_ip_updater" value="1"' . checked( s2cp()->subscribe2_options['js_ip_updater'], '1', false ) . '> ';
 		echo esc_html__( 'Use javascript to update IP address in Subscribe2 HTML form data? (useful if caching is enabled)', 'subscribe2-for-cp' ) . '</label>' . "\r\n";
 		echo '</p>';
 		echo '</div>' . "\r\n";
