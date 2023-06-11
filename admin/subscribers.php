@@ -278,7 +278,7 @@ if ( ! empty( $subscribers ) ) {
 	}
 	echo '<td style="width: 25%; text-align: right;"><input type="hidden" name="exportcsv" value="' . esc_attr( $exportcsv ) . '">' . "\r\n";
 	wp_nonce_field( 's2_export_csv', '_s2_export_csv' );
-	echo '<input type="submit" class="button-secondary" name="csv" value="' . esc_attr( __( 'Save Emails to CSV File', 'subscribe2' ) ) . '"></td>' . "\r\n";
+	echo '<input type="submit" class="button-secondary" name="csv" value="' . esc_attr( __( 'Save Emails to CSV File', 'subscribe2-for-cp' ) ) . '"></td>' . "\r\n";
 } else {
 	echo '<td style="width: 25%;"></td>';
 }

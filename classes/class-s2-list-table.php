@@ -31,7 +31,7 @@ class S2_List_Table extends WP_List_Table {
 		if ( 'registered' === $current_tab ) {
 			$url     = wp_nonce_url( sprintf( '?page=s2&amp;id=%d', rawurlencode( $item['id'] ) ), '_s2_edit_registered' );
 			$actions = array(
-				'edit' => sprintf( '<a href="%s">%s</a>', $url, __( 'Edit', 'subscribe2' ) ),
+				'edit' => sprintf( '<a href="%s">%s</a>', $url, __( 'Edit', 'subscribe2-for-cp' ) ),
 			);
 			return sprintf( '%1$s %2$s', $item['email'], $this->row_actions( $actions ) );
 		} else {
@@ -84,7 +84,7 @@ class S2_List_Table extends WP_List_Table {
 		$current_url = remove_query_arg( 'paged', $current_url );
 
 		if ( isset( $_GET['_wpnonce'] ) && false === wp_verify_nonce( $_GET['_wpnonce'], 's2_subscriber_tab' ) ) {
-			die( '<p>' . esc_html__( 'Security error! Your request cannot be completed.', 'subscribe2' ) . '</p>' );
+			die( '<p>' . esc_html__( 'Security error! Your request cannot be completed.', 'subscribe2-for-cp' ) . '</p>' );
 		}
 
 		if ( isset( $_REQUEST['what'] ) ) {
@@ -181,7 +181,7 @@ class S2_List_Table extends WP_List_Table {
 		global $current_user, $subscribers;
 
 		if ( isset( $_GET['_wpnonce'] ) && false === wp_verify_nonce( $_GET['_wpnonce'], 's2_subscriber_tab' ) ) {
-			die( '<p>' . esc_html__( 'Security error! Your request cannot be completed.', 'subscribe2' ) . '</p>' );
+			die( '<p>' . esc_html__( 'Security error! Your request cannot be completed.', 'subscribe2-for-cp' ) . '</p>' );
 		}
 
 		if ( in_array( $this->current_action(), array( 'delete', 'toggle' ), true ) ) {

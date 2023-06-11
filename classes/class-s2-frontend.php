@@ -160,7 +160,7 @@ class S2_Frontend extends S2_Core {
 			$action = ' action="' . get_permalink( $this->subscribe2_options['s2page'] ) . '"';
 		}
 
-		$value = __( 'Enter email address...', 'subscribe2' );
+		$value = __( 'Enter email address...', 'subscribe2-for-cp' );
 
 		if ( 'true' === strtolower( $args['nojs'] ) ) {
 			$value = '';
@@ -206,9 +206,9 @@ class S2_Frontend extends S2_Core {
 
 		// build default form
 		if ( 'true' === strtolower( $args['nojs'] ) ) {
-			$this->form = '<form name="' . $form_name . '" method="post"' . $action . '>' . $s2_form_nonce . '<input type="hidden" name="ip" value="' . esc_attr( $remote_ip ) . '">' . $antispam_text . '<p><label for="s2email">' . __( 'Your email:', 'subscribe2' ) . '</label><br><input type="email" name="email" id="s2email" value="' . $value . '" size="' . $args['size'] . '" required>' . $wrap_text . $this->input_form_action . '</p></form>';
+			$this->form = '<form name="' . $form_name . '" method="post"' . $action . '>' . $s2_form_nonce . '<input type="hidden" name="ip" value="' . esc_attr( $remote_ip ) . '">' . $antispam_text . '<p><label for="s2email">' . __( 'Your email:', 'subscribe2-for-cp' ) . '</label><br><input type="email" name="email" id="s2email" value="' . $value . '" size="' . $args['size'] . '" required>' . $wrap_text . $this->input_form_action . '</p></form>';
 		} else {
-			$this->form = '<form name="' . $form_name . '" method="post"' . $action . '>' . $s2_form_nonce . '<input type="hidden" name="ip" value="' . esc_attr( $remote_ip ) . '">' . $antispam_text . '<p><label for="s2email">' . __( 'Your email:', 'subscribe2' ) . '</label><br><input type="email" name="email" id="s2email" value="' . $value . '" size="' . $args['size'] . '" onfocus="if (this.value === \'' . $value . '\') {this.value = \'\';}" onblur="if (this.value === \'\') {this.value = \'' . $value . '\';}" required>' . $wrap_text . $this->input_form_action . '</p></form>' . "\r\n";
+			$this->form = '<form name="' . $form_name . '" method="post"' . $action . '>' . $s2_form_nonce . '<input type="hidden" name="ip" value="' . esc_attr( $remote_ip ) . '">' . $antispam_text . '<p><label for="s2email">' . __( 'Your email:', 'subscribe2-for-cp' ) . '</label><br><input type="email" name="email" id="s2email" value="' . $value . '" size="' . $args['size'] . '" onfocus="if (this.value === \'' . $value . '\') {this.value = \'\';}" onblur="if (this.value === \'\') {this.value = \'' . $value . '\';}" required>' . $wrap_text . $this->input_form_action . '</p></form>' . "\r\n";
 		}
 		$this->s2form = (string) apply_filters( 's2_form', $this->form, $args );
 
@@ -219,7 +219,7 @@ class S2_Frontend extends S2_Core {
 
 		if ( isset( $_POST['subscribe'] ) || isset( $_POST['unsubscribe'] ) ) {
 			if ( false === wp_verify_nonce( $_POST['_wpnonce'], 's2_form' ) ) {
-				return '<p class="s2_error">' . esc_html__( 'Security error! Your request cannot be completed.', 'subscribe2' ) . '</p>';
+				return '<p class="s2_error">' . esc_html__( 'Security error! Your request cannot be completed.', 'subscribe2-for-cp' ) . '</p>';
 			}
 
 			// anti spam sign up measure

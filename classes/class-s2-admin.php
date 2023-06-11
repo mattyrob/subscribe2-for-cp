@@ -554,12 +554,12 @@ class S2_Admin extends S2_Core {
 		// phpcs:disable WordPress.Security.NonceVerification
 		if ( isset( $_GET['s2'] ) && 'resend' === $_GET['s2'] ) {
 			$class   = 'notice notice-success is-dismissible';
-			$message = __( 'Attempt made to resend email notification.', 'subscribe2' );
+			$message = __( 'Attempt made to resend email notification.', 'subscribe2-for-cp' );
 			echo '<div class="' . esc_attr( $class ) . '"><p>' . esc_html( $message ) . '</p></div>';
 		}
 		if ( isset( $_GET['s2'] ) && 'preview' === $_GET['s2'] ) {
 			$class   = 'notice notice-success is-dismissible';
-			$message = __( 'Attempt made to send email preview.', 'subscribe2' );
+			$message = __( 'Attempt made to send email preview.', 'subscribe2-for-cp' );
 			echo '<div class="' . esc_attr( $class ) . '"><p>' . esc_html( $message ) . '</p></div>';
 		}
 		// phpcs:enable WordPress.Security.NonceVerification

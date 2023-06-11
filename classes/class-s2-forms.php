@@ -13,7 +13,7 @@ class S2_Forms {
 	 */
 	public function get_userid() {
 		if ( isset( $_GET['_wpnonce'] ) && false === wp_verify_nonce( $_GET['_wpnonce'], '_s2_edit_registered' ) ) {
-			die( '<p>' . esc_html__( 'Security error! Your request cannot be completed.', 'subscribe2' ) . '</p>' );
+			die( '<p>' . esc_html__( 'Security error! Your request cannot be completed.', 'subscribe2-for-cp' ) . '</p>' );
 		}
 
 		if ( isset( $_GET['id'] ) ) {
@@ -214,7 +214,7 @@ class S2_Forms {
 		$userid = $this->get_userid();
 
 		if ( false === wp_verify_nonce( $_REQUEST['_wpnonce'], 'subscribe2-user_subscribers' . S2VERSION ) ) {
-			die( '<p>' . esc_html__( 'Security error! Your request cannot be completed.', 'subscribe2' ) . '</p>' );
+			die( '<p>' . esc_html__( 'Security error! Your request cannot be completed.', 'subscribe2-for-cp' ) . '</p>' );
 		}
 
 		if ( isset( $_POST['submit'] ) ) {

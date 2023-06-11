@@ -351,17 +351,27 @@ module.exports = function( grunt ) {
 	);
 
 	grunt.registerTask(
-		'release',
-		[
-			'prompt'
-		]
-	);
-
-	grunt.registerTask(
 		'default',
 		[
 			'basictest'
 		]
+	);
+
+	grunt.registerTask(
+		'release',
+		'Preparing new release...',
+		function ( release ) {
+			var releases = [ 'major', 'minor', 'patch' ];
+			if ( arguments.length === 0 ) {
+				grunt.log.writeln( "Please specify release type, for example `grunt release:minor`" );
+			} else {
+				if ( releases.includes( release ) ) {
+					grunt.task.run( 'release-' + release );
+				} else {
+					grunt.log.writeln( "Please specify a valid release type" );
+				}
+			}
+		}
 	);
 
 	grunt.registerTask(

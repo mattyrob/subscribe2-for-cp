@@ -16,7 +16,6 @@
 		"grunt-csscomb": "^4.0.0",
 		"grunt-eslint": "^21.1.0",
 		"grunt-phpcs": "latest",
-		"grunt-prompt": "^1.3.3",
 		"grunt-replace": "latest",
 		"grunt-terser": "latest",
 		"grunt-wp-i18n": "^1.0.3",
