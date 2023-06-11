@@ -1,3 +1,7 @@
+= 11.9 =
+
+* Updated some i18n string domains for translation
+
 = 11.8 =
 
 * HTML code modernisation
