@@ -23,7 +23,7 @@ jobs:
           tools: composer, cs2pr
 
       - name: Install Composer dependencies
-        uses: ramsey/composer-install@v2
+        uses: ramsey/composer-install@v3
         with:
           composer-options: "--no-progress --no-ansi --no-interaction"
 
@@ -71,6 +71,9 @@ jobs:
       - name: Make Composer packages available globally
         run: echo "${PWD}/vendor/bin" >> $GITHUB_PATH
 
+      - name: Install grunt globally
+        run: npm install -g grunt-cli
+
       - name: Log debug information
         run: |
           npm --version
@@ -80,7 +83,7 @@ jobs:
           grunt --version
 
       - name: Run JSHint
-        run: ./node_modules/grunt/bin/grunt jshint:core
+        run: grunt jshint:core
 
       - name: Run ESLint
-        run: ./node_modules/grunt/bin/grunt eslint:core
+        run: grunt eslint:core
