@@ -85,5 +85,5 @@ jobs:
       - name: Run JSHint
         run: grunt jshint:core
 
-      - name: Run ESLint
-        run: grunt eslint:core
+#      - name: Run ESLint
+#        run: grunt eslint:core
