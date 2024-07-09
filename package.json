@@ -5,9 +5,6 @@
 	"private": true,
 	"repository": "local",
 	"devDependencies": {
-		"grunt": "1.6.1",
-		"grunt-bump-wp-version": "latest",
-		"grunt-cli": "1.4.3",
 		"grunt-contrib-clean": "latest",
 		"grunt-contrib-cssmin": "latest",
 		"grunt-contrib-imagemin": "latest",
@@ -17,7 +14,6 @@
 		"grunt-replace": "latest",
 		"grunt-terser": "latest",
 		"grunt-wp-i18n": "^1.0.3",
-		"grunt-zip": "latest",
 		"matchdep": "latest",
 		"terser": "latest"
 	},
