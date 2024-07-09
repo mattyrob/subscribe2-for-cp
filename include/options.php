@@ -169,4 +169,3 @@ if ( ! isset( s2cp()->subscribe2_options['js_ip_updater'] ) ) {
 if ( ! isset( s2cp()->subscribe2_options['dismiss_sender_warning'] ) ) {
 	s2cp()->subscribe2_options['dismiss_sender_warning'] = '';
 } // Default for sender warning message dismissal
-

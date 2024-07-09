@@ -1,5 +1,7 @@
 <?php
 class S2_Ajax {
+	private $script_debug;
+
 	/**
 	 * Constructor
 	 */

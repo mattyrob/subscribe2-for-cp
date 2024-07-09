@@ -257,98 +257,71 @@ class S2_Upgrade {
 		s2cp()->subscribe2_options['remind_email']         = preg_replace( $regex, $replace, s2cp()->subscribe2_options['remind_email'] );
 		s2cp()->subscribe2_options['remind_subject']       = preg_replace( $regex, $replace, s2cp()->subscribe2_options['remind_subject'] );
 
-		if ( version_compare( s2cp()->wp_release, '3.5', '<' ) ) {
-			$users = s2cp()->get_all_registered( 'ID' );
-			foreach ( $users as $user_ID ) {
-				$check_format = get_user_meta( $user_ID, s2cp()->get_usermeta_keyname( 's2_format' ), true );
-				// if user is already registered update format remove 's2_excerpt' field and update 's2_format'
-				if ( 'html' === $check_format ) {
-					delete_user_meta( $user_ID, 's2_excerpt' );
-				} elseif ( 'text' === $check_format ) {
-					update_user_meta( $user_ID, s2cp()->get_usermeta_keyname( 's2_format' ), get_user_meta( $user_ID, 's2_excerpt' ) );
-					delete_user_meta( $user_ID, 's2_excerpt' );
-				}
-				$subscribed = get_user_meta( $user_ID, s2cp()->get_usermeta_keyname( 's2_subscribed' ), true );
-				if ( strstr( $subscribed, '-1' ) ) {
-					// make sure we remove '-1' from any settings
-					$old_cats = explode( ',', $subscribed );
-					$pos      = array_search( '-1', $old_cats, true );
-					unset( $old_cats[ $pos ] );
-					$cats = implode( ',', $old_cats );
-					update_user_meta( $user_ID, s2cp()->get_usermeta_keyname( 's2_subscribed' ), $cats );
-				}
+		$args = array(
+			'meta_query' => array(
+				'relation' => 'AND',
+				array(
+					'key'   => s2html()->get_usermeta_keyname( 's2_format' ),
+					'value' => 'html',
+				),
+				array(
+					'key'     => 's2_excerpt',
+					'compare' => 'EXISTS',
+				),
+			),
+		);
+
+		$user_query = new WP_User_Query( $args );
+		$users      = $user_query->get_results();
+		if ( ! empty( $users ) ) {
+			foreach ( $users as $user ) {
+				delete_user_meta( $user->ID, 's2_excerpt' );
 			}
-		} else {
-			$args = array(
-				'relation'   => 'AND',
-				'meta_query' => array(
-					array(
-						'key'   => s2cp()->get_usermeta_keyname( 's2_format' ),
-						'value' => 'html',
-					),
-				),
-				'meta_query' => array(
-					array(
-						'key'     => 's2_excerpt',
-						'compare' => 'EXISTS',
-					),
-				),
-			);
+		}
 
-			$user_query = new WP_User_Query( $args );
-			$users      = $user_query->get_results();
-			if ( ! empty( $users ) ) {
-				foreach ( $users as $user ) {
-					delete_user_meta( $user->ID, 's2_excerpt' );
-				}
+		$args = array(
+			'meta_query' => array(
+				'relation' => 'AND',
+				array(
+					'key'   => s2html()->get_usermeta_keyname( 's2_format' ),
+					'value' => 'text',
+				),
+				array(
+					'key'     => 's2_excerpt',
+					'compare' => 'EXISTS',
+				),
+			),
+		);
+
+		$user_query = new WP_User_Query( $args );
+		$users      = $user_query->get_results();
+		if ( ! empty( $users ) ) {
+			foreach ( $users as $user ) {
+				update_user_meta( $user->ID, s2html()->get_usermeta_keyname( 's2_format' ), get_user_meta( $user->ID, 's2_excerpt' ) );
+				delete_user_meta( $user->ID, 's2_excerpt' );
 			}
+		}
 
-			$args = array(
-				'relation'   => 'AND',
-				'meta_query' => array(
-					array(
-						'key'   => s2cp()->get_usermeta_keyname( 's2_format' ),
-						'value' => 'text',
-					),
+		$args = array(
+			'meta_query' => array(
+				array(
+					'key'     => s2html()->get_usermeta_keyname( 's2_subscribed' ),
+					'value'   => '-1',
+					'compare' => 'LIKE',
 				),
-				'meta_query' => array(
-					array(
-						'key'     => 's2_excerpt',
-						'compare' => 'EXISTS',
-					),
-				),
-			);
+			),
+		);
 
-			$user_query = new WP_User_Query( $args );
-			$users      = $user_query->get_results();
-			if ( ! empty( $users ) ) {
-				foreach ( $users as $user ) {
-					update_user_meta( $user->ID, s2cp()->get_usermeta_keyname( 's2_format' ), get_user_meta( $user->ID, 's2_excerpt' ) );
-					delete_user_meta( $user->ID, 's2_excerpt' );
-				}
-			}
-
-			$args = array(
-				'meta_query' => array(
-					array(
-						'key'     => s2cp()->get_usermeta_keyname( 's2_subscribed' ),
-						'value'   => '-1',
-						'compare' => 'LIKE',
-					),
-				),
-			);
-
-			$user_query = new WP_User_Query( $args );
-			$users      = $user_query->get_results();
-			if ( ! empty( $users ) ) {
-				foreach ( $users as $user ) {
-					$subscribed = get_user_meta( $user->ID, s2cp()->get_usermeta_keyname( 's2_subscribed' ), true );
-					$old_cats   = explode( ',', $subscribed );
-					$pos        = array_search( '-1', $old_cats, true );
-					unset( $old_cats[ $pos ] );
-					$cats = implode( ',', $old_cats );
-					update_user_meta( $user->ID, s2cp()->get_usermeta_keyname( 's2_subscribed' ), $cats );
-				}
+		$user_query = new WP_User_Query( $args );
+		$users      = $user_query->get_results();
+		if ( ! empty( $users ) ) {
+			foreach ( $users as $user ) {
+				$subscribed = get_user_meta( $user->ID, s2html()->get_usermeta_keyname( 's2_subscribed' ), true );
+				$old_cats   = explode( ',', $subscribed );
+				$pos        = array_search( '-1', $old_cats, true );
+				unset( $old_cats[ $pos ] );
+				$cats = implode( ',', $old_cats );
+				update_user_meta( $user->ID, s2html()->get_usermeta_keyname( 's2_subscribed' ), $cats );
 			}
 		}
 
@@ -402,31 +375,20 @@ class S2_Upgrade {
 	}
 
 	private function upgrade7_0() {
-		global $wpdb;
-		if ( version_compare( s2cp()->wp_release, '3.5', '<' ) ) {
-			$users = $wpdb->get_col( $wpdb->prepare( "SELECT ID from $wpdb->users WHERE ID NOT IN (SELECT user_id from $wpdb->usermeta WHERE meta_key=%s", s2cp()->get_usermeta_keyname( 's2_authors' ) ) );
-			foreach ( $users as $user_ID ) {
-				$check_authors = get_user_meta( $user_ID, s2cp()->get_usermeta_keyname( 's2_authors' ), true );
-				if ( empty( $check_authors ) ) {
-					update_user_meta( $user_ID, s2cp()->get_usermeta_keyname( 's2_authors' ), '' );
-				}
-			}
-		} else {
-			$args = array(
-				'meta_query' => array(
-					array(
-						'key'     => s2cp()->get_usermeta_keyname( 's2_authors' ),
-						'compare' => 'NOT EXISTS',
-					),
+		$args = array(
+			'meta_query' => array(
+				array(
+					'key'     => s2cp()->get_usermeta_keyname( 's2_authors' ),
+					'compare' => 'NOT EXISTS',
 				),
-			);
+			),
+		);
 
-			$user_query = new WP_User_Query( $args );
-			$users      = $user_query->get_results();
-			if ( ! empty( $users ) ) {
-				foreach ( $users as $user ) {
-					update_user_meta( $user->ID, s2cp()->get_usermeta_keyname( 's2_authors' ), '' );
-				}
+		$user_query = new WP_User_Query( $args );
+		$users      = $user_query->get_results();
+		if ( ! empty( $users ) ) {
+			foreach ( $users as $user ) {
+				update_user_meta( $user->ID, s2cp()->get_usermeta_keyname( 's2_authors' ), '' );
 			}
 		}
 	}
@@ -479,32 +441,20 @@ class S2_Upgrade {
 		// to ensure compulsory category collects all users we need there to be s2_subscribed meta-keys for all users
 		global $wpdb;
 
-		if ( version_compare( s2cp()->wp_release, '3.5', '<' ) ) {
-			$all_registered = s2cp()->get_all_registered( 'ID' );
-			if ( ! empty( $all_registered ) ) {
-				foreach ( $all_registered as $user_ID ) {
-					$check_subscribed = get_user_meta( $user_ID, s2cp()->get_usermeta_keyname( 's2_subscribed' ), true );
-					if ( empty( $check_subscribed ) ) {
-						update_user_meta( $user_ID, s2cp()->get_usermeta_keyname( 's2_subscribed' ), '' );
-					}
-				}
-			}
-		} else {
-			$args = array(
-				'meta_query' => array(
-					array(
-						'key'     => s2cp()->get_usermeta_keyname( 's2_subscribed' ),
-						'compare' => 'NOT EXISTS',
-					),
+		$args = array(
+			'meta_query' => array(
+				array(
+					'key'     => s2cp()->get_usermeta_keyname( 's2_subscribed' ),
+					'compare' => 'NOT EXISTS',
 				),
-			);
+			),
+		);
 
-			$user_query = new WP_User_Query( $args );
-			$users      = $user_query->get_results();
-			if ( ! empty( $users ) ) {
-				foreach ( $users as $user ) {
-					update_user_meta( $user->ID, s2cp()->get_usermeta_keyname( 's2_subscribed' ), '' );
-				}
+		$user_query = new WP_User_Query( $args );
+		$users      = $user_query->get_results();
+		if ( ! empty( $users ) ) {
+			foreach ( $users as $user ) {
+				update_user_meta( $user->ID, s2cp()->get_usermeta_keyname( 's2_subscribed' ), '' );
 			}
 		}
 

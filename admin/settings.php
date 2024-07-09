@@ -108,13 +108,11 @@ if ( isset( $_POST['s2_admin'] ) ) {
 						wp_schedule_event( $timestamp, $email_freq, 's2_digest_cron' );
 					}
 				}
-			} else {
-				if ( isset( s2cp()->subscribe2_options[ $key ] ) ) {
-					if ( 'sender' === $key && s2cp()->subscribe2_options[ $key ] !== $_POST[ $key ] ) {
-						s2cp()->subscribe2_options['dismiss_sender_warning'] = '0';
-					}
-					s2cp()->subscribe2_options[ $key ] = $_POST[ $key ];
+			} elseif ( isset( s2cp()->subscribe2_options[ $key ] ) ) {
+				if ( 'sender' === $key && s2cp()->subscribe2_options[ $key ] !== $_POST[ $key ] ) {
+					s2cp()->subscribe2_options['dismiss_sender_warning'] = '0';
 				}
+				s2cp()->subscribe2_options[ $key ] = $_POST[ $key ];
 			}
 		}
 

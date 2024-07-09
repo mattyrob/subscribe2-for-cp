@@ -42,26 +42,26 @@ if ( isset( $_POST['s2_admin'] ) ) {
 			if ( false === s2cp()->validate_email( $clean_email ) ) {
 				( '' === $email_error ) ? $email_error = "$email" : $email_error .= ", $email";
 					continue;
-			} else {
-				if ( isset( $_POST['subscribe'] ) ) {
-					if ( false !== s2cp()->is_public( $clean_email ) ) {
-						( '' === $pub_sub_error ) ? $pub_sub_error = "$clean_email" : $pub_sub_error .= ", $clean_email";
-						continue;
-					}
-					if ( s2cp()->is_registered( $clean_email ) ) {
-						( '' === $reg_sub_error ) ? $reg_sub_error = "$clean_email" : $reg_sub_error .= ", $clean_email";
-						continue;
-					}
-					s2cp()->add( $clean_email, true );
-					$message = __( 'Address(es) subscribed!', 'subscribe2-for-cp' );
-				} elseif ( isset( $_POST['unsubscribe'] ) ) {
-					if ( false === s2cp()->is_public( $clean_email ) || s2cp()->is_registered( $clean_email ) ) {
-						( '' === $unsub_error ) ? $unsub_error = "$clean_email" : $unsub_error .= ", $clean_email";
-						continue;
-					}
-					s2cp()->delete( $clean_email );
-					$message = __( 'Address(es) unsubscribed!', 'subscribe2-for-cp' );
+			}
+
+			if ( isset( $_POST['subscribe'] ) ) {
+				if ( false !== s2cp()->is_public( $clean_email ) ) {
+					( '' === $pub_sub_error ) ? $pub_sub_error = "$clean_email" : $pub_sub_error .= ", $clean_email";
+					continue;
 				}
+				if ( s2cp()->is_registered( $clean_email ) ) {
+					( '' === $reg_sub_error ) ? $reg_sub_error = "$clean_email" : $reg_sub_error .= ", $clean_email";
+					continue;
+				}
+				s2cp()->add( $clean_email, true );
+				$message = __( 'Address(es) subscribed!', 'subscribe2-for-cp' );
+			} elseif ( isset( $_POST['unsubscribe'] ) ) {
+				if ( false === s2cp()->is_public( $clean_email ) || s2cp()->is_registered( $clean_email ) ) {
+					( '' === $unsub_error ) ? $unsub_error = "$clean_email" : $unsub_error .= ", $clean_email";
+					continue;
+				}
+				s2cp()->delete( $clean_email );
+				$message = __( 'Address(es) unsubscribed!', 'subscribe2-for-cp' );
 			}
 		}
 		if ( '' !== $reg_sub_error ) {
@@ -168,14 +168,12 @@ if ( isset( $_REQUEST['what'] ) ) {
 		$what        = 'all_users';
 		$subscribers = $all_users;
 	}
+} elseif ( 'public' === $current_tab ) {
+	$what        = 'public';
+	$subscribers = array_merge( (array) $confirmed, (array) $unconfirmed );
 } else {
-	if ( 'public' === $current_tab ) {
-		$what        = 'public';
-		$subscribers = array_merge( (array) $confirmed, (array) $unconfirmed );
-	} else {
-		$what        = 'all_users';
-		$subscribers = $all_users;
-	}
+	$what        = 'all_users';
+	$subscribers = $all_users;
 }
 
 if ( ! empty( $_POST['s'] ) ) {

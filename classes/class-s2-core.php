@@ -12,42 +12,42 @@ class S2_Core {
 	/**
 	 * Performs string substitutions for subscribe2 mail tags
 	 */
-	public function substitute( $string = '', $digest_post_ids = array() ) {
-		if ( '' === $string ) {
+	public function substitute( $text = '', $digest_post_ids = array() ) {
+		if ( '' === $text ) {
 			return;
 		}
-		$string = str_replace( '{BLOGNAME}', html_entity_decode( get_option( 'blogname' ), ENT_QUOTES ), $string );
-		$string = str_replace( '{BLOGLINK}', get_option( 'home' ), $string );
-		$string = str_replace( '{TITLE}', stripslashes( $this->post_title ), $string );
-		$string = str_replace( '{TITLETEXT}', stripslashes( $this->post_title_text ), $string );
-		$string = str_replace( '{PERMAURL}', $this->get_tracking_link( $this->permalink ), $string );
-		$link   = '<a href="' . $this->get_tracking_link( $this->permalink ) . '">' . $this->get_tracking_link( $this->permalink ) . '</a>';
-		$string = str_replace( '{PERMALINK}', $link, $string );
-		if ( strstr( $string, '{TINYLINK}' ) ) {
+		$text = str_replace( '{BLOGNAME}', html_entity_decode( get_option( 'blogname' ), ENT_QUOTES ), $text );
+		$text = str_replace( '{BLOGLINK}', get_option( 'home' ), $text );
+		$text = str_replace( '{TITLE}', stripslashes( $this->post_title ), $text );
+		$text = str_replace( '{TITLETEXT}', stripslashes( $this->post_title_text ), $text );
+		$text = str_replace( '{PERMAURL}', $this->get_tracking_link( $this->permalink ), $text );
+		$link = '<a href="' . $this->get_tracking_link( $this->permalink ) . '">' . $this->get_tracking_link( $this->permalink ) . '</a>';
+		$text = str_replace( '{PERMALINK}', $link, $text );
+		if ( strstr( $text, '{TINYLINK}' ) ) {
 			$response = wp_safe_remote_get( 'http://tinyurl.com/api-create.php?url=' . rawurlencode( $this->get_tracking_link( $this->permalink ) ) );
 			if ( ! is_wp_error( $response ) ) {
 				$tinylink = wp_remote_retrieve_body( $response );
 			}
 			if ( false !== $tinylink ) {
-				$tlink  = '<a href="' . $tinylink . '">' . $tinylink . '</a>';
-				$string = str_replace( '{TINYLINK}', $tlink, $string );
+				$tlink = '<a href="' . $tinylink . '">' . $tinylink . '</a>';
+				$text  = str_replace( '{TINYLINK}', $tlink, $text );
 			} else {
-				$string = str_replace( '{TINYLINK}', $link, $string );
+				$text = str_replace( '{TINYLINK}', $link, $text );
 			}
 		}
-		$string = str_replace( '{DATE}', $this->post_date, $string );
-		$string = str_replace( '{TIME}', $this->post_time, $string );
-		$string = str_replace( '{MYNAME}', stripslashes( $this->myname ), $string );
-		$string = str_replace( '{EMAIL}', $this->myemail, $string );
-		$string = str_replace( '{AUTHORNAME}', stripslashes( $this->authorname ), $string );
-		$string = str_replace( '{CATS}', $this->post_cat_names, $string );
-		$string = str_replace( '{TAGS}', $this->post_tag_names, $string );
-		$string = str_replace( '{COUNT}', $this->post_count, $string );
+		$text = str_replace( '{DATE}', $this->post_date, $text );
+		$text = str_replace( '{TIME}', $this->post_time, $text );
+		$text = str_replace( '{MYNAME}', stripslashes( $this->myname ), $text );
+		$text = str_replace( '{EMAIL}', $this->myemail, $text );
+		$text = str_replace( '{AUTHORNAME}', stripslashes( $this->authorname ), $text );
+		$text = str_replace( '{CATS}', $this->post_cat_names, $text );
+		$text = str_replace( '{TAGS}', $this->post_tag_names, $text );
+		$text = str_replace( '{COUNT}', $this->post_count, $text );
 
 		if ( ! empty( $digest_post_ids ) ) {
-			return (string) apply_filters( 's2_custom_keywords', $string, $digest_post_ids );
+			return (string) apply_filters( 's2_custom_keywords', $text, $digest_post_ids );
 		} else {
-			return (string) apply_filters( 's2_custom_keywords', $string );
+			return (string) apply_filters( 's2_custom_keywords', $text );
 		}
 	}
 
@@ -134,7 +134,7 @@ class S2_Core {
 					$batch[] = $bcc;
 					$bcc     = '';
 				}
-				$count++;
+				++$count;
 			}
 			// add any partially completed batches to our batch array
 			if ( '' !== $bcc ) {
@@ -237,7 +237,7 @@ class S2_Core {
 	 */
 	public function get_tracking_link( $link ) {
 		if ( empty( $link ) ) {
-			return;
+			return '';
 		}
 		if ( ! empty( $this->subscribe2_options['tracking'] ) ) {
 			( strpos( $link, '?' ) > 0 ) ? $delimiter .= '&' : $delimiter = '?';
@@ -249,7 +249,7 @@ class S2_Core {
 			}
 			if ( strpos( $tracking, '{TITLE}' ) ) {
 				$id       = url_to_postid( $link );
-				$title    = rawurlencode( htmlentities( get_the_title( $id ), 1 ), ENT_QUOTES );
+				$title    = rawurlencode( htmlentities( get_the_title( $id ), ENT_QUOTES ) );
 				$tracking = str_replace( '{TITLE}', $title, $tracking );
 			}
 			return $link . $delimiter . $tracking;
@@ -362,10 +362,10 @@ class S2_Core {
 				$post_cats_string = implode(
 					',',
 					get_terms(
-						'category',
 						array(
-							'fields' => 'ids',
-							'get'    => 'all',
+							'taxonomy' => 'category',
+							'fields'   => 'ids',
+							'get'      => 'all',
 						)
 					)
 				);
@@ -442,7 +442,7 @@ class S2_Core {
 		);
 
 		// Get email subject
-		$subject = html_entity_decode( stripslashes( wp_kses( $this->substitute( $this->subscribe2_options['notification_subject'] ), '' ) ) );
+		$subject = html_entity_decode( stripslashes( wp_kses( $this->substitute( $this->subscribe2_options['notification_subject'] ), '' ) ), ENT_QUOTES );
 		// Get the message template
 		$mailtext = (string) apply_filters( 's2_email_template', $this->subscribe2_options['mailtext'] );
 		$mailtext = stripslashes( $this->substitute( $mailtext ) );
@@ -738,7 +738,7 @@ class S2_Core {
 			} else {
 				$wpdb->query( $wpdb->prepare( "UPDATE $wpdb->subscribe2 SET date=CURDATE(), time=CURTIME() WHERE CAST(email as binary)=%s", $email ) );
 			}
-		} else {
+		} elseif ( false === $this->is_public( $email ) ) {
 			if ( $confirm ) {
 				global $current_user;
 				$wpdb->query( $wpdb->prepare( "INSERT INTO $wpdb->subscribe2 (email, active, date, time, ip) VALUES (%s, %d, CURDATE(), CURTIME(), %s)", $email, 1, $current_user->user_login ) );
@@ -857,19 +857,19 @@ class S2_Core {
 	/**
 	 * Return an array of all subscribers emails or IDs
 	 */
-	public function get_all_registered( $return = 'email' ) {
+	public function get_all_registered( $field = 'email' ) {
 		global $wpdb;
 		static $all_registered_id       = '';
 		static $all_registered_email_id = '';
 		static $all_registered_email    = '';
 
 		if ( $this->s2_mu ) {
-			if ( 'ID' === $return ) {
+			if ( 'ID' === $field ) {
 				if ( '' === $all_registered_id ) {
 					$all_registered_id = $wpdb->get_col( "SELECT user_id FROM $wpdb->usermeta WHERE meta_key='{$wpdb->prefix}capabilities'" );
 				}
 				return $all_registered_id;
-			} elseif ( 'emailid' === $return ) {
+			} elseif ( 'emailid' === $field ) {
 				if ( '' === $all_registered_email_id ) {
 					$all_registered_email_id = $wpdb->get_results( "SELECT a.user_email, a.ID FROM $wpdb->users AS a INNER JOIN $wpdb->usermeta AS b on a.ID = b.user_id WHERE b.meta_key ='{$wpdb->prefix}capabilities'", ARRAY_A );
 				}
@@ -880,8 +880,8 @@ class S2_Core {
 				}
 				return $all_registered_email;
 			}
-		} else {
-			if ( 'ID' === $return ) {
+		} elseif ( ! $this->s2_mu ) {
+			if ( 'ID' === $field ) {
 				if ( '' === $all_registered_id ) {
 					$all_registered_id = $wpdb->get_col( "SELECT ID FROM $wpdb->users" );
 				}
@@ -971,7 +971,7 @@ class S2_Core {
 					)
 				);
 			}
-		} else {
+		} elseif ( ! $this->s2_mu ) {
 			if ( '' === $this->subscribe2_options['compulsory'] ) {
 				$result = $wpdb->get_col(
 					$wpdb->prepare(
@@ -1203,7 +1203,7 @@ class S2_Core {
 				if ( in_array( (string) $cat->term_id, $excluded, true ) ) {
 					unset( $all_cats[ $id ] );
 				}
-				$id++;
+				++$id;
 			}
 		}
 
@@ -1591,7 +1591,7 @@ class S2_Core {
 				// if this post is excluded
 				// don't include it in the digest
 				if ( $check ) {
-					$this->post_count --;
+					--$this->post_count;
 					continue;
 				}
 			}
@@ -1817,7 +1817,7 @@ class S2_Core {
 		// maybe use dev scripts
 		$this->script_debug = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '' : '.min';
 
-		$this->word_wrap = apply_filters( 's2_word_wrap', 78 );
+		$this->word_wrap = (int) apply_filters( 's2_word_wrap', 78 );
 		// RFC5322 states line length MUST be no more than 998 characters
 		// and SHOULD be no more than 78 characters
 		// Use 78 as default and cap user values above 998
@@ -1828,6 +1828,7 @@ class S2_Core {
 		$this->site_switching = (bool) apply_filters( 's2_allow_site_switching', false );
 		$this->clean_interval = (int) apply_filters( 's2_clean_interval', 28 );
 		$this->lockout        = (int) apply_filters( 's2_lockout', 0 );
+
 		// lockout is for a maximum of 24 hours so cap the value
 		if ( $this->lockout > 86399 ) {
 			$this->lockout > 86399;
@@ -1836,6 +1837,13 @@ class S2_Core {
 		// get the ClassicPress release number for in code version comparisons
 		$tmp              = explode( '-', $wp_version, 2 );
 		$this->wp_release = $tmp[0];
+
+		// define and register table name
+		$s2_table = $wpdb->prefix . 'subscribe2';
+		if ( ! isset( $wpdb->subscribe2 ) ) {
+			$wpdb->subscribe2 = $s2_table;
+			$wpdb->tables[]   = 'subscribe2';
+		}
 
 		// Is this Multisite or not?
 		if ( isset( $wpmu_version ) || strpos( $wp_version, 'wordpress-mu' ) ) {
@@ -1865,13 +1873,6 @@ class S2_Core {
 		// load our translations
 		add_action( 'init', array( &$this, 'load_translations' ) );
 
-		// define and register table name
-		$s2_table = $wpdb->prefix . 'subscribe2';
-		if ( ! isset( $wpdb->subscribe2 ) ) {
-			$wpdb->subscribe2 = $s2_table;
-			$wpdb->tables[]   = 'subscribe2';
-		}
-
 		// do we need to install anything?
 		if ( $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $wpdb->subscribe2 ) ) !== $wpdb->subscribe2 ) {
 			require_once S2PATH . 'classes/class-s2-upgrade.php';
@@ -1880,7 +1881,7 @@ class S2_Core {
 		}
 
 		//do we need to upgrade anything?
-		if ( false === $this->subscribe2_options || is_array( $this->subscribe2_options ) && S2VERSION !== $this->subscribe2_options['version'] ) {
+		if ( false === $this->subscribe2_options || ( is_array( $this->subscribe2_options ) && S2VERSION !== $this->subscribe2_options['version'] ) ) {
 			if ( ! is_a( $s2_upgrade, 'S2_Upgrade' ) ) {
 				require_once S2PATH . 'classes/class-s2-upgrade.php';
 				$s2_upgrade = new S2_Upgrade();
@@ -1904,7 +1905,7 @@ class S2_Core {
 			add_action( 's2_digest_cron', array( &$this, 'subscribe2_cron' ) );
 			add_action( 'transition_post_status', array( &$this, 'digest_post_transitions' ), 10, 3 );
 		} else {
-			$statuses = apply_filters( 's2_post_statuses', array( 'new', 'draft', 'auto-draft', 'pending' ) );
+			$statuses = (array) apply_filters( 's2_post_statuses', array( 'new', 'draft', 'auto-draft', 'pending' ) );
 			if ( 'yes' === $this->subscribe2_options['private'] ) {
 				foreach ( $statuses as $status ) {
 					add_action( "{$status}_to_private", array( &$this, 'publish' ) );
@@ -1951,19 +1952,28 @@ class S2_Core {
 	public $subscribe2_options = array();
 
 	// state variables used to affect processing
-	public $s2_mu    = false;
-	public $filtered = 0;
-	public $post_count;
+	public $s2_mu      = false;
+	public $filtered   = 0;
+	public $post_count = 1;
 
 	// state variable used in substitute() function
-	public $post_title;
-	public $post_title_text;
-	public $permalink;
-	public $post_date;
-	public $post_time;
-	public $myname;
-	public $myemail;
-	public $authorname;
-	public $post_cat_names;
-	public $post_tag_names;
+	public $post_title      = '';
+	public $post_title_text = '';
+	public $permalink       = '';
+	public $post_date       = '';
+	public $post_time       = '';
+	public $myname          = '';
+	public $myemail         = '';
+	public $authorname      = '';
+	public $post_cat_names  = '';
+	public $post_tag_names  = '';
+	public $email;
+
+	public $script_debug;
+	public $wp_release;
+	public $word_wrap;
+	public $excerpt_length;
+	public $site_switching;
+	public $clean_interval;
+	public $lockout;
 }

@@ -7,6 +7,9 @@ module.exports = function( grunt ) {
 	grunt.initConfig(
 		{
 			eslint: {
+				options: {
+					overrideConfigFile: '.eslintrc.js'
+				},
 				grunt: {
 					src: [
 						'Gruntfile.js'
@@ -14,7 +17,6 @@ module.exports = function( grunt ) {
 				},
 				core: {
 					options: {
-						cwd: SOURCE_DIR,
 						fix: grunt.option( 'fix' )
 					},
 					src: [
@@ -100,7 +102,7 @@ module.exports = function( grunt ) {
 					],
 					options: {
 						bin: '/usr/local/bin/phpcs',
-						standard: '~/Desktop/subscribe2/ruleset.xml',
+						standard: '~/Plugins/ruleset.xml',
 						warningSeverity: 0
 					}
 				},
@@ -114,7 +116,7 @@ module.exports = function( grunt ) {
 					],
 					options: {
 						bin: '/usr/local/bin/phpcs',
-						standard: '~/Desktop/subscribe2/ruleset.xml',
+						standard: '~/Plugins/ruleset.xml',
 						warningSeverity: 1
 					}
 				}
@@ -154,17 +156,6 @@ module.exports = function( grunt ) {
 								return 0;
 							}
 						}
-					}
-				}
-			},
-			csscomb: {
-				src: {
-					options: {
-						cwd: SOURCE_DIR
-					},
-					files: {
-						'./include/s2-user-admin.css': [ './include/s2-user-admin.css' ],
-						'./tinymce/css/content.css': [ './tinymce/css/content.css' ]
 					}
 				}
 			},
@@ -342,7 +333,6 @@ module.exports = function( grunt ) {
 		[
 			'clean:minified',
 			'addtextdomain:s2cp',
-			'csscomb',
 			'terser',
 			'cssmin',
 			'imagemin',
@@ -362,13 +352,13 @@ module.exports = function( grunt ) {
 		'Preparing new release...',
 		function ( release ) {
 			var releases = [ 'major', 'minor', 'patch' ];
-			if ( arguments.length === 0 ) {
-				grunt.log.writeln( "Please specify release type, for example `grunt release:minor`" );
+			if ( 0 === arguments.length ) {
+				grunt.log.writeln( 'Please specify release type, for example `grunt release:minor`' );
 			} else {
 				if ( releases.includes( release ) ) {
 					grunt.task.run( 'release-' + release );
 				} else {
-					grunt.log.writeln( "Please specify a valid release type" );
+					grunt.log.writeln( 'Please specify a valid release type' );
 				}
 			}
 		}

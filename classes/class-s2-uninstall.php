@@ -1,6 +1,11 @@
 <?php
 class S2_Uninstall {
 	public function uninstall() {
+		// Sanity check before erasing
+		if ( ! doing_action( 'uninstall_subscribe2-for-cp/subscribe2.php' ) ) {
+			return;
+		}
+
 		global $wp_version, $wpmu_version;
 		// Is Subscribe2 free active
 		if ( is_plugin_active( 'subscribe2/subscribe2.php' ) ) {

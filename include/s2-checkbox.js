@@ -4,8 +4,9 @@
 // Version 1.3 - Update for Subscribe2 9.0 to remove unecessary code now WordPress 3.3 is minimum requirement
 // Version 1.4 - eslinted
 // Version 1.5 - fixed bug in Select / Unselect All box in Settings page being falsely checked on page load
+// Version 1.6 - Consistent function style
 
-var maybeSelectAll = function( object ) {
+function  maybeSelectAll( object ) {
 	var checkedStatus = true;
 	jQuery( 'input[class="' + object.className + '"]' ).each(
 		function() {
@@ -18,7 +19,7 @@ var maybeSelectAll = function( object ) {
 	);
 	jQuery( 'input[value="' + object.className + '"]' )
 		.prop( 'checked', checkedStatus );
-};
+}
 
 jQuery( document ).ready(
 	function() {

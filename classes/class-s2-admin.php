@@ -1,5 +1,10 @@
 <?php
 class S2_Admin extends S2_Core {
+	public $preview_email;
+	public $signup_dates;
+	public $signup_times;
+	public $signup_ips;
+
 	/**
 	 * Constructor
 	 */
@@ -9,66 +14,68 @@ class S2_Admin extends S2_Core {
 	}
 
 	public function admin_hooks() {
-		//add menu, authoring and category admin actions
-		add_action( 'admin_menu', array( &$this, 'admin_menu' ) );
-		add_action( 'create_category', array( &$this, 'new_category' ) );
-		add_action( 'delete_category', array( &$this, 'delete_category' ) );
+		if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) {
+			// add handler to dismiss sender error notice
+			add_action( 'wp_ajax_s2_dismiss_notice', array( &$this, 's2_dismiss_notice_handler' ) );
+		} else {
+			//add menu, authoring and category admin actions
+			add_action( 'admin_menu', array( &$this, 'admin_menu' ) );
+			add_action( 'create_category', array( &$this, 'new_category' ) );
+			add_action( 'delete_category', array( &$this, 'delete_category' ) );
 
-		// Add filters for Ozh Admin Menu
-		if ( function_exists( 'wp_ozh_adminmenu' ) ) {
-			$menu_slugs = array( 's2', 's2_posts', 's2_tools', 's2_settings' );
-			foreach ( $menu_slugs as $menu_slug ) {
-				add_filter( "ozh_adminmenu_icon_{$menu_slug}", array( &$this, 'ozh_s2_icon' ) );
+			// Add filters for Ozh Admin Menu
+			if ( function_exists( 'wp_ozh_adminmenu' ) ) {
+				$menu_slugs = array( 's2', 's2_posts', 's2_tools', 's2_settings' );
+				foreach ( $menu_slugs as $menu_slug ) {
+					add_filter( "ozh_adminmenu_icon_{$menu_slug}", array( &$this, 'ozh_s2_icon' ) );
+				}
 			}
-		}
 
-		// add counterwidget css and js
-		if ( '1' === $this->subscribe2_options['counterwidget'] ) {
-			add_action( 'admin_enqueue_scripts', array( &$this, 'widget_s2counter_css_and_js' ) );
-		}
+			// add counterwidget css and js
+			if ( '1' === $this->subscribe2_options['counterwidget'] ) {
+				add_action( 'admin_enqueue_scripts', array( &$this, 'widget_s2counter_css_and_js' ) );
+			}
 
-		// add admin actions for comment subscribers
-		if ( 'no' !== $this->subscribe2_options['comment_subs'] ) {
-			add_filter( 'jetpack_get_available_modules', array( &$this, 's2_hide_jetpack_comments' ) );
-			add_action( 'wp_set_comment_status', array( &$this, 'comment_status' ) );
-		}
+			// add admin actions for comment subscribers
+			if ( 'no' !== $this->subscribe2_options['comment_subs'] ) {
+				add_filter( 'jetpack_get_available_modules', array( &$this, 's2_hide_jetpack_comments' ) );
+				add_action( 'wp_set_comment_status', array( &$this, 'comment_status' ) );
+			}
 
-		// add write button
-		if ( '1' === s2cp()->subscribe2_options['show_button'] ) {
-			add_action( 'admin_init', array( &$this, 'button_init' ) );
-		}
+			// add write button
+			if ( '1' === s2cp()->subscribe2_options['show_button'] ) {
+				add_action( 'admin_init', array( &$this, 'button_init' ) );
+			}
 
-		// add one-click handlers
-		if ( 'yes' === $this->subscribe2_options['one_click_profile'] ) {
-			add_action( 'show_user_profile', array( &$this, 'one_click_profile_form' ) );
-			add_action( 'edit_user_profile', array( &$this, 'one_click_profile_form' ) );
-			add_action( 'personal_options_update', array( &$this, 'one_click_profile_form_save' ) );
-			add_action( 'edit_user_profile_update', array( &$this, 'one_click_profile_form_save' ) );
-		}
+			// add one-click handlers
+			if ( 'yes' === $this->subscribe2_options['one_click_profile'] ) {
+				add_action( 'show_user_profile', array( &$this, 'one_click_profile_form' ) );
+				add_action( 'edit_user_profile', array( &$this, 'one_click_profile_form' ) );
+				add_action( 'personal_options_update', array( &$this, 'one_click_profile_form_save' ) );
+				add_action( 'edit_user_profile_update', array( &$this, 'one_click_profile_form_save' ) );
+			}
 
-		// digest email preview and resend actions
-		add_action( 's2_digest_preview', array( &$this, 'digest_preview' ) );
-		add_action( 's2_digest_resend', array( &$this, 'digest_resend' ) );
+			// digest email preview and resend actions
+			add_action( 's2_digest_preview', array( &$this, 'digest_preview' ) );
+			add_action( 's2_digest_resend', array( &$this, 'digest_resend' ) );
 
-		// add handler to dismiss sender error notice
-		add_action( 'wp_ajax_s2_dismiss_notice', array( &$this, 's2_dismiss_notice_handler' ) );
+			// subscriber page options handler
+			add_filter( 'set-screen-option', array( &$this, 'subscribers_set_screen_option' ), 10, 3 );
 
-		// subscriber page options handler
-		add_filter( 'set-screen-option', array( &$this, 'subscribers_set_screen_option' ), 10, 3 );
+			// register uninstall functions
+			register_uninstall_hook( S2PLUGIN, array( 'S2_Admin', 's2_uninstall' ) );
 
-		// register uninstall functions
-		register_uninstall_hook( S2PLUGIN, array( 'S2_Admin', 's2_uninstall' ) );
-
-		// capture CSV export
-		if ( isset( $_POST['s2_admin'] ) && isset( $_POST['csv'] ) && false !== wp_verify_nonce( $_POST['_s2_export_csv'], 's2_export_csv' ) ) {
-			$date = gmdate( 'Y-m-d' );
-			header( 'Content-Description: File Transfer' );
-			header( 'Content-type: application/octet-stream' );
-			header( "Content-Disposition: attachment; filename=subscribe2_users_$date.csv" );
-			header( 'Pragma: no-cache' );
-			header( 'Expires: 0' );
-			echo esc_html( $this->prepare_export( $_POST['exportcsv'] ) );
-			exit( 0 );
+			// capture CSV export
+			if ( isset( $_POST['s2_admin'] ) && isset( $_POST['csv'] ) && false !== wp_verify_nonce( $_POST['_s2_export_csv'], 's2_export_csv' ) ) {
+				$date = gmdate( 'Y-m-d' );
+				header( 'Content-Description: File Transfer' );
+				header( 'Content-type: application/octet-stream' );
+				header( "Content-Disposition: attachment; filename=subscribe2_users_$date.csv" );
+				header( 'Pragma: no-cache' );
+				header( 'Expires: 0' );
+				echo esc_html( $this->prepare_export( $_POST['exportcsv'] ) );
+				exit( 0 );
+			}
 		}
 	}
 
@@ -77,28 +84,28 @@ class S2_Admin extends S2_Core {
 	 * Hook the menu
 	 */
 	public function admin_menu() {
-		add_menu_page( __( 'Subscribe2', 'subscribe2-for-cp' ), __( 'Subscribe2', 'subscribe2-for-cp' ), (string) apply_filters( 's2_capability', 'read', 'user' ), 's2', null, S2URL . 'include/email-edit.png' );
+		add_menu_page( __( 'Subscribe2', 'subscribe2-for-cp' ), __( 'Subscribe2', 'subscribe2-for-cp' ), (string) apply_filters( 's2_capability', 'read', 'user' ), 's2', null, S2URL . 'include/email-edit.png' ); // phpcs:ignore WordPress.WP.Capabilities
 
-		$s2user = add_submenu_page( 's2', __( 'Your Subscriptions', 'subscribe2-for-cp' ), __( 'Your Subscriptions', 'subscribe2-for-cp' ), (string) apply_filters( 's2_capability', 'read', 'user' ), 's2', array( &$this, 'user_menu' ) );
+		$s2user = add_submenu_page( 's2', __( 'Your Subscriptions', 'subscribe2-for-cp' ), __( 'Your Subscriptions', 'subscribe2-for-cp' ), (string) apply_filters( 's2_capability', 'read', 'user' ), 's2', array( &$this, 'user_menu' ) ); // phpcs:ignore WordPress.WP.Capabilities
 		add_action( "admin_print_scripts-$s2user", array( &$this, 'checkbox_form_js' ) );
 		add_action( "admin_print_styles-$s2user", array( &$this, 'user_admin_css' ) );
 		add_action( 'load-' . $s2user, array( &$this, 'user_help' ) );
 
-		$s2subscribers = add_submenu_page( 's2', __( 'Subscribers', 'subscribe2-for-cp' ), __( 'Subscribers', 'subscribe2-for-cp' ), (string) apply_filters( 's2_capability', 'manage_options', 'manage' ), 's2_tools', array( &$this, 'subscribers_menu' ) );
+		$s2subscribers = add_submenu_page( 's2', __( 'Subscribers', 'subscribe2-for-cp' ), __( 'Subscribers', 'subscribe2-for-cp' ), (string) apply_filters( 's2_capability', 'manage_options', 'manage' ), 's2_tools', array( &$this, 'subscribers_menu' ) ); // phpcs:ignore WordPress.WP.Capabilities
 		add_action( "admin_print_scripts-$s2subscribers", array( &$this, 'checkbox_form_js' ) );
 		add_action( "admin_print_scripts-$s2subscribers", array( &$this, 'subscribers_form_js' ) );
 		add_action( "admin_print_scripts-$s2subscribers", array( &$this, 'subscribers_css' ) );
 		add_action( 'load-' . $s2subscribers, array( &$this, 'subscribers_help' ) );
 		add_action( 'load-' . $s2subscribers, array( &$this, 'subscribers_options' ) );
 
-		$s2settings = add_submenu_page( 's2', __( 'Settings', 'subscribe2-for-cp' ), __( 'Settings', 'subscribe2-for-cp' ), (string) apply_filters( 's2_capability', 'manage_options', 'settings' ), 's2_settings', array( &$this, 'settings_menu' ) );
+		$s2settings = add_submenu_page( 's2', __( 'Settings', 'subscribe2-for-cp' ), __( 'Settings', 'subscribe2-for-cp' ), (string) apply_filters( 's2_capability', 'manage_options', 'settings' ), 's2_settings', array( &$this, 'settings_menu' ) ); // phpcs:ignore WordPress.WP.Capabilities
 		add_action( "admin_print_scripts-$s2settings", array( &$this, 'checkbox_form_js' ) );
 		add_action( "admin_print_scripts-$s2settings", array( &$this, 'option_form_js' ) );
 		add_action( "admin_print_scripts-$s2settings", array( &$this, 'dismiss_js' ) );
 		add_filter( 'plugin_row_meta', array( &$this, 'plugin_links' ), 10, 2 );
 		add_action( 'load-' . $s2settings, array( &$this, 'settings_help' ) );
 
-		$s2mail = add_submenu_page( 's2', __( 'Send Email', 'subscribe2-for-cp' ), __( 'Send Email', 'subscribe2-for-cp' ), (string) apply_filters( 's2_capability', 'publish_posts', 'send' ), 's2_posts', array( &$this, 'write_menu' ) );
+		$s2mail = add_submenu_page( 's2', __( 'Send Email', 'subscribe2-for-cp' ), __( 'Send Email', 'subscribe2-for-cp' ), (string) apply_filters( 's2_capability', 'publish_posts', 'send' ), 's2_posts', array( &$this, 'write_menu' ) ); // phpcs:ignore WordPress.WP.Capabilities
 		add_action( 'load-' . $s2mail, array( &$this, 'mail_help' ) );
 	}
 
@@ -310,7 +317,7 @@ class S2_Admin extends S2_Core {
 	}
 
 	public function subscribers_css() {
-		echo '<style type="text/css">';
+		echo '<style>';
 		echo '.wp-list-table .column-date { width: 15%; }';
 		echo '</style>';
 	}
@@ -478,10 +485,8 @@ class S2_Admin extends S2_Core {
 			if ( ! current_user_can( 'edit_page', $post_id ) ) {
 				return $post_id;
 			}
-		} else {
-			if ( ! current_user_can( 'edit_post', $post_id ) ) {
-				return $post_id;
-			}
+		} elseif ( ! current_user_can( 'edit_post', $post_id ) ) {
+			return $post_id;
 		}
 
 		if ( isset( $_POST['s2_meta_field'] ) && 'no' === $_POST['s2_meta_field'] ) {
@@ -661,12 +666,10 @@ class S2_Admin extends S2_Core {
 				$exportcsv .= __( 'Registered User', 'subscribe2-for-cp' );
 				$exportcsv .= ',' . $user_info->display_name;
 				$exportcsv .= ',,' . $subscribed_cats . "\r\n";
-			} else {
-				if ( '1' === $this->is_public( $subscriber ) ) {
-					$exportcsv .= $subscriber . ',' . __( 'Confirmed Public Subscriber', 'subscribe2-for-cp' ) . ',,' . $this->signup_date( $subscriber ) . ',' . $this->signup_ip( $subscriber ) . "\r\n";
-				} elseif ( '0' === $this->is_public( $subscriber ) ) {
-					$exportcsv .= $subscriber . ',' . __( 'Unconfirmed Public Subscriber', 'subscribe2-for-cp' ) . ',,' . $this->signup_date( $subscriber ) . ',' . $this->signup_ip( $subscriber ) . "\r\n";
-				}
+			} elseif ( '1' === $this->is_public( $subscriber ) ) {
+				$exportcsv .= $subscriber . ',' . __( 'Confirmed Public Subscriber', 'subscribe2-for-cp' ) . ',,' . $this->signup_date( $subscriber ) . ',' . $this->signup_ip( $subscriber ) . "\r\n";
+			} elseif ( '0' === $this->is_public( $subscriber ) ) {
+				$exportcsv .= $subscriber . ',' . __( 'Unconfirmed Public Subscriber', 'subscribe2-for-cp' ) . ',,' . $this->signup_date( $subscriber ) . ',' . $this->signup_ip( $subscriber ) . "\r\n";
 			}
 		}
 
@@ -694,7 +697,7 @@ class S2_Admin extends S2_Core {
 		foreach ( $formats[0] as $format ) {
 			if ( $i >= $half && 0 === $j ) {
 				echo '</td><td style="width: 50%; text-align: left">' . "\r\n";
-				$j++;
+				++$j;
 			}
 
 			if ( 0 === $j ) {
@@ -710,7 +713,7 @@ class S2_Admin extends S2_Core {
 				}
 				echo '> ' . esc_html( ucwords( $format ) ) . '</label><br>' . "\r\n";
 			}
-			$i++;
+			++$i;
 		}
 		echo '</td></tr>' . "\r\n";
 		echo '</table>' . "\r\n";
@@ -757,7 +760,7 @@ class S2_Admin extends S2_Core {
 			} else {
 				$count['registered'] = $count['all_users'];
 			}
-		} else {
+		} elseif ( ! $this->s2_mu ) {
 			if ( '' === $this->subscribe2_options['compulsory'] ) {
 				$count['registered'] = $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(meta_key) FROM $wpdb->usermeta WHERE meta_key=%s AND meta_value <> ''", $this->get_usermeta_keyname( 's2_subscribed' ) ) );
 			} else {

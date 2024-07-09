@@ -5,24 +5,18 @@
 	"private": true,
 	"repository": "local",
 	"devDependencies": {
-		"eslint": "^5.16.0",
-		"eslint-config-wordpress": "^2.0.0",
-		"grunt": "^1.4.1",
-		"grunt-bump-wp-version": "^0.1.0",
-		"grunt-contrib-clean": "^2.0.0",
-		"grunt-contrib-cssmin": "^3.0.0",
-		"grunt-contrib-imagemin": "^4.0.0",
-		"grunt-contrib-jshint": "^2.1.0",
-		"grunt-csscomb": "^4.0.0",
-		"grunt-eslint": "^21.1.0",
-		"grunt-phpcs": "latest",
+		"grunt-bump-wp-version": "file:~/Plugins/node/grunt-bump-wp-version",
+		"grunt-contrib-clean": "latest",
+		"grunt-contrib-cssmin": "latest",
+		"grunt-contrib-imagemin": "latest",
+		"grunt-contrib-jshint": "latest",
+		"grunt-eslint": "^25.0.0",
+		"grunt-phpcs": "file:~/Plugins/node/grunt-phpcs",
 		"grunt-replace": "latest",
 		"grunt-terser": "latest",
 		"grunt-wp-i18n": "^1.0.3",
-		"grunt-zip": "^0.18.2",
+		"grunt-zip": "latest",
 		"matchdep": "latest",
-		"minimist": ">=1.2.3",
-		"optipng": "^2.2.0",
 		"terser": "latest"
 	},
 	"eslintConfig": {
@@ -30,14 +24,5 @@
 		"parserOptions": {
 			"ecmaVersion": 6
 		}
-	},
-	"comments": {
-		"devDependencies": {
-			"minimist": "Included for security reasons as other dependencies rely on insecure versions"
-		}
-	},
-	"dependencies": {
-		"grunt-cli": "^1.4.3",
-		"npm": "^7.20.0"
 	}
 }

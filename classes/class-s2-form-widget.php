@@ -8,6 +8,7 @@ class S2_Form_Widget extends WP_Widget {
 			'classname'                   => 's2_form_widget',
 			'description'                 => esc_html__( 'Sidebar Widget for Subscribe2', 'subscribe2-for-cp' ),
 			'customize_selective_refresh' => true,
+			'show_instance_in_rest'       => true,
 		);
 
 		$control_ops = array(

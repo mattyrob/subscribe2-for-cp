@@ -8,6 +8,7 @@ class S2_Counter_Widget extends WP_Widget {
 			'classname'                   => 's2_counter',
 			'description'                 => esc_html__( 'Subscriber Counter widget for Subscribe2', 'subscribe2-for-cp' ),
 			'customize_selective_refresh' => true,
+			'show_instance_in_rest'       => true,
 		);
 
 		$control_options = array(
@@ -21,12 +22,12 @@ class S2_Counter_Widget extends WP_Widget {
 	 * Displays the Widget
 	 */
 	public function widget( $args, $instance ) {
-		$title      = empty( $instance['title'] ) ? 'Subscriber Count' : $instance['title'];
+		$title      = empty( $instance['title'] ) ? esc_html__( 'Subscriber Count', 'subscribe2-for-cp' ) : $instance['title'];
 		$s2w_bg     = empty( $instance['s2w_bg'] ) ? '#e3dacf' : $instance['s2w_bg'];
 		$s2w_fg     = empty( $instance['s2w_fg'] ) ? '#345797' : $instance['s2w_fg'];
-		$s2w_width  = empty( $instance['s2w_width'] ) ? '82' : $instance['s2w_width'];
-		$s2w_height = empty( $instance['s2w_height'] ) ? '16' : $instance['s2w_height'];
-		$s2w_font   = empty( $instance['s2w_font'] ) ? '11' : $instance['s2w_font'];
+		$s2w_width  = empty( $instance['s2w_width'] ) ? 82 : $instance['s2w_width'];
+		$s2w_height = empty( $instance['s2w_height'] ) ? 16 : $instance['s2w_height'];
+		$s2w_font   = empty( $instance['s2w_font'] ) ? 11 : $instance['s2w_font'];
 
 		echo wp_kses_post( $args['before_widget'] );
 		if ( ! empty( $title ) ) {
@@ -45,13 +46,21 @@ class S2_Counter_Widget extends WP_Widget {
 	 * Saves the widgets settings.
 	 */
 	public function update( $new_instance, $old_instance ) {
-		$instance               = $old_instance;
-		$instance['title']      = wp_strip_all_tags( stripslashes( $new_instance['title'] ) );
-		$instance['s2w_bg']     = wp_strip_all_tags( stripslashes( $new_instance['s2w_bg'] ) );
-		$instance['s2w_fg']     = wp_strip_all_tags( stripslashes( $new_instance['s2w_fg'] ) );
-		$instance['s2w_width']  = wp_strip_all_tags( stripslashes( $new_instance['s2w_width'] ) );
-		$instance['s2w_height'] = wp_strip_all_tags( stripslashes( $new_instance['s2w_height'] ) );
-		$instance['s2w_font']   = wp_strip_all_tags( stripslashes( $new_instance['s2w_font'] ) );
+		$instance          = $old_instance;
+		$instance['title'] = wp_strip_all_tags( stripslashes( $new_instance['title'] ) );
+
+		$background_color = wp_strip_all_tags( stripslashes( $new_instance['s2w_bg'] ) );
+		if ( null !== $this->sanitize_color( $background_color ) ) {
+			$instance['s2w_bg'] = $background_color;
+		}
+		$foreground_color = wp_strip_all_tags( stripslashes( $new_instance['s2w_fg'] ) );
+		if ( null !== $this->sanitize_color( $foreground_color ) ) {
+			$instance['s2w_fg'] = $foreground_color;
+		}
+
+		$instance['s2w_width']  = (int) wp_strip_all_tags( stripslashes( $new_instance['s2w_width'] ) );
+		$instance['s2w_height'] = (int) wp_strip_all_tags( stripslashes( $new_instance['s2w_height'] ) );
+		$instance['s2w_font']   = (int) wp_strip_all_tags( stripslashes( $new_instance['s2w_font'] ) );
 
 		return $instance;
 	}
@@ -67,9 +76,9 @@ class S2_Counter_Widget extends WP_Widget {
 				'title'      => 'Subscriber Count',
 				's2w_bg'     => '#e3dacf',
 				's2w_fg'     => '#345797',
-				's2w_width'  => '82',
-				's2w_height' => '16',
-				's2w_font'   => '11',
+				's2w_width'  => 82,
+				's2w_height' => 16,
+				's2w_font'   => 11,
 			);
 		} else {
 			$defaults = array(
@@ -114,5 +123,18 @@ class S2_Counter_Widget extends WP_Widget {
 		echo '<tr><td><label for="' . esc_attr( $this->get_field_id( 's2w_font' ) ) . '">' . esc_html__( 'Font', 'subscribe2-for-cp' ) . '</label></td>' . "\r\n";
 		echo '<td><input type="text" name="' . esc_attr( $this->get_field_name( 's2w_font' ) ) . '" id="' . esc_attr( $this->get_field_id( 's2w_font' ) ) . '" value="' . esc_attr( $s2w_font ) . '"></td></tr>' . "\r\n";
 		echo '</table></fieldset></div>' . "\r\n";
+	}
+
+	/**
+	 * Sanitize hex color input
+	 */
+	private function sanitize_color( $color ) {
+		if ( '' === $color || null === $color ) {
+			return null;
+		}
+
+		if ( preg_match( '|^#([A-Fa-f0-9]{3}){1,2}$|', $color ) ) {
+			return $color;
+		}
 	}
 }

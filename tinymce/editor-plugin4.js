@@ -11,13 +11,14 @@
 					shortcode  = '[subscribe2]',
 					pbreplaced = [],
 					pbreplacedcount,
-					pbRE       = new RegExp( /(\[|<!--)subscribe2.*?(\]|-->)/g ),
-					replacer   = function( str ) {
-						if ( -1 !== str.indexOf( 'class="mceSubscribe2' ) ) {
-							str = pbreplaced[i];
-						}
-						return str;
-					};
+					pbRE       = new RegExp( /(\[|<!--)subscribe2.*?(\]|-->)/g );
+
+				function replacer( str ) {
+					if ( -1 !== str.indexOf( 'class="mceSubscribe2' ) ) {
+						str = pbreplaced[i];
+					}
+					return str;
+				}
 
 				// Register commands
 				ed.addCommand(

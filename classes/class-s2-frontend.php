@@ -251,7 +251,7 @@ class S2_Frontend extends S2_Core {
 				if ( null !== $check ) {
 					// this is a registered email
 					$this->s2form = $this->please_log_in;
-				} else {
+				} elseif ( null === $check ) {
 					// this is not a registered email
 					// what should we do?
 					if ( isset( $_POST['subscribe'] ) ) {
@@ -497,10 +497,8 @@ class S2_Frontend extends S2_Core {
 					if ( false !== stripos( $domain, $new_barred_domain ) || false !== stripos( $domain, $new_barred_subdomain ) ) {
 						return false;
 					}
-				} else {
-					if ( false !== stripos( $domain, $new_barred_domain ) ) {
-						return false;
-					}
+				} elseif ( false !== stripos( $domain, $new_barred_domain ) ) {
+					return false;
 				}
 			}
 
@@ -639,4 +637,19 @@ class S2_Frontend extends S2_Core {
 
 	/* ===== define some variables ===== */
 	public $profile = '';
+	public $please_log_in;
+	public $confirmation_sent;
+	public $already_subscribed;
+	public $not_subscribed;
+	public $not_an_email;
+	public $barred_domain;
+	public $error;
+	public $no_such_email;
+	public $added;
+	public $deleted;
+	public $subscribe;
+	public $unsubscribe;
+	public $s2form;
+	public $input_form_action;
+	public $form;
 }

@@ -16,7 +16,7 @@ Domain Path: /languages
 */
 
 /*
-Copyright (C) 2006-23 Matthew Robinson
+Copyright (C) 2006-24 Matthew Robinson
 Based on the Original Subscribe2 plugin by
 Copyright (C) 2005 Scott Merrill (skippy@skippy.net)
 
@@ -61,13 +61,15 @@ if ( is_plugin_active_for_network( plugin_basename( __FILE__ ) ) ) {
 // unless you know exactly what you are doing
 define( 'S2VERSION', '11.8' );
 define( 'S2PLUGIN', __FILE__ );
-define( 'S2PATH', trailingslashit( dirname( __FILE__ ) ) );
+define( 'S2PATH', trailingslashit( __DIR__ ) );
 define( 'S2DIR', trailingslashit( dirname( plugin_basename( __FILE__ ) ) ) );
-define( 'S2URL', plugin_dir_url( dirname( __FILE__ ) ) . S2DIR );
+define( 'S2URL', plugin_dir_url( __FILE__ ) );
 
 // Set maximum execution time to 5 minutes
 if ( function_exists( 'set_time_limit' ) ) {
-	set_time_limit( 300 );
+	if ( intval( ini_get( 'max_execution_time' ) ) < 300 ) {
+		set_time_limit( 300 );
+	}
 }
 
 global $mysubscribe2;

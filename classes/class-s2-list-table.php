@@ -34,7 +34,7 @@ class S2_List_Table extends WP_List_Table {
 				'edit' => sprintf( '<a href="%s">%s</a>', $url, __( 'Edit', 'subscribe2-for-cp' ) ),
 			);
 			return sprintf( '%1$s %2$s', $item['email'], $this->row_actions( $actions ) );
-		} else {
+		} elseif ( 'registered' !== $current_tab ) {
 			if ( '0' === s2cp()->is_public( $item['email'] ) ) {
 				return sprintf( '<span style="color:#FF0000"><abbr title="%2$s">%1$s</abbr></span>', $item['email'], $item['ip'] );
 			} else {
@@ -55,8 +55,8 @@ class S2_List_Table extends WP_List_Table {
 	}
 
 	public function column_cb( $item ) {
-		$column = '<label><span class="screen-reader-text">' . __( 'Checkbox for:', 'subscribe2-for-cp' ) . ' %1$s</span><input type="checkbox" name="%2$s[]" value="%3$s"></label>';
-		return sprintf( $column, $item['email'], $this->_args['singular'], $item['email'] );
+		$column = '<label class="screen-reader-text" for="cb-select-%1$s">' . __( 'Checkbox for:', 'subscribe2-for-cp' ) . ' %2$s</label><input id="cb-select-%3$s" type="checkbox" name="%4$s[]" value="%5$s">';
+		return sprintf( $column, $item['email'], $item['email'], $item['email'], $this->_args['singular'], $item['email'] );
 	}
 
 	public function get_columns() {
@@ -110,9 +110,12 @@ class S2_List_Table extends WP_List_Table {
 
 		if ( ! empty( $columns['cb'] ) ) {
 			static $cb_counter = 1;
-			$columns['cb']     = '<label class="screen-reader-text" for="cb-select-all-' . $cb_counter . '">' . __( 'Select All', 'subscribe2-for-cp' ) . '</label>'
-				. '<input id="cb-select-all-' . $cb_counter . '" type="checkbox">';
-			$cb_counter++;
+			$columns['cb']     = '<label class="screen-reader-text" for="cb-select-all-' . $cb_counter . '">' .
+					/* translators: Hidden accessibility text. */
+					__( 'Select All', 'subscribe2-for-cp' ) .
+				'</label>' .
+				'<input id="cb-select-all-' . $cb_counter . '" type="checkbox">';
+			++$cb_counter;
 		}
 
 		foreach ( $columns as $column_key => $column_display_name ) {
@@ -154,7 +157,35 @@ class S2_List_Table extends WP_List_Table {
 				$class = "class='" . join( ' ', $class ) . "'";
 			}
 
-			echo wp_kses_post( "<$tag $scope $id $class>$column_display_name</$tag>" );
+			$allowed_tags = array(
+				'a'     => array(
+					'href' => true,
+				),
+				'input' => array(
+					'id'   => true,
+					'type' => true,
+				),
+				'label' => array(
+					'class' => true,
+					'for'   => true,
+				),
+				'span'  => array(
+					'class' => true,
+				),
+				'td'    => array(
+					'class' => true,
+					'id'    => true,
+				),
+				'th'    => array(
+					'class' => true,
+					'id'    => true,
+					'scope' => true,
+				),
+				'thead' => array(),
+				'tr'    => array(),
+			);
+
+			echo wp_kses( "<$tag $scope $id $class>$column_display_name</$tag>", $allowed_tags );
 		}
 	}
 

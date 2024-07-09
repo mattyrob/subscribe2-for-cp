@@ -17,7 +17,7 @@ class S2_Forms {
 		}
 
 		if ( isset( $_GET['id'] ) ) {
-			if ( ! current_user_can( (string) apply_filters( 's2_capability', 'manage_options', 'manage' ) ) ) {
+			if ( ! current_user_can( (string) apply_filters( 's2_capability', 'manage_options', 'manage' ) ) ) { // phpcs:ignore WordPress.WP.Capabilities
 				die( '<p>' . esc_html__( 'Permission error! Your request cannot be completed.', 'subscribe2-for-cp' ) . '</p>' );
 			}
 			if ( is_multisite() ) {
@@ -226,13 +226,10 @@ class S2_Forms {
 			}
 			if ( isset( $_POST['new_category'] ) ) {
 				update_user_meta( $userid, s2cp()->get_usermeta_keyname( 's2_autosub' ), $_POST['new_category'] );
+			} elseif ( 'yes' === s2cp()->subscribe2_options['show_autosub'] && 'yes' === s2cp()->subscribe2_options['autosub_def'] ) {
+				update_user_meta( $userid, s2cp()->get_usermeta_keyname( 's2_autosub' ), 'yes' );
 			} else {
-				// value has not been passed so use Settings defaults
-				if ( 'yes' === s2cp()->subscribe2_options['show_autosub'] && 'yes' === s2cp()->subscribe2_options['autosub_def'] ) {
-					update_user_meta( $userid, s2cp()->get_usermeta_keyname( 's2_autosub' ), 'yes' );
-				} else {
-					update_user_meta( $userid, s2cp()->get_usermeta_keyname( 's2_autosub' ), 'no' );
-				}
+				update_user_meta( $userid, s2cp()->get_usermeta_keyname( 's2_autosub' ), 'no' );
 			}
 
 			$cats = ( isset( $_POST['category'] ) ) ? $_POST['category'] : '';
@@ -334,7 +331,7 @@ class S2_Forms {
 					echo ' DISABLED';
 				}
 				echo '> <abbr title="' . esc_attr( $cat->slug ) . '">' . esc_html( $cat_name ) . '</abbr></label></td>' . "\r\n";
-				$col++;
+				++$col;
 			} else {
 				echo '<td style="width: 50%"><label><input class="checkall_' . esc_attr( $name ) . '" type="checkbox" name="' . esc_attr( $name ) . '[]" value="' . esc_attr( $cat->term_id ) . '"';
 				if ( in_array( (string) $cat->term_id, $selected, true ) || in_array( (string) $cat->term_id, $compulsory, true ) ) {
@@ -382,7 +379,7 @@ class S2_Forms {
 		foreach ( $all_authors as $author ) {
 			if ( $i >= $half && 0 === $j ) {
 				echo '</td><td style="width: 50%; text-align: left;">' . "\r\n";
-				$j++;
+				++$j;
 			}
 			if ( 0 === $j ) {
 				echo '<label><input class="checkall_author" type="checkbox" name="author[]" value="' . esc_attr( $author->ID ) . '"';
