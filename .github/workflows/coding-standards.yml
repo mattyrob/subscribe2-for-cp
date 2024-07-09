@@ -13,7 +13,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Set up PHP
         uses: shivammathur/setup-php@v2
@@ -47,15 +47,15 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Install NodeJS
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: 14
 
       - name: Cache NodeJS modules
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         env:
           cache-name: cache-node-modules
         with:
@@ -80,7 +80,7 @@ jobs:
           grunt --version
 
       - name: Run JSHint
-        run: grunt jshint:core
+        run: ./node_modules/grunt/bin/grunt jshint:core
 
       - name: Run ESLint
-        run: grunt eslint:core
+        run: ./node_modules/grunt/bin/grunt eslint:core
