@@ -1,6 +1,7 @@
 = 11.9 =
 
 * Updated some i18n string domains for translation
+* Backport multiple enhancements from Subscribe2 HTML
 
 = 11.8 =
 
