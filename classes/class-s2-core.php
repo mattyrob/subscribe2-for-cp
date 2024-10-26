@@ -1810,7 +1810,7 @@ class S2_Core {
 	 * Subscribe2 constructor
 	 */
 	public function __construct() {
-		global $wp_version, $wpmu_version;
+		global $wp_version, $wpmu_version, $wpdb;
 		// load the options
 		$this->subscribe2_options = get_option( 'subscribe2_options' );
 
