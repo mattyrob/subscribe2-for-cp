@@ -1,3 +1,7 @@
+= 11.9.1 =
+
+* Fix for activation fatal error - thanks to Web242
+
 = 11.9 =
 
 * Updated some i18n string domains for translation
