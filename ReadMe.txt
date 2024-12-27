@@ -3,7 +3,7 @@ Contributors: MattyRob
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&amp;hosted_button_id=2387904
 Tags: posts, subscription, email, subscribe, notify, notification
 Requires at least: 1.0.0
-Tested up to: 2.2.0
+Tested up to: 2.3.1
 License: GPLv3
 
 Sends a list of subscribers an email notification when you publish new posts.
