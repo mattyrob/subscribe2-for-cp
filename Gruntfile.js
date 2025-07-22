@@ -224,6 +224,12 @@ module.exports = function( grunt ) {
 					dest: SOURCE_DIR
 				}
 			},
+			shell: {
+				makepot: {
+					cwd: SOURCE_DIR,
+					command: "wp i18n make-pot . languages/subscribe2.pot --exclude=plugin-update-checker --headers='{\"Report-Msgid-Bugs-To\":\"https://github.com/mattyrob/subscribe2-for-cp/issues\"}'"
+				}
+			},
 			addtextdomain: {
 				s2cp: {
 					options: {
@@ -237,22 +243,6 @@ module.exports = function( grunt ) {
 							'classes/*.php',
 							'include/*.php'
 						]
-					}
-				}
-			},
-			makepot: {
-				s2cp: {
-					options: {
-						cwd: SOURCE_DIR,
-						mainFile: 'subscribe2.php',
-						potFilename: 'subscribe2.pot',
-						exclude: [ 'plugin-update-checker/.*' ],
-						potHeaders: {
-							poedit: true,
-							'x-poedit-keywordslist': true,
-							'report-msgid-bugs-to': 'https://wordpress.org/support/plugin/subscribe2'
-						},
-						type: 'wp-plugin'
 					}
 				}
 			},
@@ -336,7 +326,7 @@ module.exports = function( grunt ) {
 			'terser',
 			'cssmin',
 			'imagemin',
-			'makepot:s2cp'
+			'shell:makepot'
 		]
 	);
 
