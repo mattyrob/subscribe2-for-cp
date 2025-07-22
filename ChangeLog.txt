@@ -1,3 +1,7 @@
+= 11.10.0 =
+
+* Implement array format for `in_footer` where supported when calling `wp_register_script()`
+
 = 11.9.2 =
 
 * Commit update with changes missed from 11.9.1 release

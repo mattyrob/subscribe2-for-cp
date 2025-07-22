@@ -260,7 +260,8 @@ class S2_Admin extends S2_Core {
 	 * Insert Javascript and CSS into admin_headers
 	 */
 	public function checkbox_form_js() {
-		wp_register_script( 's2_checkbox', S2URL . 'include/s2-checkbox' . $this->script_debug . '.js', array( 'jquery' ), '1.4', true );
+		$args = s2cp()->get_in_footer_args();
+		wp_register_script( 's2_checkbox', S2URL . 'include/s2-checkbox' . $this->script_debug . '.js', array( 'jquery' ), '1.4', $args );
 		wp_enqueue_script( 's2_checkbox' );
 	}
 
@@ -270,20 +271,22 @@ class S2_Admin extends S2_Core {
 	}
 
 	public function option_form_js() {
-		wp_register_script( 's2_edit', S2URL . 'include/s2-edit' . $this->script_debug . '.js', array( 'jquery' ), '1.3', true );
+		$args = s2cp()->get_in_footer_args();
+		wp_register_script( 's2_edit', S2URL . 'include/s2-edit' . $this->script_debug . '.js', array( 'jquery' ), '1.3', $args );
 		wp_enqueue_script( 's2_edit' );
 		if ( 'never' !== $this->subscribe2_options['email_freq'] ||
 			( isset( $_POST['email_freq'] ) && 'never' !== $_POST['email_freq'] && false !== wp_verify_nonce( $_REQUEST['_wpnonce'], 'subscribe2-options_subscribers' . S2VERSION ) )
 			) {
 			wp_enqueue_script( 'jquery-ui-datepicker' );
 			wp_enqueue_style( 'jquery-style', 'https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css', array(), '1.12.1' );
-			wp_register_script( 's2_date_time', S2URL . 'include/s2-date-time' . $this->script_debug . '.js', array( 'jquery-ui-datepicker' ), '1.1', true );
+			wp_register_script( 's2_date_time', S2URL . 'include/s2-date-time' . $this->script_debug . '.js', array( 'jquery-ui-datepicker' ), '1.1', $args );
 			wp_enqueue_script( 's2_date_time' );
 		}
 	}
 
 	public function dismiss_js() {
-		wp_register_script( 's2_dismiss', S2URL . 'include/s2-dismiss' . $this->script_debug . '.js', array( 'jquery' ), '1.1', true );
+		$args = s2cp()->get_in_footer_args();
+		wp_register_script( 's2_dismiss', S2URL . 'include/s2-dismiss' . $this->script_debug . '.js', array( 'jquery' ), '1.1', $args );
 		$translation_array = array(
 			'ajaxurl' => admin_url( 'admin-ajax.php' ),
 			'nonce'   => wp_create_nonce( 's2_dismiss_nonce' ),
@@ -302,7 +305,8 @@ class S2_Admin extends S2_Core {
 	}
 
 	public function subscribers_form_js() {
-		wp_register_script( 's2_subscribers', S2URL . 'include/s2-subscribers' . $this->script_debug . '.js', array(), '1.5', true );
+		$args = s2cp()->get_in_footer_args();
+		wp_register_script( 's2_subscribers', S2URL . 'include/s2-subscribers' . $this->script_debug . '.js', array(), '1.5', $args );
 		$translation_array = array(
 			'registered_confirm_single' => __( 'You are about to delete a registered user account, any posts made by this user will be assigned to you. Are you sure?', 'subscribe2-for-cp' ),
 			'registered_confirm_plural' => __( 'You are about to delete registered user accounts, any posts made by these users will be assigned to you. Are you sure?', 'subscribe2-for-cp' ),
@@ -404,9 +408,10 @@ class S2_Admin extends S2_Core {
 		// ensure we only add colorpicker js to widgets page
 		$pages = array( 'widgets.php' );
 		if ( in_array( $hook, $pages, true ) ) {
+			$args = s2cp()->get_in_footer_args();
 			wp_enqueue_style( 'wp-color-picker' );
 			wp_enqueue_script( 'wp-color-picker' );
-			wp_register_script( 's2_colorpicker', S2URL . 'include/s2-colorpicker' . $this->script_debug . '.js', array( 'wp-color-picker' ), '1.4', true );
+			wp_register_script( 's2_colorpicker', S2URL . 'include/s2-colorpicker' . $this->script_debug . '.js', array( 'wp-color-picker' ), '1.4', $args );
 			wp_enqueue_script( 's2_colorpicker' );
 		}
 	}

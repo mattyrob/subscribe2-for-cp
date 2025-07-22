@@ -1441,6 +1441,44 @@ class S2_Core {
 	}
 
 	/**
+	 * Function to compate passed versions of WordPress or ClassicPress to current version.
+	 * Used in compatibility checking for introduced core functionality.
+	 */
+	public function check_core_version( $version, $cp_version ) {
+		if ( function_exists( 'classicpress_version_short' ) ) {
+			$clean_core_version = classicpress_version_short();
+
+			if ( version_compare( $clean_core_version, $cp_version, '>=' ) ) {
+				return true;
+			} else {
+				return false;
+			}
+		} else {
+			global $wp_version;
+			$clean_core_version = explode( '-', $wp_version, 2 );
+
+			if ( version_compare( $clean_core_version[0], $version, '>=' ) ) {
+				return true;
+			} else {
+				return false;
+			}
+		}
+	}
+
+	/**
+	 * Returns correctly formatted `in_footer` parameter for use in wp_register_script().
+	 */
+	public function get_in_footer_args() {
+		if ( true === s2cp()->check_core_version( '6.3', '2.6' ) ) {
+			$args = array( 'in_footer' => true );
+		} else {
+			$args = true;
+		}
+
+		return $args;
+	}
+
+	/**
 	 * Send a daily digest of today's new posts
 	 */
 	public function subscribe2_cron( $preview = '', $resend = '' ) {

@@ -38,7 +38,10 @@ class S2_Ajax {
 		}
 		wp_register_style( 'jquery-ui-style', $css, array(), '1.12.1' );
 		wp_enqueue_style( 'jquery-ui-style' );
-		wp_register_script( 's2-ajax', S2URL . 'include/s2-ajax' . $this->script_debug . '.js', array(), '1.3', true );
+
+		$args = s2cp()->get_in_footer_args();
+
+		wp_register_script( 's2-ajax', S2URL . 'include/s2-ajax' . $this->script_debug . '.js', array(), '1.3', $args );
 		$translation_array = array(
 			'ajaxurl' => admin_url( 'admin-ajax.php' ),
 			'title'   => __( 'Subscribe to this blog', 'subscribe2-for-cp' ),

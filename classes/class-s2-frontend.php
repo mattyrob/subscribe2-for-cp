@@ -569,7 +569,8 @@ class S2_Frontend extends S2_Core {
 	 * Enqueue javascript ip updater code
 	 */
 	public function js_ip_script() {
-		wp_register_script( 's2_ip_updater', S2URL . 'include/s2-ip-updater' . $this->script_debug . '.js', array(), '1.1', true );
+		$args = s2cp()->get_in_footer_args();
+		wp_register_script( 's2_ip_updater', S2URL . 'include/s2-ip-updater' . $this->script_debug . '.js', array(), '1.1', $args );
 		wp_enqueue_script( 's2_ip_updater' );
 	}
 
