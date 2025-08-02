@@ -297,7 +297,7 @@ class S2_Upgrade {
 		$users      = $user_query->get_results();
 		if ( ! empty( $users ) ) {
 			foreach ( $users as $user ) {
-				update_user_meta( $user->ID, s2html()->get_usermeta_keyname( 's2_format' ), get_user_meta( $user->ID, 's2_excerpt' ) );
+				update_user_meta( $user->ID, s2html()->get_usermeta_keyname( 's2_format' ), get_user_meta( $user->ID, 's2_excerpt', true ) );
 				delete_user_meta( $user->ID, 's2_excerpt' );
 			}
 		}
