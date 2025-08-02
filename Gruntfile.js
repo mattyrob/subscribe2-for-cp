@@ -98,7 +98,8 @@ module.exports = function( grunt ) {
 						'**/*.php',
 						'!**/*.js',
 						'!node_modules/**',
-						'!plugin-update-checker/**'
+						'!plugin-update-checker/**',
+						'!vendor/**'
 					],
 					options: {
 						bin: '/usr/local/bin/phpcs',
@@ -111,8 +112,9 @@ module.exports = function( grunt ) {
 					src: [
 						'**/*.php',
 						'!**/*.js',
+						'!node_modules/**',
 						'!plugin-update-checker/**',
-						'!node_modules/**'
+						'!vendor/**'
 					],
 					options: {
 						bin: '/usr/local/bin/phpcs',
