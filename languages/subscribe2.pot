@@ -1,17 +1,17 @@
-# Copyright (C) 2024 Matthew Robinson
+# Copyright (C) 2025 Matthew Robinson
 # This file is distributed under the same license as the Subscribe2 for ClassicPress plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: Subscribe2 for ClassicPress 11.9.2\n"
+"Project-Id-Version: Subscribe2 for ClassicPress 11.10.0\n"
 "Report-Msgid-Bugs-To: https://github.com/mattyrob/subscribe2-for-cp/issues\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2024-12-27T16:44:15+00:00\n"
+"POT-Creation-Date: 2025-12-06T16:46:37+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"X-Generator: WP-CLI 2.11.0\n"
+"X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: subscribe2-for-cp\n"
 
 #. Plugin Name of the plugin
@@ -67,39 +67,39 @@ msgstr ""
 msgid "Message sent!"
 msgstr ""
 
-#: admin/send-email.php:100
+#: admin/send-email.php:103
 msgid "Message failed!"
 msgstr ""
 
-#: admin/send-email.php:107
+#: admin/send-email.php:110
 msgid "Send an email to subscribers"
 msgstr ""
 
-#: admin/send-email.php:115
+#: admin/send-email.php:118
 msgid "A message from"
 msgstr ""
 
-#: admin/send-email.php:120
+#: admin/send-email.php:123
 msgid "Subject"
 msgstr ""
 
-#: admin/send-email.php:121
+#: admin/send-email.php:124
 msgid "Email body"
 msgstr ""
 
-#: admin/send-email.php:123
+#: admin/send-email.php:126
 msgid "Add More Files"
 msgstr ""
 
-#: admin/send-email.php:125
+#: admin/send-email.php:128
 msgid "Recipients:"
 msgstr ""
 
-#: admin/send-email.php:128
+#: admin/send-email.php:131
 msgid "Preview"
 msgstr ""
 
-#: admin/send-email.php:128
+#: admin/send-email.php:131
 msgid "Send"
 msgstr ""
 
@@ -141,12 +141,13 @@ msgstr ""
 
 #. Translators: Warning message
 #: admin/settings.php:165
+#, php-format
 msgid "You appear to be sending notifications from %1$s, which has a different domain name than your blog server %2$s. This may result in failed emails."
 msgstr ""
 
 #: admin/settings.php:173
 #: classes/class-s2-admin.php:101
-#: classes/class-s2-admin.php:330
+#: classes/class-s2-admin.php:334
 msgid "Settings"
 msgstr ""
 
@@ -176,18 +177,18 @@ msgid "Miscellaneous"
 msgstr ""
 
 #: admin/settings.php:202
-#: classes/class-s2-admin.php:942
+#: classes/class-s2-admin.php:947
 #: classes/class-s2-list-table.php:34
 msgid "Edit"
 msgstr ""
 
 #: admin/settings.php:205
-#: classes/class-s2-admin.php:956
+#: classes/class-s2-admin.php:961
 msgid "Update"
 msgstr ""
 
 #: admin/settings.php:206
-#: classes/class-s2-admin.php:957
+#: classes/class-s2-admin.php:962
 msgid "Revert"
 msgstr ""
 
@@ -667,13 +668,13 @@ msgstr ""
 
 #: admin/subscribers.php:206
 #: classes/class-s2-admin.php:148
-#: classes/class-s2-admin.php:732
+#: classes/class-s2-admin.php:737
 msgid "Public Subscribers"
 msgstr ""
 
 #: admin/subscribers.php:207
 #: classes/class-s2-admin.php:155
-#: classes/class-s2-admin.php:736
+#: classes/class-s2-admin.php:741
 msgid "Registered Subscribers"
 msgstr ""
 
@@ -907,280 +908,281 @@ msgstr ""
 msgid "<strong>Preview</strong> will send a preview of the email to the currently logged in user. <strong>Send</strong> will send the email to the recipient list."
 msgstr ""
 
-#: classes/class-s2-admin.php:307
+#: classes/class-s2-admin.php:311
 msgid "You are about to delete a registered user account, any posts made by this user will be assigned to you. Are you sure?"
 msgstr ""
 
-#: classes/class-s2-admin.php:308
+#: classes/class-s2-admin.php:312
 msgid "You are about to delete registered user accounts, any posts made by these users will be assigned to you. Are you sure?"
 msgstr ""
 
-#: classes/class-s2-admin.php:309
+#: classes/class-s2-admin.php:313
 msgid "You are about to delete a public subscriber. Are you sure?"
 msgstr ""
 
-#: classes/class-s2-admin.php:310
+#: classes/class-s2-admin.php:314
 msgid "You are about to delete public subscribers. Are you sure?"
 msgstr ""
 
-#: classes/class-s2-admin.php:311
+#: classes/class-s2-admin.php:315
 msgid "You are about to make Bulk Management changes to all Registered Users. Are you sure?"
 msgstr ""
 
-#: classes/class-s2-admin.php:312
+#: classes/class-s2-admin.php:316
 msgid "You are about to make Bulk Management changes to the selected Registered User. Are you sure?"
 msgstr ""
 
-#: classes/class-s2-admin.php:313
+#: classes/class-s2-admin.php:317
 msgid "You are about to make Bulk Management changes to the selected Registered Users. Are you sure?"
 msgstr ""
 
-#: classes/class-s2-admin.php:331
+#: classes/class-s2-admin.php:335
 msgid "Donate"
 msgstr ""
 
-#: classes/class-s2-admin.php:433
+#: classes/class-s2-admin.php:438
 msgid "Subscribe2 Notification Override"
 msgstr ""
 
-#: classes/class-s2-admin.php:442
+#: classes/class-s2-admin.php:447
 msgid "Subscribe2 Preview"
 msgstr ""
 
-#: classes/class-s2-admin.php:452
+#: classes/class-s2-admin.php:457
 msgid "Subscribe2 Resend"
 msgstr ""
 
-#: classes/class-s2-admin.php:468
+#: classes/class-s2-admin.php:473
 msgid "Check here to disable sending of an email notification for this post/page"
 msgstr ""
 
-#: classes/class-s2-admin.php:503
+#: classes/class-s2-admin.php:508
 msgid "Send preview email of this post to currently logged in user:"
 msgstr ""
 
-#: classes/class-s2-admin.php:504
+#: classes/class-s2-admin.php:509
 msgid "Send Preview"
 msgstr ""
 
-#: classes/class-s2-admin.php:533
+#: classes/class-s2-admin.php:538
 msgid "Resend the notification email of this post to current subscribers:"
 msgstr ""
 
-#: classes/class-s2-admin.php:534
+#: classes/class-s2-admin.php:539
 msgid "Resend Notification"
 msgstr ""
 
-#: classes/class-s2-admin.php:562
+#: classes/class-s2-admin.php:567
 msgid "Attempt made to resend email notification."
 msgstr ""
 
-#: classes/class-s2-admin.php:567
+#: classes/class-s2-admin.php:572
 msgid "Attempt made to send email preview."
 msgstr ""
 
-#: classes/class-s2-admin.php:644
+#: classes/class-s2-admin.php:649
 msgctxt "Comma Separated Column Header names for CSV Export"
 msgid "User Email,User Type,User Name,Confirm Date,IP"
 msgstr ""
 
-#: classes/class-s2-admin.php:666
+#: classes/class-s2-admin.php:671
 msgid "Registered User"
 msgstr ""
 
-#: classes/class-s2-admin.php:670
+#: classes/class-s2-admin.php:675
 msgid "Confirmed Public Subscriber"
 msgstr ""
 
-#: classes/class-s2-admin.php:672
+#: classes/class-s2-admin.php:677
 msgid "Unconfirmed Public Subscriber"
 msgstr ""
 
-#: classes/class-s2-admin.php:694
+#: classes/class-s2-admin.php:699
 #: classes/class-s2-forms.php:312
 #: classes/class-s2-forms.php:376
 msgid "Select / Unselect All"
 msgstr ""
 
-#: classes/class-s2-admin.php:731
+#: classes/class-s2-admin.php:736
 msgid "All Users and Subscribers"
 msgstr ""
 
-#: classes/class-s2-admin.php:733
+#: classes/class-s2-admin.php:738
 msgid "Confirmed"
 msgstr ""
 
-#: classes/class-s2-admin.php:734
+#: classes/class-s2-admin.php:739
 msgid "Unconfirmed"
 msgstr ""
 
-#: classes/class-s2-admin.php:735
+#: classes/class-s2-admin.php:740
 msgid "All Registered Users"
 msgstr ""
 
-#: classes/class-s2-admin.php:816
+#: classes/class-s2-admin.php:821
 msgid "[Compulsory]"
 msgstr ""
 
-#: classes/class-s2-admin.php:863
+#: classes/class-s2-admin.php:868
 msgid "Post Author"
 msgstr ""
 
-#: classes/class-s2-admin.php:902
+#: classes/class-s2-admin.php:907
 msgid "The ClassicPress cron functions may be disabled on this server. Digest notifications may not work."
 msgstr ""
 
-#: classes/class-s2-admin.php:911
+#: classes/class-s2-admin.php:916
 msgid "For each Post"
 msgstr ""
 
-#: classes/class-s2-admin.php:933
+#: classes/class-s2-admin.php:938
 msgid "Current UTC time is"
 msgstr ""
 
-#: classes/class-s2-admin.php:935
+#: classes/class-s2-admin.php:940
 msgid "Current blog time is"
 msgstr ""
 
-#: classes/class-s2-admin.php:937
+#: classes/class-s2-admin.php:942
 msgid "Next email notification will be sent when your blog time is after"
 msgstr ""
 
-#: classes/class-s2-admin.php:959
+#: classes/class-s2-admin.php:964
 msgid "Attempt to resend the last Digest Notification email"
 msgstr ""
 
-#: classes/class-s2-admin.php:960
+#: classes/class-s2-admin.php:965
 msgid "Resend Digest"
 msgstr ""
 
-#: classes/class-s2-admin.php:978
+#: classes/class-s2-admin.php:983
 msgid "Select a page"
 msgstr ""
 
-#: classes/class-s2-admin.php:1256
+#: classes/class-s2-admin.php:1261
 msgid "Email subscription"
 msgstr ""
 
-#: classes/class-s2-admin.php:1258
+#: classes/class-s2-admin.php:1263
 msgid "Subscribe / Unsubscribe"
 msgstr ""
 
-#: classes/class-s2-admin.php:1259
+#: classes/class-s2-admin.php:1264
 msgid "Receive notifications"
 msgstr ""
 
-#: classes/class-s2-admin.php:1260
+#: classes/class-s2-admin.php:1265
 msgid "Check if you want to receive email notification when new posts are published"
 msgstr ""
 
-#: classes/class-s2-ajax.php:44
+#: classes/class-s2-ajax.php:47
 msgid "Subscribe to this blog"
 msgstr ""
 
-#: classes/class-s2-ajax.php:104
+#: classes/class-s2-ajax.php:107
 msgid "There was an error validating your request. Please try again later."
 msgstr ""
 
-#: classes/class-s2-ajax.php:110
-#: classes/class-s2-ajax.php:144
-#: classes/class-s2-ajax.php:158
+#: classes/class-s2-ajax.php:113
+#: classes/class-s2-ajax.php:147
+#: classes/class-s2-ajax.php:161
 #: classes/class-s2-frontend.php:72
 msgid "A confirmation message is on its way!"
 msgstr ""
 
-#: classes/class-s2-ajax.php:118
+#: classes/class-s2-ajax.php:121
 #: classes/class-s2-frontend.php:78
 msgid "Sorry, but that does not look like an email address to me."
 msgstr ""
 
-#: classes/class-s2-ajax.php:120
+#: classes/class-s2-ajax.php:123
 #: classes/class-s2-frontend.php:80
 msgid "Sorry, email addresses at that domain are currently barred due to spam, please use an alternative email address."
 msgstr ""
 
-#: classes/class-s2-ajax.php:126
+#: classes/class-s2-ajax.php:129
 #: classes/class-s2-frontend.php:246
 msgid "Slow down, you move too fast."
 msgstr ""
 
 #. Translators: Link to login page
-#: classes/class-s2-ajax.php:134
+#: classes/class-s2-ajax.php:137
+#, php-format
 msgid "To manage your subscription options please <a href=\"%1$s\">login.</a>"
 msgstr ""
 
-#: classes/class-s2-ajax.php:146
-#: classes/class-s2-ajax.php:160
+#: classes/class-s2-ajax.php:149
+#: classes/class-s2-ajax.php:163
 #: classes/class-s2-frontend.php:82
 msgid "Sorry, there seems to be an error on the server. Please try again later."
 msgstr ""
 
-#: classes/class-s2-ajax.php:150
+#: classes/class-s2-ajax.php:153
 #: classes/class-s2-frontend.php:74
 msgid "That email address is already subscribed."
 msgstr ""
 
-#: classes/class-s2-ajax.php:154
+#: classes/class-s2-ajax.php:157
 #: classes/class-s2-frontend.php:76
 msgid "That email address is not subscribed."
 msgstr ""
 
-#: classes/class-s2-core.php:538
+#: classes/class-s2-core.php:542
 msgid "Plain Text Excerpt Preview"
 msgstr ""
 
-#: classes/class-s2-core.php:540
+#: classes/class-s2-core.php:544
 msgid "Plain Text Full Preview"
 msgstr ""
 
-#: classes/class-s2-core.php:542
+#: classes/class-s2-core.php:546
 msgid "HTML Excerpt Preview"
 msgstr ""
 
-#: classes/class-s2-core.php:544
+#: classes/class-s2-core.php:548
 msgid "HTML Full Preview"
 msgstr ""
 
-#: classes/class-s2-core.php:1254
+#: classes/class-s2-core.php:1258
 msgid "Check here to Subscribe to email notifications for new posts"
 msgstr ""
 
-#: classes/class-s2-core.php:1258
+#: classes/class-s2-core.php:1262
 msgid "By registering with this blog you are also agreeing to receive email notifications for new posts but you can unsubscribe at anytime"
 msgstr ""
 
-#: classes/class-s2-core.php:1288
+#: classes/class-s2-core.php:1292
 msgid "Check here to Subscribe to notifications for new posts"
 msgstr ""
 
-#: classes/class-s2-core.php:1415
+#: classes/class-s2-core.php:1419
 msgid "Weekly"
 msgstr ""
 
-#: classes/class-s2-core.php:1632
-#: classes/class-s2-core.php:1633
+#: classes/class-s2-core.php:1674
+#: classes/class-s2-core.php:1675
 msgid "Author"
 msgstr ""
 
-#: classes/class-s2-core.php:1639
+#: classes/class-s2-core.php:1681
 msgid "Posted on"
 msgstr ""
 
-#: classes/class-s2-core.php:1666
-#: classes/class-s2-core.php:1667
+#: classes/class-s2-core.php:1708
+#: classes/class-s2-core.php:1709
 msgid "Posted in"
 msgstr ""
 
-#: classes/class-s2-core.php:1680
-#: classes/class-s2-core.php:1681
+#: classes/class-s2-core.php:1722
+#: classes/class-s2-core.php:1723
 msgid "Tagged as"
 msgstr ""
 
-#: classes/class-s2-core.php:1752
+#: classes/class-s2-core.php:1794
 msgid "Digest Email"
 msgstr ""
 
-#: classes/class-s2-core.php:1765
+#: classes/class-s2-core.php:1807
 msgid "Digest Preview"
 msgstr ""
 
@@ -1381,16 +1383,19 @@ msgstr ""
 
 #. Translators: Link to login page
 #: classes/class-s2-frontend.php:56
+#, php-format
 msgid "To manage your subscription options please <a href=\"%1$s\">login</a>."
 msgstr ""
 
 #. Translators: Link to Profile page
 #: classes/class-s2-frontend.php:60
+#, php-format
 msgid "You may manage your subscription options from your <a href=\"%1$s\">profile</a>."
 msgstr ""
 
 #. Translators: Link to Profile page
 #: classes/class-s2-frontend.php:68
+#, php-format
 msgid "<a href=\"%1$s\">Subscribe</a> to email notifications when this blog posts new content."
 msgstr ""
 
@@ -1501,6 +1506,7 @@ msgstr ""
 
 #. Translators: Pagination
 #: classes/class-s2-list-table.php:284
+#, php-format
 msgid "%s item"
 msgid_plural "%s items"
 msgstr[0] ""
@@ -1521,6 +1527,7 @@ msgstr ""
 
 #. Translators: Pagination
 #: classes/class-s2-list-table.php:381
+#, php-format
 msgctxt "paging"
 msgid "%1$s of %2$s"
 msgstr ""
@@ -1588,6 +1595,7 @@ msgstr ""
 
 #. Translators: Subscribe2 requires ClassicPress, exit if not on a compatible platform
 #: subscribe2.php:44
+#, php-format
 msgid "This version of Subscribe2 requires Classicpress available at: %1$s"
 msgstr ""
 
