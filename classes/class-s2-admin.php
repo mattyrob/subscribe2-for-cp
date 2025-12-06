@@ -1301,7 +1301,7 @@ class S2_Admin extends S2_Core {
 	/**
 	 * Uninstall hook
 	 */
-	public function s2_uninstall() {
+	public static function s2_uninstall() {
 		require_once S2PATH . 'classes/class-s2-uninstall.php';
 		$s2_uninstall = new S2_Uninstall();
 		$s2_uninstall->uninstall();

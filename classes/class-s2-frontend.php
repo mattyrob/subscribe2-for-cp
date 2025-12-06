@@ -653,4 +653,6 @@ class S2_Frontend extends S2_Core {
 	public $s2form;
 	public $input_form_action;
 	public $form;
+	public $ip;
+	public $action;
 }

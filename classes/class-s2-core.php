@@ -93,7 +93,11 @@ class S2_Core {
 				}
 				// Use the mail queue provided we are not sending a preview
 				if ( function_exists( 'wpmq_mail' ) && ! isset( $this->preview_email ) ) {
-					$status = wp_mail( $recipient, $subject, $mailtext, $headers, $attachments, 0 );
+					if ( true === $this->check_core_version( '6.9', '2.6' ) && defined( 'WPMQ_VERSION' ) && version_compare( WPMQ_VERSION, '4.16', '>=' ) ) {
+						$status = wp_mail( $recipient, $subject, $mailtext, $headers, $attachments, array(), 0 );
+					} else {
+						$status = wp_mail( $recipient, $subject, $mailtext, $headers, $attachments, 0 );
+					}
 				} else {
 					$status = wp_mail( $recipient, $subject, $mailtext, $headers, $attachments );
 				}

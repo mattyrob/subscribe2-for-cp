@@ -82,9 +82,9 @@ class S2_Form_Widget extends WP_Widget {
 		$instance['size']              = intval( stripslashes( $new_instance['size'] ) );
 		$instance['hidebutton']        = wp_strip_all_tags( stripslashes( $new_instance['hidebutton'] ) );
 		$instance['postto']            = stripslashes( $new_instance['postto'] );
-		$instance['js']                = stripslashes( $new_instance['js'] );
-		$instance['noantispam']        = stripslashes( $new_instance['noantispam'] );
-		$instance['nowrap']            = stripslashes( $new_instance['nowrap'] );
+		$instance['js']                = ( empty( $new_instance['js'] ) ) ? '' : stripslashes( $new_instance['js'] );
+		$instance['noantispam']        = ( empty( $new_instance['noantispam'] ) ) ? '' : stripslashes( $new_instance['noantispam'] );
+		$instance['nowrap']            = ( empty( $new_instance['nowrap'] ) ) ? '' : stripslashes( $new_instance['nowrap'] );
 
 		return $instance;
 	}
