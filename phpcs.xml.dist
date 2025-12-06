@@ -45,7 +45,7 @@
 	<!-- Accept some variable names from PHPMailer -->
 	<rule ref="WordPress.NamingConventions.ValidVariableName">
 		<properties>
-			<property name="customPropertiesWhitelist" type="array">
+			<property name="allowed_custom_properties" type="array">
 				<element value="ErrorInfo"/>
 				<element value="Body"/>
 				<element value="ContentType"/>
