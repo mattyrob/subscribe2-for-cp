@@ -3,6 +3,7 @@
 * Implement array format for `in_footer` where supported when calling `wp_register_script()`
 * Fixed code sniff warning in upgrade code
 * Improved error handling and reporting on Send Email page in admin
+* Fixed critical error on Subscribers page when viewing Registered Subscribers - thanks to RandyC
 * ClassicPress 2.6 tested and ready
 * PHP 8.5 tested and ready
 

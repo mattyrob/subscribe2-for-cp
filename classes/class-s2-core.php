@@ -890,7 +890,7 @@ class S2_Core {
 					$all_registered_id = $wpdb->get_col( "SELECT ID FROM $wpdb->users" );
 				}
 				return $all_registered_id;
-			} elseif ( 'emailid' === $return ) {
+			} elseif ( 'emailid' === $field ) {
 				if ( '' === $all_registered_email_id ) {
 					$all_registered_email_id = $wpdb->get_results( "SELECT user_email, ID FROM $wpdb->users", ARRAY_A );
 				}
