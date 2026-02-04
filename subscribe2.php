@@ -16,7 +16,7 @@ Domain Path: /languages
 */
 
 /*
-Copyright (C) 2006-24 Matthew Robinson
+Copyright (C) 2006-26 Matthew Robinson
 Based on the Original Subscribe2 plugin by
 Copyright (C) 2005 Scott Merrill (skippy@skippy.net)
 
