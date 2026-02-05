@@ -11,8 +11,6 @@
 		"grunt-contrib-imagemin": "latest",
 		"grunt-contrib-jshint": "latest",
 		"grunt-eslint": "^25.0.0",
-		"grunt-phpcs": "^0.1.1",
-		"grunt-replace": "latest",
 		"grunt-shell": "latest",
 		"grunt-terser": "latest",
 		"grunt-wp-i18n": "^1.0.3",
@@ -25,5 +23,10 @@
 		"parserOptions": {
 			"ecmaVersion": 6
 		}
+	},
+	"scripts": {
+		"bump:patch": "node tools/bump-version.js patch",
+		"bump:minor": "node tools/bump-version.js minor",
+		"bump:major": "node tools/bump-version.js major"
 	}
 }

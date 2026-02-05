@@ -91,38 +91,6 @@ module.exports = function( grunt ) {
 					}
 				}
 			},
-			phpcs: {
-				errors: {
-					cwd: SOURCE_DIR,
-					src: [
-						'**/*.php',
-						'!**/*.js',
-						'!node_modules/**',
-						'!plugin-update-checker/**',
-						'!vendor/**'
-					],
-					options: {
-						bin: '/usr/local/bin/phpcs',
-						standard: '~/Plugins/ruleset.xml',
-						warningSeverity: 0
-					}
-				},
-				warnings: {
-					cwd: SOURCE_DIR,
-					src: [
-						'**/*.php',
-						'!**/*.js',
-						'!node_modules/**',
-						'!plugin-update-checker/**',
-						'!vendor/**'
-					],
-					options: {
-						bin: '/usr/local/bin/phpcs',
-						standard: '~/Plugins/ruleset.xml',
-						warningSeverity: 1
-					}
-				}
-			},
 			clean: {
 				options: {
 					force: true
@@ -135,52 +103,6 @@ module.exports = function( grunt ) {
 				zip: [
 					SOURCE_DIR + 'subscribe2-for-cp.zip'
 				]
-			},
-			prompt: {
-				build: {
-					options: {
-						questions: [ {
-							config: 'build',
-							type: 'list',
-							message: 'Prepare Major or Minor Release?',
-							choices: [
-								{ name: 'Major Release', value: 'release-major' },
-								{ name: 'Minor Release', value: 'release-minor' },
-								{ name: 'Patch Release', value: 'release-patch' },
-								{ name: 'Quit', value: 'quit' }
-							]
-						} ],
-						then: function( results ) {
-							if ( 'quit' !== results.build ) {
-								grunt.task.run( results.build );
-							} else {
-								grunt.log.ok( 'Quitting.' );
-								return 0;
-							}
-						}
-					}
-				}
-			},
-			replace: {
-				version: {
-					options: {
-						patterns: [ {
-							match: /^define\(\s'[\w]*',\s'(\d+\.\d+[.]?[\d]*)'\s\);$/m,
-							replacement: function() {
-								var file    = grunt.file.read( SOURCE_DIR + 'subscribe2.php' );
-								var regex   = /^[\w]*:\s(\d+\.\d+[.]?[\d]*)$/m;
-								var matches = file.match( regex );
-								return 'define( \'S2VERSION\', \'' + matches[1] + '\' );';
-							}
-						} ]
-					},
-					files: [ {
-						expand: true,
-						flatten: true,
-						src: SOURCE_DIR + 'subscribe2.php',
-						dest: SOURCE_DIR
-					} ]
-				}
 			},
 			terser: {
 				options: {
@@ -230,7 +152,32 @@ module.exports = function( grunt ) {
 				makepot: {
 					cwd: SOURCE_DIR,
 					command: "wp i18n make-pot . languages/subscribe2.pot --exclude=plugin-update-checker --headers='{\"Report-Msgid-Bugs-To\":\"https://github.com/mattyrob/subscribe2-for-cp/issues\"}'"
+				},
+				phpcs: {
+					cwd: SOURCE_DIR,
+					command: "composer run phpcs"
+				},
+				phpcs_warnings: {
+					cwd: SOURCE_DIR,
+					command: "composer run phpcs-warnings"
+				},
+				phpcompat: {
+					cwd: SOURCE_DIR,
+					command: "composer run phpcompat"
+				},
+				major_release: {
+					cwd: SOURCE_DIR,
+					command: "npm run bump:major"
+				},
+				minor_release: {
+					cwd: SOURCE_DIR,
+					command: "npm run bump:minor"
+				},
+				patch_release: {
+					cwd: SOURCE_DIR,
+					command: "npm run bump:patch"
 				}
+				
 			},
 			addtextdomain: {
 				s2cp: {
@@ -245,14 +192,6 @@ module.exports = function( grunt ) {
 							'classes/*.php',
 							'include/*.php'
 						]
-					}
-				}
-			},
-			bump_wp_version: {
-				dev: {
-					options: {},
-					files: {
-						'subscribe2.php': 'subscribe2.php'
 					}
 				}
 			},
@@ -289,7 +228,8 @@ module.exports = function( grunt ) {
 	grunt.registerTask(
 		'test',
 		[
-			'phpcs:warnings',
+			'shell:phpcs_warnings',
+			'shell:phpcompat',
 			'jshint:core',
 			'eslint:core'
 		]
@@ -306,17 +246,10 @@ module.exports = function( grunt ) {
 	grunt.registerTask(
 		'basictest',
 		[
-			'phpcs:errors',
+			'shell:phpcs',
+			'shell:phpcompat',
 			'jshint:core',
 			'eslint:core'
-		]
-	);
-
-	grunt.registerTask(
-		'bump',
-		[
-			'bump_wp_version',
-			'replace:version'
 		]
 	);
 
@@ -360,8 +293,7 @@ module.exports = function( grunt ) {
 		'release-major',
 		'Preparing Major release...',
 		function() {
-			grunt.option( 'bump', 'major' );
-			grunt.task.run( 'test', 'bump', 'build', 'zip' );
+			grunt.task.run( 'test', 'shell:major_release', 'build', 'zip' );
 		}
 	);
 
@@ -369,8 +301,7 @@ module.exports = function( grunt ) {
 		'release-minor',
 		'Preparing Minor release...',
 		function() {
-			grunt.option( 'bump', 'minor' );
-			grunt.task.run( 'test', 'bump', 'build', 'zip' );
+			grunt.task.run( 'test', 'shell:minor_release', 'build', 'zip' );
 		}
 	);
 
@@ -378,8 +309,7 @@ module.exports = function( grunt ) {
 		'release-patch',
 		'Preparing Patch release...',
 		function() {
-			grunt.option( 'bump', 'patch' );
-			grunt.task.run( 'test', 'bump', 'build', 'zip' );
+			grunt.task.run( 'test', 'shell:patch_release', 'build', 'zip' );
 		}
 	);
 };
