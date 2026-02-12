@@ -12,7 +12,8 @@ module.exports = function( grunt ) {
 				},
 				grunt: {
 					src: [
-						'Gruntfile.js'
+						'Gruntfile.js',
+						'tools/**'
 					]
 				},
 				core: {
@@ -50,7 +51,10 @@ module.exports = function( grunt ) {
 			jshint: {
 				options: grunt.file.readJSON( '.jshintrc' ),
 				grunt: {
-					src: [ 'Gruntfile.js' ]
+					src: [
+						'Gruntfile.js',
+						'tools/**'
+					]
 				},
 				core: {
 					expand: true,
@@ -151,33 +155,36 @@ module.exports = function( grunt ) {
 			shell: {
 				makepot: {
 					cwd: SOURCE_DIR,
-					command: "wp i18n make-pot . languages/subscribe2.pot --exclude=plugin-update-checker --headers='{\"Report-Msgid-Bugs-To\":\"https://github.com/mattyrob/subscribe2-for-cp/issues\"}'"
+					command: `wp i18n make-pot . languages/subscribe2.pot --exclude=plugin-update-checker --headers='{\"Report-Msgid-Bugs-To\":\"https://github.com/mattyrob/subscribe2-for-cp/issues\"}'`
+				},
+				'i18n-check': {
+					cwd: SOURCE_DIR,
+					command: `php ~/Plugins/scan-textdomain.php subscribe2-for-cp ~/Sites/dev/wp-content/plugins/subscribe2-for-cp freemius,node_modules,plugin-update-checker,vendor`
 				},
 				phpcs: {
 					cwd: SOURCE_DIR,
-					command: "composer run phpcs"
+					command: `composer run phpcs`
 				},
 				phpcs_warnings: {
 					cwd: SOURCE_DIR,
-					command: "composer run phpcs-warnings"
+					command: `composer run phpcs-warnings`
 				},
 				phpcompat: {
 					cwd: SOURCE_DIR,
-					command: "composer run phpcompat"
+					command: `composer run phpcompat`
 				},
 				major_release: {
 					cwd: SOURCE_DIR,
-					command: "npm run bump:major"
+					command: `npm run bump:major`
 				},
 				minor_release: {
 					cwd: SOURCE_DIR,
-					command: "npm run bump:minor"
+					command: `npm run bump:minor`
 				},
 				patch_release: {
 					cwd: SOURCE_DIR,
-					command: "npm run bump:patch"
+					command: `npm run bump:patch`
 				}
-				
 			},
 			addtextdomain: {
 				s2cp: {
@@ -231,7 +238,8 @@ module.exports = function( grunt ) {
 			'shell:phpcs_warnings',
 			'shell:phpcompat',
 			'jshint:core',
-			'eslint:core'
+			'eslint:core',
+			'shell:i18n-check'
 		]
 	);
 
