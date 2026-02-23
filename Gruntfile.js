@@ -159,7 +159,7 @@ module.exports = function( grunt ) {
 				},
 				'i18n-check': {
 					cwd: SOURCE_DIR,
-					command: `php ~/Plugins/scan-textdomain.php subscribe2-for-cp ~/Sites/dev/wp-content/plugins/subscribe2-for-cp freemius,node_modules,plugin-update-checker,vendor`
+					command: `php ~/Plugins/scan-textdomain.php subscribe2-for-cp ~/Plugins/development/subscribe2-for-cp freemius,node_modules,plugin-update-checker,vendor`
 				},
 				phpcs: {
 					cwd: SOURCE_DIR,
