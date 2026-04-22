@@ -155,11 +155,11 @@ module.exports = function( grunt ) {
 			shell: {
 				makepot: {
 					cwd: SOURCE_DIR,
-					command: `wp i18n make-pot . languages/subscribe2.pot --exclude=plugin-update-checker --headers='{\"Report-Msgid-Bugs-To\":\"https://github.com/mattyrob/subscribe2-for-cp/issues\"}'`
+					command: `wp i18n make-pot . languages/subscribe2.pot --headers='{\"Report-Msgid-Bugs-To\":\"https://github.com/mattyrob/subscribe2-for-cp/issues\"}'`
 				},
 				'i18n-check': {
 					cwd: SOURCE_DIR,
-					command: `php ~/Plugins/scan-textdomain.php subscribe2-for-cp ~/Plugins/development/subscribe2-for-cp freemius,node_modules,plugin-update-checker,vendor`
+					command: `php ~/Plugins/scan-textdomain.php subscribe2-for-cp ~/Plugins/development/subscribe2-for-cp freemius,node_modules,vendor`
 				},
 				phpcs: {
 					cwd: SOURCE_DIR,
@@ -186,22 +186,6 @@ module.exports = function( grunt ) {
 					command: `npm run bump:patch`
 				}
 			},
-			addtextdomain: {
-				s2cp: {
-					options: {
-						textdomain: 'subscribe2-for-cp',
-						updateDomains: true
-					},
-					files: {
-						src: [
-							'*.php',
-							'admin/*.php',
-							'classes/*.php',
-							'include/*.php'
-						]
-					}
-				}
-			},
 			zip: {
 				'release': {
 					dest: 'subscribe2-for-cp.zip',
@@ -217,7 +201,6 @@ module.exports = function( grunt ) {
 						'classes/**',
 						'include/**',
 						'languages/**',
-						'plugin-update-checker/**',
 						'tinymce/**'
 					]
 				}
@@ -265,7 +248,6 @@ module.exports = function( grunt ) {
 		'build',
 		[
 			'clean:minified',
-			'addtextdomain:s2cp',
 			'terser',
 			'cssmin',
 			'imagemin',

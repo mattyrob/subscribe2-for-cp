@@ -122,7 +122,14 @@ if ( isset( $_POST['s2_admin'] ) ) {
 }
 
 // send error message if no Pages exist
-$page_id = $wpdb->get_var( "SELECT ID FROM `{$wpdb->prefix}posts` WHERE post_type='page' AND post_status='publish' LIMIT 1" );
+$page_id = $wpdb->get_var(
+	$wpdb->prepare(
+		"SELECT ID FROM `{$wpdb->prefix}posts` WHERE post_type=%s AND post_status=%s LIMIT 1",
+		'page',
+		'publish'
+	)
+);
+
 if ( empty( $page_id ) ) {
 	echo '<div id="page_message" class="error"><p class="s2_error"><strong>' . esc_html__( 'You must create a Page for this plugin to work correctly.', 'subscribe2-for-cp' ) . '</strong></p></div>';
 }
@@ -162,11 +169,12 @@ if ( 'blogname' === s2cp()->subscribe2_options['sender'] ) {
 list( $user, $sender_domain ) = explode( '@', $sender, 2 );
 if ( ! stristr( esc_html( $_SERVER['SERVER_NAME'] ), $sender_domain ) && 'author' !== s2cp()->subscribe2_options['sender'] && '0' === s2cp()->subscribe2_options['dismiss_sender_warning'] ) {
 	// Translators: Warning message
-	echo wp_kses_post( '<div id="sender_message" class="error notice is-dismissible"><p class="s2_error"><strong>' . sprintf( __( 'You appear to be sending notifications from %1$s, which has a different domain name than your blog server %2$s. This may result in failed emails.', 'subscribe2-for-cp' ), $sender, $_SERVER['SERVER_NAME'] ) . '</strong></p></div>' );
+	echo wp_kses_post( '<div id="sender_message" class="error notice is-dismissible"><p class="s2_error"><strong>' . sprintf( __( 'You appear to be sending notifications from %1$s, which has a different domain name than your blog server %2$s. This may result in failed emails.', 'subscribe2-for-cp' ), esc_html( $sender ), esc_html( $_SERVER['SERVER_NAME'] ) ) . '</strong></p></div>' );
 }
 
 // detect or define which tab we are in
-$current_tab = isset( $_GET['tab'] ) ? $_GET['tab'] : 'email';
+$allowed_tabs = array( 'email', 'templates', 'registered', 'appearance', 'misc' );
+$current_tab = ( isset( $_GET['tab'] ) && in_array( $_GET['tab'], $allowed_tabs, true ) ) ? $_GET['tab'] : 'email';
 
 // show our form
 echo '<div class="wrap">';
@@ -229,10 +237,8 @@ switch ( $current_tab ) {
 
 		$s2_post_types = apply_filters( 's2_post_types', array() );
 		if ( ! empty( $s2_post_types ) ) {
-			if ( ! empty( $s2_post_types ) ) {
-				echo esc_html__( 'Subscribe2 will send email notifications for the following custom post types', 'subscribe2-for-cp' ) . ': ';
-				echo '<strong>' . esc_html( implode( ', ', $s2_post_types ) ) . '</strong><br><br>' . "\r\n";
-			}
+			echo esc_html__( 'Subscribe2 will send email notifications for the following custom post types', 'subscribe2-for-cp' ) . ': ';
+			echo '<strong>' . esc_html( implode( ', ', $s2_post_types ) ) . '</strong><br><br>' . "\r\n";
 		}
 
 		echo esc_html__( 'Send Emails for Password Protected Posts', 'subscribe2-for-cp' ) . ': ';

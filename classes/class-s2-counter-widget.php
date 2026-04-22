@@ -47,20 +47,20 @@ class S2_Counter_Widget extends WP_Widget {
 	 */
 	public function update( $new_instance, $old_instance ) {
 		$instance          = $old_instance;
-		$instance['title'] = wp_strip_all_tags( stripslashes( $new_instance['title'] ) );
+		$instance['title'] = wp_strip_all_tags( wp_unslash( $new_instance['title'] ) );
 
-		$background_color = wp_strip_all_tags( stripslashes( $new_instance['s2w_bg'] ) );
+		$background_color = wp_strip_all_tags( wp_unslash( $new_instance['s2w_bg'] ) );
 		if ( null !== $this->sanitize_color( $background_color ) ) {
 			$instance['s2w_bg'] = $background_color;
 		}
-		$foreground_color = wp_strip_all_tags( stripslashes( $new_instance['s2w_fg'] ) );
+		$foreground_color = wp_strip_all_tags( wp_unslash( $new_instance['s2w_fg'] ) );
 		if ( null !== $this->sanitize_color( $foreground_color ) ) {
 			$instance['s2w_fg'] = $foreground_color;
 		}
 
-		$instance['s2w_width']  = (int) wp_strip_all_tags( stripslashes( $new_instance['s2w_width'] ) );
-		$instance['s2w_height'] = (int) wp_strip_all_tags( stripslashes( $new_instance['s2w_height'] ) );
-		$instance['s2w_font']   = (int) wp_strip_all_tags( stripslashes( $new_instance['s2w_font'] ) );
+		$instance['s2w_width']  = (int) wp_strip_all_tags( wp_unslash( $new_instance['s2w_width'] ) );
+		$instance['s2w_height'] = (int) wp_strip_all_tags( wp_unslash( $new_instance['s2w_height'] ) );
+		$instance['s2w_font']   = (int) wp_strip_all_tags( wp_unslash( $new_instance['s2w_font'] ) );
 
 		return $instance;
 	}

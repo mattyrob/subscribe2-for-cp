@@ -9,8 +9,8 @@ Author URI: https://subscribe2.wordpress.com/
 Premium URI: https://checkout.freemius.com/mode/dialog/plugin/5502/plan/8921/
 Licence: GPLv3
 Requires at least: 4.4
-Requires CP: 1.0
-Requires PHP: 5.2.4
+Requires CP: 2.0
+Requires PHP: 7.4
 Text Domain: subscribe2-for-cp
 Domain Path: /languages
 */
@@ -65,13 +65,6 @@ define( 'S2PATH', trailingslashit( __DIR__ ) );
 define( 'S2DIR', trailingslashit( dirname( plugin_basename( __FILE__ ) ) ) );
 define( 'S2URL', plugin_dir_url( __FILE__ ) );
 
-// Set maximum execution time to 5 minutes
-if ( function_exists( 'set_time_limit' ) ) {
-	if ( intval( ini_get( 'max_execution_time' ) ) < 300 ) {
-		set_time_limit( 300 );
-	}
-}
-
 global $mysubscribe2;
 require_once S2PATH . 'classes/class-s2-core.php';
 if ( is_admin() ) {
@@ -88,17 +81,4 @@ return the Subscribe2 for ClassicPress global object
 function s2cp() {
 	global $mysubscribe2;
 	return $mysubscribe2;
-}
-
-/*
-Update Checking Classes
-*/
-if ( file_exists( S2PATH . 'plugin-update-checker/plugin-update-checker.php' ) ) {
-	require_once S2PATH . 'plugin-update-checker/plugin-update-checker.php';
-	global $s2_update_checker;
-	$s2_update_checker = Puc_v4_Factory::buildUpdateChecker(
-		'https://github.com/mattyrob/subscribe2-for-cp',
-		__FILE__,
-		'subscribe2-for-cp'
-	);
 }

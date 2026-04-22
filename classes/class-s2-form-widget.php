@@ -75,16 +75,16 @@ class S2_Form_Widget extends WP_Widget {
 	 */
 	public function update( $new_instance, $old_instance ) {
 		$instance                      = $old_instance;
-		$instance['title']             = wp_strip_all_tags( stripslashes( $new_instance['title'] ) );
-		$instance['div']               = wp_strip_all_tags( stripslashes( $new_instance['div'] ) );
-		$instance['widgetprecontent']  = stripslashes( $new_instance['widgetprecontent'] );
-		$instance['widgetpostcontent'] = stripslashes( $new_instance['widgetpostcontent'] );
-		$instance['size']              = intval( stripslashes( $new_instance['size'] ) );
-		$instance['hidebutton']        = wp_strip_all_tags( stripslashes( $new_instance['hidebutton'] ) );
-		$instance['postto']            = stripslashes( $new_instance['postto'] );
-		$instance['js']                = ( empty( $new_instance['js'] ) ) ? '' : stripslashes( $new_instance['js'] );
-		$instance['noantispam']        = ( empty( $new_instance['noantispam'] ) ) ? '' : stripslashes( $new_instance['noantispam'] );
-		$instance['nowrap']            = ( empty( $new_instance['nowrap'] ) ) ? '' : stripslashes( $new_instance['nowrap'] );
+		$instance['title']             = wp_strip_all_tags( wp_unslash( $new_instance['title'] ) );
+		$instance['div']               = wp_strip_all_tags( wp_unslash( $new_instance['div'] ) );
+		$instance['widgetprecontent']  = wp_unslash( $new_instance['widgetprecontent'] );
+		$instance['widgetpostcontent'] = wp_unslash( $new_instance['widgetpostcontent'] );
+		$instance['size']              = intval( wp_unslash( $new_instance['size'] ) );
+		$instance['hidebutton']        = wp_strip_all_tags( wp_unslash( $new_instance['hidebutton'] ) );
+		$instance['postto']            = wp_unslash( $new_instance['postto'] );
+		$instance['js']                = ( empty( $new_instance['js'] ) ) ? '' : wp_unslash( $new_instance['js'] );
+		$instance['noantispam']        = ( empty( $new_instance['noantispam'] ) ) ? '' : wp_unslash( $new_instance['noantispam'] );
+		$instance['nowrap']            = ( empty( $new_instance['nowrap'] ) ) ? '' : wp_unslash( $new_instance['nowrap'] );
 
 		return $instance;
 	}

@@ -5,7 +5,7 @@ class S2_Core {
 	 * Load translations
 	 */
 	public function load_translations() {
-		load_plugin_textdomain( 'subscribe2', false, S2DIR . 'languages' );
+		load_plugin_textdomain( 'subscribe2-for-cp', false, S2DIR . 'languages' );
 	}
 
 	/* ===== mail handling ===== */
@@ -24,7 +24,8 @@ class S2_Core {
 		$link = '<a href="' . $this->get_tracking_link( $this->permalink ) . '">' . $this->get_tracking_link( $this->permalink ) . '</a>';
 		$text = str_replace( '{PERMALINK}', $link, $text );
 		if ( strstr( $text, '{TINYLINK}' ) ) {
-			$response = wp_safe_remote_get( 'http://tinyurl.com/api-create.php?url=' . rawurlencode( $this->get_tracking_link( $this->permalink ) ) );
+			$tinylink = false;
+			$response = wp_safe_remote_get( 'https://tinyurl.com/api-create.php?url=' . rawurlencode( $this->get_tracking_link( $this->permalink ) ) );
 			if ( ! is_wp_error( $response ) ) {
 				$tinylink = wp_remote_retrieve_body( $response );
 			}
@@ -85,6 +86,7 @@ class S2_Core {
 		natcasesort( $recipients );
 		if ( function_exists( 'wpmq_mail' ) || 1 === $this->subscribe2_options['bcclimit'] || 1 === count( $recipients ) ) {
 			// BCCLimit is 1 so send individual emails or we only have 1 recipient
+			$status = true;
 			foreach ( $recipients as $recipient ) {
 				$recipient = trim( $recipient );
 				// sanity check -- make sure we have a valid email
@@ -94,15 +96,18 @@ class S2_Core {
 				// Use the mail queue provided we are not sending a preview
 				if ( function_exists( 'wpmq_mail' ) && ! isset( $this->preview_email ) ) {
 					if ( true === $this->check_core_version( '6.9', '2.6' ) && defined( 'WPMQ_VERSION' ) && version_compare( WPMQ_VERSION, '4.16', '>=' ) ) {
-						$status = wp_mail( $recipient, $subject, $mailtext, $headers, $attachments, array(), 0 );
+						$result = wp_mail( $recipient, $subject, $mailtext, $headers, $attachments, array(), 0 );
 					} else {
-						$status = wp_mail( $recipient, $subject, $mailtext, $headers, $attachments, 0 );
+						$result = wp_mail( $recipient, $subject, $mailtext, $headers, $attachments, 0 );
 					}
 				} else {
-					$status = wp_mail( $recipient, $subject, $mailtext, $headers, $attachments );
+					$result = wp_mail( $recipient, $subject, $mailtext, $headers, $attachments );
+				}
+				if ( ! $result ) {
+					$status = false;
 				}
 			}
-			return true;
+			return $status;
 		} elseif ( 0 === $this->subscribe2_options['bcclimit'] ) {
 			// we're using BCCLimit
 			foreach ( $recipients as $recipient ) {
@@ -113,7 +118,11 @@ class S2_Core {
 				}
 				// and NOT the sender's email, since they'll get a copy anyway
 				if ( ! empty( $recipient ) && $this->myemail !== $recipient ) {
-					( '' === $bcc ) ? $bcc = "Bcc: $recipient" : $bcc .= ", $recipient";
+					if ( '' === $bcc ) {
+						$bcc = 'Bcc: ' . $recipient;
+					} else {
+						$bcc .= ', ' . $recipient;
+					}
 					// Bcc Headers now constructed by phpmailer class
 				}
 			}
@@ -130,7 +139,11 @@ class S2_Core {
 				}
 				// and NOT the sender's email, since they'll get a copy anyway
 				if ( ! empty( $recipient ) && $this->myemail !== $recipient ) {
-					( '' === $bcc ) ? $bcc = "Bcc: $recipient" : $bcc .= ", $recipient";
+					if ( '' === $bcc ) {
+						$bcc = 'Bcc: ' . $recipient;
+					} else {
+						$bcc .= ', ' . $recipient;
+					}
 					// Bcc Headers now constructed by phpmailer class
 				}
 				if ( $this->subscribe2_options['bcclimit'] === $count ) {
@@ -181,7 +194,7 @@ class S2_Core {
 				}
 				if ( empty( $this->myemail ) ) {
 					// Get the site domain and get rid of www.
-					$sitename = strtolower( esc_html( $_SERVER['SERVER_NAME'] ) );
+					$sitename = strtolower( wp_parse_url( get_option( 'home' ), PHP_URL_HOST ) );
 					if ( 'www.' === substr( $sitename, 0, 4 ) ) {
 						$sitename = substr( $sitename, 4 );
 					}
@@ -202,7 +215,8 @@ class S2_Core {
 			$header['Reply-To'] = $this->myname . ' <' . $this->myemail . '>';
 		}
 		$header['Return-Path'] = '<' . $this->myemail . '>';
-		$header['List-ID']     = html_entity_decode( get_option( 'blogname' ), ENT_QUOTES ) . ' <' . strtolower( esc_html( $_SERVER['SERVER_NAME'] ) ) . '>';
+		$site_domain           = strtolower( sanitize_text_field( wp_parse_url( get_option( 'home' ), PHP_URL_HOST ) ) );
+		$header['List-ID']     = html_entity_decode( get_option( 'blogname' ), ENT_QUOTES ) . ' <' . $site_domain . '>';
 		if ( 'html' === $type ) {
 			// To send HTML mail, the Content-Type header must be set
 			$header['Content-Type'] = get_option( 'html_type' ) . '; charset="' . $char_set . '"';
@@ -243,15 +257,16 @@ class S2_Core {
 		if ( empty( $link ) ) {
 			return '';
 		}
+
 		if ( ! empty( $this->subscribe2_options['tracking'] ) ) {
-			( strpos( $link, '?' ) > 0 ) ? $delimiter .= '&' : $delimiter = '?';
+			$delimiter = ( false !== strpos( $link, '?' ) ) ? '&' : '?';
 
 			$tracking = $this->subscribe2_options['tracking'];
-			if ( strpos( $tracking, '{ID}' ) ) {
+			if ( false !== strpos( $tracking, '{ID}' ) ) {
 				$id       = url_to_postid( $link );
 				$tracking = str_replace( '{ID}', $id, $tracking );
 			}
-			if ( strpos( $tracking, '{TITLE}' ) ) {
+			if ( false !== strpos( $tracking, '{TITLE}' ) ) {
 				$id       = url_to_postid( $link );
 				$title    = rawurlencode( htmlentities( get_the_title( $id ), ENT_QUOTES ) );
 				$tracking = str_replace( '{TITLE}', $title, $tracking );
@@ -274,6 +289,12 @@ class S2_Core {
 			global $switched;
 			if ( $switched ) {
 				return;
+			}
+		}
+
+		if ( function_exists( 'set_time_limit' ) ) {
+			if ( intval( ini_get( 'max_execution_time' ) ) < 300 ) {
+				set_time_limit( 300 );
 			}
 		}
 
@@ -867,40 +888,37 @@ class S2_Core {
 		static $all_registered_email_id = '';
 		static $all_registered_email    = '';
 
-		if ( $this->s2_mu ) {
-			if ( 'ID' === $field ) {
+		// Determine query based on field
+		switch ( $field ) {
+			case 'ID':
 				if ( '' === $all_registered_id ) {
-					$all_registered_id = $wpdb->get_col( "SELECT user_id FROM $wpdb->usermeta WHERE meta_key='{$wpdb->prefix}capabilities'" );
+					if ( $this->s2_mu ) {
+						$all_registered_id = $wpdb->get_col( "SELECT user_id FROM $wpdb->usermeta WHERE meta_key='{$wpdb->prefix}capabilities'" );
+					} else {
+						$all_registered_id = $wpdb->get_col( "SELECT ID FROM $wpdb->users" );
+					}
 				}
 				return $all_registered_id;
-			} elseif ( 'emailid' === $field ) {
+
+			case 'emailid':
 				if ( '' === $all_registered_email_id ) {
-					$all_registered_email_id = $wpdb->get_results( "SELECT a.user_email, a.ID FROM $wpdb->users AS a INNER JOIN $wpdb->usermeta AS b on a.ID = b.user_id WHERE b.meta_key ='{$wpdb->prefix}capabilities'", ARRAY_A );
+					if ( $this->s2_mu ) {
+						$all_registered_email_id = $wpdb->get_results( "SELECT a.user_email, a.ID FROM $wpdb->users AS a INNER JOIN $wpdb->usermeta AS b ON a.ID = b.user_id WHERE b.meta_key='{$wpdb->prefix}capabilities'", ARRAY_A );
+					} else {
+						$all_registered_email_id = $wpdb->get_results( "SELECT user_email, ID FROM $wpdb->users", ARRAY_A );
+					}
 				}
 				return $all_registered_email_id;
-			} else {
+
+			default:
 				if ( '' === $all_registered_email ) {
-					$all_registered_email = $wpdb->get_col( "SELECT a.user_email FROM $wpdb->users AS a INNER JOIN $wpdb->usermeta AS b ON a.ID = b.user_id WHERE b.meta_key='{$wpdb->prefix}capabilities'" );
+					if ( $this->s2_mu ) {
+						$all_registered_email = $wpdb->get_col( "SELECT a.user_email FROM $wpdb->users AS a INNER JOIN $wpdb->usermeta AS b ON a.ID = b.user_id WHERE b.meta_key='{$wpdb->prefix}capabilities'" );
+					} else {
+						$all_registered_email = $wpdb->get_col( "SELECT user_email FROM $wpdb->users" );
+					}
 				}
 				return $all_registered_email;
-			}
-		} elseif ( ! $this->s2_mu ) {
-			if ( 'ID' === $field ) {
-				if ( '' === $all_registered_id ) {
-					$all_registered_id = $wpdb->get_col( "SELECT ID FROM $wpdb->users" );
-				}
-				return $all_registered_id;
-			} elseif ( 'emailid' === $field ) {
-				if ( '' === $all_registered_email_id ) {
-					$all_registered_email_id = $wpdb->get_results( "SELECT user_email, ID FROM $wpdb->users", ARRAY_A );
-				}
-				return $all_registered_email_id;
-			} else {
-				if ( '' === $all_registered_email ) {
-					$all_registered_email = $wpdb->get_col( "SELECT user_email FROM $wpdb->users" );
-				}
-				return $all_registered_email;
-			}
 		}
 	}
 
@@ -937,6 +955,7 @@ class S2_Core {
 
 		$join = '';
 		$and  = '';
+
 		// text or HTML subscribers
 		if ( 'all' !== $r['format'] ) {
 			$join .= "INNER JOIN $wpdb->usermeta AS b ON a.user_id = b.user_id ";
@@ -945,10 +964,14 @@ class S2_Core {
 
 		// specific category subscribers
 		if ( '' !== $r['cats'] ) {
-			$join    .= "INNER JOIN $wpdb->usermeta AS c ON a.user_id = c.user_id ";
-			$cats_and = '';
+			$join     .= "INNER JOIN $wpdb->usermeta AS c ON a.user_id = c.user_id ";
+			$cats_and  = '';
 			foreach ( explode( ',', $r['cats'] ) as $cat ) {
-				( '' === $cats_and ) ? $cats_and = $wpdb->prepare( 'c.meta_key=%s', $this->get_usermeta_keyname( 's2_cat' ) . $cat ) : $cats_and .= $wpdb->prepare( ' OR c.meta_key=%s', $this->get_usermeta_keyname( 's2_cat' ) . $cat );
+				if ( '' === $cats_and ) {
+					$cats_and = $wpdb->prepare( 'c.meta_key=%s', $this->get_usermeta_keyname( 's2_cat' ) . $cat );
+				} else {
+					$cats_and .= $wpdb->prepare( ' OR c.meta_key=%s', $this->get_usermeta_keyname( 's2_cat' ) . $cat );
+				}
 			}
 			$and .= " AND ($cats_and)";
 		}
@@ -959,40 +982,25 @@ class S2_Core {
 			$and  .= $wpdb->prepare( ' AND (d.meta_key=%s AND NOT FIND_IN_SET(%s, d.meta_value))', $this->get_usermeta_keyname( 's2_authors' ), $r['author'] );
 		}
 
+		// build and execute subscriber query
 		if ( $this->s2_mu ) {
-			if ( '' === $this->subscribe2_options['compulsory'] ) {
-				$result = $wpdb->get_col(
-					$wpdb->prepare(
-						"SELECT a.user_id FROM $wpdb->usermeta AS a INNER JOIN $wpdb->usermeta AS e ON a.user_id = e.user_id " . $join . "WHERE a.meta_key='{$wpdb->prefix}capabilities' AND e.meta_key=%s AND e.meta_value <> ''" . $and, // phpcs:ignore WordPress.DB.PreparedSQL, WordPress.DB.PreparedSQLPlaceholders
-						$this->get_usermeta_keyname( 's2_subscribed' )
-					)
-				);
-			} else {
-				$result = $wpdb->get_col(
-					$wpdb->prepare(
-						"SELECT a.user_id FROM $wpdb->usermeta AS a INNER JOIN $wpdb->usermeta AS e ON a.user_id = e.user_id " . $join . "WHERE a.meta_key='{$wpdb->prefix}capabilities' AND e.meta_key=%s" . $and, // phpcs:ignore WordPress.DB.PreparedSQL, WordPress.DB.PreparedSQLPlaceholders
-						$this->get_usermeta_keyname( 's2_subscribed' )
-					)
-				);
-			}
-		} elseif ( ! $this->s2_mu ) {
-			if ( '' === $this->subscribe2_options['compulsory'] ) {
-				$result = $wpdb->get_col(
-					$wpdb->prepare(
-						"SELECT a.user_id FROM $wpdb->usermeta AS a " . $join . "WHERE a.meta_key=%s AND a.meta_value <> ''" . $and, // phpcs:ignore WordPress.DB.PreparedSQL, WordPress.DB.PreparedSQLPlaceholders
-						$this->get_usermeta_keyname( 's2_subscribed' )
-					)
-				);
-			} else {
-				$result = $wpdb->get_col(
-					$wpdb->prepare(
-						"SELECT a.user_id FROM $wpdb->usermeta AS a " . $join . 'WHERE a.meta_key=%s' . $and, // phpcs:ignore WordPress.DB.PreparedSQL, WordPress.DB.PreparedSQLPlaceholders
-						$this->get_usermeta_keyname( 's2_subscribed' )
-					)
-				);
-			}
+			$from  = "SELECT a.user_id FROM $wpdb->usermeta AS a INNER JOIN $wpdb->usermeta AS e ON a.user_id = e.user_id ";
+			$where = "WHERE a.meta_key='{$wpdb->prefix}capabilities' AND e.meta_key=%s";
+		} else {
+			$from  = "SELECT a.user_id FROM $wpdb->usermeta AS a ";
+			$where = 'WHERE a.meta_key=%s';
 		}
 
+		if ( '' === $this->subscribe2_options['compulsory'] ) {
+			$where .= $this->s2_mu ? " AND e.meta_value <> ''" : " AND a.meta_value <> ''";
+		}
+
+		$result = $wpdb->get_col(
+			$wpdb->prepare(
+				$from . $join . $where . $and, // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+				$this->get_usermeta_keyname( 's2_subscribed' )
+			)
+		);
 		if ( empty( $result ) || false === $result ) {
 			return array();
 		} else {
@@ -1492,6 +1500,12 @@ class S2_Core {
 		define( 'DOING_S2_CRON', true );
 		global $wpdb;
 
+		if ( function_exists( 'set_time_limit' ) ) {
+			if ( intval( ini_get( 'max_execution_time' ) ) < 300 ) {
+				set_time_limit( 300 );
+			}
+		}
+
 		if ( '' === $preview ) {
 			// set up SQL query based on options
 			if ( 'yes' === $this->subscribe2_options['private'] ) {
@@ -1678,11 +1692,13 @@ class S2_Core {
 			$message_post     .= "\r\n";
 			$message_posttime .= "\r\n";
 
-			$message_posttime .= __( 'Posted on', 'subscribe2-for-cp' ) . ': ' . mysql2date( $datetime, $digest_post->post_date ) . "\r\n";
+			$message_posttime .= __( 'Posted on', 'subscribe2-for-cp' ) . ': ' . wp_date( $datetime, strtotime( $digest_post->post_date ) ) . "\r\n";
 			if ( strstr( $mailtext, '{TINYLINK}' ) ) {
-				$tinylink = wp_safe_remote_get( 'http://tinyurl.com/api-create.php?url=' . rawurlencode( $this->get_tracking_link( get_permalink( $digest_post->ID ) ) ) );
-			} else {
+				$response = wp_safe_remote_get( 'https://tinyurl.com/api-create.php?url=' . rawurlencode( $this->get_tracking_link( get_permalink( $digest_post->ID ) ) ) );
 				$tinylink = false;
+				if ( ! is_wp_error( $response ) ) {
+					$tinylink = wp_remote_retrieve_body( $response );
+				}
 			}
 			if ( strstr( $mailtext, '{TINYLINK}' ) && 'Error' !== $tinylink && false !== $tinylink ) {
 				$tablelinks       .= "\r\n" . $tinylink . "\r\n";

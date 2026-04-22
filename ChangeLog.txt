@@ -1,3 +1,12 @@
+= 11.11.0 =
+
+* Removed unnecessary Plugin Updater Library
+* Improved sanitisation of some core variables
+* Use secure protocol for TinyURL requests
+* Better email error handling for individual email sending
+* Multiple minor code enhancements
+* ClassicPress 2.7 tested and ready
+
 = 11.10.0 =
 
 * Implement array format for `in_footer` where supported when calling `wp_register_script()`

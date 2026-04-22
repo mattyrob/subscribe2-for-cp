@@ -83,7 +83,7 @@ class S2_List_Table extends WP_List_Table {
 		$current_url = set_url_scheme( 'http://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'] );
 		$current_url = remove_query_arg( 'paged', $current_url );
 
-		if ( isset( $_GET['_wpnonce'] ) && false === wp_verify_nonce( $_GET['_wpnonce'], 's2_subscriber_tab' ) ) {
+		if ( ! isset( $_GET['_wpnonce'] ) || false === wp_verify_nonce( $_GET['_wpnonce'], 's2_subscriber_tab' ) ) {
 			die( '<p>' . esc_html__( 'Security error! Your request cannot be completed.', 'subscribe2-for-cp' ) . '</p>' );
 		}
 

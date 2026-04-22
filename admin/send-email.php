@@ -97,10 +97,10 @@ if ( isset( $_POST['s2_admin'] ) && 'mail' === $_POST['s2_admin'] ) {
 		}
 	} else {
 		global $phpmailer;
+		$message = '<p class="s2_error">' . __( 'Message failed!', 'subscribe2' ) . '</p>' . $error_message;
 		if ( isset( $phpmailer->ErrorInfo ) ) {
 			$message .= ' ' . $phpmailer->ErrorInfo;
 		}
-		$message = '<p class="s2_error">' . __( 'Message failed!', 'subscribe2-for-cp' ) . '</p>' . $error_message;
 	}
 	echo '<div id="message" class="updated"><strong><p>' . wp_kses_post( $message ) . '</p></strong></div>' . "\r\n";
 }

@@ -5,7 +5,7 @@
 	"private": true,
 	"repository": "local",
 	"devDependencies": {
-		"grunt": "1.6.1",
+		"grunt": "1.6.2",
 		"grunt-contrib-clean": "latest",
 		"grunt-contrib-cssmin": "latest",
 		"grunt-contrib-imagemin": "latest",
