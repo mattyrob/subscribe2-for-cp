@@ -1001,6 +1001,7 @@ class S2_Core {
 				$this->get_usermeta_keyname( 's2_subscribed' )
 			)
 		);
+
 		if ( empty( $result ) || false === $result ) {
 			return array();
 		} else {
