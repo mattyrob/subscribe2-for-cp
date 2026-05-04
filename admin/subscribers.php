@@ -7,7 +7,7 @@ global $subscribers, $what, $current_tab;
 
 // Access function to allow display for form elements
 require_once S2PATH . 'classes/class-s2-forms.php';
-$s2_forms = new s2_forms();
+$s2_forms = new S2_Forms();
 
 // Instantiate and prepare our table data - this also runs the bulk actions
 if ( ! class_exists( 'WP_List_Table' ) ) {

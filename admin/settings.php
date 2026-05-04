@@ -341,7 +341,7 @@ switch ( $current_tab ) {
 	case 'registered':
 		// Access function to allow display for form elements
 		require_once S2PATH . 'classes/class-s2-forms.php';
-		$s2_forms = new s2_forms();
+		$s2_forms = new S2_forms();
 
 		// compulsory categories
 		echo '<div class="s2_admin" id="s2_compulsory_categories">' . "\r\n";
