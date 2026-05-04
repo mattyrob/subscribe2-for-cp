@@ -82,21 +82,20 @@ class S2_List_Table extends WP_List_Table {
 		// phpcs:ignore WordPress.Security.NonceVerification
 		$current_url = set_url_scheme( 'http://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'] );
 		$current_url = remove_query_arg( 'paged', $current_url );
+		$current_url = wp_nonce_url( $current_url, 's2_subscriber_order', '_s2_order_nonce' );
 
-		if ( ! isset( $_GET['_wpnonce'] ) || false === wp_verify_nonce( $_GET['_wpnonce'], 's2_subscriber_tab' ) ) {
-			die( '<p>' . esc_html__( 'Security error! Your request cannot be completed.', 'subscribe2-for-cp' ) . '</p>' );
+		if ( isset( $_GET['_wpnonce'] ) && true === wp_verify_nonce( $_GET['_wpnonce'], 's2_subscriber_tab' ) ) {
+			if ( isset( $_REQUEST['what'] ) ) {
+				$current_url = add_query_arg(
+					array(
+						'what' => $_REQUEST['what'],
+					),
+					$current_url
+				);
+			}
 		}
 
-		if ( isset( $_REQUEST['what'] ) ) {
-			$current_url = add_query_arg(
-				array(
-					'what' => $_REQUEST['what'],
-				),
-				$current_url
-			);
-		}
-
-		if ( isset( $_GET['orderby'] ) ) {
+		if ( isset( $_GET['orderby'] ) && in_array( $_GET['orderby'], array_keys( $columns ), true ) ) {
 			$current_orderby = $_GET['orderby'];
 		} else {
 			$current_orderby = '';
@@ -419,6 +418,20 @@ class S2_List_Table extends WP_List_Table {
 		echo $this->_pagination; // phpcs:ignore WordPress.Security.EscapeOutput
 	}
 
+	public function usort_reorder( $a, $b ) {
+		$orderby = 'email';
+		$order   = 'asc';
+
+		if ( isset( $_GET['_s2_order_nonce'] ) && false !== wp_verify_nonce( $_GET['_s2_order_nonce'], 's2_subscriber_order' ) ) {
+			$orderby = ( ! empty( $_REQUEST['orderby'] ) ) ? $_REQUEST['orderby'] : $orderby;
+			$order   = ( ! empty( $_REQUEST['order'] ) ) ? $_REQUEST['order'] : $order;
+		}
+
+		$result = strcasecmp( $a[ $orderby ], $b[ $orderby ] );
+
+		return ( 'asc' === $order ) ? $result : -$result;
+	}
+
 	public function prepare_items() {
 		global $subscribers, $current_tab;
 
@@ -458,21 +471,7 @@ class S2_List_Table extends WP_List_Table {
 			}
 		}
 
-		function usort_reorder( $a, $b ) {
-			$orderby = 'email';
-			$order   = 'asc';
-
-			if ( isset( $_GET['_s2_order_nonce'] ) && false !== wp_verify_nonce( $_GET['_s2_order_nonce'], 's2_subscriber_order' ) ) {
-				$orderby = ( ! empty( $_REQUEST['orderby'] ) ) ? $_REQUEST['orderby'] : $orderby;
-				$order   = ( ! empty( $_REQUEST['order'] ) ) ? $_REQUEST['order'] : $order;
-			}
-
-			$result = strcasecmp( $a[ $orderby ], $b[ $orderby ] );
-
-			return ( 'asc' === $order ) ? $result : -$result;
-		}
-
-		usort( $data, 'usort_reorder' );
+		usort( $data, array( $this, 'usort_reorder' ) );
 
 		$current_page = (int) $this->get_pagenum();
 
