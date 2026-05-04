@@ -1,4 +1,4 @@
-= 11.11.0 =
+= 12.0.0 =
 
 * Removed unnecessary Plugin Updater Library
 * Improved sanitisation of some core variables
@@ -6,6 +6,7 @@
 * Better email error handling for individual email sending
 * Fixes to pagination and ordering data in List Table URLs
 * Multiple minor code enhancements
+* Drop support for ClassicPress 1.x
 * ClassicPress 2.7 tested and ready
 
 = 11.10.0 =

@@ -2,14 +2,14 @@
 # This file is distributed under the same license as the Subscribe2 for ClassicPress plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: Subscribe2 for ClassicPress 11.10.0\n"
+"Project-Id-Version: Subscribe2 for ClassicPress 12.0\n"
 "Report-Msgid-Bugs-To: https://github.com/mattyrob/subscribe2-for-cp/issues\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-04-22T10:42:00+00:00\n"
+"POT-Creation-Date: 2026-05-04T15:45:02+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: subscribe2-for-cp\n"
@@ -46,8 +46,7 @@ msgstr ""
 #: classes/class-s2-forms.php:16
 #: classes/class-s2-forms.php:217
 #: classes/class-s2-frontend.php:222
-#: classes/class-s2-list-table.php:87
-#: classes/class-s2-list-table.php:215
+#: classes/class-s2-list-table.php:214
 msgid "Security error! Your request cannot be completed."
 msgstr ""
 
@@ -67,7 +66,7 @@ msgstr ""
 msgid "Message sent!"
 msgstr ""
 
-#: admin/send-email.php:103
+#: admin/send-email.php:100
 msgid "Message failed!"
 msgstr ""
 
@@ -1143,46 +1142,46 @@ msgstr ""
 msgid "HTML Full Preview"
 msgstr ""
 
-#: classes/class-s2-core.php:1266
+#: classes/class-s2-core.php:1267
 msgid "Check here to Subscribe to email notifications for new posts"
 msgstr ""
 
-#: classes/class-s2-core.php:1270
+#: classes/class-s2-core.php:1271
 msgid "By registering with this blog you are also agreeing to receive email notifications for new posts but you can unsubscribe at anytime"
 msgstr ""
 
-#: classes/class-s2-core.php:1300
+#: classes/class-s2-core.php:1301
 msgid "Check here to Subscribe to notifications for new posts"
 msgstr ""
 
-#: classes/class-s2-core.php:1427
+#: classes/class-s2-core.php:1428
 msgid "Weekly"
 msgstr ""
 
-#: classes/class-s2-core.php:1688
 #: classes/class-s2-core.php:1689
+#: classes/class-s2-core.php:1690
 msgid "Author"
 msgstr ""
 
-#: classes/class-s2-core.php:1695
+#: classes/class-s2-core.php:1696
 msgid "Posted on"
 msgstr ""
 
-#: classes/class-s2-core.php:1724
 #: classes/class-s2-core.php:1725
+#: classes/class-s2-core.php:1726
 msgid "Posted in"
 msgstr ""
 
-#: classes/class-s2-core.php:1738
 #: classes/class-s2-core.php:1739
+#: classes/class-s2-core.php:1740
 msgid "Tagged as"
 msgstr ""
 
-#: classes/class-s2-core.php:1810
+#: classes/class-s2-core.php:1811
 msgid "Digest Email"
 msgstr ""
 
-#: classes/class-s2-core.php:1823
+#: classes/class-s2-core.php:1824
 msgid "Digest Preview"
 msgstr ""
 
@@ -1471,72 +1470,72 @@ msgid "Date"
 msgstr ""
 
 #. translators: Hidden accessibility text.
-#: classes/class-s2-list-table.php:115
+#: classes/class-s2-list-table.php:114
 msgid "Select All"
 msgstr ""
 
-#: classes/class-s2-list-table.php:199
-#: classes/class-s2-list-table.php:204
+#: classes/class-s2-list-table.php:198
+#: classes/class-s2-list-table.php:203
 msgid "Delete"
 msgstr ""
 
-#: classes/class-s2-list-table.php:205
+#: classes/class-s2-list-table.php:204
 msgid "Toggle"
 msgstr ""
 
-#: classes/class-s2-list-table.php:220
+#: classes/class-s2-list-table.php:219
 msgid "No users were selected."
 msgstr ""
 
-#: classes/class-s2-list-table.php:233
+#: classes/class-s2-list-table.php:232
 msgid "Address(es) deleted!"
 msgstr ""
 
-#: classes/class-s2-list-table.php:237
+#: classes/class-s2-list-table.php:236
 msgid "Delete failed! You cannot delete some or all of these users."
 msgstr ""
 
-#: classes/class-s2-list-table.php:240
+#: classes/class-s2-list-table.php:239
 msgid "Registered user(s) deleted! Any posts made by these users were assigned to you."
 msgstr ""
 
-#: classes/class-s2-list-table.php:263
+#: classes/class-s2-list-table.php:262
 msgid "Status changed!"
 msgstr ""
 
 #. Translators: Pagination
-#: classes/class-s2-list-table.php:284
+#: classes/class-s2-list-table.php:283
 #, php-format
 msgid "%s item"
 msgid_plural "%s items"
 msgstr[0] ""
 msgstr[1] ""
 
-#: classes/class-s2-list-table.php:351
+#: classes/class-s2-list-table.php:350
 msgid "First page"
 msgstr ""
 
-#: classes/class-s2-list-table.php:362
+#: classes/class-s2-list-table.php:361
 msgid "Previous page"
 msgstr ""
 
-#: classes/class-s2-list-table.php:369
-#: classes/class-s2-list-table.php:373
+#: classes/class-s2-list-table.php:368
+#: classes/class-s2-list-table.php:372
 msgid "Current Page"
 msgstr ""
 
 #. Translators: Pagination
-#: classes/class-s2-list-table.php:381
+#: classes/class-s2-list-table.php:380
 #, php-format
 msgctxt "paging"
 msgid "%1$s of %2$s"
 msgstr ""
 
-#: classes/class-s2-list-table.php:389
+#: classes/class-s2-list-table.php:388
 msgid "Next page"
 msgstr ""
 
-#: classes/class-s2-list-table.php:400
+#: classes/class-s2-list-table.php:399
 msgid "Last page"
 msgstr ""
 
