@@ -81,7 +81,7 @@ class S2_List_Table extends WP_List_Table {
 
 		// phpcs:ignore WordPress.Security.NonceVerification
 		$current_url = set_url_scheme( 'http://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'] );
-		$current_url = remove_query_arg( 'paged', $current_url );
+		$current_url = remove_query_arg( array( 'paged', 'orderby', 'order' ), $current_url );
 		$current_url = wp_nonce_url( $current_url, 's2_subscriber_order', '_s2_order_nonce' );
 
 		if ( isset( $_GET['_wpnonce'] ) && true === wp_verify_nonce( $_GET['_wpnonce'], 's2_subscriber_tab' ) ) {
@@ -296,7 +296,7 @@ class S2_List_Table extends WP_List_Table {
 
 		$current_url = set_url_scheme( 'http://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'] );
 
-		$current_url = remove_query_arg( array( 'hotkeys_highlight_last', 'hotkeys_highlight_first' ), $current_url );
+		$current_url = remove_query_arg( array( 'hotkeys_highlight_last', 'hotkeys_highlight_first', 'paged' ), $current_url );
 
 		if ( isset( $_REQUEST['what'] ) ) {
 			$current_url = add_query_arg(
