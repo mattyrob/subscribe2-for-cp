@@ -5,12 +5,12 @@
 	"private": true,
 	"repository": "local",
 	"devDependencies": {
-		"grunt": "1.6.2",
+		"grunt": "1.6.3",
 		"grunt-contrib-clean": "latest",
 		"grunt-contrib-cssmin": "latest",
 		"grunt-contrib-imagemin": "latest",
 		"grunt-contrib-jshint": "latest",
-		"grunt-eslint": "^25.0.0",
+		"grunt-eslint": "latest",
 		"grunt-shell": "latest",
 		"grunt-terser": "latest",
 		"grunt-zip": "latest",
@@ -27,5 +27,10 @@
 		"bump:patch": "node tools/bump-version.js patch",
 		"bump:minor": "node tools/bump-version.js minor",
 		"bump:major": "node tools/bump-version.js major"
+	},
+	"allowScripts": {
+		"gifsicle": true,
+		"optipng-bin": true,
+		"jpegtran-bin": true
 	}
 }

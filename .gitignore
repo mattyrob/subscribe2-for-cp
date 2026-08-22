@@ -1,6 +1,4 @@
 # Build and Test files
-package-lock.json
-composer.lock
 node_modules/
 vendor/
 
