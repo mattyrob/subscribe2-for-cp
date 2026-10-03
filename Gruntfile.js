@@ -206,7 +206,7 @@ module.exports = function( grunt ) {
 		const { default: gifsicle } = await import( 'imagemin-gifsicle' );
 
 		await imagemin( [ SOURCE_DIR + 'include/*.{png,jpg,gif,jpeg}' ], {
-			destination: SOURCE_DIR + 'newinclude',
+			destination: SOURCE_DIR + 'include',
 			plugins: [ optipng( { optimizationLevel: 3 } ), mozjpeg( { progressive: true } ), gifsicle( { interlaced: true } ) ]
 		} );
 		done();
