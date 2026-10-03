@@ -142,16 +142,6 @@ module.exports = function( grunt ) {
 					]
 				}
 			},
-			imagemin: {
-				core: {
-					expand: true,
-					cwd: SOURCE_DIR,
-					src: [
-						'include/*.{png,jpg,gif,jpeg}'
-					],
-					dest: SOURCE_DIR
-				}
-			},
 			shell: {
 				makepot: {
 					cwd: SOURCE_DIR,
@@ -207,6 +197,20 @@ module.exports = function( grunt ) {
 			}
 		}
 	);
+
+	grunt.registerTask( 'imagemin', async function () {
+		const done = this.async();
+		const imagemin = ( await import( 'imagemin' ) ).default;
+		const { default: optipng } = await import( 'imagemin-optipng' );
+		const { default: mozjpeg } = await import( 'imagemin-mozjpeg' );
+		const { default: gifsicle } = await import( 'imagemin-gifsicle' );
+
+		await imagemin( [ SOURCE_DIR + 'include/*.{png,jpg,gif,jpeg}' ], {
+			destination: SOURCE_DIR + 'newinclude',
+			plugins: [ optipng( { optimizationLevel: 3 } ), mozjpeg( { progressive: true } ), gifsicle( { interlaced: true } ) ]
+		} );
+		done();
+	} );
 
 	grunt.registerTask(
 		'fixtest',

@@ -8,12 +8,15 @@
 		"grunt": "1.6.3",
 		"grunt-contrib-clean": "latest",
 		"grunt-contrib-cssmin": "latest",
-		"grunt-contrib-imagemin": "latest",
 		"grunt-contrib-jshint": "latest",
 		"grunt-eslint": "latest",
 		"grunt-shell": "latest",
 		"grunt-terser": "latest",
 		"grunt-zip": "latest",
+		"imagemin": "^9.0.1",
+		"imagemin-gifsicle": "^7.0.0",
+		"imagemin-mozjpeg": "^10.0.0",
+		"imagemin-optipng": "^8.0.0",
 		"matchdep": "latest",
 		"terser": "latest"
 	},
@@ -24,6 +27,7 @@
 		}
 	},
 	"scripts": {
+		"grunt": "grunt",
 		"bump:patch": "node tools/bump-version.js patch",
 		"bump:minor": "node tools/bump-version.js minor",
 		"bump:major": "node tools/bump-version.js major"
